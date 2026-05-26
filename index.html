@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#05070f">
+<title>DensityAlt — Density Altitude Calculator + Atmosphere & Hypoxia Explorer</title>
+<meta name="description" content="Free density altitude calculator plus an interactive visualizer of how air pressure, density, oxygen, and blood oxygen (SpO2) fall with altitude. Includes horsepower-at-altitude and cabin altitude calculators for pilots, students, and aerospace enthusiasts.">
+<link rel="canonical" href="https://densityalt.com/">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DensityAlt">
+<meta property="og:url" content="https://densityalt.com/">
+<meta property="og:title" content="DensityAlt — Watch Air, Oxygen & Engine Power Thin With Altitude">
+<meta property="og:description" content="Interactive: drag an aircraft up and watch pressure, air density, blood oxygen (SpO2), and horsepower collapse. Plus free density altitude, horsepower, and cabin altitude calculators.">
+<meta property="og:image" content="https://densityalt.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="DensityAlt — Watch Air, Oxygen & Engine Power Thin With Altitude">
+<meta name="twitter:description" content="Drag an aircraft up the atmosphere and watch pressure, blood oxygen (SpO2), and horsepower fall. Free density altitude, horsepower & cabin altitude calculators.">
+<meta name="twitter:image" content="https://densityalt.com/og-image.png">
+<style>
+  :root{
+    --bg:#05070f; --panel:rgba(255,255,255,.04); --panel-brd:rgba(255,255,255,.09);
+    --ink:#e8edf7; --ink-dim:#8a96ad; --accent:#4ea1ff; --accent2:#7cf;
+    --good:#37d67a; --warn:#ffb84d; --bad:#ff6a45; --crit:#ff4d4d;
+    --mono:'SFMono-Regular',ui-monospace,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  body{background:
+     radial-gradient(1200px 600px at 80% -10%, rgba(78,161,255,.10), transparent 60%),
+     radial-gradient(900px 500px at 10% 110%, rgba(124,255,204,.06), transparent 60%),
+     var(--bg);}
+  a{color:var(--accent)}
+  html{scroll-behavior:smooth}
+  .topnav{position:sticky;top:0;z-index:50;background:rgba(5,7,15,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--panel-brd)}
+  .topnav .navin{max-width:1120px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:4px;height:54px;flex-wrap:wrap}
+  .topnav .brand{font:700 15px/1 var(--sans);letter-spacing:-.01em;margin-right:auto;display:flex;align-items:center;gap:9px}
+  .topnav .brand img{width:22px;height:22px;border-radius:6px}
+  .topnav .brand b{background:linear-gradient(90deg,#7cf,#4ea1ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .navlinks{display:flex;align-items:center;gap:4px;min-width:0}
+  .topnav a.nl{font:600 13px/1 var(--sans);color:var(--ink-dim);text-decoration:none;padding:8px 11px;border-radius:8px;transition:.15s;white-space:nowrap;flex:0 0 auto}
+  .topnav a.nl:hover{color:var(--ink);background:rgba(255,255,255,.06)}
+  .nav-gh{display:flex;align-items:center;justify-content:center;color:var(--ink-dim);padding:8px;border-radius:8px;transition:.15s;flex:0 0 auto;margin-left:2px}
+  .nav-gh:hover{color:var(--ink);background:rgba(255,255,255,.06)}
+  .nav-gh svg{width:19px;height:19px;display:block}
+  section[id]{scroll-margin-top:70px}
+  @media(max-width:620px){
+    .topnav .navin{height:auto;padding:8px 0;flex-wrap:wrap}
+    .topnav .brand{width:100%;margin:0 0 6px;padding:0 14px}
+    .navlinks{width:100%;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:0 14px 2px}
+    .navlinks::-webkit-scrollbar{display:none}
+    .nav-gh{display:none}
+    section[id]{scroll-margin-top:88px}
+  }
+  .wrap{max-width:1120px;margin:0 auto;padding:28px 20px 80px}
+  header.hero{padding:18px 0 8px}
+  .kicker{font:600 12px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--accent2);opacity:.85}
+  h1{font-size:clamp(26px,4vw,40px);line-height:1.05;margin:10px 0 6px;letter-spacing:-.02em}
+  h1 span{background:linear-gradient(90deg,#7cf,#4ea1ff 40%,#b9a3ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{color:var(--ink-dim);font-size:16px;line-height:1.55}
+  .sub strong{color:var(--ink);font-weight:700}
+  .lead{margin:16px 0 0;max-width:760px;font-size:14.5px;line-height:1.6;color:var(--ink-dim)}
+  .lead strong{color:#cdd6e6;font-weight:700}
+  .calc-disclaimer{margin:0 0 20px;font:600 12.5px/1.5 var(--sans);color:var(--warn);
+    background:rgba(255,184,77,.07);border:1px solid rgba(255,184,77,.28);border-radius:9px;padding:9px 13px}
+
+  .lab{display:grid;grid-template-columns:256px 1fr;gap:22px;margin-top:26px}
+  @media(max-width:860px){.lab{grid-template-columns:1fr}}
+
+  .colwrap{align-self:start}
+  .column{position:relative;border:1px solid var(--panel-brd);border-radius:16px;overflow:hidden;background:#000}
+  #sky{display:block;width:100%;height:560px;cursor:ns-resize}
+  .col-hint{margin:9px 2px 0;text-align:center;font:500 12px/1.3 var(--sans);color:var(--ink-dim);white-space:nowrap}
+  .scale-note{margin:18px 2px 0;font-size:13px;line-height:1.55;color:var(--ink-dim);border-top:1px dashed var(--panel-brd);padding-top:14px}
+  .scale-note strong{color:#cdd6e6}
+
+  .panelstack{display:flex;flex-direction:column;gap:18px}
+  .controls{display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+    background:var(--panel);border:1px solid var(--panel-brd);border-radius:14px;padding:16px 18px}
+  .alt-readout{font:700 30px/1 var(--mono);letter-spacing:-.01em}
+  .alt-readout small{font:600 13px/1 var(--mono);color:var(--ink-dim)}
+  input[type=range]{-webkit-appearance:none;appearance:none;flex:1;min-width:200px;height:6px;border-radius:6px;
+    background:linear-gradient(90deg,#1b3a66,#4ea1ff);outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;
+    background:#fff;border:3px solid #4ea1ff;cursor:pointer;box-shadow:0 2px 10px rgba(78,161,255,.6)}
+  input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#fff;border:3px solid #4ea1ff;cursor:pointer}
+  #slider{flex:1 1 100%}
+  .alt-readout{font-variant-numeric:tabular-nums}
+  .presets{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{font:600 12px/1 var(--sans);color:var(--ink);background:rgba(255,255,255,.05);
+    border:1px solid var(--panel-brd);padding:7px 11px;border-radius:999px;cursor:pointer;transition:.15s}
+  .chip:hover{background:rgba(78,161,255,.18);border-color:var(--accent)}
+
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media(max-width:620px){.grid{grid-template-columns:repeat(2,1fr)}}
+  .card{background:var(--panel);border:1px solid var(--panel-brd);border-radius:14px;padding:14px 15px;position:relative;overflow:hidden}
+  .card .lbl{font:600 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-dim)}
+  .card .val{font:700 24px/1.1 var(--mono);margin-top:9px}
+  .card .val small{font:600 12px/1 var(--mono);color:var(--ink-dim)}
+  .card .bar{height:5px;border-radius:5px;background:rgba(255,255,255,.08);margin-top:11px;overflow:hidden}
+  .card .bar > i{display:block;height:100%;border-radius:5px;background:linear-gradient(90deg,#4ea1ff,#7cf);transition:width .25s}
+  .card .pct{font:600 11px/1 var(--mono);color:var(--ink-dim);margin-top:7px}
+
+  .spo2{grid-column:span 1;display:flex;flex-direction:column;justify-content:center;align-items:center;
+    border:1px solid var(--panel-brd);border-radius:14px;padding:16px;background:
+    radial-gradient(120px 120px at 50% 40%,rgba(55,214,122,.12),transparent 70%),var(--panel)}
+  .spo2 .lbl{align-self:flex-start}
+  .spo2 .big{font:800 52px/1 var(--mono);transition:color .3s}
+  .spo2 .big small{font:700 18px/1}
+  .spo2 .feel{font:600 12px/1.3 var(--sans);text-align:center;margin-top:8px;min-height:30px}
+
+  .strip{display:flex;gap:14px;flex-wrap:wrap}
+  .viz{flex:1;min-width:280px;background:var(--panel);border:1px solid var(--panel-brd);border-radius:14px;padding:14px 15px}
+  .viz h3{margin:0 0 4px;font-size:13px;letter-spacing:.02em}
+  .viz p.cap{margin:0 0 10px;font-size:12px;color:var(--ink-dim)}
+  canvas.box{display:block;width:100%;border-radius:10px;background:rgba(0,0,0,.35)}
+
+  .warn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:2px}
+  .flag{font:600 12px/1.3 var(--sans);padding:8px 12px;border-radius:10px;border:1px solid;display:flex;align-items:center;gap:7px}
+  .flag.ok{color:var(--good);border-color:rgba(55,214,122,.4);background:rgba(55,214,122,.08)}
+  .flag.warn{color:var(--warn);border-color:rgba(255,184,77,.4);background:rgba(255,184,77,.08)}
+  .flag.bad{color:var(--bad);border-color:rgba(255,106,69,.4);background:rgba(255,106,69,.08)}
+  .flag.crit{color:var(--crit);border-color:rgba(255,77,77,.45);background:rgba(255,77,77,.1)}
+  .flag .tuc{font-family:var(--mono);font-weight:700}
+
+  .da{margin-top:46px;background:var(--panel);border:1px solid var(--panel-brd);border-radius:16px;padding:22px 22px 24px}
+  .da h2{margin:0 0 6px;font-size:30px;letter-spacing:-.01em}
+  .da .desc{color:var(--ink-dim);font-size:15px;margin:0 0 20px;max-width:720px;line-height:1.5}
+  .da-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media(max-width:720px){.da-grid{grid-template-columns:1fr}}
+  .field label{display:block;font:600 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:8px}
+  .field .in{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.3);border:1px solid var(--panel-brd);border-radius:10px;padding:0 12px}
+  .field input{width:100%;background:transparent;border:0;color:var(--ink);font:700 20px/1 var(--mono);padding:13px 0;outline:none}
+  .field .unit{font:600 13px/1 var(--mono);color:var(--ink-dim);white-space:nowrap}
+  .unit-toggle{background:rgba(255,255,255,.06);border:1px solid var(--panel-brd);border-radius:7px;cursor:pointer;padding:6px 10px}
+  .unit-toggle:hover{background:rgba(78,161,255,.2);color:var(--ink)}
+  .da-out{margin-top:22px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media(max-width:720px){.da-out{grid-template-columns:1fr}}
+  .out{border:1px solid var(--panel-brd);border-radius:12px;padding:15px 16px;background:rgba(0,0,0,.22)}
+  .out .lbl{font:600 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-dim)}
+  .out .lbl{font-size:12px}
+  .out .v{font:700 36px/1 var(--mono);margin-top:12px}
+  .out.hero{background:radial-gradient(160px 90px at 70% 20%,rgba(255,184,77,.16),transparent),rgba(0,0,0,.22)}
+  .out.hero .v{font-size:50px;letter-spacing:-.02em}
+  .da-note{margin-top:18px;font-size:14px;line-height:1.6;color:#cdd6e6;border-left:3px solid var(--accent);padding:4px 0 4px 14px}
+  .airport-row{margin-bottom:20px}
+  .apset{margin-top:12px}
+  .airport-row .lookup-wrap{display:flex;gap:10px;align-items:stretch;max-width:640px}
+  .lookup{background:rgba(78,161,255,.18);border:1px solid var(--accent);color:#dbeaff;font:600 14px/1 var(--sans);padding:0 18px;border-radius:10px;cursor:pointer;white-space:nowrap;transition:.15s}
+  .lookup:hover{background:rgba(78,161,255,.32)}
+  .icao-status{margin-top:9px;font:600 12.5px/1.3 var(--mono);min-height:16px;color:var(--ink-dim)}
+  .icao-status.ok{color:var(--good)}
+  .icao-status.err{color:var(--warn)}
+  .icao-status.loading{color:var(--accent2);font-weight:700;font-size:13.5px}
+  .icao-status .spin{display:inline-block;width:11px;height:11px;border:2px solid rgba(124,255,255,.25);border-top-color:var(--accent2);border-radius:50%;margin-right:8px;vertical-align:-1px;animation:spin .7s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  #icao{text-transform:uppercase;letter-spacing:.1em}
+  select#acft,select#hpAcft,select#pcAcft{width:100%;background:transparent;border:0;color:var(--ink);font:700 18px/1 var(--mono);padding:13px 0;outline:none;cursor:pointer}
+  select#acft option,select#hpAcft option,select#pcAcft option{background:#0b1020;color:var(--ink)}
+  #hpChart{width:100%;height:200px;margin-top:18px;cursor:ew-resize}
+  #daChart{width:100%;height:190px;margin-top:18px;cursor:ew-resize}
+  #cabinChart{width:100%;height:240px;margin-top:18px;cursor:ew-resize}
+  #useDa{color:var(--accent);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px}
+  #useDa:hover{color:var(--accent2)}
+  .rms{margin-top:18px;padding-top:16px;border-top:1px solid var(--panel-brd);font-size:13px;color:var(--ink-dim)}
+  .rms a{font-weight:700;color:var(--accent)}
+  .ghsrc{margin-top:14px;font-size:13px;line-height:1.6;color:var(--ink-dim)}
+  .ghsrc strong{color:var(--ink)}
+  .ghsrc a{font-weight:700;color:var(--accent)}
+  .disclaimer-bar{position:fixed;left:0;right:0;bottom:0;z-index:80;display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap;background:rgba(8,11,20,.97);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-top:1px solid var(--panel-brd);padding:11px 18px;font-size:13px;line-height:1.4;color:#cdd6e6}
+  .disclaimer-bar strong{color:var(--ink)}
+  .disclaimer-bar button{background:var(--accent);border:0;color:#04121f;font:700 13px/1 var(--sans);padding:9px 16px;border-radius:8px;cursor:pointer;white-space:nowrap}
+  .disclaimer-bar[hidden]{display:none}
+  .calcrefs{display:grid;gap:9px;margin-top:6px}
+  .calcrefs div{font-size:13.5px;line-height:1.55;color:#cdd6e6}
+  .calcrefs b{color:var(--ink)}
+  .molcount{margin:10px 0 0;font:600 13px/1.4 var(--mono);color:#cdd6e6}
+  .molcount sup,.molcount sub{font-size:.7em}
+  .faqlist{margin-top:6px}
+  .faq-item{border-bottom:1px solid var(--panel-brd)}
+  .faq-item summary{font:700 16px/1.4 var(--sans);color:var(--ink);cursor:pointer;padding:14px 30px 14px 0;list-style:none;position:relative}
+  .faq-item summary::-webkit-details-marker{display:none}
+  .faq-item summary::after{content:'+';position:absolute;right:4px;top:12px;font:400 22px/1 var(--mono);color:var(--accent2)}
+  .faq-item[open] summary::after{content:'−'}
+  .faq .a{margin:0 0 16px;font-size:14.5px;line-height:1.6;color:#cdd6e6}
+  .feedback .in textarea{width:100%;background:transparent;border:0;color:var(--ink);font:500 15px/1.5 var(--sans);padding:12px 0;outline:none;resize:vertical;min-height:84px}
+  .feedback select{width:100%;background:transparent;border:0;color:var(--ink);font:600 15px/1 var(--sans);padding:14px 0;outline:none;cursor:pointer}
+  .feedback select option{background:#0b1020;color:var(--ink)}
+  .feedback .row{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:620px){.feedback .row{grid-template-columns:1fr}}
+  .feedback .send{margin-top:16px;background:var(--accent);border:0;color:#04121f;font:700 15px/1 var(--sans);padding:13px 22px;border-radius:10px;cursor:pointer;transition:.15s}
+  .feedback .send:hover{background:#7cf}
+  .about-row{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+  .about-photo{width:118px;height:118px;border-radius:50%;object-fit:cover;border:2px solid var(--panel-brd);flex:0 0 auto}
+  .about-text{flex:1;min-width:260px}
+  .about-text p{margin:0 0 14px;font-size:15px;line-height:1.65;color:#cdd6e6}
+  .about-links{display:flex;gap:10px;flex-wrap:wrap}
+  .about-links a{display:inline-flex;align-items:center;gap:8px;font:600 13px/1 var(--sans);color:var(--accent);text-decoration:none;border:1px solid var(--panel-brd);padding:10px 15px;border-radius:9px;transition:.15s}
+  .about-links svg{width:16px;height:16px;flex:0 0 auto}
+  .about-links a:hover{background:rgba(78,161,255,.15);border-color:var(--accent);color:#dbeaff}
+  .hp-hide{position:absolute;left:-9999px}
+  .pc-toggle{display:flex;gap:8px;margin:20px 0 14px}
+  .pc-tb{font:600 13px/1 var(--sans);color:var(--ink-dim);background:rgba(255,255,255,.05);border:1px solid var(--panel-brd);padding:9px 16px;border-radius:9px;cursor:pointer;transition:.15s}
+  .pc-tb.on{color:#04121f;background:var(--accent);border-color:var(--accent)}
+  #pcChart{width:100%;height:340px;cursor:ew-resize}
+  .pc-speed{margin:16px 0 4px}
+  .pc-speed label{font:600 13px/1 var(--mono);color:var(--ink-dim);display:block;margin-bottom:9px}
+  .pc-speed b{color:var(--ink)}
+  .pc-speed input[type=range]{width:100%}
+  .pc-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;font:600 12px/1 var(--mono);color:var(--ink-dim)}
+  .pc-legend span{display:flex;align-items:center;gap:6px}
+  .pc-legend i{width:14px;height:3px;border-radius:2px;display:inline-block}
+  .pc-legend .pa i{height:0;border-top:2px dashed #37d67a}
+  .pc-legend span[data-tip]{position:relative;cursor:help}
+  .pc-legend span[data-tip]:hover::after{content:attr(data-tip);position:absolute;left:0;bottom:150%;width:232px;
+    background:#0b1020;border:1px solid var(--panel-brd);border-radius:9px;padding:9px 11px;
+    font:500 11.5px/1.45 var(--sans);color:#cdd6e6;text-transform:none;letter-spacing:0;
+    z-index:30;box-shadow:0 10px 28px rgba(0,0,0,.55);white-space:normal}
+  .field-hint{margin-top:7px;font:600 11px/1.3 var(--mono);color:var(--ink-dim)}
+  .field-hint b{color:var(--accent2)}
+  .pcin{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+
+  footer{margin-top:54px;border-top:1px solid var(--panel-brd);padding-top:22px;color:var(--ink-dim);font-size:12.5px;line-height:1.6}
+  footer h4{color:var(--ink);font-size:13px;margin:0 0 8px;letter-spacing:.04em}
+  footer code{font-family:var(--mono);color:#bcd}
+  .disclaim{margin-top:14px;font-style:italic}
+
+  @media(max-width:560px){
+    .wrap{padding:18px 14px 96px}
+    header.hero{padding:14px 0 6px}
+    .sub{font-size:14.5px}
+    .da{margin-top:30px;padding:18px 15px 20px}
+    .da h2{font-size:23px;line-height:1.15}
+    .da .desc{font-size:14px;margin-bottom:16px}
+    .controls{padding:13px 14px;gap:12px}
+    .alt-readout{font-size:25px}
+    .out{padding:13px 14px}
+    .out .v{font-size:29px}
+    .out.hero .v{font-size:38px}
+    .da .desc{line-height:1.5}
+    .airport-row .lookup-wrap{flex-wrap:wrap}
+    .airport-row .lookup-wrap .in{flex:1 1 100%}
+    .airport-row .lookup{flex:1 1 auto;padding:12px 16px;text-align:center}
+    .scale-note,.da-note{font-size:13px}
+    .faq-item summary{font-size:15px}
+  }
+</style>
+</head>
+<body>
+<nav class="topnav"><div class="navin">
+  <span class="brand"><img src="favicon.svg" alt=""><b>DensityAlt</b></span>
+  <div class="navlinks">
+    <a class="nl" href="#explorer">Explorer</a>
+    <a class="nl" href="#density-altitude">Density Altitude</a>
+    <a class="nl" href="#horsepower">Horsepower</a>
+    <a class="nl" href="#power-curve">Power Curve</a>
+    <a class="nl" href="#cabin">Cabin Altitude</a>
+    <a class="nl" href="#about">About</a>
+  </div>
+  <a class="nav-gh" href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener" aria-label="DensityAlt source code on GitHub" title="Open source — view the code on GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+</div></nav>
+
+<div id="disclaimerBar" class="disclaimer-bar" hidden>
+  <span><strong>Educational estimates only.</strong> DensityAlt is not for flight planning, dispatch, or medical use — always use your POH and official sources.</span>
+  <button id="disclaimerOk" type="button">Got it</button>
+</div>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="kicker">Free aviation &amp; aerospace calculators</div>
+    <h1>Watch the air thin <span>as you climb</span></h1>
+    <p class="sub">Drag the aircraft upward. Pressure, density, and oxygen don't fall in a straight line — they drop <strong>exponentially</strong>.</p>
+    <p class="lead">A free <a href="#density-altitude"><strong>density altitude calculator</strong></a> + a live atmosphere explorer. Watch thin air hit <a href="#explorer">oxygen &amp; SpO₂</a>, <a href="#horsepower">horsepower</a>, the <a href="#power-curve">power curve</a>, and <a href="#cabin">cabin altitude</a> — built for pilots, students &amp; AvGeeks.</p>
+  </header>
+
+  <section class="lab" id="explorer">
+    <div class="colwrap">
+      <div class="column">
+        <canvas id="sky" width="230" height="560"></canvas>
+      </div>
+      <div class="col-hint">↕ drag the sky to change altitude</div>
+    </div>
+
+    <div class="panelstack">
+      <div class="controls">
+        <div class="alt-readout"><span id="altFt">0</span> <small>ft</small> &nbsp;·&nbsp; <span id="altM" style="font-size:18px;color:var(--ink-dim)">0 m</span></div>
+        <input id="slider" type="range" min="0" max="65000" step="100" value="500">
+        <div class="presets">
+          <button class="chip" data-alt="0">Sea level</button>
+          <button class="chip" data-alt="5280">Denver</button>
+          <button class="chip" data-alt="12500">FAA O₂ line</button>
+          <button class="chip" data-alt="26000">Death zone</button>
+          <button class="chip" data-alt="29032">Everest</button>
+          <button class="chip" data-alt="38000">Airliner cruise</button>
+          <button class="chip" data-alt="60000">Concorde cruise</button>
+          <button class="chip" data-alt="63000">Armstrong limit</button>
+          <button id="geoExplore" class="chip" type="button" style="border-color:var(--accent);color:#dbeaff">📍 My elevation</button>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <div class="lbl">Air Pressure</div>
+          <div class="val"><span id="pHpa">752</span> <small>hPa</small></div>
+          <div class="bar"><i id="pBar" style="width:74%"></i></div>
+          <div class="pct"><span id="pInHg">22.22</span> inHg · <span id="pPct">74%</span> of sea level</div>
+        </div>
+        <div class="card">
+          <div class="lbl">Air Density</div>
+          <div class="val"><span id="rho">0.96</span> <small>kg/m³</small></div>
+          <div class="bar"><i id="rhoBar" style="width:78%"></i></div>
+          <div class="pct"><span id="rhoPct">78%</span> of sea level</div>
+        </div>
+        <div class="card">
+          <div class="lbl">Outside Temp (ISA)</div>
+          <div class="val"><span id="tC">-1</span> <small>°C</small></div>
+          <div class="bar"><i id="tBar" style="width:60%;background:linear-gradient(90deg,#ff6a45,#ffb84d)"></i></div>
+          <div class="pct"><span id="tF">30</span> °F</div>
+        </div>
+        <div class="card">
+          <div class="lbl">Ambient O₂ pressure</div>
+          <div class="val"><span id="po2">118</span> <small>mmHg</small></div>
+          <div class="bar"><i id="po2Bar" style="width:74%"></i></div>
+          <div class="pct">sea level = 159 mmHg</div>
+        </div>
+        <div class="card">
+          <div class="lbl">In-lung O₂ (alveolar)</div>
+          <div class="val"><span id="pao2">74</span> <small>mmHg</small></div>
+          <div class="bar"><i id="pao2Bar" style="width:74%;background:linear-gradient(90deg,#7cf,#b9a3ff)"></i></div>
+          <div class="pct">sea level ≈ 100 mmHg</div>
+        </div>
+        <div class="spo2">
+          <div class="lbl">Blood O₂ · SpO₂</div>
+          <div class="big" id="spo2">96<small>%</small></div>
+          <div class="feel" id="feel">Normal — no impairment</div>
+        </div>
+      </div>
+
+      <div class="warn-row" id="flags"></div>
+
+      <div class="strip">
+        <div class="viz">
+          <h3>Air molecules per cubic metre</h3>
+          <p class="cap">The dots are illustrative; the real number density (from <code>n/V = P/k<sub>B</sub>T</code>) is below — and it's staggering.</p>
+          <canvas id="air" class="box" width="320" height="170"></canvas>
+          <p class="molcount"><span id="molDensity">2.55 × 10<sup>25</sup></span> molecules/m³ · <span id="molPct">100%</span> of sea level</p>
+        </div>
+        <div class="viz">
+          <h3>Oxygen–hemoglobin curve</h3>
+          <p class="cap">The S-curve. Above the cliff you're safe; past it, saturation falls off a ledge.</p>
+          <canvas id="curve" class="box" width="320" height="170"></canvas>
+        </div>
+      </div>
+      <p class="scale-note">This view tops out at 65,000 ft — the <strong>Armstrong limit</strong>, where unprotected body fluids boil at body temperature. For perspective, the <strong>Kármán line</strong> (the conventional edge of space) sits near <strong>330,000 ft / 100 km</strong> — roughly 5× higher than the top of this chart.</p>
+    </div>
+  </section>
+
+  <section class="da" id="density-altitude">
+    <h2>Density Altitude Calculator</h2>
+    <p class="desc">Density altitude is the altitude your aircraft <em>thinks</em> it's at. On a hot day at a high-elevation field, thin air robs lift, propeller thrust, and engine power — even though your altimeter reads field elevation.</p>
+    <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning, dispatch, or weight-and-balance.</strong> Always fly the numbers in your POH and current official weather.</p>
+    <div class="field airport-row">
+      <label>Airport (ICAO) — autofills field elevation</label>
+      <div class="lookup-wrap">
+        <div class="in" style="flex:1;min-width:260px"><input id="icao" type="text" placeholder="e.g. KGAI, KMYF, KASE" maxlength="4"></div>
+        <button id="icaoBtn" class="lookup">Look&nbsp;up</button>
+        <button id="geoBtn" class="lookup" type="button">Use my location</button>
+      </div>
+      <div class="icao-status" id="icaoStatus">Type any ICAO, tap a preset, or use your location. Works worldwide for elevation; live temp/altimeter is US-focused.</div>
+      <div class="presets apset">
+        <button class="chip apchip" data-icao="L06">Furnace Creek &minus;210 ft (lowest US)</button>
+        <button class="chip apchip" data-icao="KDEN">Denver</button>
+        <button class="chip apchip" data-icao="KASE">Aspen</button>
+        <button class="chip apchip" data-icao="KLXV">Leadville (highest US)</button>
+        <button class="chip apchip" data-icao="SLLP">La Paz</button>
+        <button class="chip apchip" data-icao="VNLK">Lukla (Everest)</button>
+        <button class="chip apchip" data-icao="ZULS">Daocheng (highest, world)</button>
+      </div>
+    </div>
+    <div class="da-grid">
+      <div class="field">
+        <label>Field Elevation</label>
+        <div class="in"><input id="elev" type="text" inputmode="numeric" value="5,000"><span class="unit">ft MSL</span></div>
+      </div>
+      <div class="field">
+        <label>Outside Air Temp</label>
+        <div class="in"><input id="oat" type="number" value="30"><button type="button" id="oatUnit" class="unit unit-toggle" title="Switch between Celsius and Fahrenheit">°C</button></div>
+        <div class="field-hint">tap the <b>°C</b> button to switch to <b>°F</b></div>
+      </div>
+      <div class="field">
+        <label>Altimeter Setting</label>
+        <div class="in"><input id="altim" type="number" step="0.01" value="29.92"><span class="unit">inHg</span></div>
+      </div>
+    </div>
+    <div class="da-out">
+      <div class="out"><div class="lbl">Pressure Altitude</div><div class="v"><span id="paOut">5,000</span> ft</div></div>
+      <div class="out"><div class="lbl">ISA Temp Deviation</div><div class="v"><span id="isaDev">+20</span> °C</div></div>
+      <div class="out hero"><div class="lbl">Density Altitude</div><div class="v" style="color:var(--warn)"><span id="daOut">7,400</span> ft</div></div>
+    </div>
+    <canvas id="daChart" class="box" width="900" height="190"></canvas>
+    <p class="cap" style="margin:8px 0 0">Drag the chart to set temperature — at this field and altimeter, density altitude climbs about 120 ft for every °C above standard.</p>
+    <div class="da-note" id="daNote"></div>
+  </section>
+
+  <section class="da" id="horsepower">
+    <h2>Aircraft Horsepower at Altitude Calculator</h2>
+    <p class="desc">Thin air carries less oxygen for combustion, so a piston engine loses power as density altitude rises. Pick your aircraft and a density altitude to see the horsepower you actually have. <a id="useDa">↑ use the density altitude from above</a></p>
+    <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning, dispatch, or weight-and-balance.</strong> Always fly the numbers in your POH and current official weather.</p>
+    <div class="da-grid">
+      <div class="field">
+        <label>Aircraft</label>
+        <div class="in"><select id="hpAcft"></select></div>
+      </div>
+      <div class="field">
+        <label>Density Altitude</label>
+        <div class="in"><input id="hpDa" type="text" inputmode="numeric" value="7,400"><span class="unit">ft</span></div>
+      </div>
+      <div class="field" id="hpCustomWrap" style="display:none">
+        <label>Rated Horsepower</label>
+        <div class="in"><input id="hpCustom" type="number" value="180"><span class="unit">hp</span></div>
+      </div>
+    </div>
+    <div class="da-out">
+      <div class="out"><div class="lbl">Rated Power (sea level)</div><div class="v"><span id="hpRated">180</span> hp</div></div>
+      <div class="out"><div class="lbl">% of Rated Power</div><div class="v"><span id="hpPct">76%</span></div></div>
+      <div class="out hero"><div class="lbl">Power Available</div><div class="v" style="color:var(--good)"><span id="hpAvail">137</span> hp</div></div>
+    </div>
+    <canvas id="hpChart" class="box" width="900" height="200"></canvas>
+    <div class="da-note" id="hpNote"></div>
+  </section>
+
+  <section class="da" id="power-curve">
+    <h2>Power Curve &amp; Region of Reversed Command</h2>
+    <p class="desc">The power needed to hold altitude is <strong>drag × airspeed</strong>, and it's U-shaped: <strong>parasite power</strong> grows with the <em>cube</em> of speed, while <strong>induced power</strong> (the cost of making lift) falls as <em>1/speed</em>. They balance at the bottom — the minimum-power speed. Slower than that, flying <em>slower</em> needs <em>more</em> power: the "back side of the power curve," the region of reversed command. Curves assume <strong>1g level flight at gross weight</strong> — where the power-available line crosses the curve on the <em>right</em> is max level speed; the low-speed crossing is below stall (hypothetical, not a real flying speed). Drag the speed and watch it. <a id="usePcDa">↑ use the density altitude from above</a></p>
+    <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning, dispatch, or weight-and-balance.</strong> Always fly the numbers in your POH and current official weather.</p>
+    <div class="da-grid pcin">
+      <div class="field">
+        <label>Aircraft</label>
+        <div class="in"><select id="pcAcft"></select></div>
+      </div>
+      <div class="field">
+        <label>Density Altitude</label>
+        <div class="in"><input id="pcDa" type="number" value="0"><span class="unit">ft</span></div>
+      </div>
+      <div class="field">
+        <label>Power Setting</label>
+        <div class="in"><input id="pcPow" type="number" min="0" max="100" value="75"><span class="unit">% rated</span></div>
+      </div>
+      <div class="field">
+        <label>Engine Power</label>
+        <div class="in"><input id="pcHp" type="number" value="135"><span class="unit">hp</span></div>
+        <div class="field-hint">auto from % &amp; altitude — override anytime</div>
+      </div>
+    </div>
+    <div class="da-grid pcin" id="pcCustomWrap" style="display:none;margin-top:18px">
+      <div class="field"><label>Gross Weight</label><div class="in"><input id="pcW" type="number" value="2400"><span class="unit">lb</span></div></div>
+      <div class="field"><label>Wing Area</label><div class="in"><input id="pcS" type="number" value="170"><span class="unit">ft²</span></div></div>
+      <div class="field"><label>Wingspan</label><div class="in"><input id="pcB" type="number" value="36"><span class="unit">ft</span></div></div>
+      <div class="field"><label>Parasite drag C<sub>D0</sub></label><div class="in"><input id="pcCd0" type="number" step="0.001" value="0.033"></div></div>
+      <div class="field"><label>Oswald efficiency e</label><div class="in"><input id="pcE" type="number" step="0.01" value="0.75"></div></div>
+    </div>
+    <canvas id="pcChart" class="box" width="900" height="340" style="margin-top:18px"></canvas>
+    <div class="pc-legend">
+      <span data-tip="Total power required = total drag × airspeed. This is the solid U-shaped curve; the engine must supply at least this much to hold altitude at a given speed."><i style="background:#7cf"></i> Total</span>
+      <span class="dash" data-tip="Power to overcome induced drag — the unavoidable cost of generating lift. Largest when slow (high angle of attack); falls roughly as 1/speed."><i style="border-top:2px dashed #b9a3ff;background:none;height:0"></i> Induced</span>
+      <span class="dash" data-tip="Power to overcome parasite drag — form drag + skin friction. Tiny when slow; grows with the cube of speed, so it dominates at high speed."><i style="border-top:2px dashed #7cc8ff;background:none;height:0"></i> Parasite</span>
+      <span class="pa" data-tip="Thrust power the engine + propeller can deliver at this power setting and density altitude. Where it crosses the Total curve on the right = max level speed; the gap above the curve is your climb power."><i style="background:#37d67a"></i> Power available</span>
+    </div>
+    <div class="pc-speed">
+      <label>Drag the chart or this slider to set true airspeed</label>
+      <input id="pcSlider" type="range" min="30" max="130" step="1" value="90">
+    </div>
+    <div class="da-out">
+      <div class="out hero" style="background:radial-gradient(160px 90px at 70% 20%,rgba(78,161,255,.16),transparent),rgba(0,0,0,.22)"><div class="lbl">True Airspeed</div><div class="v" style="color:var(--accent2)"><span id="pcV">90</span> kt</div></div>
+      <div class="out"><div class="lbl">Power Required</div><div class="v"><span id="pcPr">—</span> hp</div></div>
+      <div class="out"><div class="lbl">Excess Power @ this speed</div><div class="v" style="color:var(--good)"><span id="pcExcess">—</span> hp</div></div>
+    </div>
+    <div class="da-note" id="pcNote"></div>
+  </section>
+
+  <section class="da cabin" id="cabin">
+    <h2>Cabin Altitude Calculator</h2>
+    <p class="desc">Pressurized aircraft don't hold the cabin at sea level — they maintain a maximum pressure <em>differential</em> (ΔP) between inside and outside. Pick an aircraft and cruise altitude to see the cabin altitude your body actually experiences, and the blood oxygen that comes with it.</p>
+    <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning, dispatch, or weight-and-balance.</strong> Always fly the numbers in your POH and current official weather.</p>
+    <div class="da-grid">
+      <div class="field">
+        <label>Aircraft</label>
+        <div class="in"><select id="acft"></select></div>
+      </div>
+      <div class="field">
+        <label>Cruise Altitude</label>
+        <div class="in"><input id="cruise" type="number" value="38000"><span class="unit">ft</span></div>
+      </div>
+      <div class="field" id="customDpWrap" style="display:none">
+        <label>Custom Max Differential</label>
+        <div class="in"><input id="customDp" type="number" step="0.1" value="8.0"><span class="unit">psi</span></div>
+      </div>
+    </div>
+    <div class="da-out">
+      <div class="out"><div class="lbl">Max Differential</div><div class="v"><span id="cabinDp">8.65</span> psi</div></div>
+      <div class="out"><div class="lbl">Cabin Blood O₂ (SpO₂)</div><div class="v"><span id="cabinSpo2">95%</span></div></div>
+      <div class="out hero"><div class="lbl">Cabin Altitude</div><div class="v" style="color:var(--accent2)"><span id="cabinAlt">7,000</span> ft</div></div>
+    </div>
+    <canvas id="cabinChart" class="box" width="900" height="240"></canvas>
+    <div class="pc-legend">
+      <span><i style="background:#7cf"></i> Cabin altitude</span>
+      <span class="pa"><i style="border-top:2px dashed #ff785a;background:none;height:0"></i> Unpressurized (cabin = altitude)</span>
+      <span style="color:#ffd24d">▭ Shaded gap = what pressurization saves you</span>
+    </div>
+    <div class="da-note" id="cabinNote"></div>
+  </section>
+
+  <section class="da faq" id="faq">
+    <h2>Frequently asked questions</h2>
+    <div class="faqlist">
+      <details class="faq-item"><summary>What is density altitude?</summary>
+      <p class="a">Density altitude is pressure altitude corrected for non-standard temperature — the altitude at which the air density you're flying in would occur in the standard atmosphere. On a hot day at a high field, density altitude can be thousands of feet above your actual elevation, which is why aircraft climb and accelerate so poorly in those conditions.</p></details>
+      <details class="faq-item"><summary>How do you calculate density altitude?</summary>
+      <p class="a">First find pressure altitude: <code>PA = field elevation + (29.92 − altimeter setting) × 1000</code>. Then correct for temperature: <code>DA = PA + 120 × (OAT − ISA temperature)</code>, where ISA temperature is 15&nbsp;°C minus about 2&nbsp;°C per 1,000&nbsp;ft of pressure altitude. The calculator above does this for you.</p></details>
+      <details class="faq-item"><summary>Why do you need supplemental oxygen at altitude?</summary>
+      <p class="a">As air pressure drops, the partial pressure of oxygen drops with it, so each breath delivers less oxygen to your blood. Hypoxia can begin degrading night vision as low as ~5,000&nbsp;ft, and judgment well before you'd notice. Under FAR&nbsp;91.211, U.S. pilots need oxygen above 12,500&nbsp;ft cabin altitude (after 30&nbsp;minutes), continuously above 14,000&nbsp;ft, and must provide it to passengers above 15,000&nbsp;ft.</p></details>
+      <details class="faq-item"><summary>What is your blood oxygen (SpO₂) at altitude?</summary>
+      <p class="a">For an unacclimatized person breathing cabin air, SpO₂ falls from ~97% at sea level to roughly 87% at 10,000&nbsp;ft, ~72% at 18,000&nbsp;ft, and ~50% at 25,000&nbsp;ft. The drop accelerates because the oxygen–hemoglobin curve falls off a cliff once arterial oxygen pressure drops below ~60&nbsp;mmHg.</p></details>
+      <details class="faq-item"><summary>How much horsepower does an engine lose with altitude?</summary>
+      <p class="a">A normally-aspirated piston engine loses power roughly in proportion to air density — about 3% per 1,000&nbsp;ft of density altitude (Gagg–Ferrar). At 8,000&nbsp;ft density altitude a 180&nbsp;hp engine makes closer to 135&nbsp;hp. Turbocharged engines hold rated power up to a critical altitude, then fall off the same way.</p></details>
+      <details class="faq-item"><summary>Do jet (turbine) engines lose power at altitude?</summary>
+      <p class="a">Yes — it's a myth that they don't. Jet engines produce <em>thrust</em> (not horsepower), and thrust falls as you climb because thinner air means less mass flowing through the engine — roughly in proportion to the ambient pressure ratio, so a turbofan at FL400 may make only a third of its sea-level static thrust. Turboprops produce shaft horsepower and are usually <em>flat-rated</em> to a critical altitude (like a turbocharged piston), then lose power as density falls. Jets cruise high not because they keep their power, but because drag drops even faster up there and fuel efficiency improves — so the reduced thrust carries them further per pound of fuel.</p></details>
+      <details class="faq-item"><summary>Why are airliner cabins pressurized to about 8,000 feet?</summary>
+      <p class="a">The fuselage can only hold a limited pressure difference (ΔP) between inside and outside. At cruise the system maintains that maximum differential, which works out to a cabin altitude near 8,000&nbsp;ft for most airliners. Newer composite jets like the 787 and A350 tolerate a higher ΔP and target ~6,000&nbsp;ft, which reduces fatigue on long flights.</p></details>
+    </div>
+  </section>
+
+  <section class="da feedback" id="feedback">
+    <h2>Found a bug or have an idea?</h2>
+    <p class="desc">Spotted a wrong number, an airport that won't look up, or a calculator you'd love to see? Tell me — it shapes what gets built next.</p>
+    <form name="feedback" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="feedback">
+      <p class="hp-hide"><label>Don't fill this out: <input name="bot-field"></label></p>
+      <div class="row">
+        <div class="field">
+          <label>Your email (optional)</label>
+          <div class="in"><input type="email" name="email" placeholder="you@example.com"></div>
+        </div>
+        <div class="field">
+          <label>Topic</label>
+          <div class="in"><select name="topic"><option>Bug report</option><option>Feature idea</option><option>Wrong number</option><option>Something else</option></select></div>
+        </div>
+      </div>
+      <div class="field" style="margin-top:18px">
+        <label>Message</label>
+        <div class="in"><textarea name="message" required placeholder="What happened, or what would you like to see?"></textarea></div>
+      </div>
+      <button class="send" type="submit">Send feedback</button>
+    </form>
+  </section>
+
+  <section class="da about" id="about">
+    <h2>About</h2>
+    <div class="about-row">
+      <img class="about-photo" src="headshot.jpg" alt="Levan Sulakvelidze" width="120" height="120">
+      <div class="about-text">
+        <p>Built by <strong>Levan Sulakvelidze</strong> — an instrument-rated private pilot based at <strong>KMYF</strong> (San Diego) and trained at <strong>KGAI</strong> (Gaithersburg, Maryland). DensityAlt grew out of genuine curiosity about how the air, your blood oxygen, and your airplane's performance all thin out with altitude — and a wish for free tools that get the physics right.</p>
+        <div class="about-links">
+          <a href="https://github.com/levansula23" target="_blank" rel="me noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.37.5 0 5.78 0 12.29c0 5.2 3.44 9.6 8.21 11.16.6.11.82-.25.82-.57 0-.28-.01-1.02-.02-2-3.34.71-4.04-1.58-4.04-1.58-.55-1.37-1.34-1.74-1.34-1.74-1.09-.73.08-.72.08-.72 1.21.08 1.84 1.22 1.84 1.22 1.07 1.79 2.81 1.27 3.5.97.11-.76.42-1.27.76-1.56-2.67-.3-5.47-1.31-5.47-5.83 0-1.29.47-2.34 1.24-3.17-.12-.3-.54-1.52.12-3.16 0 0 1.01-.32 3.3 1.21.96-.26 1.98-.39 3-.4 1.02.01 2.04.14 3 .4 2.29-1.53 3.3-1.21 3.3-1.21.66 1.64.24 2.86.12 3.16.77.83 1.24 1.88 1.24 3.17 0 4.53-2.81 5.53-5.49 5.82.43.36.81 1.09.81 2.2 0 1.59-.01 2.87-.01 3.26 0 .32.22.69.83.57C20.56 21.88 24 17.49 24 12.29 24 5.78 18.63.5 12 .5z"/></svg>GitHub</a>
+          <a href="https://www.linkedin.com/in/levansula" target="_blank" rel="me noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.8 0 0 .77 0 1.73v20.54C0 23.22.8 24 1.77 24h20.45c.97 0 1.78-.78 1.78-1.73V1.73C24 .77 23.19 0 22.22 0z"/></svg>LinkedIn</a>
+          <a href="https://www.instagram.com/levansula/" target="_blank" rel="me noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.72 3.72 0 0 1-1.38-.9 3.72 3.72 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41 1.27-.06 1.65-.07 4.85-.07M12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63c-.79.31-1.46.72-2.12 1.38C1.36 2.67.95 3.34.63 4.14.33 4.9.13 5.78.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.31.79.72 1.46 1.38 2.12.66.66 1.33 1.07 2.12 1.38.76.3 1.64.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56.79-.31 1.46-.72 2.12-1.38.66-.66 1.07-1.33 1.38-2.12.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91a5.86 5.86 0 0 0-1.38-2.12A5.86 5.86 0 0 0 19.86.63c-.76-.3-1.64-.5-2.91-.56C15.67.01 15.26 0 12 0zm0 5.84A6.16 6.16 0 1 0 18.16 12 6.16 6.16 0 0 0 12 5.84zm0 10.16A4 4 0 1 1 16 12a4 4 0 0 1-4 4zm6.41-10.85a1.44 1.44 0 1 0 1.44 1.44 1.44 1.44 0 0 0-1.44-1.44z"/></svg>Instagram</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <h4>How the numbers are computed</h4>
+    <div class="calcrefs">
+      <div><b>Atmosphere</b> — International Standard Atmosphere (ISA): the barometric formula in the troposphere (1.98&nbsp;°C / 1000&nbsp;ft lapse) and the isothermal layer above the tropopause (~36,089&nbsp;ft).</div>
+      <div><b>Blood oxygen</b> — alveolar gas equation <code>P_AO₂ = 0.2095·(P − 47) − P_CO₂/0.8</code> feeding the Severinghaus SpO₂ curve. CO₂ falls with altitude (hyperventilation), tuned to acute-exposure data (~87% @ 10k, ~72% @ 18k, ~50% @ 25k&nbsp;ft).</div>
+      <div><b>Density altitude</b> — <code>PA = elev + (29.92 − altimeter)·1000</code>, then <code>DA = PA + 120·(OAT − ISA&nbsp;temp)</code>.</div>
+      <div><b>Horsepower</b> — Gagg–Ferrar relation <code>HP ≈ rated·(1.132σ − 0.132)</code>, σ = density ratio at your density altitude; turbos hold rated power to a critical altitude.</div>
+      <div><b>Power curve</b> — parabolic drag polar <code>C_D = C_D0 + C_L²/(πAR·e)</code>; power required = drag × TAS. The region of reversed command is the band from stall up to the minimum-power speed. Drag values are representative estimates and V-speeds (Vs, Va, Vno, Vne) are typical published figures — check your POH; the climb readout is idealized (constant ~80% prop efficiency) and optimistic at low speed.</div>
+      <div><b>Cabin altitude</b> — <code>cabin_P = min(sea level, ambient + ΔP)</code> inverted to an altitude; ΔP is each aircraft's published max pressure differential.</div>
+      <div><b>Data sources</b> — bundled ~110 airports (offline elevation) plus <code>aviationweather.gov</code> METAR for live temp/altimeter (works via a same-origin proxy once hosted).</div>
+      <div><b>References</b> — FAA <i>Pilot's Handbook of Aeronautical Knowledge</i> (FAA-H-8083-25) and <i>Airplane Flying Handbook</i> (FAA-H-8083-3) for density altitude, the FAR&nbsp;91.211 oxygen rules, and the power curve / region of reversed command; J.D.&nbsp;Anderson, <i>Introduction to Flight</i> (parabolic drag polar, power-required = drag&nbsp;×&nbsp;TAS); the alveolar gas equation and Severinghaus SpO₂ relation, with acute-exposure SaO₂ figures from high-altitude physiology literature (e.g. J.B.&nbsp;West). Power-curve V-speeds and the narrow trainer reversed-command band cross-checked against Van's Air Force, GoFly, and Boldmethod.</div>
+    </div>
+    <p class="disclaim">Educational models for healthy unacclimatized adults at acute exposure. Real SpO₂ varies with fitness, acclimatization, and individual physiology. Not for medical or operational flight-planning use.</p>
+    <p class="ghsrc"><strong>Open source.</strong> DensityAlt is built in the open — <a href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener">view the code on GitHub</a> to see exactly how every number is computed.</p>
+    <p class="rms">Made with <a href="https://readymadesites.com/" rel="noopener">ReadyMadeSites™</a> — custom calculators, interactive tools &amp; SEO-ready websites that rank.</p>
+  </footer>
+
+</div>
+
+<script>
+"use strict";
+
+const G=9.80665, M=0.0289644, R=8.31447, L=0.0065;
+const T0=288.15, P0=101325, RHO0=1.225;
+const FT_PER_M=3.28084, PA_PER_INHG=3386.389, MMHG_PER_PA=0.00750062;
+const FIO2=0.2095, PH2O=47, RQ=0.8;
+const MAX_ALT=65000;
+const CABIN_MAX=60000;
+const KB=1.380649e-23, N0=P0/(KB*T0);
+
+function isa(h){
+  let T,P;
+  if(h<=11000){
+    T=T0-L*h;
+    P=P0*Math.pow(T/T0, G*M/(R*L));
+  } else {
+    const T11=T0-L*11000;
+    const P11=P0*Math.pow(T11/T0, G*M/(R*L));
+    T=T11;
+    P=P11*Math.exp(-G*M*(h-11000)/(R*T11));
+  }
+  return {T,P,rho:P*M/(R*T)};
+}
+function paCO2(altFt){ return Math.max(18, 40 - 0.0015*Math.max(0, altFt-8000)); }
+function spo2(pao2){ return pao2<=0?0:100/(1+23400/(pao2*pao2*pao2 + 150*pao2)); }
+function pressureToAltFt(P){ return (T0/L)*(1-Math.pow(P/P0, R*L/(G*M)))*FT_PER_M; }
+
+const TUC=[[18000,'20–30 min'],[22000,'~10 min'],[25000,'3–5 min'],[28000,'2.5–3 min'],
+           [30000,'1–2 min'],[35000,'30–60 sec'],[40000,'15–20 sec'],[43000,'9–12 sec']];
+function tuc(a){ if(a<15000)return null; let r='30+ min'; for(const[al,l]of TUC){if(a>=al)r=l;} return r; }
+
+const LM=[
+  {a:0,t:'Sea level',c:'#9fd0ff'},
+  {a:5280,t:'Denver',c:'#9fd0ff'},
+  {a:12500,t:'FAA crew O₂ (>30 min)',c:'#ffd27a'},
+  {a:14000,t:'FAA crew O₂ (continuous)',c:'#ffb84d'},
+  {a:18000,t:'½ the atmosphere is below you',c:'#ffb84d'},
+  {a:26000,t:'Death zone',c:'#ff7a45'},
+  {a:29032,t:'Mt Everest',c:'#ff9d6b'},
+  {a:38000,t:'Airliner cruise',c:'#bcd'},
+  {a:63000,t:"Armstrong limit — water boils at body temp",c:'#ff4d4d'},
+];
+
+let alt=8000;
+let lastDA=0, tempUnit='C';
+const fmt=n=>Math.round(n).toLocaleString('en-US');
+const commaInt=s=>{const n=parseFloat(String(s).replace(/,/g,''));return isNaN(n)?0:n;};
+const sciHTML=n=>{ if(n<=0)return '0'; const e=Math.floor(Math.log10(n)); return (n/Math.pow(10,e)).toFixed(2)+' × 10<sup>'+e+'</sup>'; };
+
+const $=id=>document.getElementById(id);
+const slider=$('slider'), sky=$('sky'), air=$('air'), curve=$('curve'), pcChart=$('pcChart'), hpChart=$('hpChart'), cabinChart=$('cabinChart'), daChart=$('daChart');
+const skc=sky.getContext('2d'), ac=air.getContext('2d'), cc=curve.getContext('2d'), pcc=pcChart.getContext('2d'), hpc=hpChart.getContext('2d'), cbc=cabinChart.getContext('2d'), dac=daChart.getContext('2d');
+
+function fit(cv,ctx){const r=cv.getBoundingClientRect();const d=window.devicePixelRatio||1;
+  cv.width=r.width*d;cv.height=r.height*d;ctx.setTransform(d,0,0,d,0,0);return {w:r.width,h:r.height};}
+let airDim=fit(air,ac), curveDim=fit(curve,cc), pcDim=fit(pcChart,pcc), hpDim=fit(hpChart,hpc), cabinDim=fit(cabinChart,cbc);
+let skyDim=fit(sky,skc);
+let daDim=fit(daChart,dac);
+let cabinXMax=51000;
+
+function satColor(s){
+  if(s>=95)return '#37d67a';
+  if(s>=90)return '#9ad637';
+  if(s>=85)return '#ffd24d';
+  if(s>=80)return '#ffb84d';
+  if(s>=70)return '#ff7a45';
+  return '#ff4d4d';
+}
+function feelText(s){
+  if(s>=95)return 'Normal — no impairment';
+  if(s>=90)return 'Mild — subtle night-vision & reaction loss';
+  if(s>=85)return 'Hypoxia onset — judgment quietly degrading';
+  if(s>=80)return 'Impaired — euphoria, poor decisions, no warning';
+  if(s>=70)return 'Serious hypoxia — vision tunnels, hands fumble';
+  if(s>=60)return 'Severe — confusion, near collapse';
+  return 'Critical — loss of consciousness imminent';
+}
+
+function update(a){
+  alt=Math.max(0,Math.min(MAX_ALT,a));
+  const h=alt/FT_PER_M;
+  const {T,P,rho}=isa(h);
+  const pHpa=P/100, pInHg=P/PA_PER_INHG, pMm=P*MMHG_PER_PA, tC=T-273.15;
+  const ambPO2=FIO2*pMm;
+  const pao2=Math.max(0, FIO2*(pMm-PH2O)-paCO2(alt)/RQ);
+  const sat=spo2(pao2);
+
+  $('altFt').textContent=fmt(alt);
+  $('altM').textContent=fmt(h)+' m';
+  slider.value=alt;
+
+  $('pHpa').textContent=Math.round(pHpa);
+  $('pInHg').textContent=pInHg.toFixed(2);
+  $('pPct').textContent=Math.round(P/P0*100)+'%';
+  $('pBar').style.width=(P/P0*100)+'%';
+
+  $('rho').textContent=rho.toFixed(2);
+  $('rhoPct').textContent=Math.round(rho/RHO0*100)+'%';
+  $('rhoBar').style.width=(rho/RHO0*100)+'%';
+
+  const numDens=P/(KB*T);
+  $('molDensity').innerHTML=sciHTML(numDens);
+  $('molPct').textContent=Math.round(numDens/N0*100)+'%';
+
+  $('tC').textContent=Math.round(tC);
+  $('tF').textContent=Math.round(tC*9/5+32);
+  $('tBar').style.width=Math.max(2,Math.min(100,(tC+60)/75*100))+'%';
+
+  $('po2').textContent=Math.round(ambPO2);
+  $('po2Bar').style.width=(ambPO2/(FIO2*760)*100)+'%';
+
+  $('pao2').textContent=Math.round(pao2);
+  $('pao2Bar').style.width=Math.min(100,pao2/100*100)+'%';
+
+  const se=$('spo2'); se.innerHTML=Math.round(sat)+'<small>%</small>';
+  se.style.color=satColor(sat);
+  $('feel').textContent=feelText(sat);
+  $('feel').style.color=satColor(sat);
+
+  renderFlags(sat);
+  drawSky();
+  drawCurve(pao2,sat);
+}
+
+function renderFlags(sat){
+  const f=$('flags'); f.innerHTML='';
+  const t=tuc(alt);
+  const add=(cls,html)=>{const d=document.createElement('div');d.className='flag '+cls;d.innerHTML=html;f.appendChild(d);};
+  if(alt<5000) add('ok','✓ No supplemental oxygen required');
+  else if(alt<12500) add('warn','△ Night-vision loss begins — O₂ recommended');
+  else if(alt<14000) add('bad','⚠ FAR 91.211 — crew O₂ required above 12,500 ft for more than 30 min');
+  else if(alt<15000) add('bad','⚠ FAR 91.211 — crew O₂ required continuously above 14,000 ft');
+  else add('crit','⛔ FAR 91.211 — all occupants must be provided O₂ above 15,000 ft');
+  if(t) add(alt>=25000?'crit':(alt>=18000?'bad':'warn'),'Time of useful consciousness: <span class="tuc">'+t+'</span>');
+  if(alt>=26000) add('crit','Above the death zone — body cannot acclimatize');
+  if(alt>=63000) add('crit','Above Armstrong limit — unprotected blood would boil');
+}
+
+let stars=null;
+function drawSky(){
+  const w=skyDim.w, h=skyDim.h;
+  if(!stars){ stars=[]; for(let i=0;i<90;i++) stars.push({x:Math.random()*w,y:Math.random()*h*0.72,r:Math.random()*1.3+0.2,a:Math.random()*0.7+0.3}); }
+
+  const pad=14;
+  const altToY=al=>h-pad-(al/MAX_ALT)*(h-2*pad);
+
+  const g=skc.createLinearGradient(0,0,0,h);
+  g.addColorStop(0,'#01010a'); g.addColorStop(0.18,'#05143a');
+  g.addColorStop(0.42,'#0b347e'); g.addColorStop(0.7,'#2f72c7'); g.addColorStop(1,'#7db9ef');
+  skc.fillStyle=g; skc.fillRect(0,0,w,h);
+
+  for(const s of stars){ const vis=1-(altToYInv(s.y,h,pad)/MAX_ALT); const op=s.a*Math.max(0,Math.min(1,(s.y/(h*0.6))*-1+1));
+    skc.globalAlpha=Math.max(0,1-s.y/(h*0.62))*s.a; skc.fillStyle='#fff';
+    skc.beginPath(); skc.arc(s.x,s.y,s.r,0,7); skc.fill(); }
+  skc.globalAlpha=1;
+
+  skc.textBaseline='middle'; skc.font='600 9px ui-monospace,Menlo,monospace';
+  for(const m of LM){ const y=altToY(m.a); if(y<pad||y>h-pad)continue;
+    skc.strokeStyle='rgba(255,255,255,.18)'; skc.lineWidth=1; skc.setLineDash([3,3]);
+    skc.beginPath(); skc.moveTo(0,y); skc.lineTo(w,y); skc.stroke(); skc.setLineDash([]);
+    skc.fillStyle=m.c; skc.fillText(m.t,7,y-6); }
+
+  const y=altToY(alt);
+  skc.save();
+  skc.shadowColor='rgba(120,200,255,.9)'; skc.shadowBlur=14;
+  skc.fillStyle='#fff'; skc.strokeStyle='#4ea1ff'; skc.lineWidth=2;
+  skc.beginPath();
+  skc.moveTo(w/2,y-9); skc.lineTo(w/2+8,y+7); skc.lineTo(w/2,y+3); skc.lineTo(w/2-8,y+7); skc.closePath();
+  skc.fill(); skc.stroke();
+  skc.restore();
+
+  skc.fillStyle='#fff'; skc.font='700 11px ui-monospace,Menlo,monospace'; skc.textBaseline='bottom';
+  skc.fillText(fmt(alt)+' ft', w/2-22, y-12);
+}
+function altToYInv(){return 0;}
+
+let parts=[];
+function ensureParts(n){
+  while(parts.length<n) parts.push({x:Math.random()*airDim.w,y:Math.random()*airDim.h,
+    vx:(Math.random()*2-1)*0.5,vy:(Math.random()*2-1)*0.5});
+}
+function drawAir(){
+  const {w,h}=airDim;
+  ac.clearRect(0,0,w,h);
+  const rho=isa(alt/FT_PER_M).rho;
+  const target=Math.max(4,Math.round(170*rho/RHO0));
+  ensureParts(target);
+  const active=parts.slice(0,target);
+  for(const p of active){
+    p.x+=p.vx; p.y+=p.vy;
+    if(p.x<2||p.x>w-2)p.vx*=-1; if(p.y<2||p.y>h-2)p.vy*=-1;
+    p.x=Math.max(2,Math.min(w-2,p.x)); p.y=Math.max(2,Math.min(h-2,p.y));
+  }
+  ac.fillStyle='rgba(124,200,255,.85)';
+  for(const p of active){ ac.beginPath(); ac.arc(p.x,p.y,2.1,0,7); ac.fill(); }
+  requestAnimationFrame(drawAir);
+}
+
+function drawCurve(pao2,sat){
+  const {w,h}=curveDim; const padL=30,padB=22,padT=10,padR=8;
+  cc.clearRect(0,0,w,h);
+  const xMax=120;
+  const X=v=>padL+(v/xMax)*(w-padL-padR);
+  const Y=s=>h-padB-(s/100)*(h-padB-padT);
+
+  cc.strokeStyle='rgba(255,255,255,.08)'; cc.lineWidth=1; cc.font='9px ui-monospace,monospace'; cc.fillStyle='rgba(255,255,255,.45)';
+  for(let s=0;s<=100;s+=25){const y=Y(s);cc.beginPath();cc.moveTo(padL,y);cc.lineTo(w-padR,y);cc.stroke();cc.fillText(s+'%',4,y+3);}
+  for(let x=0;x<=120;x+=30){const xx=X(x);cc.fillText(x,xx-5,h-8);}
+
+  cc.strokeStyle='#7cf'; cc.lineWidth=2.5; cc.beginPath();
+  for(let p=0;p<=xMax;p+=1){const s=spo2(p); const xx=X(p),yy=Y(s); p===0?cc.moveTo(xx,yy):cc.lineTo(xx,yy);}
+  cc.stroke();
+
+  const mx=X(Math.min(pao2,xMax)), my=Y(sat);
+  cc.strokeStyle='rgba(255,255,255,.25)'; cc.setLineDash([3,3]);
+  cc.beginPath();cc.moveTo(mx,h-padB);cc.lineTo(mx,my);cc.lineTo(padL,my);cc.stroke();cc.setLineDash([]);
+  cc.fillStyle=satColor(sat); cc.shadowColor=satColor(sat); cc.shadowBlur=10;
+  cc.beginPath();cc.arc(mx,my,5,0,7);cc.fill(); cc.shadowBlur=0;
+  cc.fillStyle='rgba(255,255,255,.6)'; cc.font='9px ui-monospace,monospace';
+  cc.fillText('PaO₂ (mmHg)', w-78, h-8);
+}
+
+const AIRPORTS={
+ KMYF:423,KGAI:539,KSEE:388,KSEZ:4830,KSBA:13,KRNM:1395,KHMT:1512,KOKB:28,KPSP:477,KSGU:2941,KPGA:4316,
+ KLAX:125,KSMO:177,KBUR:778,KAVX:1602,KGCN:6609,KSAN:17,L06:-210,
+ KJFK:13,KLGA:21,KEWR:18,KORD:672,KMDW:620,KATL:1026,KDEN:5434,KSFO:13,KOAK:9,KSJC:62,KSEA:433,KBOS:20,
+ KDFW:607,KDAL:487,KLAS:2181,KPHX:1135,KMIA:8,KFLL:65,KMCO:96,KDCA:15,KIAD:313,KBWI:146,KSLC:4227,KMSP:1044,
+ KDTW:645,KPHL:36,KCLT:748,KIAH:97,KAUS:542,KPDX:31,KSMF:27,KSAF:6349,KFLG:7014,
+ KASE:7838,KTEX:9078,KLXV:9934,KEGE:6548,KJAC:6451,KTRK:5901,KAPA:5885,KBJC:5673,
+ EGLL:83,EGKK:202,LFPG:392,LFPO:291,EHAM:-11,EDDF:364,EDDM:1487,LIRF:15,LIMC:768,LEMD:1998,LEBL:12,
+ LSZH:1416,LOWW:600,EKCH:17,ESSA:137,LPPT:374,LTFM:325,
+ OMDB:62,OTHH:13,OERK:2049,LLBG:135,
+ RJTT:35,RJAA:141,RKSI:23,ZBAA:116,ZSPD:13,VHHH:28,RCTP:108,WSSS:22,VTBS:5,WMKK:69,VIDP:777,VABB:39,RPLL:75,WIII:34,
+ YSSY:21,YMML:434,NZAA:23,
+ CYYZ:569,CYVR:14,CYUL:118,
+ MMMX:7316,SBGR:2461,SAEZ:67,SCEL:1555,SKBO:8361,SPJC:113,
+ FAOR:5558,HECA:382,DNMM:135,HAAB:7625,
+ SLLP:13325,ZULS:14472,VQPR:7333,SPZO:10860,VNKT:4390,VNLK:9334,
+ KSDL:1510,KTUS:2643,KABQ:5355,KBOI:2871,KRNO:4415,KGEG:2376,KBZN:4473,KCOS:6187,KGJT:4858,KSUN:5318,KTVL:6264,KMMH:7135,KBIH:4124,KPRC:5045,
+ KSAT:809,KMSY:4,KBNA:599,KSTL:618,KMCI:1026,KCLE:791,KPIT:1203,KCVG:896,KIND:797,KCMH:815,KMKE:723,KSAV:51,KJAX:30,KTPA:26,KPBI:19,KRDU:435,KMEM:341,KOKC:1295,KTUL:677,KOMA:984,KONT:944,KSNA:56,KLGB:60,KVNY:802,KPAO:4,
+ PANC:152,PAFA:434,PAJN:21,PHNL:13,PHOG:54,PHTO:38,PHKO:47,
+ CYYC:3557,CYEG:2373,CYWG:783,CYOW:374,CYHZ:477,CYQB:244,
+ MMUN:22,MMGL:5016,MMMY:1278,SEQM:7841,SKCL:3162,SLVR:1224,SABE:18,SUMU:105,SBGL:28,SBBR:3497,SBSP:2631,SCFA:455,
+ EGCC:257,EGPH:135,EGGD:622,EGLC:19,EIDW:242,EINN:46,LFML:74,LFLL:821,LFMN:13,LEMG:53,LEPA:27,GCLP:78,GCTS:209,LGAV:308,LHBP:495,LKPR:1247,EPWA:362,UUEE:622,LTAI:177,LIPZ:7,LIML:353,EBBR:184,ELLX:1234,LSGG:1411,LSZS:5600,LOWI:1907,LFLJ:6588,ENGM:681,ENBR:170,EFHK:179,BIKF:171,BIRK:48,LPMA:192,LCLK:8,LMML:300,LXGB:15,
+ OMAA:88,OEJN:48,OKBK:206,OBBI:6,OIIE:3305,HKJK:5330,FACT:151,HEGN:60,
+ ZGGG:50,ZGSZ:13,ZUUU:1626,ZSSS:10,ZPPP:6903,VOMM:52,VOBL:3002,VOHS:2024,VECC:20,VTBD:9,VTSP:82,VVNB:39,VVTS:33,WADD:14,RPLC:484,RJBB:26,RJOO:50,RJCC:82,RKPC:119,
+ NZQN:1171,NZWN:41,NZCH:123,YBBN:13,YPPH:67,YPAD:20,YBCG:21,NFFN:59,NTAA:5,
+ TNCM:13,MDPC:47,TJSJ:9,MKJP:10,MWCR:8,TBPB:169,TFFJ:49,TNCS:60
+};
+function fetchT(url,ms){ const c=new AbortController(); const t=setTimeout(()=>c.abort(),ms); return fetch(url,{cache:'no-store',signal:c.signal}).finally(()=>clearTimeout(t)); }
+
+const HOSTED=(location.protocol==='http:'||location.protocol==='https:');
+function wxURL(src,ids){ return HOSTED ? '/api/wx?src='+src+'&ids='+encodeURIComponent(ids)
+  : 'https://aviationweather.gov/api/data/'+src+'?ids='+encodeURIComponent(ids)+'&format=json'; }
+async function lookupICAO(){
+  const raw=$('icao').value.trim().toUpperCase();
+  const st=$('icaoStatus');
+  if(!raw){ st.className='icao-status'; st.textContent=''; return; }
+  st.className='icao-status loading'; st.innerHTML='<span class="spin"></span>Looking up '+raw+' — fetching live elevation, temperature &amp; altimeter…';
+  let elevFt=null, tempC=null, altInHg=null, name=null;
+
+  try{
+    const r=await fetchT(wxURL('metar',raw),5000);
+    if(r.ok){ const d=await r.json(); if(d && d[0]){
+      if(d[0].name) name=d[0].name.trim();
+      if(d[0].elev!=null) elevFt=d[0].elev*FT_PER_M;
+      if(d[0].temp!=null) tempC=d[0].temp;
+      if(d[0].altim!=null) altInHg=d[0].altim*0.0295300;
+    }}
+  }catch(e){}
+
+  if(elevFt==null){
+    try{
+      const r=await fetchT(wxURL('airport',raw),5000);
+      if(r.ok){ const d=await r.json(); if(d && d[0] && d[0].elev!=null){ elevFt=d[0].elev*FT_PER_M; if(!name && d[0].name) name=d[0].name.trim(); } }
+    }catch(e){}
+  }
+
+  if(elevFt==null && AIRPORTS[raw]!=null) elevFt=AIRPORTS[raw];
+
+  const got=[], missing=[];
+  if(elevFt!=null){ $('elev').value=fmt(elevFt); got.push('elevation '+Math.round(elevFt).toLocaleString('en-US')+' ft'); } else missing.push('elevation');
+  if(tempC!=null){ $('oat').value=Math.round(tempC); got.push('temp '+Math.round(tempC)+'°C'); } else missing.push('temp');
+  if(altInHg!=null){ $('altim').value=altInHg.toFixed(2); got.push('altimeter '+altInHg.toFixed(2)+'"'); } else missing.push('altimeter');
+  calcDA();
+
+  if(!got.length){
+    st.className='icao-status err';
+    st.textContent='Couldn’t reach live data for '+raw+'. '+(HOSTED?'The station may be unlisted or the weather service is momentarily down.':'Live temp/altimeter needs the hosted site (it runs through a server-side proxy).')+' Listed airports still work offline for elevation — otherwise enter values manually.';
+    return;
+  }
+  let msg='<strong>'+raw+'</strong>'+(name?' · '+name:'')+' — set '+got.join(', ')+'.';
+  if(missing.length){ st.className='icao-status err'; msg+=' Couldn’t get '+missing.join(' & ')+' — please set '+(missing.length>1?'those':'it')+' manually.'; }
+  else st.className='icao-status ok';
+  st.innerHTML=msg;
+}
+
+function useMyLocation(){
+  const st=$('icaoStatus');
+  if(!navigator.geolocation){ st.className='icao-status err'; st.textContent='Geolocation isn’t available in this browser.'; return; }
+  st.className='icao-status loading'; st.innerHTML='<span class="spin"></span>Getting your location…';
+  navigator.geolocation.getCurrentPosition(async pos=>{
+    const lat=pos.coords.latitude, lon=pos.coords.longitude, got=[], missing=[];
+    try{
+      const r=await fetchT('https://api.open-meteo.com/v1/elevation?latitude='+lat.toFixed(4)+'&longitude='+lon.toFixed(4),6000);
+      const d=r.ok?await r.json():null, m=(d&&d.elevation&&d.elevation[0]!=null)?d.elevation[0]:null;
+      if(m!=null){ const ft=Math.round(m*FT_PER_M); $('elev').value=fmt(ft); got.push('elevation '+ft.toLocaleString('en-US')+' ft'); } else missing.push('elevation');
+    }catch(e){ missing.push('elevation'); }
+    try{
+      const r=await fetchT('https://api.open-meteo.com/v1/forecast?latitude='+lat.toFixed(4)+'&longitude='+lon.toFixed(4)+'&current=temperature_2m,pressure_msl',6000);
+      const d=r.ok?await r.json():null, cur=d&&d.current;
+      if(cur&&cur.temperature_2m!=null){ const c=cur.temperature_2m; $('oat').value=(tempUnit==='F')?Math.round(c*9/5+32):Math.round(c); got.push('temp '+Math.round(c)+'°C'); } else missing.push('temp');
+      if(cur&&cur.pressure_msl!=null){ const inHg=cur.pressure_msl*0.0295300; $('altim').value=inHg.toFixed(2); got.push('altimeter '+inHg.toFixed(2)+'"'); } else missing.push('altimeter');
+    }catch(e){ missing.push('temp'); missing.push('altimeter'); }
+    calcDA();
+    if(!got.length){ st.className='icao-status err'; st.textContent='Got your location, but couldn’t fetch its data — enter values manually.'; return; }
+    let msg='Current conditions at your location ('+lat.toFixed(2)+', '+lon.toFixed(2)+') — set '+got.join(', ')+'.';
+    if(missing.length){ st.className='icao-status err'; msg+=' Couldn’t get '+missing.join(' &amp; ')+' — set '+(missing.length>1?'those':'it')+' manually.'; }
+    else st.className='icao-status ok';
+    st.innerHTML=msg;
+  }, err=>{
+    st.className='icao-status err';
+    st.textContent = (err && err.code===1) ? 'Location permission denied — type the values, or use the ICAO lookup.' : 'Couldn’t get your location (needs a secure HTTPS connection once hosted) — enter values manually.';
+  }, {timeout:8000, maximumAge:600000});
+}
+
+function useMyAltitude(){
+  const btn=$('geoExplore'); if(!btn) return;
+  if(!navigator.geolocation){ btn.textContent='no geolocation'; setTimeout(()=>btn.textContent='📍 My elevation',2200); return; }
+  const orig='📍 My elevation'; btn.textContent='locating…';
+  navigator.geolocation.getCurrentPosition(async pos=>{
+    try{
+      const r=await fetchT('https://api.open-meteo.com/v1/elevation?latitude='+pos.coords.latitude.toFixed(4)+'&longitude='+pos.coords.longitude.toFixed(4),6000);
+      const d=r.ok?await r.json():null, m=(d&&d.elevation&&d.elevation[0]!=null)?d.elevation[0]:null;
+      if(m!=null){ update(Math.max(0,Math.round(m*FT_PER_M))); btn.textContent=orig; return; }
+    }catch(e){}
+    btn.textContent='unavailable'; setTimeout(()=>btn.textContent=orig,2200);
+  }, ()=>{ btn.textContent='needs HTTPS / allow location'; setTimeout(()=>btn.textContent=orig,2600); }, {timeout:8000,maximumAge:600000});
+}
+
+function calcDA(){
+  const elev=commaInt($('elev').value);
+  let oat=parseFloat($('oat').value);
+  if(tempUnit==='F' && !isNaN(oat)) oat=(oat-32)*5/9;
+  const altim=parseFloat($('altim').value)||29.92;
+  const pa=elev+(29.92-altim)*1000;
+  const isaT=15-1.98*(pa/1000);
+  const dev=(isNaN(oat)?isaT:oat)-isaT;
+  const da=pa+120*dev;
+  $('paOut').textContent=fmt(pa);
+  $('isaDev').textContent=(dev>=0?'+':'')+Math.round(dev);
+  $('daOut').textContent=fmt(da);
+  const diff=da-elev;
+  const toMult=1+Math.max(0,da)/1000*0.10;
+  $('daNote').innerHTML=
+    'Your aircraft will perform as if at <strong>'+fmt(da)+' ft</strong> — about <strong>'+fmt(diff)+' ft higher</strong> than the field. '
+    +'Rule of thumb: takeoff/landing distance up ≈ <strong>'+Math.round((toMult-1)*100)+'%</strong>, and a normally-aspirated engine loses ≈ <strong>'+Math.round(Math.max(0,da)/1000*3)+'%</strong> of its power. Climb rate suffers most.';
+  lastDA=da;
+  const u=$('useDa'); if(u) u.textContent='↑ use the density altitude from above ('+fmt(da)+' ft)';
+  drawDA(pa,isaT,(isNaN(oat)?isaT:oat),elev);
+}
+function drawDA(pa,isaT,oatC,elev){
+  const w=daDim.w,h=daDim.h,padL=46,padR=14,padT=14,padB=26,tMin=-25,tMax=50;
+  dac.clearRect(0,0,w,h);
+  const daAt=t=>pa+120*(t-isaT);
+  let yMin=Math.min(daAt(tMin),daAt(tMax)), yMax=Math.max(daAt(tMin),daAt(tMax));
+  const padY=(yMax-yMin)*0.14||600; yMin-=padY; yMax+=padY;
+  const X=t=>padL+((t-tMin)/(tMax-tMin))*(w-padL-padR);
+  const Y=v=>h-padB-((v-yMin)/(yMax-yMin))*(h-padT-padB);
+  dac.font='9px ui-monospace,Menlo,monospace';dac.textBaseline='alphabetic';
+  dac.strokeStyle='rgba(255,255,255,.08)';dac.fillStyle='rgba(255,255,255,.5)';dac.lineWidth=1;
+  const yStep=niceStep(yMax-yMin,4);
+  for(let v=Math.ceil(yMin/yStep)*yStep; v<=yMax; v+=yStep){ const yy=Y(v); dac.beginPath();dac.moveTo(padL,yy);dac.lineTo(w-padR,yy);dac.stroke(); dac.fillText(fmt(v),4,yy+3); }
+  for(let t=tMin;t<=tMax;t+=15){ dac.fillText(t+'°',X(t)-7,h-8); }
+  dac.fillStyle='rgba(255,255,255,.55)';dac.fillText('OAT °C',w-46,h-8);
+  if(elev>=yMin&&elev<=yMax){ const ey=Y(elev); dac.strokeStyle='rgba(124,200,255,.5)';dac.setLineDash([4,3]);dac.beginPath();dac.moveTo(padL,ey);dac.lineTo(w-padR,ey);dac.stroke();dac.setLineDash([]); dac.fillStyle='rgba(124,200,255,.8)';dac.fillText('field elev',padL+4,ey-4); }
+  dac.strokeStyle='#ffb84d';dac.lineWidth=2.6;dac.beginPath();dac.moveTo(X(tMin),Y(daAt(tMin)));dac.lineTo(X(tMax),Y(daAt(tMax)));dac.stroke();
+  const t=Math.max(tMin,Math.min(tMax,oatC)), da=daAt(t), mx=X(t), my=Y(da);
+  dac.strokeStyle='rgba(255,255,255,.25)';dac.setLineDash([3,3]);dac.beginPath();dac.moveTo(mx,h-padB);dac.lineTo(mx,my);dac.lineTo(padL,my);dac.stroke();dac.setLineDash([]);
+  dac.fillStyle='#ffb84d';dac.shadowColor='#ffb84d';dac.shadowBlur=10;dac.beginPath();dac.arc(mx,my,5,0,7);dac.fill();dac.shadowBlur=0;
+  dac.font='700 11px ui-monospace,Menlo,monospace';dac.fillStyle='#ffd24d';
+  const lbl=fmt(da)+' ft',tw=dac.measureText(lbl).width; dac.fillText(lbl,Math.min(mx+8,w-padR-tw),Math.max(padT+10,my-7));
+}
+
+const AIRCRAFT={
+ c172:{n:'Cessna 172 (unpressurized)',dp:0},
+ sr22:{n:'Cirrus SR22 (unpressurized)',dp:0},
+ p210:{n:'Cessna P210 Centurion',dp:3.35},
+ m350:{n:'Piper M350',dp:5.5},
+ pc12:{n:'Pilatus PC-12',dp:5.75},
+ tbm:{n:'Daher TBM 960',dp:6.2},
+ cj4:{n:'Cessna Citation CJ4',dp:9.0},
+ phenom:{n:'Embraer Phenom 300',dp:9.4},
+ a320:{n:'Airbus A320',dp:8.3},
+ b737:{n:'Boeing 737',dp:8.65},
+ b787:{n:'Boeing 787 Dreamliner',dp:9.4},
+ a350:{n:'Airbus A350',dp:9.25},
+ g650:{n:'Gulfstream G650',dp:10.7},
+ concorde:{n:'Concorde',dp:10.7},
+ custom:{n:'Custom ΔP…',dp:null}
+};
+function initAircraft(){
+  const sel=$('acft');
+  for(const k in AIRCRAFT){ const o=document.createElement('option'); o.value=k; o.textContent=AIRCRAFT[k].n; sel.appendChild(o); }
+  sel.value='b787';
+}
+function calcCabin(){
+  const key=$('acft').value, ac=AIRCRAFT[key];
+  const cruise=Math.max(0,Math.min(CABIN_MAX,parseFloat($('cruise').value)||0));
+  let dp=ac.dp;
+  if(key==='custom'){ $('customDpWrap').style.display=''; dp=Math.max(0,parseFloat($('customDp').value)||0); }
+  else $('customDpWrap').style.display='none';
+  const Pamb=isa(cruise/FT_PER_M).P;
+  let cabinAlt, cabinMm;
+  if(dp<=0){ cabinAlt=cruise; cabinMm=Pamb*MMHG_PER_PA; }
+  else { const cabinP=Math.min(P0, Pamb+dp*6894.76); cabinAlt=Math.max(0,pressureToAltFt(cabinP)); cabinMm=cabinP*MMHG_PER_PA; }
+  const pao2=Math.max(0, FIO2*(cabinMm-PH2O)-paCO2(cabinAlt)/RQ);
+  const sat=spo2(pao2);
+  $('cabinDp').textContent=dp.toFixed(2);
+  $('cabinAlt').textContent=fmt(cabinAlt);
+  const ce=$('cabinSpo2'); ce.textContent=Math.round(sat)+'%'; ce.style.color=satColor(sat);
+  let note;
+  if(dp<=0){
+    note='This aircraft is <strong>unpressurized</strong> — the cabin <em>is</em> the outside air, so your body is physiologically at the full '+fmt(cruise)+' ft. '
+      +(cruise>=15000?'Oxygen is mandatory and you have limited useful consciousness here.':cruise>=12500?'FAR 91.211 requires crew oxygen above 12,500 ft.':cruise>=10000?'Supplemental oxygen is recommended above 10,000 ft.':'Within the comfortable, no-oxygen range.');
+  } else {
+    note='At '+fmt(cruise)+' ft, a '+dp.toFixed(1)+' psi maximum differential holds the cabin near <strong>'+fmt(cabinAlt)+' ft</strong>. Passengers feel like they’re at '+fmt(cabinAlt)+' ft with about <strong>'+Math.round(sat)+'% blood oxygen</strong> — '
+      +(cabinAlt>8000?'on the high side, which drives the fatigue and headaches of long flights.':'comfortable, in line with modern jets (the 787 & A350 target ~6,000 ft for exactly this reason).');
+  }
+  $('cabinNote').innerHTML=note;
+  drawCabin(dp, cruise);
+}
+function drawCabin(dp, cruise){
+  const w=cabinDim.w,h=cabinDim.h,padL=44,padR=14,padT=16,padB=30;
+  cbc.clearRect(0,0,w,h);
+  const xMax=Math.min(CABIN_MAX, Math.max(45000, Math.ceil((cruise+3000)/5000)*5000)); cabinXMax=xMax;
+  const X=a=>padL+(a/xMax)*(w-padL-padR);
+  const Y=a=>h-padB-(Math.max(0,a)/xMax)*(h-padT-padB);
+  const cab=a=> dp<=0 ? a : Math.max(0, pressureToAltFt(Math.min(P0, isa(a/FT_PER_M).P + dp*6894.76)));
+  cbc.font='9px ui-monospace,Menlo,monospace';cbc.textBaseline='alphabetic';
+  cbc.strokeStyle='rgba(255,255,255,.08)';cbc.fillStyle='rgba(255,255,255,.5)';cbc.lineWidth=1;
+  for(let v=0;v<=xMax;v+=10000){ const yy=Y(v); cbc.beginPath();cbc.moveTo(padL,yy);cbc.lineTo(w-padR,yy);cbc.stroke(); cbc.fillText((v/1000)+'k',6,yy+3); cbc.fillText((v/1000)+'k',X(v)-6,h-8); }
+  cbc.fillStyle='rgba(255,255,255,.55)';cbc.fillText('aircraft altitude (ft)',w-130,h-8);
+  const pts=[], step=xMax/160; for(let a=0;a<=xMax+1;a+=step) pts.push([a,cab(a)]);
+
+  cbc.fillStyle='rgba(78,161,255,.10)';cbc.beginPath();cbc.moveTo(X(0),Y(0));
+  for(const p of pts) cbc.lineTo(X(p[0]),Y(p[0]));
+  for(let i=pts.length-1;i>=0;i--) cbc.lineTo(X(pts[i][0]),Y(pts[i][1]));
+  cbc.closePath();cbc.fill();
+
+  cbc.strokeStyle='rgba(255,120,90,.65)';cbc.lineWidth=1.5;cbc.setLineDash([5,4]);
+  cbc.beginPath();cbc.moveTo(X(0),Y(0));cbc.lineTo(X(xMax),Y(xMax));cbc.stroke();cbc.setLineDash([]);
+
+  cbc.strokeStyle='rgba(255,210,77,.5)';cbc.setLineDash([2,3]);cbc.beginPath();cbc.moveTo(padL,Y(8000));cbc.lineTo(w-padR,Y(8000));cbc.stroke();cbc.setLineDash([]);
+  cbc.fillStyle='rgba(255,210,77,.85)';cbc.fillText('8,000 ft cabin',padL+4,Y(8000)-4);
+
+  cbc.strokeStyle='#7cf';cbc.lineWidth=2.6;cbc.beginPath();
+  pts.forEach((p,i)=>{const xx=X(p[0]),yy=Y(p[1]);i?cbc.lineTo(xx,yy):cbc.moveTo(xx,yy);});cbc.stroke();
+
+  const cc2=cab(cruise),mx=X(cruise);
+  cbc.strokeStyle='rgba(124,200,255,.45)';cbc.setLineDash([4,3]);cbc.lineWidth=1.2;
+  cbc.beginPath();cbc.moveTo(mx,padT);cbc.lineTo(mx,h-padB);cbc.stroke();cbc.setLineDash([]);
+  cbc.strokeStyle='rgba(255,255,255,.35)';cbc.setLineDash([3,3]);cbc.beginPath();cbc.moveTo(mx,Y(cruise));cbc.lineTo(mx,Y(cc2));cbc.stroke();cbc.setLineDash([]);
+  cbc.fillStyle='rgba(255,160,130,.95)';cbc.beginPath();cbc.arc(mx,Y(cruise),4,0,7);cbc.fill();
+  cbc.fillStyle='#37d67a';cbc.shadowColor='#37d67a';cbc.shadowBlur=12;cbc.beginPath();cbc.arc(mx,Y(cc2),6.5,0,7);cbc.fill();cbc.shadowBlur=0;
+  cbc.strokeStyle='rgba(255,255,255,.9)';cbc.lineWidth=1.5;cbc.beginPath();cbc.arc(mx,Y(cc2),6.5,0,7);cbc.stroke();
+  cbc.font='700 11px ui-monospace,Menlo,monospace';
+  const aLbl=fmt(cruise)+' ft',aTw=cbc.measureText(aLbl).width;
+  cbc.fillStyle='#ffb09a';cbc.fillText(aLbl,Math.min(mx+8,w-padR-aTw),Math.max(padT+9,Y(cruise)-7));
+  const cLbl=fmt(cc2)+' ft cabin',cTw=cbc.measureText(cLbl).width;
+  cbc.fillStyle='#37d67a';cbc.fillText(cLbl,Math.min(mx+10,w-padR-cTw),Math.min(h-padB-4,Y(cc2)+19));
+}
+
+const AIRCRAFT_HP={
+ c152:{n:'Cessna 152',hp:110},
+ c172e:{n:'Cessna 172E–H (145 hp)',hp:145},
+ c172m:{n:'Cessna 172I–M (150 hp)',hp:150},
+ c172n:{n:'Cessna 172N',hp:160},
+ c172s:{n:'Cessna 172S Skyhawk',hp:180},
+ c182:{n:'Cessna 182 Skylane',hp:230},
+ t182t:{n:'Cessna T182T (turbo)',hp:235,turbo:true,crit:20000},
+ c206:{n:'Cessna 206 Stationair',hp:300},
+ pa28w:{n:'Piper PA-28 Warrior',hp:160},
+ pa28a:{n:'Piper PA-28 Archer',hp:180},
+ arrow:{n:'Piper Arrow',hp:200},
+ sr20:{n:'Cirrus SR20',hp:215},
+ sr22:{n:'Cirrus SR22',hp:310},
+ sr22t:{n:'Cirrus SR22T (turbo)',hp:315,turbo:true,crit:25000},
+ a36:{n:'Beechcraft Bonanza A36',hp:300},
+ m20j:{n:'Mooney M20J',hp:200},
+ m20k:{n:'Mooney M20K 231 (turbo)',hp:210,turbo:true,crit:20000},
+ da40:{n:'Diamond DA40',hp:180},
+ tiger:{n:'Grumman Tiger',hp:180},
+ custom:{n:'Custom…',hp:null}
+};
+function densityRatioAtFt(ft){ return isa(ft/FT_PER_M).rho/RHO0; }
+function gagg(sigma){ return Math.max(0, Math.min(1, 1.132*sigma - 0.132)); }
+function powerFrac(daFt, turbo, critFt){
+  if(turbo){
+    if(daFt<=critFt) return 1;
+    const base=gagg(densityRatioAtFt(critFt));
+    return base>0 ? Math.max(0,Math.min(1, gagg(densityRatioAtFt(daFt))/base)) : 0;
+  }
+  return gagg(densityRatioAtFt(daFt));
+}
+function initHP(){
+  const s=$('hpAcft');
+  for(const k in AIRCRAFT_HP){ const o=document.createElement('option'); o.value=k; o.textContent=AIRCRAFT_HP[k].n; s.appendChild(o); }
+  s.value='c172s';
+}
+function calcHP(){
+  const key=$('hpAcft').value, a=AIRCRAFT_HP[key];
+  let rated=a.hp, turbo=!!a.turbo, crit=a.crit||0;
+  if(key==='custom'){ $('hpCustomWrap').style.display=''; rated=Math.max(0,parseFloat($('hpCustom').value)||0); turbo=false; }
+  else $('hpCustomWrap').style.display='none';
+  const da=Math.max(0,commaInt($('hpDa').value));
+  const frac=powerFrac(da, turbo, crit);
+  const avail=rated*frac, lost=rated-avail;
+  $('hpRated').textContent=Math.round(rated);
+  $('hpPct').textContent=Math.round(frac*100)+'%';
+  const ae=$('hpAvail'); ae.textContent=Math.round(avail);
+  const hpCol = frac>=0.85?'#37d67a':frac>=0.70?'#ffd24d':frac>=0.55?'#ffb84d':'#ff6a45';
+  ae.style.color=hpCol; ae.parentElement.style.color=hpCol;
+  let note;
+  if(turbo && da<=crit){
+    note='Turbocharged — the engine holds its full <strong>'+Math.round(rated)+' hp</strong> up to its critical altitude (~'+fmt(crit)+' ft density altitude). At '+fmt(da)+' ft you’re below that, so no power loss yet.';
+  } else {
+    note='At <strong>'+fmt(da)+' ft</strong> density altitude you have about <strong>'+Math.round(avail)+' hp</strong> — '+Math.round(frac*100)+'% of rated, down <strong>'+Math.round(lost)+' hp</strong>. '
+      +(turbo?'You’re above the turbo’s critical altitude, so power now falls with air density.':'Normally-aspirated power falls roughly with air density (Gagg–Ferrar).')
+      +' Less power means a longer takeoff roll and a sharply reduced climb rate — the figure pilots feel first.';
+  }
+  $('hpNote').innerHTML=note;
+  drawHP(turbo,crit,da);
+}
+function drawHP(turbo,crit,curDa){
+  const w=hpDim.w,h=hpDim.h,padL=42,padR=14,padT=14,padB=28,daMax=30000;
+  hpc.clearRect(0,0,w,h);
+  const X=da=>padL+(da/daMax)*(w-padL-padR);
+  const Y=p=>h-padB-(p/100)*(h-padT-padB);
+  hpc.font='9px ui-monospace,Menlo,monospace';hpc.textBaseline='alphabetic';
+  hpc.strokeStyle='rgba(255,255,255,.08)';hpc.fillStyle='rgba(255,255,255,.5)';hpc.lineWidth=1;
+  for(let p=0;p<=100;p+=25){const yy=Y(p);hpc.beginPath();hpc.moveTo(padL,yy);hpc.lineTo(w-padR,yy);hpc.stroke();hpc.fillText(p+'%',6,yy+3);}
+  for(let da=0;da<=daMax;da+=5000){hpc.fillText((da/1000)+'k',X(da)-6,h-8);}
+  hpc.fillStyle='rgba(255,255,255,.55)';hpc.fillText('density altitude (ft)',w-128,h-8);
+  hpc.strokeStyle='#7cf';hpc.lineWidth=2.6;hpc.beginPath();
+  for(let da=0;da<=daMax;da+=200){const p=powerFrac(da,turbo,crit)*100,xx=X(da),yy=Y(p);da?hpc.lineTo(xx,yy):hpc.moveTo(xx,yy);}
+  hpc.stroke();
+  if(turbo&&crit<daMax){const xx=X(crit);hpc.strokeStyle='rgba(255,184,77,.7)';hpc.setLineDash([3,3]);hpc.beginPath();hpc.moveTo(xx,padT);hpc.lineTo(xx,h-padB);hpc.stroke();hpc.setLineDash([]);hpc.fillStyle='rgba(255,184,77,.9)';hpc.fillText('critical alt',xx-8,padT+9);}
+  const cda=Math.max(0,Math.min(daMax,curDa)),pp=powerFrac(cda,turbo,crit)*100,mx=X(cda),my=Y(pp);
+  hpc.strokeStyle='rgba(255,255,255,.25)';hpc.setLineDash([3,3]);hpc.beginPath();hpc.moveTo(mx,h-padB);hpc.lineTo(mx,my);hpc.stroke();hpc.setLineDash([]);
+  hpc.fillStyle='#37d67a';hpc.shadowColor='#37d67a';hpc.shadowBlur=10;hpc.beginPath();hpc.arc(mx,my,5,0,7);hpc.fill();hpc.shadowBlur=0;
+}
+
+const AIRCRAFT_PC={
+ c152:{n:'Cessna 152', W:1670, S:160, b:33.4, cd0:0.035, e:0.75, hp:110, vs:43, va:104, vno:111, vne:149},
+ c172:{n:'Cessna 172', W:2450, S:174, b:36.0, cd0:0.033, e:0.75, hp:180, vs:48, va:99, vno:129, vne:163},
+ pa28:{n:'Piper PA-28 Archer', W:2550, S:170, b:35.0, cd0:0.035, e:0.74, hp:180, vs:50, va:113, vno:125, vne:154},
+ da40:{n:'Diamond DA40', W:2646, S:145, b:39.2, cd0:0.026, e:0.78, hp:180, vs:49, va:108, vno:129, vne:178},
+ sr22:{n:'Cirrus SR22', W:3400, S:145, b:38.3, cd0:0.027, e:0.77, hp:310, vs:60, va:133, vno:165, vne:200},
+ custom:{n:'Custom…', W:2400, S:170, b:36, cd0:0.033, e:0.75, hp:180, vs:48, va:100, vno:125, vne:160}
+};
+const LB_N=4.44822, FT2_M2=0.092903, MS_KT=1.94384, HP_W=745.7, N_LBF=0.224809, ETAP=0.80;
+let pcView='power', pcVminKt=40, pcVmaxKt=180;
+
+function pcParams(){
+  const key=$('pcAcft').value, a=Object.assign({},AIRCRAFT_PC[key]);
+  if(key==='custom'){ $('pcCustomWrap').style.display='';
+    a.W=Math.max(1,parseFloat($('pcW').value)||2400);
+    a.S=Math.max(1,parseFloat($('pcS').value)||170);
+    a.b=Math.max(1,parseFloat($('pcB').value)||36);
+    a.cd0=Math.max(0.005,parseFloat($('pcCd0').value)||0.033);
+    a.e=Math.max(0.4,Math.min(1,parseFloat($('pcE').value)||0.75));
+  } else $('pcCustomWrap').style.display='none';
+  a.Wn=a.W*LB_N; a.Sm=a.S*FT2_M2; a.AR=a.b*a.b/a.S; a.k=1/(Math.PI*a.AR*a.e);
+  return a;
+}
+function pcPerf(a,V,rho){ const q=0.5*rho*V*V, CL=a.Wn/(q*a.Sm);
+  const Dp=q*a.Sm*a.cd0; let Di=q*a.Sm*a.k*CL*CL;
+  const Vs=a.vs/MS_KT; if(V<Vs){ const x=(Vs-V)/Vs; Di*=1+6*x*x; }
+  const D=Dp+Di;
+  return {Dp,Di,D,Pp:Dp*V,Pi:Di*V,Pr:D*V,CL}; }
+function pcSpeeds(a,rho){
+  const Vmd=Math.sqrt(2*a.Wn/(rho*a.Sm*Math.sqrt(a.cd0/a.k)));
+  const Vmp=Math.sqrt(2*a.Wn/(rho*a.Sm*Math.sqrt(3*a.cd0/a.k)));
+  return {Vmd,Vmp}; }
+
+function drawPC(a,rho){
+  const w=pcDim.w,h=pcDim.h,padL=52,padR=14,padT=34,padB=32;
+  pcc.clearRect(0,0,w,h);
+  const {Vmd,Vmp}=pcSpeeds(a,rho);
+  const power=pcView==='power';
+  const xMinKt=Math.max(10, a.vs*0.22), xMaxKt=a.vne*1.03;
+  const VminMs=xMinKt/MS_KT, VmaxMs=xMaxKt/MS_KT;
+  const conv=v=>power?v.Pr/HP_W:v.D*N_LBF, convI=v=>power?v.Pi/HP_W:v.Di*N_LBF, convP=v=>power?v.Pp/HP_W:v.Dp*N_LBF;
+  const PaHp=Math.max(0,parseFloat($('pcHp').value)||0)*ETAP;
+
+  const minVal=power?pcPerf(a,Vmp,rho).Pr/HP_W:pcPerf(a,Vmd,rho).D*N_LBF;
+  const yMax=power?Math.max(3.5*minVal,1.25*PaHp,1.6*minVal):3.0*minVal;
+  const N=140, pts=[];
+  for(let i=0;i<=N;i++){ const V=VminMs+(VmaxMs-VminMs)*i/N, p=pcPerf(a,V,rho);
+    pts.push({x:V*MS_KT,t:conv(p),i:convI(p),p:convP(p)}); }
+  const X=kt=>padL+((kt-xMinKt)/(xMaxKt-xMinKt))*(w-padL-padR);
+  const Y=y=>h-padB-(y/yMax)*(h-padT-padB);
+
+  pcc.fillStyle='rgba(120,130,150,.12)'; pcc.fillRect(X(xMinKt),padT,Math.max(0,X(a.vs)-X(xMinKt)),h-padT-padB);
+  if(power){ pcc.fillStyle='rgba(255,106,69,.13)'; pcc.fillRect(X(a.vs),padT,Math.max(0,X(Vmp*MS_KT)-X(a.vs)),h-padT-padB); }
+  pcc.font='9px ui-monospace,Menlo,monospace'; pcc.textBaseline='alphabetic';
+  pcc.strokeStyle='rgba(255,255,255,.08)'; pcc.fillStyle='rgba(255,255,255,.5)'; pcc.lineWidth=1;
+  const yUnit=power?'hp':'lbf', yStep=niceStep(yMax,5);
+  for(let y=0;y<=yMax;y+=yStep){ const yy=Y(y); pcc.beginPath();pcc.moveTo(padL,yy);pcc.lineTo(w-padR,yy);pcc.stroke(); pcc.fillText(Math.round(y),6,yy+3); }
+  const xStep=niceStep(xMaxKt,7);
+  for(let kt=Math.ceil(xMinKt/xStep)*xStep;kt<=xMaxKt;kt+=xStep){ pcc.fillText(Math.round(kt),X(kt)-7,h-8); }
+  pcc.fillStyle='rgba(255,255,255,.55)'; pcc.fillText('kt TAS',w-44,h-8); pcc.save();
+  pcc.translate(11,padT+34);pcc.rotate(-Math.PI/2);pcc.fillText(yUnit,0,0);pcc.restore();
+
+  const line=(key,color,width,dash)=>{ pcc.save();pcc.beginPath();pcc.rect(padL,padT-4,w-padL-padR,h-padT-padB+6);pcc.clip();
+    pcc.strokeStyle=color;pcc.lineWidth=width;pcc.setLineDash(dash?[4,3]:[]);pcc.beginPath();
+    pts.forEach((o,idx)=>{const xx=X(o.x),yy=Y(o[key]); idx?pcc.lineTo(xx,yy):pcc.moveTo(xx,yy);}); pcc.stroke();pcc.setLineDash([]);pcc.restore(); };
+  line('p','rgba(124,200,255,.5)',1.5,true);
+  line('i','rgba(185,163,255,.7)',1.5,true);
+  line('t','#7cf',2.6,false);
+  if(power && PaHp>0 && PaHp<yMax){ const yy=Y(PaHp); pcc.strokeStyle='rgba(55,214,122,.85)';pcc.lineWidth=1.5;pcc.setLineDash([6,4]);
+      pcc.beginPath();pcc.moveTo(padL,yy);pcc.lineTo(w-padR,yy);pcc.stroke();pcc.setLineDash([]);
+      pcc.fillStyle='rgba(55,214,122,.9)';pcc.fillText('power available',w-padR-96,yy-4); }
+
+  if(power && PaHp>0){ let vmaxKt=null; for(const o of pts){ if(o.t<=PaHp) vmaxKt=o.x; }
+    if(vmaxKt!=null && vmaxKt<xMaxKt*0.995){ const xx=X(vmaxKt),yy=Y(PaHp);
+      pcc.fillStyle='#37d67a';pcc.shadowColor='#37d67a';pcc.shadowBlur=8;pcc.beginPath();pcc.arc(xx,yy,4.5,0,7);pcc.fill();pcc.shadowBlur=0;
+      pcc.font='700 11px ui-monospace,Menlo,monospace';pcc.fillStyle='rgba(55,214,122,.95)';
+      const lbl='max level ≈ '+Math.round(vmaxKt)+' kt',tw=pcc.measureText(lbl).width; pcc.fillText(lbl,Math.min(xx+7,w-tw-4),yy+15); } }
+  pcc.fillStyle='rgba(6,9,16,.28)'; pcc.fillRect(X(xMinKt),padT,Math.max(0,X(a.vs)-X(xMinKt)),h-padT-padB);
+  pcc.fillStyle='rgba(255,255,255,.5)'; pcc.font='italic 9px ui-monospace,Menlo,monospace'; pcc.fillText('stalled — hypothetical', X(xMinKt)+4, h-padB-6);
+  pcc.font='700 12px ui-monospace,Menlo,monospace';
+  const vline=(kt,color,label,row)=>{ if(kt<xMinKt||kt>xMaxKt)return; const xx=X(kt); pcc.strokeStyle=color;pcc.setLineDash([2,3]);pcc.lineWidth=1;
+    pcc.beginPath();pcc.moveTo(xx,padT);pcc.lineTo(xx,h-padB);pcc.stroke();pcc.setLineDash([]);
+    if(label){ pcc.fillStyle=color; const tw=pcc.measureText(label).width; pcc.fillText(label, Math.min(Math.max(xx-tw/2,2), w-tw-2), row===0?14:29); } };
+  vline(a.vs,'rgba(255,99,99,.95)','Vs',0);
+  if(power) vline(Vmp*MS_KT,'rgba(255,184,77,.95)','',1);
+  vline(Vmd*MS_KT,'rgba(55,214,122,.9)','L/Dmax',0);
+  vline(a.va,'rgba(124,200,255,.9)','Va',1);
+  vline(a.vno,'rgba(255,210,77,.9)','Vno',0);
+  vline(a.vne,'rgba(255,99,99,.95)','Vne',1);
+  const vkt=Math.max(xMinKt,Math.min(xMaxKt,+$('pcSlider').value)), pp=pcPerf(a,vkt/MS_KT,rho);
+  const mx=X(vkt),my=Math.max(padT+2,Math.min(h-padB,Y(conv(pp))));
+  pcc.strokeStyle='rgba(255,255,255,.25)';pcc.setLineDash([3,3]);pcc.beginPath();pcc.moveTo(mx,h-padB);pcc.lineTo(mx,my);pcc.stroke();pcc.setLineDash([]);
+  pcc.fillStyle=vkt<Vmp*MS_KT?'#ff6a45':'#fff';pcc.shadowColor=pcc.fillStyle;pcc.shadowBlur=10;
+  pcc.beginPath();pcc.arc(mx,my,5,0,7);pcc.fill();pcc.shadowBlur=0;
+  pcVminKt=xMinKt; pcVmaxKt=xMaxKt;
+}
+function niceStep(max,target){ const raw=max/target,mag=Math.pow(10,Math.floor(Math.log10(raw))),n=raw/mag;
+  const s=n<1.5?1:n<3?2:n<7?5:10; return s*mag; }
+
+function calcPC(){
+  const a=pcParams(), da=parseFloat($('pcDa').value)||0, rho=isa(da/FT_PER_M).rho;
+  const {Vmd,Vmp}=pcSpeeds(a,rho);
+  const xMinKt=Math.max(10, a.vs*0.22);
+  const sl=$('pcSlider'); sl.min=Math.round(xMinKt); sl.max=Math.round(a.vno);
+  let vkt=parseFloat(sl.value); if(vkt<+sl.min)vkt=+sl.min; if(vkt>+sl.max)vkt=+sl.max; sl.value=vkt;
+  $('pcV').textContent=Math.round(vkt);
+  const V=vkt/MS_KT, p=pcPerf(a,V,rho), prHp=p.Pr/HP_W;
+  const PaHp=Math.max(0,parseFloat($('pcHp').value)||0)*ETAP;
+  const excessHp=PaHp-prHp;
+  $('pcPr').textContent=Math.round(prHp);
+  const re=$('pcExcess');
+  if(vkt<a.vs){ re.textContent='—'; re.parentElement.style.color='var(--ink-dim)'; }
+  else { re.textContent=(excessHp>=0?'+':'−')+Math.abs(Math.round(excessHp)); re.parentElement.style.color=excessHp>=0?'#37d67a':'#ff6a45'; }
+  let note;
+  if(vkt<a.vs){ note='<strong>Hypothetical.</strong> Stall speed is determined by the wing’s critical angle of attack, not by power. Theoretically, if enough thrust were available to "hang the plane on the prop" (not realistic in a trainer), you could sustain flight slower — but the wing stalls first.'; }
+  else if(V<Vmp){ note='<strong>Region of reversed command (back side of the power curve).</strong> Below the minimum-power speed (≈'+Math.round(Vmp*MS_KT)+' kt), flying <em>slower</em> needs <em>more</em> power, nose-high. For a trainer this band — stall up to the min-power speed — is narrow, which is why being "behind the curve" sneaks up on you on short final.'; }
+  else { note='Front side of the power curve. <b>L/Dmax ≈ '+Math.round(Vmd*MS_KT)+' kt</b> is best lift-to-drag (best glide &amp; max range); the <b>minimum-power speed ≈ '+Math.round(Vmp*MS_KT)+' kt</b> gives best endurance and is near best-rate-of-climb (Vy).'; }
+  if(vkt>=a.vs){ note += excessHp>=0
+    ? ' <b>Excess power ≈ '+Math.round(excessHp)+' hp</b> (the green line minus the curve) is the surplus over level-flight power — what climbs or accelerates the airplane. It’s largest near the min-power speed, which is why Vy sits there.'
+    : ' Here power required exceeds power available, so at this setting you’d be <b>descending</b>, not holding altitude.'; }
+  $('pcNote').innerHTML=note;
+  drawPC(a,rho);
+}
+function initPC(){ const s=$('pcAcft'); for(const k in AIRCRAFT_PC){const o=document.createElement('option');o.value=k;o.textContent=AIRCRAFT_PC[k].n;s.appendChild(o);} s.value='c172'; }
+
+function pcSyncPower(from){
+  const a=pcParams(), da=parseFloat($('pcDa').value)||0, ratedAtAlt=a.hp*gagg(densityRatioAtFt(da));
+  if(from==='hp'){ const hp=Math.max(0,parseFloat($('pcHp').value)||0);
+    $('pcPow').value = ratedAtAlt>0 ? Math.round(Math.min(100, hp/ratedAtAlt*100)) : 0; }
+  else { const pct=Math.max(0,Math.min(100,parseFloat($('pcPow').value)||0));
+    $('pcHp').value = Math.round(ratedAtAlt*pct/100); }
+}
+
+slider.addEventListener('input',e=>update(+e.target.value));
+document.querySelectorAll('.chip[data-alt]').forEach(c=>c.addEventListener('click',()=>update(+c.dataset.alt)));
+$('geoExplore').addEventListener('click',useMyAltitude);
+document.querySelectorAll('.apchip').forEach(c=>c.addEventListener('click',()=>{ $('icao').value=c.dataset.icao; lookupICAO(); }));
+['elev','oat','altim'].forEach(id=>$(id).addEventListener('input',calcDA));
+(function(){ let drag=false;
+  const toOAT=e=>{ const r=daChart.getBoundingClientRect(),padL=46,padR=14; let f=(e.clientX-r.left-padL)/(r.width-padL-padR); f=Math.max(0,Math.min(1,f)); return -25+f*75; };
+  const set=e=>{ const tC=toOAT(e); $('oat').value=(tempUnit==='F')?Math.round(tC*9/5+32):Math.round(tC); calcDA(); };
+  daChart.addEventListener('pointerdown',e=>{drag=true;daChart.setPointerCapture(e.pointerId);set(e);});
+  daChart.addEventListener('pointermove',e=>{if(drag)set(e);});
+  daChart.addEventListener('pointerup',()=>drag=false);
+})();
+$('icaoBtn').addEventListener('click',lookupICAO);
+$('geoBtn').addEventListener('click',useMyLocation);
+$('oatUnit').addEventListener('click',()=>{ const inp=$('oat'); const v=parseFloat(inp.value);
+  if(tempUnit==='C'){ tempUnit='F'; if(!isNaN(v)) inp.value=Math.round(v*9/5+32); $('oatUnit').textContent='°F'; }
+  else { tempUnit='C'; if(!isNaN(v)) inp.value=Math.round((v-32)*5/9); $('oatUnit').textContent='°C'; }
+  calcDA(); });
+$('icao').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();lookupICAO();}});
+$('icao').addEventListener('blur',lookupICAO);
+['acft','cruise','customDp'].forEach(id=>$(id).addEventListener('input',calcCabin));
+(function(){ let drag=false;
+  const toAlt=e=>{ const r=cabinChart.getBoundingClientRect(),padL=44,padR=14; let f=(e.clientX-r.left-padL)/(r.width-padL-padR); f=Math.max(0,Math.min(1,f)); return Math.round(f*cabinXMax/500)*500; };
+  const set=e=>{ $('cruise').value=toAlt(e); calcCabin(); };
+  cabinChart.addEventListener('pointerdown',e=>{drag=true;cabinChart.setPointerCapture(e.pointerId);set(e);});
+  cabinChart.addEventListener('pointermove',e=>{if(drag)set(e);});
+  cabinChart.addEventListener('pointerup',()=>drag=false);
+})();
+['hpAcft','hpDa','hpCustom'].forEach(id=>$(id).addEventListener('input',calcHP));
+(function(){ let drag=false;
+  const toDa=e=>{ const r=hpChart.getBoundingClientRect(),padL=42,padR=14; let f=(e.clientX-r.left-padL)/(r.width-padL-padR); f=Math.max(0,Math.min(1,f)); return Math.round(f*30000/100)*100; };
+  const set=e=>{ $('hpDa').value=fmt(toDa(e)); calcHP(); };
+  hpChart.addEventListener('pointerdown',e=>{drag=true;hpChart.setPointerCapture(e.pointerId);set(e);});
+  hpChart.addEventListener('pointermove',e=>{if(drag)set(e);});
+  hpChart.addEventListener('pointerup',()=>drag=false);
+})();
+$('useDa').addEventListener('click',()=>{ $('hpDa').value=fmt(lastDA); calcHP(); });
+['elev','hpDa'].forEach(id=>$(id).addEventListener('blur',()=>{ const v=$(id).value.trim(); if(v!=='') $(id).value=fmt(commaInt(v)); }));
+['pcAcft','pcDa','pcW','pcS','pcB','pcCd0','pcE'].forEach(id=>$(id).addEventListener('input',()=>{ pcSyncPower('pct'); calcPC(); }));
+$('pcPow').addEventListener('input',()=>{ pcSyncPower('pct'); calcPC(); });
+$('pcHp').addEventListener('input',()=>{ pcSyncPower('hp'); calcPC(); });
+$('pcSlider').addEventListener('input',calcPC);
+$('usePcDa').addEventListener('click',()=>{ $('pcDa').value=Math.round(lastDA); pcSyncPower('pct'); calcPC(); });
+(function(){ let drag=false;
+  const toKt=e=>{ const r=pcChart.getBoundingClientRect(),padL=52,padR=14; let f=(e.clientX-r.left-padL)/(r.width-padL-padR); f=Math.max(0,Math.min(1,f)); return pcVminKt+f*(pcVmaxKt-pcVminKt); };
+  const set=e=>{ const sl=$('pcSlider'); let kt=Math.round(toKt(e)); kt=Math.max(+sl.min,Math.min(+sl.max,kt)); sl.value=kt; calcPC(); };
+  pcChart.addEventListener('pointerdown',e=>{drag=true;pcChart.setPointerCapture(e.pointerId);set(e);});
+  pcChart.addEventListener('pointermove',e=>{if(drag)set(e);});
+  pcChart.addEventListener('pointerup',()=>drag=false);
+})();
+
+function skyToAlt(clientY){
+  const r=sky.getBoundingClientRect(); const pad=14*(sky.height/r.height);
+  const yCanvas=(clientY-r.top)*(sky.height/r.height);
+  const frac=1-(yCanvas-pad)/(sky.height-2*pad);
+  return Math.max(0,Math.min(MAX_ALT,frac*MAX_ALT));
+}
+let dragging=false;
+sky.addEventListener('pointerdown',e=>{dragging=true;sky.setPointerCapture(e.pointerId);update(skyToAlt(e.clientY));});
+sky.addEventListener('pointermove',e=>{if(dragging)update(skyToAlt(e.clientY));});
+sky.addEventListener('pointerup',()=>dragging=false);
+window.addEventListener('resize',()=>{skyDim=fit(sky,skc);stars=null;airDim=fit(air,ac);curveDim=fit(curve,cc);pcDim=fit(pcChart,pcc);hpDim=fit(hpChart,hpc);cabinDim=fit(cabinChart,cbc);daDim=fit(daChart,dac);parts=[];update(alt);calcDA();calcPC();calcHP();calcCabin();});
+
+initAircraft();
+initHP();
+initPC();
+pcSyncPower('pct');
+update(500);
+calcDA();
+calcCabin();
+calcHP();
+calcPC();
+drawAir();
+
+(function(){ const b=$('disclaimerBar'); if(!b)return; b.hidden=false;
+  $('disclaimerOk').addEventListener('click',()=>{ b.hidden=true; }); })();
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "DensityAlt",
+  "url": "https://densityalt.com/",
+  "description": "Free density altitude calculator paired with an interactive atmosphere and hypoxia explorer, plus horsepower-at-altitude, power-required-curve, and cabin altitude calculators for pilots, students, and aerospace enthusiasts.",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Any (web browser)",
+  "browserRequirements": "Requires JavaScript",
+  "isAccessibleForFree": true,
+  "author": {"@type": "Person", "name": "Levan Sulakvelidze", "description": "Instrument-rated private pilot", "sameAs": ["https://www.linkedin.com/in/levansula", "https://www.instagram.com/levansula/", "https://github.com/levansula23"]},
+  "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+  "featureList": [
+    "Density altitude calculator (pressure altitude, ISA deviation, density altitude)",
+    "Interactive atmosphere & hypoxia explorer (pressure, density, ambient/alveolar O2, SpO2)",
+    "Horsepower at altitude calculator (Gagg-Ferrar)",
+    "Power-required curve & region of reversed command",
+    "Cabin altitude calculator"
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"What is density altitude?","acceptedAnswer":{"@type":"Answer","text":"Density altitude is pressure altitude corrected for non-standard temperature — the altitude at which the air density you're flying in would occur in the standard atmosphere. On a hot day at a high field it can be thousands of feet above your actual elevation, which is why aircraft climb and accelerate poorly in those conditions."}},
+    {"@type":"Question","name":"How do you calculate density altitude?","acceptedAnswer":{"@type":"Answer","text":"First find pressure altitude: PA = field elevation + (29.92 − altimeter setting) × 1000. Then correct for temperature: DA = PA + 120 × (OAT − ISA temperature), where ISA temperature is 15 °C minus about 2 °C per 1,000 ft of pressure altitude."}},
+    {"@type":"Question","name":"Why do you need supplemental oxygen at altitude?","acceptedAnswer":{"@type":"Answer","text":"As air pressure drops, the partial pressure of oxygen drops too, so each breath delivers less oxygen to your blood. Under FAR 91.211, U.S. pilots need oxygen above 12,500 ft cabin altitude after 30 minutes, continuously above 14,000 ft, and must provide it to passengers above 15,000 ft."}},
+    {"@type":"Question","name":"What is your blood oxygen (SpO2) at altitude?","acceptedAnswer":{"@type":"Answer","text":"For an unacclimatized person breathing cabin air, SpO2 falls from about 97% at sea level to roughly 87% at 10,000 ft, 72% at 18,000 ft, and 50% at 25,000 ft. The drop accelerates because the oxygen–hemoglobin curve falls off sharply once arterial oxygen pressure drops below about 60 mmHg."}},
+    {"@type":"Question","name":"How much horsepower does an engine lose with altitude?","acceptedAnswer":{"@type":"Answer","text":"A normally-aspirated piston engine loses power roughly in proportion to air density — about 3% per 1,000 ft of density altitude. At 8,000 ft density altitude a 180 hp engine makes closer to 135 hp. Turbocharged engines hold rated power up to a critical altitude, then fall off similarly."}},
+    {"@type":"Question","name":"Do jet (turbine) engines lose power at altitude?","acceptedAnswer":{"@type":"Answer","text":"Yes. Jet engines produce thrust, not horsepower, and thrust falls as you climb because thinner air means less mass flow through the engine — roughly with the ambient pressure ratio, so a turbofan at FL400 may make only about a third of its sea-level static thrust. Turboprops produce shaft horsepower and are usually flat-rated to a critical altitude, then lose power as density falls. Jets cruise high because drag drops even faster up there and fuel efficiency improves, not because they keep their thrust."}},
+    {"@type":"Question","name":"Why are airliner cabins pressurized to about 8,000 feet?","acceptedAnswer":{"@type":"Answer","text":"The fuselage can only hold a limited pressure difference between inside and outside. At cruise the system maintains that maximum differential, which works out to a cabin altitude near 8,000 ft for most airliners. Composite jets like the 787 and A350 tolerate a higher differential and target about 6,000 ft."}}
+  ]
+}
+</script>
+</body>
+</html>

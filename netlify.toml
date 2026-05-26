@@ -1,0 +1,23 @@
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+[[redirects]]
+  from = "/api/wx"
+  to = "/.netlify/functions/wx"
+  status = 200
+
+[[redirects]]
+  from = "/HANDOFF.md"
+  to = "/"
+  status = 404
+
+[[redirects]]
+  from = "/make_og_image.py"
+  to = "/"
+  status = 404
+
+[[redirects]]
+  from = "/netlify.toml"
+  to = "/"
+  status = 404
