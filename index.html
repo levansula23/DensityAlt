@@ -154,6 +154,7 @@
   .icao-status{margin-top:9px;font:600 12.5px/1.3 var(--mono);min-height:16px;color:var(--ink-dim)}
   .icao-status.ok{color:var(--good)}
   .icao-status.err{color:var(--warn)}
+  .icao-status.info{color:var(--accent2)}
   .icao-status.loading{color:var(--accent2);font-weight:700;font-size:13.5px}
   .icao-status .spin{display:inline-block;width:11px;height:11px;border:2px solid rgba(124,255,255,.25);border-top-color:var(--accent2);border-radius:50%;margin-right:8px;vertical-align:-1px;animation:spin .7s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
@@ -370,7 +371,7 @@
         <button id="icaoBtn" class="lookup">Look&nbsp;up</button>
         <button id="geoBtn" class="lookup" type="button">Use my location</button>
       </div>
-      <div class="icao-status" id="icaoStatus">Type any ICAO, tap a preset, or use your location. Works worldwide for elevation; live temp/altimeter is US-focused.</div>
+      <div class="icao-status" id="icaoStatus">Type any ICAO, tap a preset, or use your location. Works worldwide — elevation plus live temp/altimeter for almost any field.</div>
       <div class="presets apset">
         <button class="chip apchip" data-icao="L06">Furnace Creek &minus;210 ft (lowest US)</button>
         <button class="chip apchip" data-icao="KDEN">Denver</button>
@@ -588,7 +589,7 @@
       <div><b>Horsepower</b> — Gagg–Ferrar relation <code>HP ≈ rated·(1.132σ − 0.132)</code>, σ = density ratio at your density altitude; turbos hold rated power to a critical altitude.</div>
       <div><b>Power curve</b> — parabolic drag polar <code>C_D = C_D0 + C_L²/(πAR·e)</code>; power required = drag × TAS. The region of reversed command is the band from stall up to the minimum-power speed. Drag values are representative estimates and V-speeds (Vs, Va, Vno, Vne) are typical published figures — check your POH; the climb readout is idealized (constant ~80% prop efficiency) and optimistic at low speed.</div>
       <div><b>Cabin altitude</b> — <code>cabin_P = min(sea level, ambient + ΔP)</code> inverted to an altitude; ΔP is each aircraft's published max pressure differential.</div>
-      <div><b>Data sources</b> — bundled ~110 airports (offline elevation) plus <code>aviationweather.gov</code> METAR for live temp/altimeter (works via a same-origin proxy once hosted).</div>
+      <div><b>Data sources</b> — bundled ~110 airports (offline elevation) plus <code>aviationweather.gov</code> METAR for live temp/altimeter (via a same-origin proxy once hosted), falling back to <code>open-meteo.com</code> current weather by coordinates for fields without a METAR.</div>
       <div><b>References</b> — FAA <i>Pilot's Handbook of Aeronautical Knowledge</i> (FAA-H-8083-25) and <i>Airplane Flying Handbook</i> (FAA-H-8083-3) for density altitude, the FAR&nbsp;91.211 oxygen rules, and the power curve / region of reversed command; J.D.&nbsp;Anderson, <i>Introduction to Flight</i> (parabolic drag polar, power-required = drag&nbsp;×&nbsp;TAS); the alveolar gas equation and Severinghaus SpO₂ relation, with acute-exposure SaO₂ figures from high-altitude physiology literature (e.g. J.B.&nbsp;West). Power-curve V-speeds and the narrow trainer reversed-command band cross-checked against Van's Air Force, GoFly, and Boldmethod.</div>
     </div>
     <p class="disclaim">Educational models for healthy unacclimatized adults at acute exposure. Real SpO₂ varies with fitness, acclimatization, and individual physiology. Not for medical or operational flight-planning use.</p>
@@ -848,6 +849,7 @@ const AIRPORTS={
  NZQN:1171,NZWN:41,NZCH:123,YBBN:13,YPPH:67,YPAD:20,YBCG:21,NFFN:59,NTAA:5,
  TNCM:13,MDPC:47,TJSJ:9,MKJP:10,MWCR:8,TBPB:169,TFFJ:49,TNCS:60
 };
+const COORDS={ L06:[36.4636,-116.8811], VNLK:[27.6861,86.7297], ZULS:[29.3231,100.0533] };
 function fetchT(url,ms){ const c=new AbortController(); const t=setTimeout(()=>c.abort(),ms); return fetch(url,{cache:'no-store',signal:c.signal}).finally(()=>clearTimeout(t)); }
 
 const HOSTED=(location.protocol==='http:'||location.protocol==='https:');
@@ -858,7 +860,7 @@ async function lookupICAO(){
   const st=$('icaoStatus');
   if(!raw){ st.className='icao-status'; st.textContent=''; return; }
   st.className='icao-status loading'; st.innerHTML='<span class="spin"></span>Looking up '+raw+' — fetching live elevation, temperature &amp; altimeter…';
-  let elevFt=null, tempC=null, altInHg=null, name=null;
+  let elevFt=null, tempC=null, altInHg=null, name=null, lat=null, lon=null;
 
   try{
     const r=await fetchT(wxURL('metar',raw),5000);
@@ -867,17 +869,34 @@ async function lookupICAO(){
       if(d[0].elev!=null) elevFt=d[0].elev*FT_PER_M;
       if(d[0].temp!=null) tempC=d[0].temp;
       if(d[0].altim!=null) altInHg=d[0].altim*0.0295300;
+      if(d[0].lat!=null){ lat=d[0].lat; lon=d[0].lon; }
     }}
   }catch(e){}
 
-  if(elevFt==null){
+  if(elevFt==null || lat==null){
     try{
       const r=await fetchT(wxURL('airport',raw),5000);
-      if(r.ok){ const d=await r.json(); if(d && d[0] && d[0].elev!=null){ elevFt=d[0].elev*FT_PER_M; if(!name && d[0].name) name=d[0].name.trim(); } }
+      if(r.ok){ const d=await r.json(); if(d && d[0]){
+        if(elevFt==null && d[0].elev!=null) elevFt=d[0].elev*FT_PER_M;
+        if(!name && d[0].name) name=d[0].name.trim();
+        if(lat==null && d[0].lat!=null){ lat=d[0].lat; lon=d[0].lon; }
+      } }
     }catch(e){}
   }
 
   if(elevFt==null && AIRPORTS[raw]!=null) elevFt=AIRPORTS[raw];
+  if(lat==null && COORDS[raw]){ lat=COORDS[raw][0]; lon=COORDS[raw][1]; }
+
+  if((tempC==null || altInHg==null) && lat!=null && lon!=null){
+    try{
+      const r=await fetchT('https://api.open-meteo.com/v1/forecast?latitude='+lat.toFixed(4)+'&longitude='+lon.toFixed(4)+'&current=temperature_2m,pressure_msl',6000);
+      const d=r.ok?await r.json():null, cur=d&&d.current;
+      if(cur){
+        if(tempC==null && cur.temperature_2m!=null) tempC=cur.temperature_2m;
+        if(altInHg==null && cur.pressure_msl!=null) altInHg=cur.pressure_msl*0.0295300;
+      }
+    }catch(e){}
+  }
 
   const got=[], missing=[];
   if(elevFt!=null){ $('elev').value=fmt(elevFt); got.push('elevation '+Math.round(elevFt).toLocaleString('en-US')+' ft'); } else missing.push('elevation');
@@ -891,7 +910,11 @@ async function lookupICAO(){
     return;
   }
   let msg='<strong>'+raw+'</strong>'+(name?' · '+name:'')+' — set '+got.join(', ')+'.';
-  if(missing.length){ st.className='icao-status err'; msg+=' Couldn’t get '+missing.join(' & ')+' — please set '+(missing.length>1?'those':'it')+' manually.'; }
+  if(missing.length){
+    const noElev=missing.includes('elevation');
+    st.className='icao-status '+(noElev?'err':'info');
+    msg+=' No live '+missing.join(' & ')+' published for this field — enter '+(missing.length>1?'them':'it')+' manually.';
+  }
   else st.className='icao-status ok';
   st.innerHTML=msg;
 }
