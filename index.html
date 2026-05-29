@@ -1429,5 +1429,22 @@ drawAir();
   ]
 }
 </script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to calculate density altitude",
+  "description": "Calculate density altitude from field elevation, altimeter setting, and outside air temperature.",
+  "totalTime": "PT1M",
+  "tool": [{"@type": "HowToTool", "name": "DensityAlt density altitude calculator"}],
+  "step": [
+    {"@type": "HowToStep", "name": "Enter field elevation", "text": "Enter the airport field elevation in feet MSL, or look it up by ICAO identifier to autofill it.", "url": "https://densityalt.com/#density-altitude"},
+    {"@type": "HowToStep", "name": "Enter the altimeter setting", "text": "Enter the current altimeter setting in inches of mercury (inHg) to compute pressure altitude: PA = field elevation + (29.92 − altimeter) × 1000."},
+    {"@type": "HowToStep", "name": "Enter outside air temperature", "text": "Enter the outside air temperature. Density altitude corrects pressure altitude for non-standard temperature: DA = PA + 120 × (OAT − ISA temperature)."},
+    {"@type": "HowToStep", "name": "Read the density altitude", "text": "The calculator displays pressure altitude, ISA temperature deviation, and the resulting density altitude in feet."}
+  ]
+}
+</script>
 </body>
 </html>
