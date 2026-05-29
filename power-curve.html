@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#05070f">
+<title>Power Curve & Region of Reversed Command | DensityAlt</title>
+<meta name="description" content="Interactive power curve and region of reversed command explainer — the back side of the power curve, L/Dmax, Vy, and how density altitude shifts it all.">
+<link rel="canonical" href="https://densityalt.com/power-curve">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DensityAlt">
+<meta property="og:url" content="https://densityalt.com/power-curve">
+<meta property="og:title" content="The Power Curve & Region of Reversed Command">
+<meta property="og:description" content="Interactive power-required curve: explore the back side of the curve, L/Dmax, V-speeds, and how density altitude shrinks your margins.">
+<meta property="og:image" content="https://densityalt.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Power Curve & Region of Reversed Command">
+<meta name="twitter:description" content="Interactive power-required curve: explore the back side of the curve, L/Dmax, V-speeds, and how density altitude shrinks your margins.">
+<meta name="twitter:image" content="https://densityalt.com/og-image.png">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<nav class="topnav"><div class="navin">
+  <a class="brand" href="/" style="text-decoration:none"><img src="/favicon.svg" alt=""><b>DensityAlt</b></a>
+  <div class="navlinks">
+    <a class="nl" href="/">Density Altitude</a>
+    <a class="nl" href="/atmosphere-explorer">Explorer</a>
+    <a class="nl" href="/horsepower-at-altitude">Horsepower</a>
+    <a class="nl" href="/power-curve">Power Curve</a>
+    <a class="nl" href="/cabin-altitude-calculator">Cabin Altitude</a>
+    <a class="nl" href="/#about">About</a>
+  </div>
+  <a class="nav-gh" href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener" aria-label="DensityAlt source code on GitHub" title="Open source — view the code on GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+</div></nav>
+
+<div id="disclaimerBar" class="disclaimer-bar" hidden>
+  <span><strong>Educational estimates only.</strong> DensityAlt is not for flight planning, dispatch, or medical use — always use your POH and official sources.</span>
+  <button id="disclaimerOk" type="button">Got it</button>
+</div>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="kicker">Free aviation &amp; aerospace calculators</div>
+    <h1>Power Curve &amp; Region of <span>Reversed Command</span></h1>
+    <p class="hero-sub">The back side of the curve.</p>
+    <p class="lead">The region of reversed command is where flying slower paradoxically needs <em>more</em> power. The whole curve shifts up with density altitude — get yours from the <a href="/">density altitude calculator</a> — so high, hot fields shrink your margins.</p>
+  </header>
+
+  <section class="da" id="power-curve">
+    <h2>Power Curve &amp; Region of Reversed Command</h2>
+    <p class="desc"><strong>Parasite drag</strong> increases with the <em>square</em> of speed, while <strong>lift-induced drag</strong> is higher at lower speed. The bottom of the curve is the <strong>L/Dmax</strong> speed. Flying at very slow speeds requires high angle of attack (AoA, or alpha), so it takes <em>more</em> power to fly <em>slower</em> — the <strong>region of reversed command</strong>. Inside this region, altitude is controlled with <em>power</em> and airspeed with <em>pitch</em>. Drag the speed across the chart and watch the power change. <a id="usePcDa">↑ use the density altitude from above</a></p>
+    <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning, dispatch, or weight-and-balance.</strong> Always fly the numbers in your POH and current official weather.</p>
+    <div class="da-grid pcin">
+      <div class="field">
+        <label>Aircraft</label>
+        <div class="in"><select id="pcAcft"></select></div>
+      </div>
+      <div class="field">
+        <label>Density Altitude</label>
+        <div class="in"><input id="pcDa" type="number" value="0"><span class="unit">ft</span></div>
+      </div>
+      <div class="field">
+        <label>Power Setting</label>
+        <div class="in"><input id="pcPow" type="number" min="0" max="100" value="75"><span class="unit">% rated</span></div>
+      </div>
+      <div class="field">
+        <label>Engine Power</label>
+        <div class="in"><input id="pcHp" type="number" value="135"><span class="unit">hp</span></div>
+        <div class="field-hint">auto from % &amp; altitude — override anytime</div>
+      </div>
+    </div>
+    <div class="da-grid pcin" id="pcCustomWrap" style="display:none;margin-top:18px">
+      <div class="field"><label>Gross Weight</label><div class="in"><input id="pcW" type="number" value="2400"><span class="unit">lb</span></div></div>
+      <div class="field"><label>Wing Area</label><div class="in"><input id="pcS" type="number" value="170"><span class="unit">ft²</span></div></div>
+      <div class="field"><label>Wingspan</label><div class="in"><input id="pcB" type="number" value="36"><span class="unit">ft</span></div></div>
+      <div class="field"><label>Parasite drag C<sub>D0</sub></label><div class="in"><input id="pcCd0" type="number" step="0.001" value="0.033"></div></div>
+      <div class="field"><label>Oswald efficiency e</label><div class="in"><input id="pcE" type="number" step="0.01" value="0.75"></div></div>
+    </div>
+    <canvas id="pcChart" class="box" width="900" height="340" style="margin-top:18px"></canvas>
+    <div class="pc-legend">
+      <span data-tip="Total power required = total drag × airspeed. This is the solid U-shaped curve; the engine must supply at least this much to hold altitude at a given speed."><i style="background:#7cf"></i> Total</span>
+      <span class="dash" data-tip="Power to overcome induced drag — the unavoidable cost of generating lift. Largest when slow (high angle of attack); falls roughly as 1/speed."><i style="border-top:2px dashed #b9a3ff;background:none;height:0"></i> Induced</span>
+      <span class="dash" data-tip="Power to overcome parasite drag — form drag + skin friction. Tiny when slow; grows with the cube of speed, so it dominates at high speed."><i style="border-top:2px dashed #7cc8ff;background:none;height:0"></i> Parasite</span>
+      <span class="pa" data-tip="Thrust power the engine + propeller can deliver at this power setting and density altitude. Where it crosses the Total curve on the right = max level speed; the gap above the curve is your climb power."><i style="background:#37d67a"></i> Power available</span>
+    </div>
+    <div class="pc-speed">
+      <label>Drag the chart or this slider to set true airspeed</label>
+      <input id="pcSlider" type="range" min="30" max="130" step="1" value="90">
+    </div>
+    <div class="da-out">
+      <div class="out hero" style="background:radial-gradient(160px 90px at 70% 20%,rgba(78,161,255,.16),transparent),rgba(0,0,0,.22)"><div class="lbl">True Airspeed</div><div class="v" style="color:var(--accent2)"><span id="pcV">90</span> kt</div></div>
+      <div class="out"><div class="lbl">Power Required</div><div class="v"><span id="pcPr">—</span> hp</div></div>
+      <div class="out"><div class="lbl">Excess Power @ this speed</div><div class="v" style="color:var(--good)"><span id="pcExcess">—</span> hp</div></div>
+    </div>
+    <div class="da-note" id="pcNote"></div>
+  </section>
+
+  <footer>
+    <h4>How the numbers are computed</h4>
+    <div class="calcrefs">
+      <div><b>Atmosphere</b> — International Standard Atmosphere (ISA): the barometric formula in the troposphere (1.98&nbsp;°C / 1000&nbsp;ft lapse) and the isothermal layer above the tropopause (~36,089&nbsp;ft).</div>
+      <div><b>Blood oxygen</b> — alveolar gas equation <code>P_AO₂ = 0.2095·(P − 47) − P_CO₂/0.8</code> feeding the Severinghaus SpO₂ curve. CO₂ falls with altitude, tuned to acute-exposure data (~87% @ 10k, ~72% @ 18k, ~50% @ 25k&nbsp;ft).</div>
+      <div><b>Density altitude</b> — <code>PA = elev + (29.92 − altimeter)·1000</code>, then <code>DA = PA + 120·(OAT − ISA&nbsp;temp)</code>.</div>
+      <div><b>Horsepower</b> — Gagg–Ferrar relation <code>HP ≈ rated·(1.132σ − 0.132)</code>, σ = density ratio at your density altitude; turbos hold rated power to a critical altitude.</div>
+      <div><b>Power curve</b> — parabolic drag polar <code>C_D = C_D0 + C_L²/(πAR·e)</code>; power required = drag × TAS. The region of reversed command is the band from stall up to the minimum-power speed. Drag values are representative estimates and V-speeds (Vs, Va, Vno, Vne) are typical published figures — check your POH; the climb readout is idealized (constant ~80% prop efficiency) and optimistic at low speed.</div>
+      <div><b>Cabin altitude</b> — <code>cabin_P = min(sea level, ambient + ΔP)</code> inverted to an altitude; ΔP is each aircraft's published max pressure differential.</div>
+      <div><b>Data sources</b> — bundled ~110 airports (offline elevation) plus <code>aviationweather.gov</code> METAR for live temp/altimeter (via a same-origin proxy once hosted), falling back to <code>open-meteo.com</code> current weather by coordinates for fields without a METAR.</div>
+      <div><b>References</b> — FAA <i>Pilot's Handbook of Aeronautical Knowledge</i> (FAA-H-8083-25) and <i>Airplane Flying Handbook</i> (FAA-H-8083-3) for density altitude, the FAR&nbsp;91.211 oxygen rules, and the power curve / region of reversed command; J.D.&nbsp;Anderson, <i>Introduction to Flight</i> (parabolic drag polar, power-required = drag&nbsp;×&nbsp;TAS); the alveolar gas equation and Severinghaus SpO₂ relation, with acute-exposure SaO₂ figures from high-altitude physiology literature (e.g. J.B.&nbsp;West). Power-curve V-speeds and the narrow trainer reversed-command band cross-checked against Van's Air Force, GoFly, and Boldmethod.</div>
+    </div>
+    <p class="disclaim">Educational models for healthy unacclimatized adults at acute exposure. Real SpO₂ varies with fitness, acclimatization, and individual physiology. Not for medical or operational flight-planning use.</p>
+    <p class="ghsrc"><strong>Open source.</strong> DensityAlt is built in the open — <a href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener">view the code on GitHub</a> to see exactly how every number is computed.</p>
+    <p class="rms">Made with <a href="https://readymadesites.com/" rel="noopener">ReadyMadeSites™</a> — custom calculators, interactive tools &amp; SEO-ready websites that rank.</p>
+  </footer>
+
+</div>
+
+<script src="/app.js"></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "DensityAlt Power Curve & Region of Reversed Command",
+  "url": "https://densityalt.com/power-curve",
+  "description": "Interactive power-required curve showing the region of reversed command, L/Dmax, minimum-power speed, V-speeds, and the effect of density altitude.",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Any (web browser)",
+  "browserRequirements": "Requires JavaScript",
+  "isAccessibleForFree": true,
+  "author": {"@type": "Person", "name": "Levan Sulakvelidze", "description": "Instrument-rated private pilot", "sameAs": ["https://www.linkedin.com/in/levansula", "https://www.instagram.com/levansula/", "https://github.com/levansula23"]},
+  "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+  "featureList": [
+    "Power-required and drag curves",
+    "Region of reversed command (back side of the power curve)",
+    "L/Dmax and minimum-power speed",
+    "V-speeds (Vs, Va, Vno, Vne)",
+    "Density-altitude effect on the curve"
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Density Altitude Calculator","item":"https://densityalt.com/"},
+    {"@type":"ListItem","position":2,"name":"Power Curve & Region of Reversed Command","item":"https://densityalt.com/power-curve"}
+  ]
+}
+</script>
+</body>
+</html>

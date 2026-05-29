@@ -8,7 +8,7 @@
 <title>Density Altitude Calculator — Free Online | DensityAlt</title>
 <meta name="description" content="Free density altitude calculator with live airport weather lookup, plus interactive air pressure, oxygen/SpO₂, horsepower, and cabin-altitude tools for pilots and students.">
 <link rel="canonical" href="https://densityalt.com/">
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="DensityAlt">
 <meta property="og:url" content="https://densityalt.com/">
@@ -17,20 +17,20 @@
 <meta property="og:image" content="https://densityalt.com/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="DensityAlt — Watch Air, Oxygen & Engine Power Thin With Altitude">
-<meta name="twitter:description" content="Drag an aircraft up the atmosphere and watch pressure, blood oxygen (SpO2), and horsepower fall. Free density altitude, horsepower & cabin altitude calculators.">
+<meta name="twitter:description" content="Interactive: drag an aircraft up and watch pressure, air density, blood oxygen (SpO2), and horsepower collapse. Plus free density altitude, horsepower, and cabin altitude calculators.">
 <meta name="twitter:image" content="https://densityalt.com/og-image.png">
 <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
 <nav class="topnav"><div class="navin">
-  <span class="brand"><img src="favicon.svg" alt=""><b>DensityAlt</b></span>
+  <a class="brand" href="/" style="text-decoration:none"><img src="/favicon.svg" alt=""><b>DensityAlt</b></a>
   <div class="navlinks">
-    <a class="nl" href="#explorer">Explorer</a>
-    <a class="nl" href="#density-altitude">Density Altitude</a>
-    <a class="nl" href="#horsepower">Horsepower</a>
-    <a class="nl" href="#power-curve">Power Curve</a>
-    <a class="nl" href="#cabin">Cabin Altitude</a>
-    <a class="nl" href="#about">About</a>
+    <a class="nl" href="/">Density Altitude</a>
+    <a class="nl" href="/atmosphere-explorer">Explorer</a>
+    <a class="nl" href="/horsepower-at-altitude">Horsepower</a>
+    <a class="nl" href="/power-curve">Power Curve</a>
+    <a class="nl" href="/cabin-altitude-calculator">Cabin Altitude</a>
+    <a class="nl" href="/#about">About</a>
   </div>
   <a class="nav-gh" href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener" aria-label="DensityAlt source code on GitHub" title="Open source — view the code on GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
 </div></nav>
@@ -46,91 +46,8 @@
     <div class="kicker">Free aviation &amp; aerospace calculators</div>
     <h1>Density Altitude <span>Calculator</span></h1>
     <p class="hero-sub">Watch the air thin as you climb.</p>
-    <p class="sub">Drag the aircraft upward. Pressure, density, and oxygen don't fall in a straight line — they drop <strong>exponentially</strong>.</p>
-    <p class="lead">A free <a href="#density-altitude"><strong>density altitude calculator</strong></a> + a live atmosphere explorer. Watch thin air hit <a href="#explorer">oxygen &amp; SpO₂</a>, <a href="#horsepower">horsepower</a>, the <a href="#power-curve">power curve</a>, and <a href="#cabin">cabin altitude</a> — built for pilots, students &amp; AvGeeks.</p>
+    <p class="lead">A free <strong>density altitude calculator</strong> with live airport weather, plus an interactive <a href="/atmosphere-explorer">atmosphere &amp; hypoxia explorer</a>, <a href="/horsepower-at-altitude">horsepower</a>, <a href="/power-curve">power curve</a>, and <a href="/cabin-altitude-calculator">cabin altitude</a> tools — built for pilots, students &amp; AvGeeks.</p>
   </header>
-
-  <section class="lab" id="explorer">
-    <div class="colwrap">
-      <div class="column">
-        <canvas id="sky" width="230" height="560"></canvas>
-      </div>
-      <div class="col-hint">↕ drag the sky to change altitude</div>
-    </div>
-
-    <div class="panelstack">
-      <div class="controls">
-        <div class="alt-readout"><span id="altFt">0</span> <small>ft</small> &nbsp;·&nbsp; <span id="altM" style="font-size:18px;color:var(--ink-dim)">0 m</span></div>
-        <input id="slider" type="range" min="0" max="65000" step="100" value="500">
-        <div class="presets">
-          <button class="chip" data-alt="0">Sea level</button>
-          <button class="chip" data-alt="5280">Denver</button>
-          <button class="chip" data-alt="12500">FAA O₂ line</button>
-          <button class="chip" data-alt="26000">Death zone</button>
-          <button class="chip" data-alt="29032">Everest</button>
-          <button class="chip" data-alt="38000">Airliner cruise</button>
-          <button class="chip" data-alt="60000">Concorde cruise</button>
-          <button class="chip" data-alt="63000">Armstrong limit</button>
-          <button id="geoExplore" class="chip" type="button" style="border-color:var(--accent);color:#dbeaff">📍 My elevation</button>
-        </div>
-      </div>
-
-      <div class="grid">
-        <div class="card">
-          <div class="lbl">Air Pressure</div>
-          <div class="val"><span id="pHpa">752</span> <small>hPa</small></div>
-          <div class="bar"><i id="pBar" style="width:74%"></i></div>
-          <div class="pct"><span id="pInHg">22.22</span> inHg · <span id="pPct">74%</span> of sea level</div>
-        </div>
-        <div class="card">
-          <div class="lbl">Air Density</div>
-          <div class="val"><span id="rho">0.96</span> <small>kg/m³</small></div>
-          <div class="bar"><i id="rhoBar" style="width:78%"></i></div>
-          <div class="pct"><span id="rhoPct">78%</span> of sea level</div>
-        </div>
-        <div class="card">
-          <div class="lbl">Outside Temp (ISA)</div>
-          <div class="val"><span id="tC">-1</span> <small>°C</small></div>
-          <div class="bar"><i id="tBar" style="width:60%;background:linear-gradient(90deg,#ff6a45,#ffb84d)"></i></div>
-          <div class="pct"><span id="tF">30</span> °F</div>
-        </div>
-        <div class="card">
-          <div class="lbl">Ambient O₂ pressure</div>
-          <div class="val"><span id="po2">118</span> <small>mmHg</small></div>
-          <div class="bar"><i id="po2Bar" style="width:74%"></i></div>
-          <div class="pct">sea level = 159 mmHg</div>
-        </div>
-        <div class="card">
-          <div class="lbl">In-lung O₂ (alveolar)</div>
-          <div class="val"><span id="pao2">74</span> <small>mmHg</small></div>
-          <div class="bar"><i id="pao2Bar" style="width:74%;background:linear-gradient(90deg,#7cf,#b9a3ff)"></i></div>
-          <div class="pct">sea level ≈ 100 mmHg</div>
-        </div>
-        <div class="spo2">
-          <div class="lbl">Blood O₂ · SpO₂</div>
-          <div class="big" id="spo2">96<small>%</small></div>
-          <div class="feel" id="feel">Normal — no impairment</div>
-        </div>
-      </div>
-
-      <div class="warn-row" id="flags"></div>
-
-      <div class="strip">
-        <div class="viz">
-          <h3>Air molecules per cubic metre</h3>
-          <p class="cap">The dots are illustrative; the real number density (from <code>n/V = P/k<sub>B</sub>T</code>) is below — and it's staggering.</p>
-          <canvas id="air" class="box" width="320" height="170"></canvas>
-          <p class="molcount"><span id="molDensity">2.55 × 10<sup>25</sup></span> molecules/m³ · <span id="molPct">100%</span> of sea level</p>
-        </div>
-        <div class="viz">
-          <h3>Oxygen–hemoglobin curve</h3>
-          <p class="cap">The S-curve. Above the cliff you're safe; past it, saturation falls off a ledge.</p>
-          <canvas id="curve" class="box" width="320" height="170"></canvas>
-        </div>
-      </div>
-      <p class="scale-note">This view tops out at 65,000 ft — the <strong>Armstrong limit</strong>, where unprotected body fluids boil at body temperature. For perspective, the <strong>Kármán line</strong> (the conventional edge of space) sits near <strong>330,000 ft / 100 km</strong> — roughly 5× higher than the top of this chart.</p>
-    </div>
-  </section>
 
   <section class="da" id="density-altitude">
     <h2>Density Altitude Calculator</h2>
@@ -179,112 +96,23 @@
     <div class="da-note" id="daNote"></div>
   </section>
 
-  <section class="da" id="horsepower">
-    <h2>Aircraft Horsepower at Altitude Calculator</h2>
-    <p class="desc">Thin air carries less oxygen for combustion, so a piston engine loses power as density altitude rises. Pick your aircraft and a density altitude to see the horsepower you actually have. <a id="useDa">↑ use the density altitude from above</a></p>
-    <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning, dispatch, or weight-and-balance.</strong> Always fly the numbers in your POH and current official weather.</p>
-    <div class="da-grid">
-      <div class="field">
-        <label>Aircraft</label>
-        <div class="in"><select id="hpAcft"></select></div>
-      </div>
-      <div class="field">
-        <label>Density Altitude</label>
-        <div class="in"><input id="hpDa" type="text" inputmode="numeric" value="7,400"><span class="unit">ft</span></div>
-      </div>
-      <div class="field" id="hpCustomWrap" style="display:none">
-        <label>Rated Horsepower</label>
-        <div class="in"><input id="hpCustom" type="number" value="180"><span class="unit">hp</span></div>
-      </div>
+  <section class="da" id="more-tools">
+    <h2>More free altitude tools</h2>
+    <p class="desc">DensityAlt is a set of free, no-signup aviation calculators. Explore the rest:</p>
+    <div class="grid">
+      <a class="card" href="/atmosphere-explorer" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Atmosphere &amp; Hypoxia Explorer</div>
+        <div class="pct">Drag an aircraft up and watch pressure, oxygen &amp; SpO₂ fall.</div></a>
+      <a class="card" href="/horsepower-at-altitude" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Horsepower at Altitude</div>
+        <div class="pct">How much power a piston engine loses with density altitude.</div></a>
+      <a class="card" href="/power-curve" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Power Curve &amp; Reversed Command</div>
+        <div class="pct">The back side of the power curve and your climb margins.</div></a>
+      <a class="card" href="/cabin-altitude-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Cabin Altitude</div>
+        <div class="pct">What cabin altitude your pressurization holds at cruise.</div></a>
     </div>
-    <div class="da-out">
-      <div class="out"><div class="lbl">Rated Power (sea level)</div><div class="v"><span id="hpRated">180</span> hp</div></div>
-      <div class="out"><div class="lbl">% of Rated Power</div><div class="v"><span id="hpPct">76%</span></div></div>
-      <div class="out hero"><div class="lbl">Power Available</div><div class="v" style="color:var(--good)"><span id="hpAvail">137</span> hp</div></div>
-    </div>
-    <canvas id="hpChart" class="box" width="900" height="200"></canvas>
-    <div class="da-note" id="hpNote"></div>
-  </section>
-
-  <section class="da" id="power-curve">
-    <h2>Power Curve &amp; Region of Reversed Command</h2>
-    <p class="desc"><strong>Parasite drag</strong> increases with the <em>square</em> of speed, while <strong>lift-induced drag</strong> is higher at lower speed. The bottom of the curve is the <strong>L/Dmax</strong> speed. Flying at very slow speeds requires high angle of attack (AoA, or alpha), so it takes <em>more</em> power to fly <em>slower</em> — the <strong>region of reversed command</strong>. Inside this region, altitude is controlled with <em>power</em> and airspeed with <em>pitch</em>. Drag the speed across the chart and watch the power change. <a id="usePcDa">↑ use the density altitude from above</a></p>
-    <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning, dispatch, or weight-and-balance.</strong> Always fly the numbers in your POH and current official weather.</p>
-    <div class="da-grid pcin">
-      <div class="field">
-        <label>Aircraft</label>
-        <div class="in"><select id="pcAcft"></select></div>
-      </div>
-      <div class="field">
-        <label>Density Altitude</label>
-        <div class="in"><input id="pcDa" type="number" value="0"><span class="unit">ft</span></div>
-      </div>
-      <div class="field">
-        <label>Power Setting</label>
-        <div class="in"><input id="pcPow" type="number" min="0" max="100" value="75"><span class="unit">% rated</span></div>
-      </div>
-      <div class="field">
-        <label>Engine Power</label>
-        <div class="in"><input id="pcHp" type="number" value="135"><span class="unit">hp</span></div>
-        <div class="field-hint">auto from % &amp; altitude — override anytime</div>
-      </div>
-    </div>
-    <div class="da-grid pcin" id="pcCustomWrap" style="display:none;margin-top:18px">
-      <div class="field"><label>Gross Weight</label><div class="in"><input id="pcW" type="number" value="2400"><span class="unit">lb</span></div></div>
-      <div class="field"><label>Wing Area</label><div class="in"><input id="pcS" type="number" value="170"><span class="unit">ft²</span></div></div>
-      <div class="field"><label>Wingspan</label><div class="in"><input id="pcB" type="number" value="36"><span class="unit">ft</span></div></div>
-      <div class="field"><label>Parasite drag C<sub>D0</sub></label><div class="in"><input id="pcCd0" type="number" step="0.001" value="0.033"></div></div>
-      <div class="field"><label>Oswald efficiency e</label><div class="in"><input id="pcE" type="number" step="0.01" value="0.75"></div></div>
-    </div>
-    <canvas id="pcChart" class="box" width="900" height="340" style="margin-top:18px"></canvas>
-    <div class="pc-legend">
-      <span data-tip="Total power required = total drag × airspeed. This is the solid U-shaped curve; the engine must supply at least this much to hold altitude at a given speed."><i style="background:#7cf"></i> Total</span>
-      <span class="dash" data-tip="Power to overcome induced drag — the unavoidable cost of generating lift. Largest when slow (high angle of attack); falls roughly as 1/speed."><i style="border-top:2px dashed #b9a3ff;background:none;height:0"></i> Induced</span>
-      <span class="dash" data-tip="Power to overcome parasite drag — form drag + skin friction. Tiny when slow; grows with the cube of speed, so it dominates at high speed."><i style="border-top:2px dashed #7cc8ff;background:none;height:0"></i> Parasite</span>
-      <span class="pa" data-tip="Thrust power the engine + propeller can deliver at this power setting and density altitude. Where it crosses the Total curve on the right = max level speed; the gap above the curve is your climb power."><i style="background:#37d67a"></i> Power available</span>
-    </div>
-    <div class="pc-speed">
-      <label>Drag the chart or this slider to set true airspeed</label>
-      <input id="pcSlider" type="range" min="30" max="130" step="1" value="90">
-    </div>
-    <div class="da-out">
-      <div class="out hero" style="background:radial-gradient(160px 90px at 70% 20%,rgba(78,161,255,.16),transparent),rgba(0,0,0,.22)"><div class="lbl">True Airspeed</div><div class="v" style="color:var(--accent2)"><span id="pcV">90</span> kt</div></div>
-      <div class="out"><div class="lbl">Power Required</div><div class="v"><span id="pcPr">—</span> hp</div></div>
-      <div class="out"><div class="lbl">Excess Power @ this speed</div><div class="v" style="color:var(--good)"><span id="pcExcess">—</span> hp</div></div>
-    </div>
-    <div class="da-note" id="pcNote"></div>
-  </section>
-
-  <section class="da cabin" id="cabin">
-    <h2>Cabin Altitude Calculator</h2>
-    <p class="desc">Pressurized aircraft don't hold the cabin at sea level — they maintain a maximum pressure <em>differential</em> (ΔP) between inside and outside. Pick an aircraft and cruise altitude to see the cabin altitude your body actually experiences, and the <a href="#explorer">blood oxygen (SpO₂)</a> that comes with it.</p>
-    <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning, dispatch, or weight-and-balance.</strong> Always fly the numbers in your POH and current official weather.</p>
-    <div class="da-grid">
-      <div class="field">
-        <label>Aircraft</label>
-        <div class="in"><select id="acft"></select></div>
-      </div>
-      <div class="field">
-        <label>Cruise Altitude</label>
-        <div class="in"><input id="cruise" type="number" value="38000"><span class="unit">ft</span></div>
-      </div>
-      <div class="field" id="customDpWrap" style="display:none">
-        <label>Custom Max Differential</label>
-        <div class="in"><input id="customDp" type="number" step="0.1" value="8.0"><span class="unit">psi</span></div>
-      </div>
-    </div>
-    <div class="da-out">
-      <div class="out"><div class="lbl">Max Differential</div><div class="v"><span id="cabinDp">8.65</span> psi</div></div>
-      <div class="out"><div class="lbl">Cabin Blood O₂ (SpO₂)</div><div class="v"><span id="cabinSpo2">95%</span></div></div>
-      <div class="out hero"><div class="lbl">Cabin Altitude</div><div class="v" style="color:var(--accent2)"><span id="cabinAlt">7,000</span> ft</div></div>
-    </div>
-    <canvas id="cabinChart" class="box" width="900" height="240"></canvas>
-    <div class="pc-legend">
-      <span><i style="background:#7cf"></i> Cabin altitude</span>
-      <span class="pa"><i style="border-top:2px dashed #ff785a;background:none;height:0"></i> Unpressurized (cabin = altitude)</span>
-      <span style="color:#ffd24d">▭ Shaded gap = what pressurization saves you</span>
-    </div>
-    <div class="da-note" id="cabinNote"></div>
   </section>
 
   <section class="da faq" id="faq">
