@@ -7,6 +7,42 @@
   to = "/.netlify/functions/wx"
   status = 200
 
+# Clean URLs: serve extensionless paths from their .html files (matches canonicals + sitemap)
+[[redirects]]
+  from = "/atmosphere-explorer"
+  to = "/atmosphere-explorer.html"
+  status = 200
+[[redirects]]
+  from = "/horsepower-at-altitude"
+  to = "/horsepower-at-altitude.html"
+  status = 200
+[[redirects]]
+  from = "/power-curve"
+  to = "/power-curve.html"
+  status = 200
+[[redirects]]
+  from = "/cabin-altitude-calculator"
+  to = "/cabin-altitude-calculator.html"
+  status = 200
+
+# Redirect the .html forms to the canonical clean URLs (avoid duplicate content)
+[[redirects]]
+  from = "/atmosphere-explorer.html"
+  to = "/atmosphere-explorer"
+  status = 301
+[[redirects]]
+  from = "/horsepower-at-altitude.html"
+  to = "/horsepower-at-altitude"
+  status = 301
+[[redirects]]
+  from = "/power-curve.html"
+  to = "/power-curve"
+  status = 301
+[[redirects]]
+  from = "/cabin-altitude-calculator.html"
+  to = "/cabin-altitude-calculator"
+  status = 301
+
 [[redirects]]
   from = "/HANDOFF.md"
   to = "/"
