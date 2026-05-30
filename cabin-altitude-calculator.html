@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#05070f">
+<title>Cabin Altitude Calculator — Cabin Pressure at Cruise | DensityAlt</title>
+<meta name="description" content="Free cabin altitude calculator: enter cruise altitude and aircraft to see the cabin altitude pressurization holds, and the blood oxygen (SpO₂) you'd have.">
+<link rel="canonical" href="https://densityalt.com/cabin-altitude-calculator">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DensityAlt">
+<meta property="og:url" content="https://densityalt.com/cabin-altitude-calculator">
+<meta property="og:title" content="What Cabin Altitude Does Your Jet Hold?">
+<meta property="og:description" content="Free cabin altitude calculator — cruise altitude and max differential to cabin altitude and blood oxygen, for airliners and bizjets.">
+<meta property="og:image" content="https://densityalt.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="What Cabin Altitude Does Your Jet Hold?">
+<meta name="twitter:description" content="Free cabin altitude calculator — cruise altitude and max differential to cabin altitude and blood oxygen, for airliners and bizjets.">
+<meta name="twitter:image" content="https://densityalt.com/og-image.png">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<nav class="topnav"><div class="navin">
+  <a class="brand" href="/" style="text-decoration:none"><img src="/favicon.svg" alt=""><b>DensityAlt</b></a>
+  <div class="navlinks">
+    <a class="nl" href="/atmosphere-explorer">Explorer</a>
+    <a class="nl" href="/">Density Altitude</a>
+    <a class="nl" href="/horsepower-at-altitude">Horsepower</a>
+    <a class="nl" href="/power-curve">Power Curve</a>
+    <a class="nl" href="/cabin-altitude-calculator">Cabin Altitude</a>
+    <a class="nl" href="/#about">About</a>
+  </div>
+  <a class="nav-gh" href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener" aria-label="DensityAlt source code on GitHub" title="Open source — view the code on GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+</div></nav>
+
+<div id="disclaimerBar" class="disclaimer-bar" hidden>
+  <span><strong>Educational estimates only.</strong> DensityAlt is not for flight planning, dispatch, or medical use — always use your POH and official sources.</span>
+  <button id="disclaimerOk" type="button">Got it</button>
+</div>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="kicker">Free aviation &amp; aerospace calculators</div>
+    <h1>Cabin Altitude <span>Calculator</span></h1>
+    <p class="hero-sub">What your body really feels at cruise.</p>
+    <p class="lead">Pressurized aircraft hold a maximum pressure <em>differential</em> (ΔP) between inside and outside. Pick an aircraft and cruise altitude to see the cabin altitude your body actually experiences, and the <a href="/atmosphere-explorer">blood oxygen (SpO₂)</a> that comes with it.</p>
+  </header>
+
+  <section class="da cabin" id="cabin">
+    <h2>Cabin Altitude Calculator</h2>
+    <p class="desc">Pressurized aircraft don't hold the cabin at sea level — they maintain a maximum pressure <em>differential</em> (ΔP) between inside and outside. Pick an aircraft and cruise altitude to see the cabin altitude your body actually experiences, and the <a href="#explorer">blood oxygen (SpO₂)</a> that comes with it.</p>
+    <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning, dispatch, or weight-and-balance.</strong> Always fly the numbers in your POH and current official weather.</p>
+    <div class="da-grid">
+      <div class="field">
+        <label>Aircraft</label>
+        <div class="in"><select id="acft"></select></div>
+      </div>
+      <div class="field">
+        <label>Cruise Altitude</label>
+        <div class="in"><input id="cruise" type="number" value="38000"><span class="unit">ft</span></div>
+      </div>
+      <div class="field" id="customDpWrap" style="display:none">
+        <label>Custom Max Differential</label>
+        <div class="in"><input id="customDp" type="number" step="0.1" value="8.0"><span class="unit">psi</span></div>
+      </div>
+    </div>
+    <div class="da-out">
+      <div class="out"><div class="lbl">Max Differential</div><div class="v"><span id="cabinDp">8.65</span> psi</div></div>
+      <div class="out"><div class="lbl">Cabin Blood O₂ (SpO₂)</div><div class="v"><span id="cabinSpo2">95%</span></div></div>
+      <div class="out hero"><div class="lbl">Cabin Altitude</div><div class="v" style="color:var(--accent2)"><span id="cabinAlt">7,000</span> ft</div></div>
+    </div>
+    <canvas id="cabinChart" class="box" width="900" height="240"></canvas>
+    <div class="pc-legend">
+      <span><i style="background:#7cf"></i> Cabin altitude</span>
+      <span class="pa"><i style="border-top:2px dashed #ff785a;background:none;height:0"></i> Unpressurized (cabin = altitude)</span>
+      <span style="color:#ffd24d">▭ Shaded gap = what pressurization saves you</span>
+    </div>
+    <div class="da-note" id="cabinNote"></div>
+  </section>
+
+  <section class="da faq" id="faq">
+    <h2>Frequently asked questions</h2>
+    <div class="faqlist">
+      <details class="faq-item"><summary>Why are airliner cabins pressurized to about 8,000 feet?</summary>
+      <p class="a">The fuselage can only hold a limited pressure difference (ΔP). At cruise the system maintains that maximum differential, which works out to a cabin altitude near 8,000&nbsp;ft for most airliners. Composite jets like the 787 and A350 tolerate a higher ΔP and target ~6,000&nbsp;ft.</p></details>
+      <details class="faq-item"><summary>What is cabin altitude?</summary>
+      <p class="a">Cabin altitude is the effective altitude your body experiences inside a pressurized aircraft — based on the cabin pressure the system holds, not the altitude you're flying at. A jet at 38,000&nbsp;ft typically holds a cabin near 6,000–8,000&nbsp;ft.</p></details>
+    </div>
+  </section>
+
+  <footer>
+    <h4>How the numbers are computed</h4>
+    <div class="calcrefs">
+      <div><b>Atmosphere</b> — International Standard Atmosphere (ISA): the barometric formula in the troposphere (1.98&nbsp;°C / 1000&nbsp;ft lapse) and the isothermal layer above the tropopause (~36,089&nbsp;ft).</div>
+      <div><b>Blood oxygen</b> — alveolar gas equation <code>P_AO₂ = 0.2095·(P − 47) − P_CO₂/0.8</code> feeding the Severinghaus SpO₂ curve. CO₂ falls with altitude, tuned to acute-exposure data (~87% @ 10k, ~72% @ 18k, ~50% @ 25k&nbsp;ft).</div>
+      <div><b>Density altitude</b> — <code>PA = elev + (29.92 − altimeter)·1000</code>, then <code>DA = PA + 120·(OAT − ISA&nbsp;temp)</code>.</div>
+      <div><b>Horsepower</b> — Gagg–Ferrar relation <code>HP ≈ rated·(1.132σ − 0.132)</code>, σ = density ratio at your density altitude; turbos hold rated power to a critical altitude.</div>
+      <div><b>Power curve</b> — parabolic drag polar <code>C_D = C_D0 + C_L²/(πAR·e)</code>; power required = drag × TAS. The region of reversed command is the band from stall up to the minimum-power speed. Drag values are representative estimates and V-speeds (Vs, Va, Vno, Vne) are typical published figures — check your POH; the climb readout is idealized (constant ~80% prop efficiency) and optimistic at low speed.</div>
+      <div><b>Cabin altitude</b> — <code>cabin_P = min(sea level, ambient + ΔP)</code> inverted to an altitude; ΔP is each aircraft's published max pressure differential.</div>
+      <div><b>Data sources</b> — bundled ~110 airports (offline elevation) plus <code>aviationweather.gov</code> METAR for live temp/altimeter (via a same-origin proxy once hosted), falling back to <code>open-meteo.com</code> current weather by coordinates for fields without a METAR.</div>
+      <div><b>References</b> — FAA <i>Pilot's Handbook of Aeronautical Knowledge</i> (FAA-H-8083-25) and <i>Airplane Flying Handbook</i> (FAA-H-8083-3) for density altitude, the FAR&nbsp;91.211 oxygen rules, and the power curve / region of reversed command; J.D.&nbsp;Anderson, <i>Introduction to Flight</i> (parabolic drag polar, power-required = drag&nbsp;×&nbsp;TAS); the alveolar gas equation and Severinghaus SpO₂ relation, with acute-exposure SaO₂ figures from high-altitude physiology literature (e.g. J.B.&nbsp;West). Power-curve V-speeds and the narrow trainer reversed-command band cross-checked against Van's Air Force, GoFly, and Boldmethod.</div>
+    </div>
+    <p class="disclaim">Educational models for healthy unacclimatized adults at acute exposure. Real SpO₂ varies with fitness, acclimatization, and individual physiology. Not for medical or operational flight-planning use.</p>
+    <p class="ghsrc"><strong>Open source.</strong> DensityAlt is built in the open — <a href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener">view the code on GitHub</a> to see exactly how every number is computed.</p>
+    <p class="rms">Made with <a href="https://readymadesites.com/" rel="noopener">ReadyMadeSites™</a> — custom calculators, interactive tools &amp; SEO-ready websites that rank.</p>
+  </footer>
+
+</div>
+
+<script src="/app.js"></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "DensityAlt Cabin Altitude Calculator",
+  "url": "https://densityalt.com/cabin-altitude-calculator",
+  "description": "Calculate the cabin altitude a pressurized aircraft maintains at cruise from its maximum pressure differential, plus the resulting blood oxygen (SpO2).",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Any (web browser)",
+  "browserRequirements": "Requires JavaScript",
+  "isAccessibleForFree": true,
+  "author": {"@type": "Person", "name": "Levan Sulakvelidze", "description": "Instrument-rated private pilot", "sameAs": ["https://www.linkedin.com/in/levansula", "https://www.instagram.com/levansula/", "https://github.com/levansula23"]},
+  "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+  "featureList": [
+    "Cabin altitude at cruise from max pressure differential",
+    "Blood oxygen (SpO2) at cabin altitude",
+    "Library of airliners and business jets",
+    "Draggable cabin-vs-aircraft-altitude chart"
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"Why are airliner cabins pressurized to about 8,000 feet?","acceptedAnswer":{"@type":"Answer","text":"The fuselage can only hold a limited pressure difference between inside and outside. At cruise the system maintains that maximum differential, which works out to a cabin altitude near 8,000 ft for most airliners. Composite jets like the 787 and A350 tolerate a higher differential and target about 6,000 ft."}},
+    {"@type":"Question","name":"What is cabin altitude?","acceptedAnswer":{"@type":"Answer","text":"Cabin altitude is the effective altitude your body experiences inside a pressurized aircraft, based on the cabin air pressure the pressurization system maintains — not the altitude the aircraft is actually flying at. A jet at 38,000 ft typically holds a cabin altitude near 6,000-8,000 ft."}}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Density Altitude Calculator","item":"https://densityalt.com/"},
+    {"@type":"ListItem","position":2,"name":"Cabin Altitude Calculator","item":"https://densityalt.com/cabin-altitude-calculator"}
+  ]
+}
+</script>
+</body>
+</html>

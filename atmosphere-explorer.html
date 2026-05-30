@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#05070f">
+<title>Atmosphere & Hypoxia Explorer — Air, O₂ & SpO₂ vs Altitude | DensityAlt</title>
+<meta name="description" content="Interactive atmosphere and hypoxia explorer: drag an aircraft up and watch air pressure, density, oxygen, and blood oxygen (SpO₂) fall with altitude. Free, no signup.">
+<link rel="canonical" href="https://densityalt.com/atmosphere-explorer">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DensityAlt">
+<meta property="og:url" content="https://densityalt.com/atmosphere-explorer">
+<meta property="og:title" content="Watch Air, Oxygen & Blood O₂ Thin With Altitude">
+<meta property="og:description" content="Drag an aircraft up the atmosphere and watch pressure, density, oxygen, and SpO₂ collapse in real time. Free interactive explorer for pilots and students.">
+<meta property="og:image" content="https://densityalt.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Watch Air, Oxygen & Blood O₂ Thin With Altitude">
+<meta name="twitter:description" content="Drag an aircraft up the atmosphere and watch pressure, density, oxygen, and SpO₂ collapse in real time. Free interactive explorer for pilots and students.">
+<meta name="twitter:image" content="https://densityalt.com/og-image.png">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<nav class="topnav"><div class="navin">
+  <a class="brand" href="/" style="text-decoration:none"><img src="/favicon.svg" alt=""><b>DensityAlt</b></a>
+  <div class="navlinks">
+    <a class="nl" href="/atmosphere-explorer">Explorer</a>
+    <a class="nl" href="/">Density Altitude</a>
+    <a class="nl" href="/horsepower-at-altitude">Horsepower</a>
+    <a class="nl" href="/power-curve">Power Curve</a>
+    <a class="nl" href="/cabin-altitude-calculator">Cabin Altitude</a>
+    <a class="nl" href="/#about">About</a>
+  </div>
+  <a class="nav-gh" href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener" aria-label="DensityAlt source code on GitHub" title="Open source — view the code on GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+</div></nav>
+
+<div id="disclaimerBar" class="disclaimer-bar" hidden>
+  <span><strong>Educational estimates only.</strong> DensityAlt is not for flight planning, dispatch, or medical use — always use your POH and official sources.</span>
+  <button id="disclaimerOk" type="button">Got it</button>
+</div>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="kicker">Free aviation &amp; aerospace calculators</div>
+    <h1>Atmosphere &amp; Hypoxia <span>Explorer</span></h1>
+    <p class="hero-sub">Watch the air thin as you climb.</p>
+    <p class="lead">Drag the aircraft up the column and watch <strong>air pressure, density, oxygen, and blood oxygen (SpO₂)</strong> fall — they drop exponentially, not linearly. Then check your field with the free <a href="/">density altitude calculator</a>.</p>
+  </header>
+
+  <section class="lab" id="explorer">
+    <div class="colwrap">
+      <div class="column">
+        <canvas id="sky" width="230" height="560"></canvas>
+      </div>
+      <div class="col-hint">↕ drag the sky to change altitude</div>
+    </div>
+
+    <div class="panelstack">
+      <div class="controls">
+        <div class="alt-readout"><span id="altFt">0</span> <small>ft</small> &nbsp;·&nbsp; <span id="altM" style="font-size:18px;color:var(--ink-dim)">0 m</span></div>
+        <input id="slider" type="range" min="0" max="65000" step="100" value="500">
+        <div class="presets">
+          <button class="chip" data-alt="0">Sea level</button>
+          <button class="chip" data-alt="5280">Denver</button>
+          <button class="chip" data-alt="12500">FAA O₂ line</button>
+          <button class="chip" data-alt="26000">Death zone</button>
+          <button class="chip" data-alt="29032">Everest</button>
+          <button class="chip" data-alt="38000">Airliner cruise</button>
+          <button class="chip" data-alt="60000">Concorde cruise</button>
+          <button class="chip" data-alt="63000">Armstrong limit</button>
+          <button id="geoExplore" class="chip" type="button" style="border-color:var(--accent);color:#dbeaff">📍 My elevation</button>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <div class="lbl">Air Pressure</div>
+          <div class="val"><span id="pHpa">752</span> <small>hPa</small></div>
+          <div class="bar"><i id="pBar" style="width:74%"></i></div>
+          <div class="pct"><span id="pInHg">22.22</span> inHg · <span id="pPct">74%</span> of sea level</div>
+        </div>
+        <div class="card">
+          <div class="lbl">Air Density</div>
+          <div class="val"><span id="rho">0.96</span> <small>kg/m³</small></div>
+          <div class="bar"><i id="rhoBar" style="width:78%"></i></div>
+          <div class="pct"><span id="rhoPct">78%</span> of sea level</div>
+        </div>
+        <div class="card">
+          <div class="lbl">Outside Temp (ISA)</div>
+          <div class="val"><span id="tC">-1</span> <small>°C</small></div>
+          <div class="bar"><i id="tBar" style="width:60%;background:linear-gradient(90deg,#ff6a45,#ffb84d)"></i></div>
+          <div class="pct"><span id="tF">30</span> °F</div>
+        </div>
+        <div class="card">
+          <div class="lbl">Ambient O₂ pressure</div>
+          <div class="val"><span id="po2">118</span> <small>mmHg</small></div>
+          <div class="bar"><i id="po2Bar" style="width:74%"></i></div>
+          <div class="pct">sea level = 159 mmHg</div>
+        </div>
+        <div class="card">
+          <div class="lbl">In-lung O₂ (alveolar)</div>
+          <div class="val"><span id="pao2">74</span> <small>mmHg</small></div>
+          <div class="bar"><i id="pao2Bar" style="width:74%;background:linear-gradient(90deg,#7cf,#b9a3ff)"></i></div>
+          <div class="pct">sea level ≈ 100 mmHg</div>
+        </div>
+        <div class="spo2">
+          <div class="lbl">Blood O₂ · SpO₂</div>
+          <div class="big" id="spo2">96<small>%</small></div>
+          <div class="feel" id="feel">Normal — no impairment</div>
+        </div>
+      </div>
+
+      <div class="warn-row" id="flags"></div>
+
+      <div class="strip">
+        <div class="viz">
+          <h3>Air molecules per cubic metre</h3>
+          <p class="cap">The dots are illustrative; the real number density (from <code>n/V = P/k<sub>B</sub>T</code>) is below — and it's staggering.</p>
+          <canvas id="air" class="box" width="320" height="170"></canvas>
+          <p class="molcount"><span id="molDensity">2.55 × 10<sup>25</sup></span> molecules/m³ · <span id="molPct">100%</span> of sea level</p>
+        </div>
+        <div class="viz">
+          <h3>Oxygen–hemoglobin curve</h3>
+          <p class="cap">The S-curve. Above the cliff you're safe; past it, saturation falls off a ledge.</p>
+          <canvas id="curve" class="box" width="320" height="170"></canvas>
+        </div>
+      </div>
+      <p class="scale-note">This view tops out at 65,000 ft — the <strong>Armstrong limit</strong>, where unprotected body fluids boil at body temperature. For perspective, the <strong>Kármán line</strong> (the conventional edge of space) sits near <strong>330,000 ft / 100 km</strong> — roughly 5× higher than the top of this chart.</p>
+    </div>
+  </section>
+
+  <section class="da faq" id="faq">
+    <h2>Frequently asked questions</h2>
+    <div class="faqlist">
+      <details class="faq-item"><summary>How many layers does the atmosphere have?</summary>
+      <p class="a">Five, stacked by temperature: the <strong>troposphere</strong> (to ~7 miles), <strong>stratosphere</strong> (to ~31 miles), <strong>mesosphere</strong> (to ~53 miles), <strong>thermosphere</strong> (to ~370 miles), and the <strong>exosphere</strong>. The Kármán line — the edge of space — sits at about 62 miles.</p></details>
+      <details class="faq-item"><summary>Does the composition of the atmosphere change with altitude?</summary>
+      <p class="a">No — the mix stays remarkably constant (~78% nitrogen, ~21% oxygen) up to ~62 miles. What changes is the <em>pressure</em>, not the recipe: at 18,000&nbsp;ft the air is still ~21% oxygen, but there are roughly half as many molecules per breath — which is why partial pressure, not percentage, drives hypoxia.</p></details>
+      <details class="faq-item"><summary>Why do you need supplemental oxygen at altitude?</summary>
+      <p class="a">As pressure drops, the partial pressure of oxygen drops with it, so each breath delivers less oxygen to your blood. Under FAR&nbsp;91.211, U.S. pilots need oxygen above 12,500&nbsp;ft cabin altitude (after 30&nbsp;min), continuously above 14,000&nbsp;ft, and must provide it to passengers above 15,000&nbsp;ft.</p></details>
+      <details class="faq-item"><summary>What is your blood oxygen (SpO₂) at altitude?</summary>
+      <p class="a">For an unacclimatized person, SpO₂ falls from ~97% at sea level to ~87% at 10,000&nbsp;ft, ~72% at 18,000&nbsp;ft, and ~50% at 25,000&nbsp;ft. The drop accelerates because the oxygen–hemoglobin curve falls off a cliff below ~60&nbsp;mmHg PaO₂.</p></details>
+    </div>
+  </section>
+
+  <footer>
+    <h4>How the numbers are computed</h4>
+    <div class="calcrefs">
+      <div><b>Atmosphere</b> — International Standard Atmosphere (ISA): the barometric formula in the troposphere (1.98&nbsp;°C / 1000&nbsp;ft lapse) and the isothermal layer above the tropopause (~36,089&nbsp;ft).</div>
+      <div><b>Blood oxygen</b> — alveolar gas equation <code>P_AO₂ = 0.2095·(P − 47) − P_CO₂/0.8</code> feeding the Severinghaus SpO₂ curve. CO₂ falls with altitude, tuned to acute-exposure data (~87% @ 10k, ~72% @ 18k, ~50% @ 25k&nbsp;ft).</div>
+      <div><b>Density altitude</b> — <code>PA = elev + (29.92 − altimeter)·1000</code>, then <code>DA = PA + 120·(OAT − ISA&nbsp;temp)</code>.</div>
+      <div><b>Horsepower</b> — Gagg–Ferrar relation <code>HP ≈ rated·(1.132σ − 0.132)</code>, σ = density ratio at your density altitude; turbos hold rated power to a critical altitude.</div>
+      <div><b>Power curve</b> — parabolic drag polar <code>C_D = C_D0 + C_L²/(πAR·e)</code>; power required = drag × TAS. The region of reversed command is the band from stall up to the minimum-power speed. Drag values are representative estimates and V-speeds (Vs, Va, Vno, Vne) are typical published figures — check your POH; the climb readout is idealized (constant ~80% prop efficiency) and optimistic at low speed.</div>
+      <div><b>Cabin altitude</b> — <code>cabin_P = min(sea level, ambient + ΔP)</code> inverted to an altitude; ΔP is each aircraft's published max pressure differential.</div>
+      <div><b>Data sources</b> — bundled ~110 airports (offline elevation) plus <code>aviationweather.gov</code> METAR for live temp/altimeter (via a same-origin proxy once hosted), falling back to <code>open-meteo.com</code> current weather by coordinates for fields without a METAR.</div>
+      <div><b>References</b> — FAA <i>Pilot's Handbook of Aeronautical Knowledge</i> (FAA-H-8083-25) and <i>Airplane Flying Handbook</i> (FAA-H-8083-3) for density altitude, the FAR&nbsp;91.211 oxygen rules, and the power curve / region of reversed command; J.D.&nbsp;Anderson, <i>Introduction to Flight</i> (parabolic drag polar, power-required = drag&nbsp;×&nbsp;TAS); the alveolar gas equation and Severinghaus SpO₂ relation, with acute-exposure SaO₂ figures from high-altitude physiology literature (e.g. J.B.&nbsp;West). Power-curve V-speeds and the narrow trainer reversed-command band cross-checked against Van's Air Force, GoFly, and Boldmethod.</div>
+    </div>
+    <p class="disclaim">Educational models for healthy unacclimatized adults at acute exposure. Real SpO₂ varies with fitness, acclimatization, and individual physiology. Not for medical or operational flight-planning use.</p>
+    <p class="ghsrc"><strong>Open source.</strong> DensityAlt is built in the open — <a href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener">view the code on GitHub</a> to see exactly how every number is computed.</p>
+    <p class="rms">Made with <a href="https://readymadesites.com/" rel="noopener">ReadyMadeSites™</a> — custom calculators, interactive tools &amp; SEO-ready websites that rank.</p>
+  </footer>
+
+</div>
+
+<script src="/app.js"></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "DensityAlt Atmosphere & Hypoxia Explorer",
+  "url": "https://densityalt.com/atmosphere-explorer",
+  "description": "Interactive atmosphere and hypoxia explorer showing how air pressure, density, ambient and alveolar oxygen, and blood oxygen (SpO2) fall with altitude.",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Any (web browser)",
+  "browserRequirements": "Requires JavaScript",
+  "isAccessibleForFree": true,
+  "author": {"@type": "Person", "name": "Levan Sulakvelidze", "description": "Instrument-rated private pilot", "sameAs": ["https://www.linkedin.com/in/levansula", "https://www.instagram.com/levansula/", "https://github.com/levansula23"]},
+  "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+  "featureList": [
+    "Interactive atmosphere explorer (pressure, density, temperature)",
+    "Ambient and alveolar oxygen partial pressure",
+    "Blood oxygen (SpO2) and oxygen-hemoglobin dissociation curve",
+    "Air molecule number-density visualization",
+    "FAR 91.211 supplemental-oxygen thresholds"
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"How many layers does the atmosphere have?","acceptedAnswer":{"@type":"Answer","text":"Five, stacked by temperature: the troposphere (to about 7 miles), stratosphere (to about 31 miles), mesosphere (to about 53 miles), thermosphere (to about 370 miles), and the exosphere, which fades into space. The Kármán line — the edge of space — sits at about 62 miles."}},
+    {"@type":"Question","name":"Does the composition of the atmosphere change with altitude?","acceptedAnswer":{"@type":"Answer","text":"No — the mix stays remarkably constant. By volume, dry air is about 78% nitrogen, 21% oxygen, 0.9% argon, and 0.04% carbon dioxide up to about 62 miles. What changes with altitude is the pressure, not the recipe: at 18,000 ft the air is still about 21% oxygen, but there are roughly half as many molecules in each breath, which is why partial pressure rather than percentage drives hypoxia."}},
+    {"@type":"Question","name":"Why do you need supplemental oxygen at altitude?","acceptedAnswer":{"@type":"Answer","text":"As air pressure drops, the partial pressure of oxygen drops too, so each breath delivers less oxygen to your blood. Under FAR 91.211, U.S. pilots need oxygen above 12,500 ft cabin altitude after 30 minutes, continuously above 14,000 ft, and must provide it to passengers above 15,000 ft."}},
+    {"@type":"Question","name":"What is your blood oxygen (SpO2) at altitude?","acceptedAnswer":{"@type":"Answer","text":"For an unacclimatized person breathing cabin air, SpO2 falls from about 97% at sea level to roughly 87% at 10,000 ft, 72% at 18,000 ft, and 50% at 25,000 ft. The drop accelerates because the oxygen–hemoglobin curve falls off sharply once arterial oxygen pressure drops below about 60 mmHg."}}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Density Altitude Calculator","item":"https://densityalt.com/"},
+    {"@type":"ListItem","position":2,"name":"Atmosphere & Hypoxia Explorer","item":"https://densityalt.com/atmosphere-explorer"}
+  ]
+}
+</script>
+</body>
+</html>

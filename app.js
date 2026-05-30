@@ -48,15 +48,14 @@ const commaInt=s=>{const n=parseFloat(String(s).replace(/,/g,''));return isNaN(n
 const sciHTML=n=>{ if(n<=0)return '0'; const e=Math.floor(Math.log10(n)); return (n/Math.pow(10,e)).toFixed(2)+' × 10<sup>'+e+'</sup>'; };
 
 const $=id=>document.getElementById(id);
-const slider=$('slider'), sky=$('sky'), air=$('air'), curve=$('curve'), pcChart=$('pcChart'), hpChart=$('hpChart'), cabinChart=$('cabinChart'), daChart=$('daChart');
-const skc=sky.getContext('2d'), ac=air.getContext('2d'), cc=curve.getContext('2d'), pcc=pcChart.getContext('2d'), hpc=hpChart.getContext('2d'), cbc=cabinChart.getContext('2d'), dac=daChart.getContext('2d');
+let slider,sky,air,curve,pcChart,hpChart,cabinChart,daChart;
+let skc,ac,cc,pcc,hpc,cbc,dac;
 
 function fit(cv,ctx){const r=cv.getBoundingClientRect();const d=window.devicePixelRatio||1;
   cv.width=r.width*d;cv.height=r.height*d;ctx.setTransform(d,0,0,d,0,0);return {w:r.width,h:r.height};}
-let airDim=fit(air,ac), curveDim=fit(curve,cc), pcDim=fit(pcChart,pcc), hpDim=fit(hpChart,hpc), cabinDim=fit(cabinChart,cbc);
-let skyDim=fit(sky,skc);
-let daDim=fit(daChart,dac);
+let airDim,curveDim,pcDim,hpDim,cabinDim,skyDim,daDim;
 let cabinXMax=51000;
+let dragging=false;
 
 function satColor(s){
   if(s>=95)return '#37d67a';
@@ -706,79 +705,123 @@ function pcSyncPower(from){
     $('pcHp').value = Math.round(ratedAtAlt*pct/100); }
 }
 
-slider.addEventListener('input',e=>update(+e.target.value));
-document.querySelectorAll('.chip[data-alt]').forEach(c=>c.addEventListener('click',()=>update(+c.dataset.alt)));
-$('geoExplore').addEventListener('click',useMyAltitude);
-document.querySelectorAll('.apchip').forEach(c=>c.addEventListener('click',()=>{ $('icao').value=c.dataset.icao; lookupICAO(); }));
-['elev','oat','altim'].forEach(id=>$(id).addEventListener('input',calcDA));
-(function(){ let drag=false;
-  const toOAT=e=>{ const r=daChart.getBoundingClientRect(),padL=46,padR=14; let f=(e.clientX-r.left-padL)/(r.width-padL-padR); f=Math.max(0,Math.min(1,f)); return -25+f*75; };
-  const set=e=>{ const tC=toOAT(e); $('oat').value=(tempUnit==='F')?Math.round(tC*9/5+32):Math.round(tC); calcDA(); };
-  daChart.addEventListener('pointerdown',e=>{drag=true;daChart.setPointerCapture(e.pointerId);set(e);});
-  daChart.addEventListener('pointermove',e=>{if(drag)set(e);});
-  daChart.addEventListener('pointerup',()=>drag=false);
-})();
-$('icaoBtn').addEventListener('click',lookupICAO);
-$('geoBtn').addEventListener('click',useMyLocation);
-$('oatUnit').addEventListener('click',()=>{ const inp=$('oat'); const v=parseFloat(inp.value);
-  if(tempUnit==='C'){ tempUnit='F'; if(!isNaN(v)) inp.value=Math.round(v*9/5+32); $('oatUnit').textContent='°F'; }
-  else { tempUnit='C'; if(!isNaN(v)) inp.value=Math.round((v-32)*5/9); $('oatUnit').textContent='°C'; }
-  calcDA(); });
-$('icao').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();lookupICAO();}});
-$('icao').addEventListener('blur',lookupICAO);
-['acft','cruise','customDp'].forEach(id=>$(id).addEventListener('input',calcCabin));
-(function(){ let drag=false;
-  const toAlt=e=>{ const r=cabinChart.getBoundingClientRect(),padL=44,padR=14; let f=(e.clientX-r.left-padL)/(r.width-padL-padR); f=Math.max(0,Math.min(1,f)); return Math.round(f*cabinXMax/500)*500; };
-  const set=e=>{ $('cruise').value=toAlt(e); calcCabin(); };
-  cabinChart.addEventListener('pointerdown',e=>{drag=true;cabinChart.setPointerCapture(e.pointerId);set(e);});
-  cabinChart.addEventListener('pointermove',e=>{if(drag)set(e);});
-  cabinChart.addEventListener('pointerup',()=>drag=false);
-})();
-['hpAcft','hpDa','hpCustom'].forEach(id=>$(id).addEventListener('input',calcHP));
-(function(){ let drag=false;
-  const toDa=e=>{ const r=hpChart.getBoundingClientRect(),padL=42,padR=14; let f=(e.clientX-r.left-padL)/(r.width-padL-padR); f=Math.max(0,Math.min(1,f)); return Math.round(f*30000/100)*100; };
-  const set=e=>{ $('hpDa').value=fmt(toDa(e)); calcHP(); };
-  hpChart.addEventListener('pointerdown',e=>{drag=true;hpChart.setPointerCapture(e.pointerId);set(e);});
-  hpChart.addEventListener('pointermove',e=>{if(drag)set(e);});
-  hpChart.addEventListener('pointerup',()=>drag=false);
-})();
-$('useDa').addEventListener('click',()=>{ $('hpDa').value=fmt(lastDA); calcHP(); });
-['elev','hpDa'].forEach(id=>$(id).addEventListener('blur',()=>{ const v=$(id).value.trim(); if(v!=='') $(id).value=fmt(commaInt(v)); }));
-['pcAcft','pcDa','pcW','pcS','pcB','pcCd0','pcE'].forEach(id=>$(id).addEventListener('input',()=>{ pcSyncPower('pct'); calcPC(); }));
-$('pcPow').addEventListener('input',()=>{ pcSyncPower('pct'); calcPC(); });
-$('pcHp').addEventListener('input',()=>{ pcSyncPower('hp'); calcPC(); });
-$('pcSlider').addEventListener('input',calcPC);
-$('usePcDa').addEventListener('click',()=>{ $('pcDa').value=Math.round(lastDA); pcSyncPower('pct'); calcPC(); });
-(function(){ let drag=false;
-  const toKt=e=>{ const r=pcChart.getBoundingClientRect(),padL=52,padR=14; let f=(e.clientX-r.left-padL)/(r.width-padL-padR); f=Math.max(0,Math.min(1,f)); return pcVminKt+f*(pcVmaxKt-pcVminKt); };
-  const set=e=>{ const sl=$('pcSlider'); let kt=Math.round(toKt(e)); kt=Math.max(+sl.min,Math.min(+sl.max,kt)); sl.value=kt; calcPC(); };
-  pcChart.addEventListener('pointerdown',e=>{drag=true;pcChart.setPointerCapture(e.pointerId);set(e);});
-  pcChart.addEventListener('pointermove',e=>{if(drag)set(e);});
-  pcChart.addEventListener('pointerup',()=>drag=false);
-})();
-
 function skyToAlt(clientY){
   const r=sky.getBoundingClientRect(); const pad=14*(sky.height/r.height);
   const yCanvas=(clientY-r.top)*(sky.height/r.height);
   const frac=1-(yCanvas-pad)/(sky.height-2*pad);
   return Math.max(0,Math.min(MAX_ALT,frac*MAX_ALT));
 }
-let dragging=false;
-sky.addEventListener('pointerdown',e=>{dragging=true;sky.setPointerCapture(e.pointerId);update(skyToAlt(e.clientY));});
-sky.addEventListener('pointermove',e=>{if(dragging)update(skyToAlt(e.clientY));});
-sky.addEventListener('pointerup',()=>dragging=false);
-window.addEventListener('resize',()=>{skyDim=fit(sky,skc);stars=null;airDim=fit(air,ac);curveDim=fit(curve,cc);pcDim=fit(pcChart,pcc);hpDim=fit(hpChart,hpc);cabinDim=fit(cabinChart,cbc);daDim=fit(daChart,dac);parts=[];update(alt);calcDA();calcPC();calcHP();calcCabin();});
 
-initAircraft();
-initHP();
-initPC();
-pcSyncPower('pct');
-update(500);
-calcDA();
-calcCabin();
-calcHP();
-calcPC();
-drawAir();
+function setupExplorer(){
+  sky=$('sky'); if(!sky) return false;
+  air=$('air'); curve=$('curve');
+  skc=sky.getContext('2d'); ac=air.getContext('2d'); cc=curve.getContext('2d');
+  airDim=fit(air,ac); curveDim=fit(curve,cc); skyDim=fit(sky,skc);
+  slider=$('slider');
+  slider.addEventListener('input',e=>update(+e.target.value));
+  document.querySelectorAll('.chip[data-alt]').forEach(c=>c.addEventListener('click',()=>update(+c.dataset.alt)));
+  $('geoExplore').addEventListener('click',useMyAltitude);
+  sky.addEventListener('pointerdown',e=>{dragging=true;sky.setPointerCapture(e.pointerId);update(skyToAlt(e.clientY));});
+  sky.addEventListener('pointermove',e=>{if(dragging)update(skyToAlt(e.clientY));});
+  sky.addEventListener('pointerup',()=>dragging=false);
+  update(500);
+  drawAir();
+  return true;
+}
+
+function setupDA(){
+  daChart=$('daChart'); if(!daChart) return false;
+  dac=daChart.getContext('2d'); daDim=fit(daChart,dac);
+  document.querySelectorAll('.apchip').forEach(c=>c.addEventListener('click',()=>{ $('icao').value=c.dataset.icao; lookupICAO(); }));
+  ['elev','oat','altim'].forEach(id=>$(id).addEventListener('input',calcDA));
+  (function(){ let drag=false;
+    const toOAT=e=>{ const r=daChart.getBoundingClientRect(),padL=46,padR=14; let f=(e.clientX-r.left-padL)/(r.width-padL-padR); f=Math.max(0,Math.min(1,f)); return -25+f*75; };
+    const set=e=>{ const tC=toOAT(e); $('oat').value=(tempUnit==='F')?Math.round(tC*9/5+32):Math.round(tC); calcDA(); };
+    daChart.addEventListener('pointerdown',e=>{drag=true;daChart.setPointerCapture(e.pointerId);set(e);});
+    daChart.addEventListener('pointermove',e=>{if(drag)set(e);});
+    daChart.addEventListener('pointerup',()=>drag=false);
+  })();
+  $('icaoBtn').addEventListener('click',lookupICAO);
+  $('geoBtn').addEventListener('click',useMyLocation);
+  $('oatUnit').addEventListener('click',()=>{ const inp=$('oat'); const v=parseFloat(inp.value);
+    if(tempUnit==='C'){ tempUnit='F'; if(!isNaN(v)) inp.value=Math.round(v*9/5+32); $('oatUnit').textContent='°F'; }
+    else { tempUnit='C'; if(!isNaN(v)) inp.value=Math.round((v-32)*5/9); $('oatUnit').textContent='°C'; }
+    calcDA(); });
+  $('icao').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();lookupICAO();}});
+  $('icao').addEventListener('blur',lookupICAO);
+  $('elev').addEventListener('blur',()=>{ const v=$('elev').value.trim(); if(v!=='') $('elev').value=fmt(commaInt(v)); });
+  calcDA();
+  return true;
+}
+
+function setupCabin(){
+  cabinChart=$('cabinChart'); if(!cabinChart) return false;
+  cbc=cabinChart.getContext('2d'); cabinDim=fit(cabinChart,cbc);
+  initAircraft();
+  ['acft','cruise','customDp'].forEach(id=>$(id).addEventListener('input',calcCabin));
+  (function(){ let drag=false;
+    const toAlt=e=>{ const r=cabinChart.getBoundingClientRect(),padL=44,padR=14; let f=(e.clientX-r.left-padL)/(r.width-padL-padR); f=Math.max(0,Math.min(1,f)); return Math.round(f*cabinXMax/500)*500; };
+    const set=e=>{ $('cruise').value=toAlt(e); calcCabin(); };
+    cabinChart.addEventListener('pointerdown',e=>{drag=true;cabinChart.setPointerCapture(e.pointerId);set(e);});
+    cabinChart.addEventListener('pointermove',e=>{if(drag)set(e);});
+    cabinChart.addEventListener('pointerup',()=>drag=false);
+  })();
+  calcCabin();
+  return true;
+}
+
+function setupHP(){
+  hpChart=$('hpChart'); if(!hpChart) return false;
+  hpc=hpChart.getContext('2d'); hpDim=fit(hpChart,hpc);
+  initHP();
+  ['hpAcft','hpDa','hpCustom'].forEach(id=>$(id).addEventListener('input',calcHP));
+  (function(){ let drag=false;
+    const toDa=e=>{ const r=hpChart.getBoundingClientRect(),padL=42,padR=14; let f=(e.clientX-r.left-padL)/(r.width-padL-padR); f=Math.max(0,Math.min(1,f)); return Math.round(f*30000/100)*100; };
+    const set=e=>{ $('hpDa').value=fmt(toDa(e)); calcHP(); };
+    hpChart.addEventListener('pointerdown',e=>{drag=true;hpChart.setPointerCapture(e.pointerId);set(e);});
+    hpChart.addEventListener('pointermove',e=>{if(drag)set(e);});
+    hpChart.addEventListener('pointerup',()=>drag=false);
+  })();
+  const ud=$('useDa'); if(ud) ud.addEventListener('click',()=>{ $('hpDa').value=fmt(lastDA); calcHP(); });
+  $('hpDa').addEventListener('blur',()=>{ const v=$('hpDa').value.trim(); if(v!=='') $('hpDa').value=fmt(commaInt(v)); });
+  calcHP();
+  return true;
+}
+
+function setupPC(){
+  pcChart=$('pcChart'); if(!pcChart) return false;
+  pcc=pcChart.getContext('2d'); pcDim=fit(pcChart,pcc);
+  initPC();
+  pcSyncPower('pct');
+  ['pcAcft','pcDa','pcW','pcS','pcB','pcCd0','pcE'].forEach(id=>$(id).addEventListener('input',()=>{ pcSyncPower('pct'); calcPC(); }));
+  $('pcPow').addEventListener('input',()=>{ pcSyncPower('pct'); calcPC(); });
+  $('pcHp').addEventListener('input',()=>{ pcSyncPower('hp'); calcPC(); });
+  $('pcSlider').addEventListener('input',calcPC);
+  const upd=$('usePcDa'); if(upd) upd.addEventListener('click',()=>{ $('pcDa').value=Math.round(lastDA); pcSyncPower('pct'); calcPC(); });
+  (function(){ let drag=false;
+    const toKt=e=>{ const r=pcChart.getBoundingClientRect(),padL=52,padR=14; let f=(e.clientX-r.left-padL)/(r.width-padL-padR); f=Math.max(0,Math.min(1,f)); return pcVminKt+f*(pcVmaxKt-pcVminKt); };
+    const set=e=>{ const sl=$('pcSlider'); let kt=Math.round(toKt(e)); kt=Math.max(+sl.min,Math.min(+sl.max,kt)); sl.value=kt; calcPC(); };
+    pcChart.addEventListener('pointerdown',e=>{drag=true;pcChart.setPointerCapture(e.pointerId);set(e);});
+    pcChart.addEventListener('pointermove',e=>{if(drag)set(e);});
+    pcChart.addEventListener('pointerup',()=>drag=false);
+  })();
+  calcPC();
+  return true;
+}
+
+const hasExplorer=setupExplorer();
+const hasDA=setupDA();
+const hasCabin=setupCabin();
+const hasHP=setupHP();
+const hasPC=setupPC();
+
+window.addEventListener('resize',()=>{
+  if(hasExplorer){skyDim=fit(sky,skc);stars=null;airDim=fit(air,ac);curveDim=fit(curve,cc);parts=[];update(alt);}
+  if(hasPC){pcDim=fit(pcChart,pcc);calcPC();}
+  if(hasHP){hpDim=fit(hpChart,hpc);calcHP();}
+  if(hasCabin){cabinDim=fit(cabinChart,cbc);calcCabin();}
+  if(hasDA){daDim=fit(daChart,dac);calcDA();}
+});
 
 (function(){ const b=$('disclaimerBar'); if(!b)return; b.hidden=false;
   $('disclaimerOk').addEventListener('click',()=>{ b.hidden=true; }); })();
