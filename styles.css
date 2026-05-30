@@ -21,8 +21,6 @@
   .navlinks{display:flex;align-items:center;gap:4px;min-width:0}
   .topnav a.nl{font:600 13px/1 var(--sans);color:var(--ink-dim);text-decoration:none;padding:8px 11px;border-radius:8px;transition:.15s;white-space:nowrap;flex:0 0 auto}
   .topnav a.nl:hover{color:var(--ink);background:rgba(255,255,255,.06)}
-  .topnav a.nl.nl-feat{color:#dbeaff;font-weight:700;border:1px solid var(--accent);background:rgba(78,161,255,.14);box-shadow:0 0 0 2px rgba(78,161,255,.10)}
-  .topnav a.nl.nl-feat:hover{background:rgba(78,161,255,.26);box-shadow:0 0 10px rgba(78,161,255,.35)}
   .nav-gh{display:flex;align-items:center;justify-content:center;color:var(--ink-dim);padding:8px;border-radius:8px;transition:.15s;flex:0 0 auto;margin-left:2px}
   .nav-gh:hover{color:var(--ink);background:rgba(255,255,255,.06)}
   .nav-gh svg{width:19px;height:19px;display:block}
