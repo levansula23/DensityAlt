@@ -726,6 +726,16 @@ function kochTOpct(sigma, cs){ return (Math.pow(Math.max(1e-6,sigma), -4.0) - 1)
 // Climb-rate loss ~ 7.5%/1000 ft DA (fixed-pitch), 7.0% constant-speed; matches FAA chart.
 function kochClimbLoss(daFt, cs){ return Math.min(95, Math.max(0, daFt/1000*(cs?7.0:7.5))); }
 
+// Landing distance scales ~ 1/density-ratio (ground roll proportional to TAS^2,
+// TAS proportional to 1/sqrt(sigma)) -> about +3.5% per 1,000 ft DA.
+function kochLDpct(sigma){ return (1/Math.max(1e-6,sigma) - 1)*100; }
+function kRoundRect(x,y,w,h,r){ r=Math.min(r,h/2,w/2); kc.beginPath();
+  kc.moveTo(x+r,y); kc.arcTo(x+w,y,x+w,y+h,r); kc.arcTo(x+w,y+h,x,y+h,r);
+  kc.arcTo(x,y+h,x,y,r); kc.arcTo(x,y,x+w,y,r); kc.closePath(); }
+function kPlane(x,y,col){ kc.save(); kc.fillStyle=col; kc.shadowColor=col; kc.shadowBlur=8;
+  kc.beginPath(); kc.moveTo(x+9,y); kc.lineTo(x-6,y-6); kc.lineTo(x-2,y); kc.lineTo(x-6,y+6);
+  kc.closePath(); kc.fill(); kc.restore(); }
+
 function calcKoch(){
   const pa=commaInt($('kPa').value);
   let oat=parseFloat($('kOat').value);
@@ -733,59 +743,62 @@ function calcKoch(){
   if(isNaN(oat)) oat=15-1.9812*(pa/1000);
   const cs=$('kProp').value==='cs';
   const sigma=kochSigma(pa,oat), da=kochDA(sigma);
-  const toPct=kochTOpct(sigma,cs), climbLoss=kochClimbLoss(da,cs);
-  const baseTo=Math.max(0,commaInt($('kTo').value)), baseRoc=Math.max(0,commaInt($('kRoc').value));
+  const toPct=kochTOpct(sigma,cs), ldPct=kochLDpct(sigma), climbLoss=kochClimbLoss(da,cs);
+  const baseTo=Math.max(0,commaInt($('kTo').value)), baseLd=Math.max(0,commaInt($('kLd').value)), baseRoc=Math.max(0,commaInt($('kRoc').value));
+  const daTo=baseTo*(1+toPct/100), daLd=baseLd*(1+ldPct/100);
   $('kDa').textContent=fmt(da);
   $('kToPct').textContent='+'+Math.round(toPct)+'%';
+  $('kLdPct').textContent='+'+Math.round(ldPct)+'%';
   $('kRocPct').textContent='−'+Math.round(climbLoss)+'%';
-  $('kToOut').textContent=fmt(baseTo*(1+toPct/100));
+  $('kToOut').textContent=fmt(daTo);
+  $('kLdOut').textContent=fmt(daLd);
   $('kRocOut').textContent=fmt(baseRoc*(1-climbLoss/100));
   const toEl=$('kToPct'); toEl.style.color = toPct>=150?'#ff4d4d':toPct>=70?'#ff6a45':toPct>=30?'#ffb84d':'#37d67a';
   let note='At <strong>'+fmt(pa)+' ft</strong> pressure altitude and <strong>'+Math.round(oat)+'°C</strong>, density altitude is about <strong>'+fmt(da)+' ft</strong>. '
-    +'Expect takeoff/ground roll about <strong>'+Math.round(toPct)+'% longer</strong> and climb rate down about <strong>'+Math.round(climbLoss)+'%</strong> versus a sea-level standard day. ';
-  if(baseTo>0) note+='A '+fmt(baseTo)+' ft sea-level takeoff becomes roughly <strong>'+fmt(baseTo*(1+toPct/100))+' ft</strong>. ';
-  note+=(toPct>=100?'This is a serious mountain/hot-day penalty — verify against your POH and runway available.':'Climb performance is what pilots feel first.');
+    +'Expect the <strong>takeoff roll about '+Math.round(toPct)+'% longer</strong> and the <strong>landing roll about '+Math.round(ldPct)+'% longer</strong> than a sea-level standard day, with climb rate down about <strong>'+Math.round(climbLoss)+'%</strong>. ';
+  if(baseTo>0) note+='A '+fmt(baseTo)+' ft sea-level takeoff becomes roughly <strong>'+fmt(daTo)+' ft</strong>; a '+fmt(baseLd)+' ft landing becomes about <strong>'+fmt(daLd)+' ft</strong>. ';
+  note+=(toPct>=100?'That is a serious high/hot penalty — verify against your POH and the runway available.':'Always confirm against your POH and runway available.');
   $('kNote').innerHTML=note;
-  drawKoch(pa,oat,cs);
+  drawKoch(toPct,ldPct,baseTo,baseLd,daTo,daLd);
 }
-function drawKoch(pa,oatC,cs){
-  const w=kDim.w,h=kDim.h,padL=46,padR=14,padT=14,padB=26,tMin=-25,tMax=50;
+function drawKoch(toPct,ldPct,baseTo,baseLd,daTo,daLd){
+  const w=kDim.w,h=kDim.h,padL=12,padR=14,padT=8,padB=20;
   kc.clearRect(0,0,w,h);
-  const toAt=t=>kochTOpct(kochSigma(pa,t),cs);
-  let yMin=0,yMax=Math.max(toAt(tMax),50); yMax+=yMax*0.10;
-  const X=t=>padL+((t-tMin)/(tMax-tMin))*(w-padL-padR);
-  const Y=v=>h-padB-((v-yMin)/(yMax-yMin))*(h-padT-padB);
-  kc.font='9px ui-monospace,Menlo,monospace';kc.textBaseline='alphabetic';
-  kc.strokeStyle='rgba(255,255,255,.08)';kc.fillStyle='rgba(255,255,255,.5)';kc.lineWidth=1;
-  const yStep=niceStep(yMax-yMin,4);
-  for(let v=0;v<=yMax;v+=yStep){const yy=Y(v);kc.beginPath();kc.moveTo(padL,yy);kc.lineTo(w-padR,yy);kc.stroke();kc.fillText('+'+Math.round(v)+'%',4,yy+3);}
-  for(let t=tMin;t<=tMax;t+=15){kc.fillText(t+'°',X(t)-7,h-8);}
-  kc.fillStyle='rgba(255,255,255,.55)';kc.fillText('OAT °C',w-46,h-8);
-  kc.strokeStyle='#ff6a45';kc.lineWidth=2.6;kc.beginPath();
-  for(let t=tMin;t<=tMax;t+=1){const xx=X(t),yy=Y(toAt(t));t===tMin?kc.moveTo(xx,yy):kc.lineTo(xx,yy);}
-  kc.stroke();
-  const t=Math.max(tMin,Math.min(tMax,oatC)),val=toAt(t),mx=X(t),my=Y(val);
-  kc.strokeStyle='rgba(255,255,255,.25)';kc.setLineDash([3,3]);kc.beginPath();kc.moveTo(mx,h-padB);kc.lineTo(mx,my);kc.lineTo(padL,my);kc.stroke();kc.setLineDash([]);
-  kc.fillStyle='#ff6a45';kc.shadowColor='#ff6a45';kc.shadowBlur=10;kc.beginPath();kc.arc(mx,my,5,0,7);kc.fill();kc.shadowBlur=0;
-  kc.font='700 11px ui-monospace,Menlo,monospace';kc.fillStyle='#ffd24d';
-  const lbl='+'+Math.round(val)+'% takeoff',tw=kc.measureText(lbl).width;kc.fillText(lbl,Math.min(mx+8,w-padR-tw),Math.max(padT+10,my-7));
+  const maxD=Math.max(daTo,daLd,baseTo,baseLd,1)*1.06;
+  const plotW=w-padL-padR, X=d=>padL+(d/maxD)*plotW;
+  const laneH=(h-padT-padB)/2;
+  function lane(yTop,label,base,da,pct,col){
+    const stripY=yTop+20, stripH=laneH-30, cy=stripY+stripH/2;
+    kc.fillStyle='rgba(255,255,255,.05)'; kRoundRect(padL,stripY,plotW,stripH,6); kc.fill();
+    kc.strokeStyle='rgba(255,255,255,.20)'; kc.lineWidth=2; kc.setLineDash([11,9]);
+    kc.beginPath(); kc.moveTo(padL+8,cy); kc.lineTo(padL+plotW-8,cy); kc.stroke(); kc.setLineDash([]);
+    const g=kc.createLinearGradient(padL,0,X(da),0);
+    g.addColorStop(0,col+'cc'); g.addColorStop(1,col+'66');
+    kc.fillStyle=g; kRoundRect(padL,stripY,Math.max(3,X(da)-padL),stripH,6); kc.fill();
+    if(base>0){ const sx=X(base);
+      kc.strokeStyle='rgba(255,255,255,.85)'; kc.lineWidth=1.5; kc.setLineDash([4,3]);
+      kc.beginPath(); kc.moveTo(sx,stripY-3); kc.lineTo(sx,stripY+stripH+3); kc.stroke(); kc.setLineDash([]);
+      kc.fillStyle='rgba(255,255,255,.85)'; kc.font='9px ui-monospace,monospace'; kc.textAlign='center';
+      kc.fillText('sea level', sx, stripY+stripH+14); }
+    kPlane(Math.min(X(da),w-padR-2), cy, col);
+    kc.textAlign='left'; kc.fillStyle='#cdd6e6'; kc.font='700 11px ui-monospace,monospace';
+    kc.fillText(label, padL+2, yTop+12);
+    kc.fillStyle=col; kc.font='700 13px ui-monospace,monospace';
+    kc.fillText(fmt(da)+' ft  (+'+Math.round(pct)+'%)', padL+72, yTop+12);
+  }
+  lane(padT, 'TAKEOFF', baseTo, daTo, toPct, '#ff6a45');
+  lane(padT+laneH, 'LANDING', baseLd, daLd, ldPct, '#7cf');
+  kc.textAlign='left';
 }
 function setupKoch(){
   kChart=$('kChart'); if(!kChart) return false;
   kc=kChart.getContext('2d'); kDim=fit(kChart,kc);
-  ['kPa','kOat','kProp','kTo','kRoc'].forEach(id=>$(id).addEventListener('input',calcKoch));
-  (function(){ let drag=false;
-    const toOAT=e=>{ const r=kChart.getBoundingClientRect(),padL=46,padR=14; let f=(e.clientX-r.left-padL)/(r.width-padL-padR); f=Math.max(0,Math.min(1,f)); return -25+f*75; };
-    const set=e=>{ const tC=toOAT(e); $('kOat').value=(kTempUnit==='F')?Math.round(tC*9/5+32):Math.round(tC); calcKoch(); };
-    kChart.addEventListener('pointerdown',e=>{drag=true;kChart.setPointerCapture(e.pointerId);set(e);});
-    kChart.addEventListener('pointermove',e=>{if(drag)set(e);});
-    kChart.addEventListener('pointerup',()=>drag=false);
-  })();
+  ['kPa','kOat','kProp','kTo','kLd','kRoc'].forEach(id=>$(id).addEventListener('input',calcKoch));
   $('kOatUnit').addEventListener('click',()=>{ const inp=$('kOat'); const v=parseFloat(inp.value);
     if(kTempUnit==='C'){ kTempUnit='F'; if(!isNaN(v)) inp.value=Math.round(v*9/5+32); $('kOatUnit').textContent='°F'; }
     else { kTempUnit='C'; if(!isNaN(v)) inp.value=Math.round((v-32)*5/9); $('kOatUnit').textContent='°C'; }
     calcKoch(); });
-  $('kPa').addEventListener('blur',()=>{ const v=$('kPa').value.trim(); if(v!=='') $('kPa').value=fmt(commaInt(v)); });
+  ['kPa','kTo','kLd'].forEach(id=>$(id).addEventListener('blur',()=>{ const v=$(id).value.trim(); if(v!=='') $(id).value=fmt(commaInt(v)); }));
   calcKoch();
   return true;
 }
