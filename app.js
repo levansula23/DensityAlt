@@ -787,7 +787,7 @@ function drawKoch(toPct,ldPct,baseTo,baseLd,daTo,daLd){
     kc.fillText(fmt(da)+' ft  (+'+Math.round(pct)+'%)', padL+72, yTop+12);
   }
   lane(padT, 'TAKEOFF', baseTo, daTo, toPct, '#ff6a45');
-  lane(padT+laneH, 'LANDING', baseLd, daLd, ldPct, '#7cf');
+  lane(padT+laneH, 'LANDING', baseLd, daLd, ldPct, '#77ccff');
   kc.textAlign='left';
 }
 function setupKoch(){
