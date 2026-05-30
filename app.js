@@ -48,14 +48,15 @@ const commaInt=s=>{const n=parseFloat(String(s).replace(/,/g,''));return isNaN(n
 const sciHTML=n=>{ if(n<=0)return '0'; const e=Math.floor(Math.log10(n)); return (n/Math.pow(10,e)).toFixed(2)+' × 10<sup>'+e+'</sup>'; };
 
 const $=id=>document.getElementById(id);
-let slider,sky,air,curve,pcChart,hpChart,cabinChart,daChart;
-let skc,ac,cc,pcc,hpc,cbc,dac;
+let slider,sky,air,curve,pcChart,hpChart,cabinChart,daChart,kChart,xChart;
+let skc,ac,cc,pcc,hpc,cbc,dac,kc,xc;
 
 function fit(cv,ctx){const r=cv.getBoundingClientRect();const d=window.devicePixelRatio||1;
   cv.width=r.width*d;cv.height=r.height*d;ctx.setTransform(d,0,0,d,0,0);return {w:r.width,h:r.height};}
-let airDim,curveDim,pcDim,hpDim,cabinDim,skyDim,daDim;
+let airDim,curveDim,pcDim,hpDim,cabinDim,skyDim,daDim,kDim,xDim;
 let cabinXMax=51000;
 let dragging=false;
+let kTempUnit='C';
 
 function satColor(s){
   if(s>=95)return '#37d67a';
@@ -712,6 +713,154 @@ function skyToAlt(clientY){
   return Math.max(0,Math.min(MAX_ALT,frac*MAX_ALT));
 }
 
+// ---- Koch chart: takeoff / climb derating from pressure altitude + temperature ----
+// Density altitude via the standard NWS/Embree relation (matches kochchart.com).
+// DA = 145426 * (1 - sigma^0.235), sigma = density ratio.
+function kochSigma(paFt, tC){
+  return Math.pow((288.16 - paFt*0.0019812)/288.16, 5.2563) / ((273.16 + tC)/288.16);
+}
+function kochDA(sigma){ return 145426*(1 - Math.pow(Math.max(1e-6,sigma), 0.235)); }
+// Takeoff-distance multiplier ~ sigma^-4.0, calibrated to FAA Koch chart reference
+// points (+230% at ~9,800 ft DA); conservative (over-estimates) at low DA.
+function kochTOpct(sigma, cs){ return (Math.pow(Math.max(1e-6,sigma), -4.0) - 1)*100*(cs?0.867:1); }
+// Climb-rate loss ~ 7.5%/1000 ft DA (fixed-pitch), 7.0% constant-speed; matches FAA chart.
+function kochClimbLoss(daFt, cs){ return Math.min(95, Math.max(0, daFt/1000*(cs?7.0:7.5))); }
+
+function calcKoch(){
+  const pa=commaInt($('kPa').value);
+  let oat=parseFloat($('kOat').value);
+  if(kTempUnit==='F' && !isNaN(oat)) oat=(oat-32)*5/9;
+  if(isNaN(oat)) oat=15-1.9812*(pa/1000);
+  const cs=$('kProp').value==='cs';
+  const sigma=kochSigma(pa,oat), da=kochDA(sigma);
+  const toPct=kochTOpct(sigma,cs), climbLoss=kochClimbLoss(da,cs);
+  const baseTo=Math.max(0,commaInt($('kTo').value)), baseRoc=Math.max(0,commaInt($('kRoc').value));
+  $('kDa').textContent=fmt(da);
+  $('kToPct').textContent='+'+Math.round(toPct)+'%';
+  $('kRocPct').textContent='−'+Math.round(climbLoss)+'%';
+  $('kToOut').textContent=fmt(baseTo*(1+toPct/100));
+  $('kRocOut').textContent=fmt(baseRoc*(1-climbLoss/100));
+  const toEl=$('kToPct'); toEl.style.color = toPct>=150?'#ff4d4d':toPct>=70?'#ff6a45':toPct>=30?'#ffb84d':'#37d67a';
+  let note='At <strong>'+fmt(pa)+' ft</strong> pressure altitude and <strong>'+Math.round(oat)+'°C</strong>, density altitude is about <strong>'+fmt(da)+' ft</strong>. '
+    +'Expect takeoff/ground roll about <strong>'+Math.round(toPct)+'% longer</strong> and climb rate down about <strong>'+Math.round(climbLoss)+'%</strong> versus a sea-level standard day. ';
+  if(baseTo>0) note+='A '+fmt(baseTo)+' ft sea-level takeoff becomes roughly <strong>'+fmt(baseTo*(1+toPct/100))+' ft</strong>. ';
+  note+=(toPct>=100?'This is a serious mountain/hot-day penalty — verify against your POH and runway available.':'Climb performance is what pilots feel first.');
+  $('kNote').innerHTML=note;
+  drawKoch(pa,oat,cs);
+}
+function drawKoch(pa,oatC,cs){
+  const w=kDim.w,h=kDim.h,padL=46,padR=14,padT=14,padB=26,tMin=-25,tMax=50;
+  kc.clearRect(0,0,w,h);
+  const toAt=t=>kochTOpct(kochSigma(pa,t),cs);
+  let yMin=0,yMax=Math.max(toAt(tMax),50); yMax+=yMax*0.10;
+  const X=t=>padL+((t-tMin)/(tMax-tMin))*(w-padL-padR);
+  const Y=v=>h-padB-((v-yMin)/(yMax-yMin))*(h-padT-padB);
+  kc.font='9px ui-monospace,Menlo,monospace';kc.textBaseline='alphabetic';
+  kc.strokeStyle='rgba(255,255,255,.08)';kc.fillStyle='rgba(255,255,255,.5)';kc.lineWidth=1;
+  const yStep=niceStep(yMax-yMin,4);
+  for(let v=0;v<=yMax;v+=yStep){const yy=Y(v);kc.beginPath();kc.moveTo(padL,yy);kc.lineTo(w-padR,yy);kc.stroke();kc.fillText('+'+Math.round(v)+'%',4,yy+3);}
+  for(let t=tMin;t<=tMax;t+=15){kc.fillText(t+'°',X(t)-7,h-8);}
+  kc.fillStyle='rgba(255,255,255,.55)';kc.fillText('OAT °C',w-46,h-8);
+  kc.strokeStyle='#ff6a45';kc.lineWidth=2.6;kc.beginPath();
+  for(let t=tMin;t<=tMax;t+=1){const xx=X(t),yy=Y(toAt(t));t===tMin?kc.moveTo(xx,yy):kc.lineTo(xx,yy);}
+  kc.stroke();
+  const t=Math.max(tMin,Math.min(tMax,oatC)),val=toAt(t),mx=X(t),my=Y(val);
+  kc.strokeStyle='rgba(255,255,255,.25)';kc.setLineDash([3,3]);kc.beginPath();kc.moveTo(mx,h-padB);kc.lineTo(mx,my);kc.lineTo(padL,my);kc.stroke();kc.setLineDash([]);
+  kc.fillStyle='#ff6a45';kc.shadowColor='#ff6a45';kc.shadowBlur=10;kc.beginPath();kc.arc(mx,my,5,0,7);kc.fill();kc.shadowBlur=0;
+  kc.font='700 11px ui-monospace,Menlo,monospace';kc.fillStyle='#ffd24d';
+  const lbl='+'+Math.round(val)+'% takeoff',tw=kc.measureText(lbl).width;kc.fillText(lbl,Math.min(mx+8,w-padR-tw),Math.max(padT+10,my-7));
+}
+function setupKoch(){
+  kChart=$('kChart'); if(!kChart) return false;
+  kc=kChart.getContext('2d'); kDim=fit(kChart,kc);
+  ['kPa','kOat','kProp','kTo','kRoc'].forEach(id=>$(id).addEventListener('input',calcKoch));
+  (function(){ let drag=false;
+    const toOAT=e=>{ const r=kChart.getBoundingClientRect(),padL=46,padR=14; let f=(e.clientX-r.left-padL)/(r.width-padL-padR); f=Math.max(0,Math.min(1,f)); return -25+f*75; };
+    const set=e=>{ const tC=toOAT(e); $('kOat').value=(kTempUnit==='F')?Math.round(tC*9/5+32):Math.round(tC); calcKoch(); };
+    kChart.addEventListener('pointerdown',e=>{drag=true;kChart.setPointerCapture(e.pointerId);set(e);});
+    kChart.addEventListener('pointermove',e=>{if(drag)set(e);});
+    kChart.addEventListener('pointerup',()=>drag=false);
+  })();
+  $('kOatUnit').addEventListener('click',()=>{ const inp=$('kOat'); const v=parseFloat(inp.value);
+    if(kTempUnit==='C'){ kTempUnit='F'; if(!isNaN(v)) inp.value=Math.round(v*9/5+32); $('kOatUnit').textContent='°F'; }
+    else { kTempUnit='C'; if(!isNaN(v)) inp.value=Math.round((v-32)*5/9); $('kOatUnit').textContent='°C'; }
+    calcKoch(); });
+  $('kPa').addEventListener('blur',()=>{ const v=$('kPa').value.trim(); if(v!=='') $('kPa').value=fmt(commaInt(v)); });
+  calcKoch();
+  return true;
+}
+
+// ---- Crosswind calculator: headwind/tailwind + crosswind components ----
+function calcCross(){
+  const rwy=((parseFloat($('xRwy').value)||0)%360+360)%360;
+  const wdir=((parseFloat($('xWdir').value)||0)%360+360)%360;
+  const wspd=Math.max(0,parseFloat($('xWspd').value)||0);
+  let ang=wdir-rwy; while(ang>180)ang-=360; while(ang<-180)ang+=360;
+  const rad=ang*Math.PI/180;
+  const head=wspd*Math.cos(rad), cross=wspd*Math.sin(rad);
+  const he=$('xHead'); he.textContent=(head>=0?'+':'−')+Math.abs(Math.round(head));
+  he.style.color = head>=0?'#37d67a':'#ff6a45';
+  $('xCross').textContent=Math.abs(Math.round(cross))+' '+(Math.abs(Math.round(cross))===0?'':(cross>=0?'R':'L'));
+  $('xAngle').textContent=Math.round(Math.abs(ang))+'°';
+  let note='Wind '+Math.round(wdir).toString().padStart(3,'0')+'° at '+Math.round(wspd)+' kt, '+Math.round(Math.abs(ang))+'° off the nose. '
+    +'<strong>'+Math.abs(Math.round(cross))+' kt crosswind from the '+(cross>=0?'right':'left')+'</strong>'
+    +' and a <strong>'+Math.abs(Math.round(head))+' kt '+(head>=0?'headwind':'tailwind')+'</strong>. ';
+  if(head<0) note+='Note the <strong>tailwind component</strong> — check your takeoff/landing distance and consider the reciprocal runway. ';
+  else note+='Compare the crosswind against your aircraft’s demonstrated crosswind component and your personal limits.';
+  $('xNote').innerHTML=note;
+  drawCross(rwy,wdir,wspd,ang,head,cross);
+}
+function drawCross(rwy,wdir,wspd,ang,head,cross){
+  const w=xDim.w,h=xDim.h; xc.clearRect(0,0,w,h);
+  const cx=w/2, cy=h/2, R=Math.min(w,h)/2-26;
+  xc.save(); xc.translate(cx,cy);
+  xc.strokeStyle='rgba(255,255,255,.12)';xc.lineWidth=1;xc.beginPath();xc.arc(0,0,R,0,7);xc.stroke();
+  const rwLen=R*1.45, rwW=26;
+  xc.fillStyle='rgba(255,255,255,.08)';xc.strokeStyle='rgba(255,255,255,.45)';xc.lineWidth=2;
+  xc.fillRect(-rwW/2,-rwLen/2,rwW,rwLen);xc.strokeRect(-rwW/2,-rwLen/2,rwW,rwLen);
+  xc.strokeStyle='rgba(255,255,255,.6)';xc.setLineDash([7,9]);xc.lineWidth=1.5;
+  xc.beginPath();xc.moveTo(0,-rwLen/2+10);xc.lineTo(0,rwLen/2-10);xc.stroke();xc.setLineDash([]);
+  const num=Math.round(rwy/10)||36, recip=((num+18-1)%36)+1;
+  xc.fillStyle='#cdd6e6';xc.font='700 14px ui-monospace,Menlo,monospace';xc.textAlign='center';
+  xc.fillText((num<10?'0':'')+num, 0, rwLen/2-14);
+  xc.fillText((recip<10?'0':'')+recip, 0, -rwLen/2+22);
+  const a=ang*Math.PI/180, fx=Math.sin(a)*R, fy=-Math.cos(a)*R;
+  xc.strokeStyle='#4ea1ff';xc.fillStyle='#4ea1ff';xc.lineWidth=3.5;
+  xc.beginPath();xc.moveTo(fx,fy);xc.lineTo(fx*0.18,fy*0.18);xc.stroke();
+  const ah=Math.atan2(fy*0.18-fy, fx*0.18-fx);
+  xc.beginPath();xc.moveTo(fx*0.18,fy*0.18);
+  xc.lineTo(fx*0.18-12*Math.cos(ah-0.4),fy*0.18-12*Math.sin(ah-0.4));
+  xc.lineTo(fx*0.18-12*Math.cos(ah+0.4),fy*0.18-12*Math.sin(ah+0.4));
+  xc.closePath();xc.fill();
+  xc.fillStyle='#9fd0ff';xc.font='700 12px ui-monospace,Menlo,monospace';
+  xc.fillText(Math.round(wspd)+' kt', fx*1.04, fy*1.04+4);
+  const scale=R/Math.max(wspd,1)*0.72;
+  xc.strokeStyle='#ff6a45';xc.lineWidth=3;xc.setLineDash([4,3]);
+  xc.beginPath();xc.moveTo(0,0);xc.lineTo(cross*scale,0);xc.stroke();xc.setLineDash([]);
+  xc.strokeStyle='#37d67a';
+  xc.beginPath();xc.moveTo(0,0);xc.lineTo(0,-head*scale);xc.stroke();
+  xc.restore();
+  xc.fillStyle='#ff9d6b';xc.font='700 11px ui-monospace,Menlo,monospace';xc.textAlign='left';
+  xc.fillText(Math.abs(Math.round(cross))+' kt xwind '+(cross>=0?'→':'←'), 10, h-12);
+  xc.fillStyle='#37d67a';xc.textAlign='right';
+  xc.fillText((head>=0?'headwind ':'tailwind ')+Math.abs(Math.round(head))+' kt', w-10, h-12);
+}
+function setupCross(){
+  xChart=$('xChart'); if(!xChart) return false;
+  xc=xChart.getContext('2d'); xDim=fit(xChart,xc);
+  ['xRwy','xWdir','xWspd'].forEach(id=>$(id).addEventListener('input',calcCross));
+  (function(){ let drag=false;
+    const toDir=e=>{ const r=xChart.getBoundingClientRect(); const px=e.clientX-r.left-r.width/2, py=e.clientY-r.top-r.height/2;
+      let deg=Math.atan2(px,-py)*180/Math.PI; const rwy=((parseFloat($('xRwy').value)||0)); let wd=rwy+deg; wd=((Math.round(wd)%360)+360)%360; return wd; };
+    const set=e=>{ $('xWdir').value=Math.round(toDir(e)); calcCross(); };
+    xChart.addEventListener('pointerdown',e=>{drag=true;xChart.setPointerCapture(e.pointerId);set(e);});
+    xChart.addEventListener('pointermove',e=>{if(drag)set(e);});
+    xChart.addEventListener('pointerup',()=>drag=false);
+  })();
+  calcCross();
+  return true;
+}
+
 function setupExplorer(){
   sky=$('sky'); if(!sky) return false;
   air=$('air'); curve=$('curve');
@@ -814,6 +963,8 @@ const hasDA=setupDA();
 const hasCabin=setupCabin();
 const hasHP=setupHP();
 const hasPC=setupPC();
+const hasKoch=setupKoch();
+const hasCross=setupCross();
 
 window.addEventListener('resize',()=>{
   if(hasExplorer){skyDim=fit(sky,skc);stars=null;airDim=fit(air,ac);curveDim=fit(curve,cc);parts=[];update(alt);}
@@ -821,6 +972,8 @@ window.addEventListener('resize',()=>{
   if(hasHP){hpDim=fit(hpChart,hpc);calcHP();}
   if(hasCabin){cabinDim=fit(cabinChart,cbc);calcCabin();}
   if(hasDA){daDim=fit(daChart,dac);calcDA();}
+  if(hasKoch){kDim=fit(kChart,kc);calcKoch();}
+  if(hasCross){xDim=fit(xChart,xc);calcCross();}
 });
 
 (function(){ const b=$('disclaimerBar'); if(!b)return; b.hidden=false;

@@ -5,19 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="theme-color" content="#05070f">
-<title>Cabin Altitude Calculator — Cabin Pressure at Cruise | DensityAlt</title>
-<meta name="description" content="Free cabin altitude calculator: enter cruise altitude and aircraft to see the cabin altitude pressurization holds, and the blood oxygen (SpO₂) you'd have.">
-<link rel="canonical" href="https://densityalt.com/cabin-altitude-calculator">
+<title>Koch Chart Calculator — Takeoff Distance & Climb at Altitude | DensityAlt</title>
+<meta name="description" content="Free interactive Koch chart: enter pressure altitude and temperature to see how much density altitude increases takeoff distance and cuts climb rate. For pilots.">
+<link rel="canonical" href="https://densityalt.com/koch-chart">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="DensityAlt">
-<meta property="og:url" content="https://densityalt.com/cabin-altitude-calculator">
-<meta property="og:title" content="What Cabin Altitude Does Your Jet Hold?">
-<meta property="og:description" content="Free cabin altitude calculator — cruise altitude and max differential to cabin altitude and blood oxygen, for airliners and bizjets.">
+<meta property="og:url" content="https://densityalt.com/koch-chart">
+<meta property="og:title" content="Koch Chart — How Density Altitude Hurts Takeoff & Climb">
+<meta property="og:description" content="Interactive Koch chart calculator: how much longer your takeoff roll gets and how much climb you lose at high density altitude. Free, no signup.">
 <meta property="og:image" content="https://densityalt.com/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="What Cabin Altitude Does Your Jet Hold?">
-<meta name="twitter:description" content="Free cabin altitude calculator — cruise altitude and max differential to cabin altitude and blood oxygen, for airliners and bizjets.">
+<meta name="twitter:title" content="Koch Chart — How Density Altitude Hurts Takeoff & Climb">
+<meta name="twitter:description" content="Interactive Koch chart calculator: how much longer your takeoff roll gets and how much climb you lose at high density altitude. Free, no signup.">
 <meta name="twitter:image" content="https://densityalt.com/og-image.png">
 <link rel="stylesheet" href="/styles.css">
 </head>
@@ -46,50 +46,63 @@
 
   <header class="hero">
     <div class="kicker">Free aviation &amp; aerospace calculators</div>
-    <h1>Cabin Altitude <span>Calculator</span></h1>
-    <p class="hero-sub">What your body really feels at cruise.</p>
-    <p class="lead">Pressurized aircraft hold a maximum pressure <em>differential</em> (ΔP) between inside and outside. Pick an aircraft and cruise altitude to see the cabin altitude your body actually experiences, and the <a href="/atmosphere-explorer">blood oxygen (SpO₂)</a> that comes with it.</p>
+    <h1>Koch Chart <span>Calculator</span></h1>
+    <p class="hero-sub">How density altitude steals takeoff &amp; climb.</p>
+    <p class="lead">High and hot means a longer ground roll and a weaker climb. This interactive Koch chart turns pressure altitude and temperature into a takeoff-distance and climb-rate penalty — pair it with the <a href="/">density altitude calculator</a>.</p>
   </header>
 
-  <section class="da cabin" id="cabin">
-    <h2>Cabin Altitude Calculator</h2>
-    <p class="desc">Pressurized aircraft don't hold the cabin at sea level — they maintain a maximum pressure <em>differential</em> (ΔP) between inside and outside. Pick an aircraft and cruise altitude to see the cabin altitude your body actually experiences, and the <a href="#explorer">blood oxygen (SpO₂)</a> that comes with it.</p>
+  <section class="da" id="koch">
+    <h2>Koch Chart Calculator — Takeoff &amp; Climb Derating</h2>
+    <p class="desc">The Koch chart shows how high density altitude stretches your takeoff roll and flattens your climb. Enter pressure altitude and temperature to see the penalty — or get density altitude straight from the <a href="/">density altitude calculator</a>.</p>
     <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning, dispatch, or weight-and-balance.</strong> Always fly the numbers in your POH and current official weather.</p>
     <div class="da-grid">
       <div class="field">
-        <label>Aircraft</label>
-        <div class="in"><select id="acft"></select></div>
+        <label>Pressure Altitude</label>
+        <div class="in"><input id="kPa" type="text" inputmode="numeric" value="6,000"><span class="unit">ft</span></div>
       </div>
       <div class="field">
-        <label>Cruise Altitude</label>
-        <div class="in"><input id="cruise" type="number" value="38000"><span class="unit">ft</span></div>
+        <label>Outside Air Temp</label>
+        <div class="in"><input id="kOat" type="number" value="30"><button type="button" id="kOatUnit" class="unit unit-toggle" title="Switch between Celsius and Fahrenheit">°C</button></div>
+        <div class="field-hint">tap the <b>°C</b> button to switch to <b>°F</b></div>
       </div>
-      <div class="field" id="customDpWrap" style="display:none">
-        <label>Custom Max Differential</label>
-        <div class="in"><input id="customDp" type="number" step="0.1" value="8.0"><span class="unit">psi</span></div>
+      <div class="field">
+        <label>Propeller</label>
+        <div class="in"><select id="kProp"><option value="fixed">Fixed-pitch</option><option value="cs">Constant-speed</option></select></div>
+      </div>
+    </div>
+    <div class="da-grid" style="margin-top:18px">
+      <div class="field">
+        <label>Sea-level Takeoff Distance <span style="text-transform:none;font-weight:400">(optional)</span></label>
+        <div class="in"><input id="kTo" type="text" inputmode="numeric" value="1,000"><span class="unit">ft</span></div>
+      </div>
+      <div class="field">
+        <label>Sea-level Climb Rate <span style="text-transform:none;font-weight:400">(optional)</span></label>
+        <div class="in"><input id="kRoc" type="text" inputmode="numeric" value="700"><span class="unit">fpm</span></div>
       </div>
     </div>
     <div class="da-out">
-      <div class="out"><div class="lbl">Max Differential</div><div class="v"><span id="cabinDp">8.65</span> psi</div></div>
-      <div class="out"><div class="lbl">Cabin Blood O₂ (SpO₂)</div><div class="v"><span id="cabinSpo2">95%</span></div></div>
-      <div class="out hero"><div class="lbl">Cabin Altitude</div><div class="v" style="color:var(--accent2)"><span id="cabinAlt">7,000</span> ft</div></div>
+      <div class="out"><div class="lbl">Density Altitude</div><div class="v"><span id="kDa">9,800</span> ft</div></div>
+      <div class="out hero"><div class="lbl">Takeoff Distance</div><div class="v" style="color:var(--warn)"><span id="kToPct">+230%</span></div></div>
+      <div class="out"><div class="lbl">Climb Rate</div><div class="v" style="color:var(--bad)"><span id="kRocPct">−74%</span></div></div>
     </div>
-    <canvas id="cabinChart" class="box" width="900" height="240"></canvas>
-    <div class="pc-legend">
-      <span><i style="background:#7cf"></i> Cabin altitude</span>
-      <span class="pa"><i style="border-top:2px dashed #ff785a;background:none;height:0"></i> Unpressurized (cabin = altitude)</span>
-      <span style="color:#ffd24d">▭ Shaded gap = what pressurization saves you</span>
+    <div class="da-out">
+      <div class="out"><div class="lbl">Takeoff Distance Needed</div><div class="v"><span id="kToOut">3,300</span> ft</div></div>
+      <div class="out"><div class="lbl">Climb Rate Remaining</div><div class="v"><span id="kRocOut">180</span> fpm</div></div>
     </div>
-    <div class="da-note" id="cabinNote"></div>
+    <canvas id="kChart" class="box" width="900" height="200"></canvas>
+    <p class="cap" style="margin:8px 0 0">Drag the chart to set temperature — takeoff penalty climbs steeply as the air thins.</p>
+    <div class="da-note" id="kNote"></div>
   </section>
 
   <section class="da faq" id="faq">
     <h2>Frequently asked questions</h2>
     <div class="faqlist">
-      <details class="faq-item"><summary>Why are airliner cabins pressurized to about 8,000 feet?</summary>
-      <p class="a">The fuselage can only hold a limited pressure difference (ΔP). At cruise the system maintains that maximum differential, which works out to a cabin altitude near 8,000&nbsp;ft for most airliners. Composite jets like the 787 and A350 tolerate a higher ΔP and target ~6,000&nbsp;ft.</p></details>
-      <details class="faq-item"><summary>What is cabin altitude?</summary>
-      <p class="a">Cabin altitude is the effective altitude your body experiences inside a pressurized aircraft — based on the cabin pressure the system holds, not the altitude you're flying at. A jet at 38,000&nbsp;ft typically holds a cabin near 6,000–8,000&nbsp;ft.</p></details>
+      <details class="faq-item"><summary>What is the Koch chart?</summary>
+      <p class="a">The Koch chart is an FAA-recommended graphical tool that estimates how much your takeoff distance increases and rate of climb decreases as pressure altitude and temperature rise. You connect temperature and pressure altitude with a line and read the percentages in the center. It is an approximation for when POH data isn't handy — always defer to your POH.</p></details>
+      <details class="faq-item"><summary>How much does takeoff distance increase with density altitude?</summary>
+      <p class="a">A lot, and non-linearly. At ~6,000&nbsp;ft pressure altitude and 100&nbsp;°F (~9,800&nbsp;ft density altitude) the chart adds about <strong>230%</strong> to sea-level takeoff distance — a 1,000&nbsp;ft ground roll becomes ~3,300&nbsp;ft. Confirm against your POH and runway available.</p></details>
+      <details class="faq-item"><summary>How much does climb rate drop with density altitude?</summary>
+      <p class="a">Roughly <strong>7–8% per 1,000&nbsp;ft</strong> of density altitude for a normally-aspirated airplane. At ~9,800&nbsp;ft DA a 500&nbsp;fpm sea-level climb drops to ~120&nbsp;fpm. Climb is usually what you feel first on a hot, high day.</p></details>
     </div>
   </section>
 
@@ -118,9 +131,9 @@
 {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  "name": "DensityAlt Cabin Altitude Calculator",
-  "url": "https://densityalt.com/cabin-altitude-calculator",
-  "description": "Calculate the cabin altitude a pressurized aircraft maintains at cruise from its maximum pressure differential, plus the resulting blood oxygen (SpO2).",
+  "name": "DensityAlt Koch Chart Calculator",
+  "url": "https://densityalt.com/koch-chart",
+  "description": "Interactive Koch chart that estimates takeoff-distance increase and rate-of-climb decrease from pressure altitude and temperature, calibrated to the FAA Koch chart.",
   "applicationCategory": "EducationalApplication",
   "operatingSystem": "Any (web browser)",
   "browserRequirements": "Requires JavaScript",
@@ -128,10 +141,11 @@
   "author": {"@type": "Person", "name": "Levan Sulakvelidze", "description": "Instrument-rated private pilot", "sameAs": ["https://www.linkedin.com/in/levansula", "https://www.instagram.com/levansula/", "https://github.com/levansula23"]},
   "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
   "featureList": [
-    "Cabin altitude at cruise from max pressure differential",
-    "Blood oxygen (SpO2) at cabin altitude",
-    "Library of airliners and business jets",
-    "Draggable cabin-vs-aircraft-altitude chart"
+    "Takeoff-distance increase at altitude",
+    "Rate-of-climb decrease at altitude",
+    "Density altitude from pressure altitude and temperature",
+    "Fixed-pitch and constant-speed propeller models",
+    "Draggable temperature vs takeoff-penalty chart"
   ]
 }
 </script>
@@ -141,8 +155,9 @@
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
-    {"@type":"Question","name":"Why are airliner cabins pressurized to about 8,000 feet?","acceptedAnswer":{"@type":"Answer","text":"The fuselage can only hold a limited pressure difference between inside and outside. At cruise the system maintains that maximum differential, which works out to a cabin altitude near 8,000 ft for most airliners. Composite jets like the 787 and A350 tolerate a higher differential and target about 6,000 ft."}},
-    {"@type":"Question","name":"What is cabin altitude?","acceptedAnswer":{"@type":"Answer","text":"Cabin altitude is the effective altitude your body experiences inside a pressurized aircraft, based on the cabin air pressure the pressurization system maintains — not the altitude the aircraft is actually flying at. A jet at 38,000 ft typically holds a cabin altitude near 6,000-8,000 ft."}}
+    {"@type":"Question","name":"What is the Koch chart?","acceptedAnswer":{"@type":"Answer","text":"The Koch chart is an FAA-recommended graphical tool that estimates how much your takeoff distance increases and your rate of climb decreases as pressure altitude and temperature rise. You connect the temperature and pressure altitude with a line and read the percent takeoff increase and percent climb decrease in the center. It is meant as an approximation when POH performance data is unavailable."}},
+    {"@type":"Question","name":"How much does takeoff distance increase with density altitude?","acceptedAnswer":{"@type":"Answer","text":"A lot, and non-linearly. At about 6,000 ft pressure altitude and 100 degrees F (roughly 9,800 ft density altitude), the Koch chart adds about 230% to sea-level takeoff distance — a 1,000 ft ground roll becomes about 3,300 ft. Always confirm against your POH and the runway available."}},
+    {"@type":"Question","name":"How much does climb rate drop with density altitude?","acceptedAnswer":{"@type":"Answer","text":"Rate of climb falls roughly 7 to 8 percent per 1,000 ft of density altitude for a normally-aspirated airplane. At about 9,800 ft density altitude a 500 fpm sea-level climb drops to roughly 120 fpm. Climb performance is usually what pilots notice first on a hot, high day."}}
   ]
 }
 </script>
@@ -153,7 +168,7 @@
   "@type": "BreadcrumbList",
   "itemListElement": [
     {"@type":"ListItem","position":1,"name":"Density Altitude Calculator","item":"https://densityalt.com/"},
-    {"@type":"ListItem","position":2,"name":"Cabin Altitude Calculator","item":"https://densityalt.com/cabin-altitude-calculator"}
+    {"@type":"ListItem","position":2,"name":"Koch Chart Calculator","item":"https://densityalt.com/koch-chart"}
   ]
 }
 </script>
