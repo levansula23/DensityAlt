@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#05070f">
+<title>Takeoff & Landing Distance Calculator (Density Altitude) | DensityAlt</title>
+<meta name="description" content="Free takeoff and landing distance calculator: see how much density altitude lengthens your ground roll and rollout, plus climb-rate loss. Interactive FAA Koch chart.">
+<link rel="canonical" href="https://densityalt.com/takeoff-landing-distance">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DensityAlt">
+<meta property="og:url" content="https://densityalt.com/takeoff-landing-distance">
+<meta property="og:title" content="Takeoff & Landing Distance at Density Altitude">
+<meta property="og:description" content="How much longer is your takeoff and landing roll when it's high and hot? Interactive runway diagram + climb-rate penalty. Free, no signup.">
+<meta property="og:image" content="https://densityalt.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Takeoff & Landing Distance at Density Altitude">
+<meta name="twitter:description" content="How much longer is your takeoff and landing roll when it's high and hot? Interactive runway diagram + climb-rate penalty. Free, no signup.">
+<meta name="twitter:image" content="https://densityalt.com/og-image.png">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<nav class="topnav"><div class="navin">
+  <a class="brand" href="/" style="text-decoration:none"><img src="/favicon.svg" alt=""><b>DensityAlt</b></a>
+  <div class="navlinks">
+    <a class="nl" href="/atmosphere-explorer">Explorer</a>
+    <a class="nl" href="/">Density Altitude</a>
+    <a class="nl" href="/crosswind-calculator">Crosswind</a>
+    <a class="nl" href="/takeoff-landing-distance">Takeoff/Landing</a>
+    <a class="nl" href="/horsepower-at-altitude">Horsepower</a>
+    <a class="nl" href="/power-curve">Power Curve</a>
+    <a class="nl" href="/cabin-altitude-calculator">Cabin Altitude</a>
+    <a class="nl" href="/#about">About</a>
+  </div>
+  <a class="nav-gh" href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener" aria-label="DensityAlt source code on GitHub" title="Open source — view the code on GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+</div></nav>
+
+<div id="disclaimerBar" class="disclaimer-bar" hidden>
+  <span><strong>Educational estimates only.</strong> DensityAlt is not for flight planning, dispatch, or medical use — always use your POH and official sources.</span>
+  <button id="disclaimerOk" type="button">Got it</button>
+</div>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="kicker">Free aviation &amp; aerospace calculators</div>
+    <h1>Takeoff &amp; Landing Distance <span>Calculator</span></h1>
+    <p class="hero-sub">High and hot means a longer runway.</p>
+    <p class="lead">See how density altitude stretches both your takeoff and landing roll, and flattens your climb. Enter pressure altitude and temperature, or get density altitude from the <a href="/">density altitude calculator</a>. This is an interactive version of the FAA <strong>Koch chart</strong>, extended to landing distance.</p>
+  </header>
+
+  <section class="da" id="tldist">
+    <h2>Takeoff &amp; Landing Distance Calculator</h2>
+    <p class="desc">High density altitude stretches both your takeoff roll and your landing rollout, and flattens your climb. Enter pressure altitude and temperature to see the penalty — or get density altitude straight from the <a href="/">density altitude calculator</a>. (This is an interactive version of the FAA <strong>Koch chart</strong>.)</p>
+    <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning, dispatch, or weight-and-balance.</strong> Always fly the numbers in your POH and current official weather.</p>
+    <div class="da-grid">
+      <div class="field">
+        <label>Pressure Altitude</label>
+        <div class="in"><input id="kPa" type="text" inputmode="numeric" value="6,000"><span class="unit">ft</span></div>
+      </div>
+      <div class="field">
+        <label>Outside Air Temp</label>
+        <div class="in"><input id="kOat" type="number" value="30"><button type="button" id="kOatUnit" class="unit unit-toggle" title="Switch between Celsius and Fahrenheit">°C</button></div>
+        <div class="field-hint">tap the <b>°C</b> button to switch to <b>°F</b></div>
+      </div>
+      <div class="field">
+        <label>Propeller</label>
+        <div class="in"><select id="kProp"><option value="fixed">Fixed-pitch</option><option value="cs">Constant-speed</option></select></div>
+      </div>
+    </div>
+    <div class="da-grid" style="margin-top:18px">
+      <div class="field">
+        <label>Sea-level Takeoff Distance <span style="text-transform:none;font-weight:400">(your POH)</span></label>
+        <div class="in"><input id="kTo" type="text" inputmode="numeric" value="1,000"><span class="unit">ft</span></div>
+      </div>
+      <div class="field">
+        <label>Sea-level Landing Distance <span style="text-transform:none;font-weight:400">(your POH)</span></label>
+        <div class="in"><input id="kLd" type="text" inputmode="numeric" value="1,200"><span class="unit">ft</span></div>
+      </div>
+      <div class="field">
+        <label>Sea-level Climb Rate <span style="text-transform:none;font-weight:400">(optional)</span></label>
+        <div class="in"><input id="kRoc" type="text" inputmode="numeric" value="700"><span class="unit">fpm</span></div>
+      </div>
+    </div>
+    <div class="da-out">
+      <div class="out"><div class="lbl">Density Altitude</div><div class="v"><span id="kDa">9,800</span> ft</div></div>
+      <div class="out hero"><div class="lbl">Takeoff Distance</div><div class="v" style="color:var(--warn)"><span id="kToOut">3,300</span> ft</div></div>
+      <div class="out hero"><div class="lbl">Landing Distance</div><div class="v" style="color:var(--accent2)"><span id="kLdOut">1,650</span> ft</div></div>
+    </div>
+    <div class="da-out">
+      <div class="out"><div class="lbl">Takeoff Increase</div><div class="v"><span id="kToPct">+230%</span></div></div>
+      <div class="out"><div class="lbl">Landing Increase</div><div class="v"><span id="kLdPct">+37%</span></div></div>
+      <div class="out"><div class="lbl">Climb Rate Change</div><div class="v" style="color:var(--bad)"><span id="kRocPct">−74%</span> <span style="font-size:14px;color:var(--ink-dim)">(<span id="kRocOut">180</span> fpm)</span></div></div>
+    </div>
+    <canvas id="kChart" class="box" width="900" height="240"></canvas>
+    <p class="cap" style="margin:8px 0 0">Runway view — the bars show your <span style="color:#ff6a45">takeoff</span> and <span style="color:#7cf">landing</span> rolls at density altitude; the dashed line marks the sea-level figure.</p>
+    <div class="da-note" id="kNote"></div>
+  </section>
+
+  <section class="da faq" id="faq">
+    <h2>Frequently asked questions</h2>
+    <div class="faqlist">
+      <details class="faq-item"><summary>How much does takeoff distance increase with density altitude?</summary>
+      <p class="a">A lot, and non-linearly. At ~6,000&nbsp;ft pressure altitude and 100&nbsp;°F (~9,800&nbsp;ft density altitude) takeoff distance increases about <strong>230%</strong> over a sea-level standard day — a 1,000&nbsp;ft ground roll becomes ~3,300&nbsp;ft (matches the FAA Koch chart). Confirm against your POH and runway available.</p></details>
+      <details class="faq-item"><summary>How much does landing distance increase with density altitude?</summary>
+      <p class="a">Roughly <strong>3.5% per 1,000&nbsp;ft</strong> of density altitude. The cause is <em>true airspeed</em>: at altitude your TAS at touchdown is higher for the same indicated approach speed, so you carry more energy and roll farther. At ~9,800&nbsp;ft DA a 1,200&nbsp;ft sea-level landing becomes ~1,650&nbsp;ft.</p></details>
+      <details class="faq-item"><summary>What is the Koch chart?</summary>
+      <p class="a">The Koch chart is an FAA-recommended graphical tool that estimates how much takeoff distance increases and rate of climb decreases as pressure altitude and temperature rise. This calculator is an interactive version of it, extended to also estimate landing distance. It is an approximation for when POH data isn't handy — always defer to your POH.</p></details>
+      <details class="faq-item"><summary>How much does climb rate drop with density altitude?</summary>
+      <p class="a">Roughly <strong>7–8% per 1,000&nbsp;ft</strong> of density altitude for a normally-aspirated airplane. At ~9,800&nbsp;ft DA a 500&nbsp;fpm sea-level climb drops to ~120&nbsp;fpm. Climb is usually what you feel first on a hot, high day.</p></details>
+    </div>
+  </section>
+
+  <footer>
+    <h4>How the numbers are computed</h4>
+    <div class="calcrefs">
+      <div><b>Atmosphere</b> — International Standard Atmosphere (ISA): the barometric formula in the troposphere (1.98&nbsp;°C / 1000&nbsp;ft lapse) and the isothermal layer above the tropopause (~36,089&nbsp;ft).</div>
+      <div><b>Blood oxygen</b> — alveolar gas equation <code>P_AO₂ = 0.2095·(P − 47) − P_CO₂/0.8</code> feeding the Severinghaus SpO₂ curve. CO₂ falls with altitude, tuned to acute-exposure data (~87% @ 10k, ~72% @ 18k, ~50% @ 25k&nbsp;ft).</div>
+      <div><b>Density altitude</b> — <code>PA = elev + (29.92 − altimeter)·1000</code>, then <code>DA = PA + 120·(OAT − ISA&nbsp;temp)</code>.</div>
+      <div><b>Horsepower</b> — Gagg–Ferrar relation <code>HP ≈ rated·(1.132σ − 0.132)</code>, σ = density ratio at your density altitude; turbos hold rated power to a critical altitude.</div>
+      <div><b>Power curve</b> — parabolic drag polar <code>C_D = C_D0 + C_L²/(πAR·e)</code>; power required = drag × TAS. The region of reversed command is the band from stall up to the minimum-power speed. Drag values are representative estimates and V-speeds (Vs, Va, Vno, Vne) are typical published figures — check your POH; the climb readout is idealized (constant ~80% prop efficiency) and optimistic at low speed.</div>
+      <div><b>Cabin altitude</b> — <code>cabin_P = min(sea level, ambient + ΔP)</code> inverted to an altitude; ΔP is each aircraft's published max pressure differential.</div>
+      <div><b>Data sources</b> — bundled ~110 airports (offline elevation) plus <code>aviationweather.gov</code> METAR for live temp/altimeter (via a same-origin proxy once hosted), falling back to <code>open-meteo.com</code> current weather by coordinates for fields without a METAR.</div>
+      <div><b>References</b> — FAA <i>Pilot's Handbook of Aeronautical Knowledge</i> (FAA-H-8083-25) and <i>Airplane Flying Handbook</i> (FAA-H-8083-3) for density altitude, the FAR&nbsp;91.211 oxygen rules, and the power curve / region of reversed command; J.D.&nbsp;Anderson, <i>Introduction to Flight</i> (parabolic drag polar, power-required = drag&nbsp;×&nbsp;TAS); the alveolar gas equation and Severinghaus SpO₂ relation, with acute-exposure SaO₂ figures from high-altitude physiology literature (e.g. J.B.&nbsp;West). Power-curve V-speeds and the narrow trainer reversed-command band cross-checked against Van's Air Force, GoFly, and Boldmethod.</div>
+    </div>
+    <p class="disclaim">Educational models for healthy unacclimatized adults at acute exposure. Real SpO₂ varies with fitness, acclimatization, and individual physiology. Not for medical or operational flight-planning use.</p>
+    <p class="ghsrc"><strong>Open source.</strong> DensityAlt is built in the open — <a href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener">view the code on GitHub</a> to see exactly how every number is computed.</p>
+    <p class="rms">Made with <a href="https://readymadesites.com/" rel="noopener">ReadyMadeSites™</a> — custom calculators, interactive tools &amp; SEO-ready websites that rank.</p>
+  </footer>
+
+</div>
+
+<script src="/app.js"></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "DensityAlt Takeoff & Landing Distance Calculator",
+  "url": "https://densityalt.com/takeoff-landing-distance",
+  "description": "Interactive takeoff and landing distance calculator showing how density altitude lengthens ground roll and rollout and reduces climb rate, an interactive FAA Koch chart extended to landing distance.",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Any (web browser)",
+  "browserRequirements": "Requires JavaScript",
+  "isAccessibleForFree": true,
+  "author": {"@type": "Person", "name": "Levan Sulakvelidze", "description": "Instrument-rated private pilot", "sameAs": ["https://www.linkedin.com/in/levansula", "https://www.instagram.com/levansula/", "https://github.com/levansula23"]},
+  "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+  "featureList": [
+    "Takeoff-distance increase at density altitude",
+    "Landing-distance increase at density altitude",
+    "Rate-of-climb decrease at altitude",
+    "Interactive runway diagram of takeoff vs landing roll",
+    "Fixed-pitch and constant-speed propeller models",
+    "Interactive FAA Koch chart"
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"How much does takeoff distance increase with density altitude?","acceptedAnswer":{"@type":"Answer","text":"A lot, and non-linearly. At about 6,000 ft pressure altitude and 100 degrees F (roughly 9,800 ft density altitude), takeoff distance increases about 230% over a sea-level standard day — a 1,000 ft ground roll becomes about 3,300 ft. This matches the FAA Koch chart. Always confirm against your POH and the runway available."}},
+    {"@type":"Question","name":"How much does landing distance increase with density altitude?","acceptedAnswer":{"@type":"Answer","text":"Landing distance grows roughly in proportion to density ratio — about 3.5% per 1,000 ft of density altitude. The cause is true airspeed: at altitude your true airspeed at touchdown is higher for the same indicated approach speed, so you carry more energy and roll farther. At 9,800 ft density altitude a 1,200 ft sea-level landing becomes roughly 1,650 ft."}},
+    {"@type":"Question","name":"What is the Koch chart?","acceptedAnswer":{"@type":"Answer","text":"The Koch chart is an FAA-recommended graphical tool that estimates how much takeoff distance increases and rate of climb decreases as pressure altitude and temperature rise. You connect temperature and pressure altitude with a line and read the percentages in the center. This calculator is an interactive version of it, extended to include landing distance. It is an approximation for when POH performance data is unavailable."}},
+    {"@type":"Question","name":"How much does climb rate drop with density altitude?","acceptedAnswer":{"@type":"Answer","text":"Rate of climb falls roughly 7 to 8 percent per 1,000 ft of density altitude for a normally-aspirated airplane. At about 9,800 ft density altitude a 500 fpm sea-level climb drops to roughly 120 fpm. Climb performance is usually what pilots notice first on a hot, high day."}}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Density Altitude Calculator","item":"https://densityalt.com/"},
+    {"@type":"ListItem","position":2,"name":"Takeoff & Landing Distance Calculator","item":"https://densityalt.com/takeoff-landing-distance"}
+  ]
+}
+</script>
+</body>
+</html>

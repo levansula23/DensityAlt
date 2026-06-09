@@ -24,6 +24,14 @@
   from = "/cabin-altitude-calculator"
   to = "/cabin-altitude-calculator.html"
   status = 200
+[[redirects]]
+  from = "/crosswind-calculator"
+  to = "/crosswind-calculator.html"
+  status = 200
+[[redirects]]
+  from = "/takeoff-landing-distance"
+  to = "/takeoff-landing-distance.html"
+  status = 200
 
 # Redirect the .html forms to the canonical clean URLs (avoid duplicate content)
 [[redirects]]
@@ -41,6 +49,14 @@
 [[redirects]]
   from = "/cabin-altitude-calculator.html"
   to = "/cabin-altitude-calculator"
+  status = 301
+[[redirects]]
+  from = "/crosswind-calculator.html"
+  to = "/crosswind-calculator"
+  status = 301
+[[redirects]]
+  from = "/takeoff-landing-distance.html"
+  to = "/takeoff-landing-distance"
   status = 301
 
 [[redirects]]

@@ -5,19 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="theme-color" content="#05070f">
-<title>Power Curve & Region of Reversed Command | DensityAlt</title>
-<meta name="description" content="Interactive power curve and region of reversed command explainer — the back side of the power curve, L/Dmax, Vy, and how density altitude shifts it all.">
-<link rel="canonical" href="https://densityalt.com/power-curve">
+<title>Crosswind Calculator — Crosswind & Headwind Components | DensityAlt</title>
+<meta name="description" content="Free visual crosswind calculator: enter runway heading and wind, or drag the wind around the runway, to get crosswind and headwind/tailwind components in knots.">
+<link rel="canonical" href="https://densityalt.com/crosswind-calculator">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="DensityAlt">
-<meta property="og:url" content="https://densityalt.com/power-curve">
-<meta property="og:title" content="The Power Curve & Region of Reversed Command">
-<meta property="og:description" content="Interactive power-required curve: explore the back side of the curve, L/Dmax, V-speeds, and how density altitude shrinks your margins.">
+<meta property="og:url" content="https://densityalt.com/crosswind-calculator">
+<meta property="og:title" content="Crosswind Calculator — See the Components on the Runway">
+<meta property="og:description" content="Free interactive crosswind calculator. Drag the wind around a runway diagram to split it into crosswind and headwind components. For pilots and students.">
 <meta property="og:image" content="https://densityalt.com/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="The Power Curve & Region of Reversed Command">
-<meta name="twitter:description" content="Interactive power-required curve: explore the back side of the curve, L/Dmax, V-speeds, and how density altitude shrinks your margins.">
+<meta name="twitter:title" content="Crosswind Calculator — See the Components on the Runway">
+<meta name="twitter:description" content="Free interactive crosswind calculator. Drag the wind around a runway diagram to split it into crosswind and headwind components. For pilots and students.">
 <meta name="twitter:image" content="https://densityalt.com/og-image.png">
 <link rel="stylesheet" href="/styles.css">
 </head>
@@ -46,58 +46,50 @@
 
   <header class="hero">
     <div class="kicker">Free aviation &amp; aerospace calculators</div>
-    <h1>Power Curve &amp; Region of <span>Reversed Command</span></h1>
-    <p class="hero-sub">The back side of the curve.</p>
-    <p class="lead">The region of reversed command is where flying slower paradoxically needs <em>more</em> power. The whole curve shifts up with density altitude — get yours from the <a href="/">density altitude calculator</a> — so high, hot fields shrink your margins.</p>
+    <h1>Crosswind <span>Calculator</span></h1>
+    <p class="hero-sub">See the wind split across the runway.</p>
+    <p class="lead">Break any wind into its crosswind and headwind/tailwind components against your runway. Type the numbers or drag the wind arrow around the runway diagram — then compare against your aircraft&rsquo;s demonstrated crosswind and your personal limits.</p>
   </header>
 
-  <section class="da" id="power-curve">
-    <h2>Power Curve &amp; Region of Reversed Command</h2>
-    <p class="desc"><strong>Parasite drag</strong> increases with the <em>square</em> of speed, while <strong>lift-induced drag</strong> is higher at lower speed. The bottom of the curve is the <strong>L/Dmax</strong> speed. Flying at very slow speeds requires high angle of attack (AoA, or alpha), so it takes <em>more</em> power to fly <em>slower</em> — the <strong>region of reversed command</strong>. Inside this region, altitude is controlled with <em>power</em> and airspeed with <em>pitch</em>. Drag the speed across the chart and watch the power change. <a id="usePcDa">↑ use the density altitude from above</a></p>
-    <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning, dispatch, or weight-and-balance.</strong> Always fly the numbers in your POH and current official weather.</p>
-    <div class="da-grid pcin">
+  <section class="da" id="crosswind">
+    <h2>Crosswind Calculator</h2>
+    <p class="desc">Enter your runway heading and the wind — or drag the wind arrow around the runway — to break it into crosswind and headwind/tailwind components.</p>
+    <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning or dispatch.</strong> Compare results against your aircraft's demonstrated crosswind component and your own limits.</p>
+    <div class="da-grid">
       <div class="field">
-        <label>Aircraft</label>
-        <div class="in"><select id="pcAcft"></select></div>
+        <label>Runway Heading</label>
+        <div class="in"><input id="xRwy" type="number" min="0" max="360" value="90"><span class="unit">° mag</span></div>
+        <div class="field-hint">e.g. runway 09 = <b>90</b>, runway 27 = <b>270</b></div>
       </div>
       <div class="field">
-        <label>Density Altitude</label>
-        <div class="in"><input id="pcDa" type="number" value="0"><span class="unit">ft</span></div>
+        <label>Wind Direction</label>
+        <div class="in"><input id="xWdir" type="number" min="0" max="360" value="140"><span class="unit">° from</span></div>
       </div>
       <div class="field">
-        <label>Power Setting</label>
-        <div class="in"><input id="pcPow" type="number" min="0" max="100" value="75"><span class="unit">% rated</span></div>
+        <label>Wind Speed</label>
+        <div class="in"><input id="xWspd" type="number" min="0" value="15"><span class="unit">kt</span></div>
       </div>
-      <div class="field">
-        <label>Engine Power</label>
-        <div class="in"><input id="pcHp" type="number" value="135"><span class="unit">hp</span></div>
-        <div class="field-hint">auto from % &amp; altitude — override anytime</div>
-      </div>
-    </div>
-    <div class="da-grid pcin" id="pcCustomWrap" style="display:none;margin-top:18px">
-      <div class="field"><label>Gross Weight</label><div class="in"><input id="pcW" type="number" value="2400"><span class="unit">lb</span></div></div>
-      <div class="field"><label>Wing Area</label><div class="in"><input id="pcS" type="number" value="170"><span class="unit">ft²</span></div></div>
-      <div class="field"><label>Wingspan</label><div class="in"><input id="pcB" type="number" value="36"><span class="unit">ft</span></div></div>
-      <div class="field"><label>Parasite drag C<sub>D0</sub></label><div class="in"><input id="pcCd0" type="number" step="0.001" value="0.033"></div></div>
-      <div class="field"><label>Oswald efficiency e</label><div class="in"><input id="pcE" type="number" step="0.01" value="0.75"></div></div>
-    </div>
-    <canvas id="pcChart" class="box" width="900" height="340" style="margin-top:18px"></canvas>
-    <div class="pc-legend">
-      <span data-tip="Total power required = total drag × airspeed. This is the solid U-shaped curve; the engine must supply at least this much to hold altitude at a given speed."><i style="background:#7cf"></i> Total</span>
-      <span class="dash" data-tip="Power to overcome induced drag — the unavoidable cost of generating lift. Largest when slow (high angle of attack); falls roughly as 1/speed."><i style="border-top:2px dashed #b9a3ff;background:none;height:0"></i> Induced</span>
-      <span class="dash" data-tip="Power to overcome parasite drag — form drag + skin friction. Tiny when slow; grows with the cube of speed, so it dominates at high speed."><i style="border-top:2px dashed #7cc8ff;background:none;height:0"></i> Parasite</span>
-      <span class="pa" data-tip="Thrust power the engine + propeller can deliver at this power setting and density altitude. Where it crosses the Total curve on the right = max level speed; the gap above the curve is your climb power."><i style="background:#37d67a"></i> Power available</span>
-    </div>
-    <div class="pc-speed">
-      <label>Drag the chart or this slider to set true airspeed</label>
-      <input id="pcSlider" type="range" min="30" max="130" step="1" value="90">
     </div>
     <div class="da-out">
-      <div class="out hero" style="background:radial-gradient(160px 90px at 70% 20%,rgba(78,161,255,.16),transparent),rgba(0,0,0,.22)"><div class="lbl">True Airspeed</div><div class="v" style="color:var(--accent2)"><span id="pcV">90</span> kt</div></div>
-      <div class="out"><div class="lbl">Power Required</div><div class="v"><span id="pcPr">—</span> hp</div></div>
-      <div class="out"><div class="lbl">Excess Power @ this speed</div><div class="v" style="color:var(--good)"><span id="pcExcess">—</span> hp</div></div>
+      <div class="out hero"><div class="lbl">Crosswind Component</div><div class="v" style="color:var(--accent2)"><span id="xCross">11 R</span></div></div>
+      <div class="out"><div class="lbl">Head / Tailwind</div><div class="v" style="color:var(--good)"><span id="xHead">+10</span> kt</div></div>
+      <div class="out"><div class="lbl">Wind Angle</div><div class="v"><span id="xAngle">50</span>°</div></div>
     </div>
-    <div class="da-note" id="pcNote"></div>
+    <canvas id="xChart" class="box" width="900" height="360"></canvas>
+    <p class="cap" style="margin:8px 0 0">Drag around the runway to set wind direction. Blue = wind, orange = crosswind, green = headwind.</p>
+    <div class="da-note" id="xNote"></div>
+  </section>
+
+  <section class="da faq" id="faq">
+    <h2>Frequently asked questions</h2>
+    <div class="faqlist">
+      <details class="faq-item"><summary>How do you calculate a crosswind component?</summary>
+      <p class="a">Crosswind = wind speed × sin(angle between wind and runway); headwind = wind speed × cos(angle). A 15-kt wind 50° off the runway gives about <strong>11 kt crosswind</strong> and about <strong>10 kt headwind</strong>.</p></details>
+      <details class="faq-item"><summary>What is a demonstrated crosswind component?</summary>
+      <p class="a">The maximum demonstrated crosswind is the strongest crosswind a test pilot demonstrated at certification — a capability figure, not a hard limit, but beyond it you're in untested territory. Many light trainers show ~15&nbsp;kt. Know your aircraft's number and set a personal limit below it.</p></details>
+      <details class="faq-item"><summary>Does a crosswind also reduce your headwind?</summary>
+      <p class="a">Yes. The more the wind is off the runway heading, the more becomes crosswind and the less becomes headwind. Past 90° off the nose it's a <em>tailwind</em> — which lengthens takeoff and landing distance and may favor the reciprocal runway.</p></details>
+    </div>
   </section>
 
   <footer>
@@ -125,9 +117,9 @@
 {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  "name": "DensityAlt Power Curve & Region of Reversed Command",
-  "url": "https://densityalt.com/power-curve",
-  "description": "Interactive power-required curve showing the region of reversed command, L/Dmax, minimum-power speed, V-speeds, and the effect of density altitude.",
+  "name": "DensityAlt Crosswind Calculator",
+  "url": "https://densityalt.com/crosswind-calculator",
+  "description": "Interactive crosswind calculator that resolves wind into crosswind and headwind/tailwind components against a runway heading, with a visual runway diagram.",
   "applicationCategory": "EducationalApplication",
   "operatingSystem": "Any (web browser)",
   "browserRequirements": "Requires JavaScript",
@@ -135,11 +127,23 @@
   "author": {"@type": "Person", "name": "Levan Sulakvelidze", "description": "Instrument-rated private pilot", "sameAs": ["https://www.linkedin.com/in/levansula", "https://www.instagram.com/levansula/", "https://github.com/levansula23"]},
   "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
   "featureList": [
-    "Power-required and drag curves",
-    "Region of reversed command (back side of the power curve)",
-    "L/Dmax and minimum-power speed",
-    "V-speeds (Vs, Va, Vno, Vne)",
-    "Density-altitude effect on the curve"
+    "Crosswind component in knots",
+    "Headwind and tailwind component",
+    "Wind angle relative to the runway",
+    "Interactive draggable runway and wind diagram",
+    "Left/right crosswind indication"
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"How do you calculate a crosswind component?","acceptedAnswer":{"@type":"Answer","text":"The crosswind component equals wind speed times the sine of the angle between the wind and the runway; the headwind component equals wind speed times the cosine of that angle. For example, a 15-knot wind 50 degrees off the runway gives about 11 knots of crosswind and about 10 knots of headwind."}},
+    {"@type":"Question","name":"What is a demonstrated crosswind component?","acceptedAnswer":{"@type":"Answer","text":"The maximum demonstrated crosswind component is the strongest crosswind a test pilot demonstrated during certification — it is a capability figure, not a regulatory limit, but exceeding it means you are beyond tested territory. Many light trainers show roughly 15 knots. Always know your aircraft's figure and set a personal limit below it."}},
+    {"@type":"Question","name":"Does a crosswind also reduce your headwind?","acceptedAnswer":{"@type":"Answer","text":"Yes. The more the wind is off the runway heading, the more of it becomes crosswind and the less becomes headwind. Beyond 90 degrees off the nose the headwind becomes a tailwind, which lengthens your takeoff and landing distance and may favor the reciprocal runway."}}
   ]
 }
 </script>
@@ -150,7 +154,7 @@
   "@type": "BreadcrumbList",
   "itemListElement": [
     {"@type":"ListItem","position":1,"name":"Density Altitude Calculator","item":"https://densityalt.com/"},
-    {"@type":"ListItem","position":2,"name":"Power Curve & Region of Reversed Command","item":"https://densityalt.com/power-curve"}
+    {"@type":"ListItem","position":2,"name":"Crosswind Calculator","item":"https://densityalt.com/crosswind-calculator"}
   ]
 }
 </script>
