@@ -812,7 +812,7 @@ function calcCross(){
   const rad=ang*Math.PI/180;
   const head=wspd*Math.cos(rad), cross=wspd*Math.sin(rad);
   const he=$('xHead'); he.textContent=(head>=0?'+':'−')+Math.abs(Math.round(head));
-  he.style.color = head>=0?'#37d67a':'#ff6a45';
+  he.style.color = head>=0?'#37d67a':'#ff5252';
   $('xCross').textContent=Math.abs(Math.round(cross))+' '+(Math.abs(Math.round(cross))===0?'':(cross>=0?'R':'L'));
   $('xAngle').textContent=Math.round(Math.abs(ang))+'°';
   let note='Wind '+Math.round(wdir).toString().padStart(3,'0')+'° at '+Math.round(wspd)+' kt, '+Math.round(Math.abs(ang))+'° off the nose. '
@@ -850,12 +850,22 @@ function drawCross(rwy,wdir,wspd,ang,head,cross){
   const scale=R/Math.max(wspd,1)*0.72;
   xc.strokeStyle='#ff6a45';xc.lineWidth=3;xc.setLineDash([4,3]);
   xc.beginPath();xc.moveTo(0,0);xc.lineTo(cross*scale,0);xc.stroke();xc.setLineDash([]);
-  xc.strokeStyle='#37d67a';
+  xc.strokeStyle=head>=0?'#37d67a':'#ff5252';
   xc.beginPath();xc.moveTo(0,0);xc.lineTo(0,-head*scale);xc.stroke();
+  // live magnitude labels at each component-line tip — move/resize with the lines as you drag
+  xc.font='700 11px ui-monospace,Menlo,monospace';xc.shadowColor='rgba(0,0,0,.9)';xc.shadowBlur=3;
+  if(Math.abs(cross)>=0.5){
+    xc.fillStyle='#ff9d6b';xc.textBaseline='alphabetic';xc.textAlign=cross>=0?'left':'right';
+    xc.fillText(Math.abs(Math.round(cross))+' kt', cross*scale+(cross>=0?6:-6), -7);
+  }
+  if(Math.abs(head)>=0.5){
+    xc.fillStyle=head>=0?'#37d67a':'#ff5252';xc.textBaseline='middle';xc.textAlign='left';
+    xc.fillText(Math.abs(Math.round(head))+' kt', 8, -head*scale);
+  }
   xc.restore();
   xc.fillStyle='#ff9d6b';xc.font='700 11px ui-monospace,Menlo,monospace';xc.textAlign='left';
   xc.fillText(Math.abs(Math.round(cross))+' kt xwind '+(cross>=0?'→':'←'), 10, h-12);
-  xc.fillStyle='#37d67a';xc.textAlign='right';
+  xc.fillStyle=head>=0?'#37d67a':'#ff5252';xc.textAlign='right';
   xc.fillText((head>=0?'headwind ':'tailwind ')+Math.abs(Math.round(head))+' kt', w-10, h-12);
 }
 function setupCross(){
