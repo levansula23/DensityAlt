@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#05070f">
+<title>Learn — Density Altitude &amp; Aviation Guides | DensityAlt</title>
+<meta name="description" content="Pilot-written guides on density altitude, aircraft performance, and the atmosphere — the physics behind the free DensityAlt calculators, in plain English.">
+<link rel="canonical" href="https://densityalt.com/learn/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DensityAlt">
+<meta property="og:url" content="https://densityalt.com/learn/">
+<meta property="og:title" content="Learn — DensityAlt Aviation Guides">
+<meta property="og:description" content="In-depth, pilot-written explainers on density altitude, performance, and the atmosphere — plus the free calculators.">
+<meta property="og:image" content="https://densityalt.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Learn — DensityAlt Aviation Guides">
+<meta name="twitter:description" content="In-depth, pilot-written explainers on density altitude, performance, and the atmosphere — plus the free calculators.">
+<meta name="twitter:image" content="https://densityalt.com/og-image.png">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<nav class="topnav"><div class="navin">
+  <a class="brand" href="/" style="text-decoration:none"><img src="/favicon.svg" alt=""><b>DensityAlt</b></a>
+  <div class="navlinks">
+    <a class="nl" href="/atmosphere-explorer">Explorer</a>
+    <a class="nl" href="/">Density Altitude</a>
+    <a class="nl" href="/learn/">Learn</a>
+    <a class="nl" href="/crosswind-calculator">Crosswind</a>
+    <a class="nl" href="/takeoff-landing-distance">Takeoff/Landing</a>
+    <a class="nl" href="/horsepower-at-altitude">Horsepower</a>
+    <a class="nl" href="/power-curve">Power Curve</a>
+    <a class="nl" href="/cabin-altitude-calculator">Cabin Altitude</a>
+    <a class="nl" href="/#about">About</a>
+  </div>
+  <a class="nav-gh" href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener" aria-label="DensityAlt source code on GitHub" title="Open source — view the code on GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+</div></nav>
+
+<div id="disclaimerBar" class="disclaimer-bar" hidden>
+  <span><strong>Educational estimates only.</strong> DensityAlt is not for flight planning, dispatch, or medical use — always use your POH and official sources.</span>
+  <button id="disclaimerOk" type="button">Got it</button>
+</div>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="kicker">DensityAlt · Learn</div>
+    <h1>Learn</h1>
+    <p class="hero-sub">Plain-English aviation guides.</p>
+    <p class="lead">In-depth, pilot-written explainers on the physics behind the calculators — density altitude, performance, and the atmosphere. Start with the cornerstone guide below, then put it to work in the tools.</p>
+  </header>
+
+  <style>
+  .article{max-width:760px;margin:0 auto}
+  .crumbs{max-width:760px;margin:0 auto 4px;font-size:13px;color:var(--ink-dim)}
+  .crumbs a{color:var(--accent);text-decoration:none}
+  .crumbs span{color:var(--ink-dim)}
+  .byline{max-width:760px;margin:18px auto 0;display:flex;gap:10px;align-items:center;font-size:13.5px;color:var(--ink-dim)}
+  .byline img{width:34px;height:34px;border-radius:50%;flex:0 0 auto}
+  .article h2{font-size:23px;line-height:1.25;margin:38px 0 12px;scroll-margin-top:70px}
+  .article h3{font-size:17px;margin:24px 0 8px;color:var(--ink)}
+  .article p{font-size:16px;line-height:1.72;color:var(--ink);margin:0 0 16px}
+  .article ul,.article ol{font-size:16px;line-height:1.72;color:var(--ink);padding-left:22px;margin:0 0 18px}
+  .article li{margin:7px 0}
+  .article a{color:var(--accent)}
+  .article strong{color:#fff}
+  .toc{background:var(--panel);border:1px solid var(--panel-brd);border-radius:12px;padding:16px 20px}
+  .toc .toc-t{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-dim);margin:0 0 8px}
+  .toc ol{margin:0;padding-left:20px;font-size:15px;line-height:1.5}
+  .toc a{color:var(--accent);text-decoration:none}
+  .keybox{background:var(--panel);border:1px solid var(--panel-brd);border-left:3px solid var(--accent);border-radius:10px;padding:14px 18px;margin:0 0 20px;font-size:16px;line-height:1.6}
+  .formula{font-family:var(--mono);background:rgba(255,255,255,.05);border:1px solid var(--panel-brd);border-radius:10px;padding:13px 16px;margin:0 0 18px;font-size:14px;color:var(--accent2);overflow-x:auto}
+  .article table{width:100%;border-collapse:collapse;margin:0 0 20px;font-size:14.5px}
+  .article th,.article td{border:1px solid var(--panel-brd);padding:8px 12px;text-align:left}
+  .article th{color:var(--ink-dim);font-weight:600}
+  .article blockquote{border-left:3px solid var(--warn);margin:0 0 18px;padding:4px 0 4px 18px;color:var(--ink-dim);font-style:italic}
+  .calc-intro{max-width:760px;margin:0 auto}
+  .authorbox{max-width:760px;margin:40px auto 0;display:flex;gap:14px;align-items:flex-start;background:var(--panel);border:1px solid var(--panel-brd);border-radius:14px;padding:18px}
+  .authorbox img{width:54px;height:54px;border-radius:50%;flex:0 0 auto}
+  .authorbox p{font-size:14px;line-height:1.6;color:var(--ink-dim);margin:6px 0 0}
+  .authorbox a{color:var(--accent)}
+  .learn-card{display:block;background:var(--panel);border:1px solid var(--panel-brd);border-radius:14px;padding:22px;text-decoration:none;color:inherit;margin:0 0 14px}
+  .learn-card:hover{border-color:var(--accent)}
+  .learn-card .lc-k{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent)}
+  .learn-card .lc-t{font-size:20px;font-weight:700;margin:4px 0 6px;color:var(--ink)}
+  .learn-card .lc-d{font-size:14.5px;color:var(--ink-dim);line-height:1.5}
+  </style>
+
+  <section class="da" style="margin-top:34px">
+    <a class="learn-card" href="/learn/density-altitude">
+      <div class="lc-k">Cornerstone guide</div>
+      <div class="lc-t">What Is Density Altitude? A Pilot’s Guide</div>
+      <div class="lc-d">What it is, how to calculate it, and what it does to takeoff, climb, and landing — with a live calculator built in.</div>
+    </a>
+    <p class="desc" style="margin:18px 0 0">More guides are on the way — types of altitude, density altitude &amp; aircraft performance, hypoxia, and the region of reversed command.</p>
+  </section>
+
+  <section class="da"><h2 style="margin:0 0 6px;font-size:20px">Or jump straight to the tools</h2>
+    <p class="desc">Every DensityAlt calculator is free and needs no signup.</p>
+<div class="grid">
+      <a class="card" href="/atmosphere-explorer" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Atmosphere &amp; Hypoxia Explorer</div>
+        <div class="pct">Drag an aircraft up and watch pressure, oxygen &amp; SpO₂ fall.</div></a>
+      <a class="card" href="/crosswind-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Crosswind Calculator</div>
+        <div class="pct">Split the wind into crosswind &amp; headwind on a runway diagram.</div></a>
+      <a class="card" href="/takeoff-landing-distance" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Takeoff &amp; Landing Distance</div>
+        <div class="pct">How density altitude stretches your ground roll &amp; rollout.</div></a>
+      <a class="card" href="/horsepower-at-altitude" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Horsepower at Altitude</div>
+        <div class="pct">How much power a piston engine loses with density altitude.</div></a>
+      <a class="card" href="/power-curve" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Power Curve &amp; Reversed Command</div>
+        <div class="pct">The back side of the power curve and your climb margins.</div></a>
+      <a class="card" href="/cabin-altitude-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Cabin Altitude</div>
+        <div class="pct">What cabin altitude your pressurization holds at cruise.</div></a>
+    </div>
+  </section>
+
+  <footer>
+    <h4>How the numbers are computed</h4>
+    <div class="calcrefs">
+      <div><b>Atmosphere</b> — International Standard Atmosphere (ISA): the barometric formula in the troposphere (1.98&nbsp;°C / 1000&nbsp;ft lapse) and the isothermal layer above the tropopause (~36,089&nbsp;ft).</div>
+      <div><b>Blood oxygen</b> — alveolar gas equation <code>P_AO₂ = 0.2095·(P − 47) − P_CO₂/0.8</code> feeding the Severinghaus SpO₂ curve. CO₂ falls with altitude, tuned to acute-exposure data (~87% @ 10k, ~72% @ 18k, ~50% @ 25k&nbsp;ft).</div>
+      <div><b>Density altitude</b> — <code>PA = elev + (29.92 − altimeter)·1000</code>, then <code>DA = PA + 120·(OAT − ISA&nbsp;temp)</code>.</div>
+      <div><b>Horsepower</b> — Gagg–Ferrar relation <code>HP ≈ rated·(1.132σ − 0.132)</code>, σ = density ratio at your density altitude; turbos hold rated power to a critical altitude.</div>
+      <div><b>Power curve</b> — parabolic drag polar <code>C_D = C_D0 + C_L²/(πAR·e)</code>; power required = drag × TAS. The region of reversed command is the band from stall up to the minimum-power speed. Drag values are representative estimates and V-speeds (Vs, Va, Vno, Vne) are typical published figures — check your POH; the climb readout is idealized (constant ~80% prop efficiency) and optimistic at low speed.</div>
+      <div><b>Cabin altitude</b> — <code>cabin_P = min(sea level, ambient + ΔP)</code> inverted to an altitude; ΔP is each aircraft's published max pressure differential.</div>
+      <div><b>Data sources</b> — bundled ~110 airports (offline elevation) plus <code>aviationweather.gov</code> METAR for live temp/altimeter (via a same-origin proxy once hosted), falling back to <code>open-meteo.com</code> current weather by coordinates for fields without a METAR.</div>
+      <div><b>References</b> — FAA <i>Pilot's Handbook of Aeronautical Knowledge</i> (FAA-H-8083-25) and <i>Airplane Flying Handbook</i> (FAA-H-8083-3) for density altitude, the FAR&nbsp;91.211 oxygen rules, and the power curve / region of reversed command; J.D.&nbsp;Anderson, <i>Introduction to Flight</i> (parabolic drag polar, power-required = drag&nbsp;×&nbsp;TAS); the alveolar gas equation and Severinghaus SpO₂ relation, with acute-exposure SaO₂ figures from high-altitude physiology literature (e.g. J.B.&nbsp;West). Power-curve V-speeds and the narrow trainer reversed-command band cross-checked against Van's Air Force, GoFly, and Boldmethod.</div>
+    </div>
+    <p class="disclaim">Educational models for healthy unacclimatized adults at acute exposure. Real SpO₂ varies with fitness, acclimatization, and individual physiology. Not for medical or operational flight-planning use.</p>
+    <p class="ghsrc"><strong>Open source.</strong> DensityAlt is built in the open — <a href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener">view the code on GitHub</a> to see exactly how every number is computed.</p>
+    <p class="rms">Made with <a href="https://readymadesites.com/" rel="noopener">ReadyMadeSites™</a> — custom calculators, interactive tools &amp; SEO-ready websites that rank.</p>
+  </footer>
+
+</div>
+
+<script src="/app.js"></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://densityalt.com/"},
+    {"@type":"ListItem","position":2,"name":"Learn","item":"https://densityalt.com/learn/"}
+  ]
+}
+</script>
+</body>
+</html>

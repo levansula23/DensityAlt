@@ -32,6 +32,10 @@
   from = "/takeoff-landing-distance"
   to = "/takeoff-landing-distance.html"
   status = 200
+[[redirects]]
+  from = "/learn/density-altitude"
+  to = "/learn/density-altitude.html"
+  status = 200
 
 # Redirect the .html forms to the canonical clean URLs (avoid duplicate content)
 [[redirects]]
@@ -57,6 +61,10 @@
 [[redirects]]
   from = "/takeoff-landing-distance.html"
   to = "/takeoff-landing-distance"
+  status = 301
+[[redirects]]
+  from = "/learn/density-altitude.html"
+  to = "/learn/density-altitude"
   status = 301
 
 [[redirects]]
