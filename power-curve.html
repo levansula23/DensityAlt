@@ -100,6 +100,18 @@
     <div class="da-note" id="pcNote"></div>
   </section>
 
+  <section class="da faq" id="faq">
+    <h2>Frequently asked questions</h2>
+    <div class="faqlist">
+      <details class="faq-item"><summary>What is the region of reversed command?</summary>
+      <p class="a">The range of slow airspeeds, below the <strong>minimum-power speed</strong>, where flying <em>slower</em> needs <em>more</em> power, not less. It's the back side of the power curve: slow flight, short-field approaches, the initial climb. Slow down here and induced drag rises, so you need more power just to hold altitude.</p></details>
+      <details class="faq-item"><summary>What is the back side of the power curve?</summary>
+      <p class="a">The slow-speed part of the power-required curve, left of its lowest point (the <strong>minimum-power speed</strong>). On the <em>front</em> side faster needs more power; on the <em>back</em> side slower needs more power. Dragging it in low and slow on a short-field approach is a classic factor in undershoot and stall-spin accidents.</p></details>
+      <details class="faq-item"><summary>How does density altitude affect the power curve?</summary>
+      <p class="a">It shifts everything against you: <strong>power available</strong> falls as the air thins while the <strong>power required</strong> (in true airspeed) stays about the same. The gap between them, your excess power for climb and maneuvering, shrinks, so your margins are thinnest exactly when high, hot fields demand the most. Get yours from the <a href="/">density altitude calculator</a>.</p></details>
+    </div>
+  </section>
+
   <footer>
     <h4>How the numbers are computed</h4>
     <div class="calcrefs">
@@ -140,6 +152,18 @@
     "L/Dmax and minimum-power speed",
     "V-speeds (Vs, Va, Vno, Vne)",
     "Density-altitude effect on the curve"
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"What is the region of reversed command?","acceptedAnswer":{"@type":"Answer","text":"The region of reversed command is the range of slow airspeeds, below the minimum-power speed, where flying slower requires more power, not less. It lies on the back side of the power curve and shows up in slow flight, short-field approaches, and the initial climb. Slow down here and induced drag rises, so you need more power just to hold altitude."}},
+    {"@type":"Question","name":"What is the back side of the power curve?","acceptedAnswer":{"@type":"Answer","text":"The back side of the power curve is the slow-speed part of the power-required curve, to the left of its lowest point (the minimum-power speed). On the front side, going faster needs more power; on the back side, going slower needs more power. Dragging it in low and slow on a short-field approach is a classic factor in undershoot and stall-spin accidents."}},
+    {"@type":"Question","name":"How does density altitude affect the power curve?","acceptedAnswer":{"@type":"Answer","text":"Density altitude shifts everything against you: the power available falls as the air thins, while the power required to fly stays about the same in true airspeed. The gap between the two curves, your excess power for climb and maneuvering, shrinks, so your margins are thinnest exactly when high, hot fields demand the most."}}
   ]
 }
 </script>
