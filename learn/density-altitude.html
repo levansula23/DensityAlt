@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#05070f">
+<title>What Is Density Altitude? A Pilot’s Guide (+ Calculator) | DensityAlt</title>
+<meta name="description" content="What density altitude is, how to calculate it, and what it does to takeoff, climb, and landing — a clear pilot’s guide with a built-in density altitude calculator.">
+<link rel="canonical" href="https://densityalt.com/learn/density-altitude">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DensityAlt">
+<meta property="og:url" content="https://densityalt.com/learn/density-altitude">
+<meta property="og:title" content="What Is Density Altitude? A Pilot’s Guide">
+<meta property="og:description" content="The altitude your airplane thinks it’s flying at — what density altitude is, how to calculate it, and how to fly it. Includes a live calculator.">
+<meta property="og:image" content="https://densityalt.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="What Is Density Altitude? A Pilot’s Guide">
+<meta name="twitter:description" content="The altitude your airplane thinks it’s flying at — what density altitude is, how to calculate it, and how to fly it. Includes a live calculator.">
+<meta name="twitter:image" content="https://densityalt.com/og-image.png">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<nav class="topnav"><div class="navin">
+  <a class="brand" href="/" style="text-decoration:none"><img src="/favicon.svg" alt=""><b>DensityAlt</b></a>
+  <div class="navlinks">
+    <a class="nl" href="/atmosphere-explorer">Explorer</a>
+    <a class="nl" href="/">Density Altitude</a>
+    <div class="nl-drop">
+      <button type="button" class="nl-trigger" aria-haspopup="true">Calculators<span class="caret" aria-hidden="true"></span></button>
+      <div class="nl-menu">
+        <a class="nl" href="/crosswind-calculator">Crosswind</a>
+        <a class="nl" href="/takeoff-landing-distance">Takeoff &amp; Landing</a>
+        <a class="nl" href="/horsepower-at-altitude">Horsepower</a>
+        <a class="nl" href="/power-curve">Power Curve</a>
+        <a class="nl" href="/cabin-altitude-calculator">Cabin Altitude</a>
+      </div>
+    </div>
+    <a class="nl" href="/learn/">Learn</a>
+    <a class="nl" href="/#about">About</a>
+  </div>
+  <a class="nav-gh" href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener" aria-label="DensityAlt source code on GitHub" title="Open source — view the code on GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+</div></nav>
+
+<div id="disclaimerBar" class="disclaimer-bar" hidden>
+  <span><strong>Educational estimates only.</strong> DensityAlt is not for flight planning, dispatch, or medical use — always use your POH and official sources.</span>
+  <button id="disclaimerOk" type="button">Got it</button>
+</div>
+
+<div class="wrap">
+
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/learn/">Learn</a> › <span>What is density altitude?</span></nav>
+  <header class="hero">
+    <div class="kicker">Learn · Density Altitude</div>
+    <h1>What Is Density Altitude?</h1>
+    <p class="hero-sub">The altitude your airplane thinks it’s flying at.</p>
+    <p class="lead">A complete, pilot’s-eye guide to the one number that decides how your airplane really performs on a high, hot day — what it is, how to calculate it, and what to do about it. With a live calculator built in.</p>
+  </header>
+  <div class="byline"><img src="/headshot.jpg" alt="Levan Sulakvelidze" width="34" height="34" loading="lazy" decoding="async"><span><strong>Levan Sulakvelidze</strong> · Instrument-rated private pilot · Updated June 2026 · ~9 min read</span></div>
+
+  <style>
+  .article{max-width:760px;margin:0 auto}
+  .crumbs{max-width:760px;margin:0 auto 4px;font-size:13px;color:var(--ink-dim)}
+  .crumbs a{color:var(--accent);text-decoration:none}
+  .crumbs span{color:var(--ink-dim)}
+  .byline{max-width:760px;margin:18px auto 0;display:flex;gap:10px;align-items:center;font-size:13.5px;color:var(--ink-dim)}
+  .byline img{width:34px;height:34px;border-radius:50%;flex:0 0 auto}
+  .article h2{font-size:23px;line-height:1.25;margin:38px 0 12px;scroll-margin-top:70px}
+  .article h3{font-size:17px;margin:24px 0 8px;color:var(--ink)}
+  .article p{font-size:16px;line-height:1.72;color:var(--ink);margin:0 0 16px}
+  .article ul,.article ol{font-size:16px;line-height:1.72;color:var(--ink);padding-left:22px;margin:0 0 18px}
+  .article li{margin:7px 0}
+  .article a{color:var(--accent)}
+  .article strong{color:#fff}
+  .toc{background:var(--panel);border:1px solid var(--panel-brd);border-radius:12px;padding:16px 20px}
+  .toc .toc-t{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-dim);margin:0 0 8px}
+  .toc ol{margin:0;padding-left:20px;font-size:15px;line-height:1.5}
+  .toc a{color:var(--accent);text-decoration:none}
+  .keybox{background:var(--panel);border:1px solid var(--panel-brd);border-left:3px solid var(--accent);border-radius:10px;padding:14px 18px;margin:0 0 20px;font-size:16px;line-height:1.6}
+  .formula{font-family:var(--mono);background:rgba(255,255,255,.05);border:1px solid var(--panel-brd);border-radius:10px;padding:13px 16px;margin:0 0 18px;font-size:14px;color:var(--accent2);overflow-x:auto}
+  .article table{width:100%;border-collapse:collapse;margin:0 0 20px;font-size:14.5px}
+  .article th,.article td{border:1px solid var(--panel-brd);padding:8px 12px;text-align:left}
+  .article th{color:var(--ink-dim);font-weight:600}
+  .article blockquote{border-left:3px solid var(--warn);margin:0 0 18px;padding:4px 0 4px 18px;color:var(--ink-dim);font-style:italic}
+  .calc-intro{max-width:760px;margin:0 auto}
+  .authorbox{max-width:760px;margin:40px auto 0;display:flex;gap:14px;align-items:flex-start;background:var(--panel);border:1px solid var(--panel-brd);border-radius:14px;padding:18px}
+  .authorbox img{width:54px;height:54px;border-radius:50%;flex:0 0 auto}
+  .authorbox p{font-size:14px;line-height:1.6;color:var(--ink-dim);margin:6px 0 0}
+  .authorbox a{color:var(--accent)}
+  .learn-card{display:block;background:var(--panel);border:1px solid var(--panel-brd);border-radius:14px;padding:22px;text-decoration:none;color:inherit;margin:0 0 14px}
+  .learn-card:hover{border-color:var(--accent)}
+  .learn-card .lc-k{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent)}
+  .learn-card .lc-t{font-size:20px;font-weight:700;margin:4px 0 6px;color:var(--ink)}
+  .learn-card .lc-d{font-size:14.5px;color:var(--ink-dim);line-height:1.5}
+  </style>
+
+  <div class="article">
+    <p>On a standard day near sea level a light trainer leaps off the runway. Move that same airplane to a mountain strip on a hot afternoon and it can feel like someone is dragging the brakes — the takeoff roll doubles, the climb sags, and the trees at the end of the runway get a lot of your attention. Nothing changed about the airplane. What changed is the <strong>air</strong>. <strong>Density altitude</strong> is the one number that captures how thin that air has become, and it’s the most important performance figure most pilots never see on a gauge.</p>
+    <div class="keybox"><strong>The short version:</strong> density altitude is pressure altitude corrected for non-standard temperature. It tells you the altitude in the standard atmosphere where the air would be as thin as it is right where you’re sitting. High and hot &rarr; high density altitude &rarr; less lift, less thrust, less power, longer runways.</div>
+    <div class="toc">
+      <div class="toc-t">In this guide</div>
+      <ol>
+        <li><a href="#what-it-is">What density altitude actually is</a></li>
+        <li><a href="#ingredients">The three ingredients: pressure, temperature, humidity</a></li>
+        <li><a href="#how-to-calculate">How to calculate density altitude</a></li>
+        <li><a href="#calculator">Calculate it yourself (interactive)</a></li>
+        <li><a href="#effects">What it does to your airplane</a></li>
+        <li><a href="#example">A real example: high and hot</a></li>
+        <li><a href="#vs-other">Density altitude vs. the other altitudes</a></li>
+        <li><a href="#managing">How pilots manage it</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ol>
+    </div>
+
+    <h2 id="what-it-is">What density altitude actually is</h2>
+    <p>An airplane doesn’t care how high it is. It cares how <em>dense</em> the air is. Lift comes from air mass flowing over the wing, propeller thrust comes from accelerating air, and a normally-aspirated engine makes power by burning the oxygen in each lungful of air it breathes. All three scale with air density. When the air thins out, all three fade together.</p>
+    <p>The trouble is that air density is hard to picture directly. So aviation borrows a reference everyone already understands — altitude — and asks a simple question: <em>in the standard atmosphere, at what altitude would the air be this thin?</em> That answer is your density altitude. If it’s a cool, standard day, density altitude roughly equals your true altitude. As the air warms or the pressure drops, density altitude climbs above your true altitude, sometimes by thousands of feet, and the airplane performs as if it had been hauled up to that height.</p>
+
+    <h2 id="ingredients">The three ingredients: pressure, temperature, and a little humidity</h2>
+    <p>Three things set air density, and therefore density altitude:</p>
+    <ul>
+      <li><strong>Pressure (your elevation).</strong> Air thins with height. The starting point is <em>pressure altitude</em> — your altitude with the altimeter set to the standard 29.92&nbsp;inHg. A high field is already playing with a weak hand.</li>
+      <li><strong>Temperature.</strong> This is the big day-to-day driver. Warm air expands and thins. A field that sits at 5,000&nbsp;ft can easily fly like 8,000&nbsp;ft or more on a hot afternoon, even though the elevation never changed.</li>
+      <li><strong>Humidity.</strong> A smaller effect: water vapor is lighter than the air it displaces, so humid air is slightly less dense. Worth a few hundred feet on a hot, muggy day — enough to be the straw that breaks the climb.</li>
+    </ul>
+
+    <h2 id="how-to-calculate">How to calculate density altitude</h2>
+    <p>You can get density altitude exactly from the standard-atmosphere equations, or close enough with mental math. Both start from pressure altitude:</p>
+    <div class="formula">Pressure altitude = field elevation + (29.92 − altimeter setting) &times; 1,000 ft</div>
+    <p>Next you need how far the temperature is from a standard day. Standard temperature is 15&nbsp;°C at sea level and drops about 2&nbsp;°C per 1,000&nbsp;ft:</p>
+    <div class="formula">ISA temp at your altitude ≈ 15 − 2 &times; (pressure altitude / 1,000)&nbsp;°C</div>
+    <p>Then the classic rule of thumb — every degree Celsius above standard adds roughly 120&nbsp;ft of density altitude:</p>
+    <div class="formula">Density altitude ≈ pressure altitude + 120 &times; (OAT − ISA temp)&nbsp;°C</div>
+    <p><strong>Worked example.</strong> Field elevation 5,000&nbsp;ft, altimeter 29.92, so pressure altitude is 5,000&nbsp;ft. Standard temp there is about 15 − 10 = 5&nbsp;°C. It’s a hot 30&nbsp;°C, which is 25&nbsp;°C above standard. The quick rule gives 5,000 + 120 &times; 25 ≈ <strong>8,000&nbsp;ft of density altitude</strong> — your airplane will fly as if it were a mile and a half up. The calculator below uses the full atmospheric relation, which is a touch gentler down low; set it to these numbers and watch.</p>
+  </div>
+
+
+  <div class="calc-intro">
+    <h2 id="calculator" style="max-width:760px;margin:38px auto 12px">Calculate it yourself</h2>
+    <p style="max-width:760px;margin:0 auto 18px;font-size:16px;line-height:1.7;color:var(--ink)">Enter a field and conditions — or look up live airport weather — and drag the chart to feel how fast density altitude climbs with temperature. This is the same calculator that powers the DensityAlt homepage.</p>
+  </div>
+
+  <section class="da" id="density-altitude">
+    <h2>Density Altitude Calculator</h2>
+    <p class="desc">Density altitude is the altitude your aircraft <em>thinks</em> it's at. On a hot day at a high-elevation field, thin air robs lift, propeller thrust, and engine power — even though your altimeter reads field elevation.</p>
+    <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning, dispatch, or weight-and-balance.</strong> Always fly the numbers in your POH and current official weather.</p>
+    <div class="field airport-row">
+      <label>Airport (ICAO) — autofills field elevation</label>
+      <div class="lookup-wrap">
+        <div class="in" style="flex:1;min-width:260px"><input id="icao" type="text" placeholder="e.g. KGAI, KMYF, KASE" maxlength="4"></div>
+        <button id="icaoBtn" class="lookup">Look&nbsp;up</button>
+        <button id="geoBtn" class="lookup" type="button">Use my location</button>
+      </div>
+      <div class="icao-status" id="icaoStatus">Type any ICAO, tap a preset, or use your location. Works worldwide — elevation plus live temp/altimeter for almost any field.</div>
+      <div class="presets apset">
+        <button class="chip apchip" data-icao="L06">Furnace Creek &minus;210 ft (lowest US)</button>
+        <button class="chip apchip" data-icao="KDEN">Denver</button>
+        <button class="chip apchip" data-icao="KASE">Aspen</button>
+        <button class="chip apchip" data-icao="KLXV">Leadville (highest US)</button>
+        <button class="chip apchip" data-icao="SLLP">La Paz</button>
+        <button class="chip apchip" data-icao="VNLK">Lukla (Everest)</button>
+        <button class="chip apchip" data-icao="ZULS">Daocheng (highest, world)</button>
+      </div>
+    </div>
+    <div class="da-grid">
+      <div class="field">
+        <label>Field Elevation</label>
+        <div class="in"><input id="elev" type="text" inputmode="numeric" value="5,000"><span class="unit">ft MSL</span></div>
+      </div>
+      <div class="field">
+        <label>Outside Air Temp</label>
+        <div class="in"><input id="oat" type="number" value="30"><button type="button" id="oatUnit" class="unit unit-toggle" title="Switch between Celsius and Fahrenheit">°C</button></div>
+        <div class="field-hint">tap the <b>°C</b> button to switch to <b>°F</b></div>
+      </div>
+      <div class="field">
+        <label>Altimeter Setting</label>
+        <div class="in"><input id="altim" type="number" step="0.01" value="29.92"><span class="unit">inHg</span></div>
+      </div>
+    </div>
+    <div class="da-out">
+      <div class="out"><div class="lbl">Pressure Altitude</div><div class="v"><span id="paOut">5,000</span> ft</div></div>
+      <div class="out"><div class="lbl">ISA Temp Deviation</div><div class="v"><span id="isaDev">+20</span> °C</div></div>
+      <div class="out hero"><div class="lbl">Density Altitude</div><div class="v" style="color:var(--warn)"><span id="daOut">7,400</span> ft</div></div>
+    </div>
+    <canvas id="daChart" class="box" width="900" height="190"></canvas>
+    <p class="cap" style="margin:8px 0 0">Drag the chart to set temperature — at this field and altimeter, density altitude climbs about 120 ft for every °C above standard.</p>
+    <div class="da-note" id="daNote"></div>
+  </section>
+
+  <div class="article">
+    <h2 id="effects">What density altitude does to your airplane</h2>
+    <p>Every number that matters on takeoff and climb moves the wrong way as density altitude rises:</p>
+    <ul>
+      <li><strong>Takeoff distance balloons.</strong> Less thrust and less lift mean a longer ground roll — and it grows non-linearly. By roughly 9,800&nbsp;ft density altitude a typical light single needs well over double its sea-level takeoff distance. See it move on the <a href="/takeoff-landing-distance">takeoff &amp; landing distance calculator</a>.</li>
+      <li><strong>Climb rate collapses.</strong> Rate of climb falls about 7–8% per 1,000&nbsp;ft of density altitude. The 500&nbsp;fpm you count on can become a barely-there 100&nbsp;fpm crawl over rising terrain.</li>
+      <li><strong>Engine power drops.</strong> A normally-aspirated piston loses roughly 3% of its power per 1,000&nbsp;ft of density altitude — quantified on the <a href="/horsepower-at-altitude">horsepower-at-altitude calculator</a>. Turbocharged engines hold on until their critical altitude, then fall off the same way.</li>
+      <li><strong>True airspeed runs ahead of indicated.</strong> Your indicated airspeed still reads honestly, but in thin air the airplane is actually moving faster across the ground for the same indicated number. That stretches your <a href="/power-curve">landing roll</a> and shrinks your margins.</li>
+    </ul>
+
+    <h2 id="example">A real example: a hot afternoon at a high field</h2>
+    <p>Picture a loaded four-seater at a 6,000&nbsp;ft strip when the OAT hits 32&nbsp;°C. Pressure altitude is near field elevation, standard temp up there is about 3&nbsp;°C, so you’re close to 30&nbsp;°C above standard — density altitude pushing 9,000–10,000&nbsp;ft. The airplane that uses 1,200&nbsp;ft of runway at sea level now wants the better part of 3,000&nbsp;ft, and the climb that should be 700&nbsp;fpm is barely making 150. This is exactly where high-and-hot accidents happen: the airplane flies, just barely, then can’t out-climb the terrain. The fix is almost never “pull harder” — it’s knowing the number before you taxi out.</p>
+    <blockquote>The airplane doesn’t know it’s at a mountain airport on a hot day. It only knows how thin the air is. Density altitude is how you find that out in advance.</blockquote>
+
+    <h2 id="vs-other">Density altitude vs. the other altitudes</h2>
+    <p>Pilots juggle several “altitudes,” and it helps to keep them straight:</p>
+    <ul>
+      <li><strong>Indicated altitude</strong> — what the altimeter reads with the local setting dialed in.</li>
+      <li><strong>Pressure altitude</strong> — indicated altitude with 29.92 set; the starting point for performance and for density altitude.</li>
+      <li><strong>True altitude</strong> — your actual height above sea level.</li>
+      <li><strong>Density altitude</strong> — pressure altitude corrected for temperature; the one your airplane’s <em>performance</em> answers to.</li>
+    </ul>
+    <p>On a standard day they nearly coincide. On a hot day at altitude, density altitude is the outlier that climbs away from the rest — and the one that bites.</p>
+
+    <h2 id="managing">How pilots manage high density altitude</h2>
+    <ul>
+      <li><strong>Run the real numbers.</strong> Use your POH performance charts for the actual density altitude and weight — not the sea-level figures you remember.</li>
+      <li><strong>Fly in the cool.</strong> An early-morning departure can buy you thousands of feet of density altitude back versus mid-afternoon.</li>
+      <li><strong>Lighten up.</strong> Less fuel and fewer bags shorten the roll and steepen the climb where it counts.</li>
+      <li><strong>Use all the runway, and lean the mixture</strong> for best power before takeoff at a high field.</li>
+      <li><strong>Respect ground effect.</strong> The airplane may lift off in ground effect and then refuse to climb out of it. Lifting off is not the same as being able to climb.</li>
+    </ul>
+    <p class="calc-disclaimer" style="margin-top:22px"><strong>Educational only.</strong> The figures here are rules of thumb to build intuition — always fly your POH numbers and current official weather, not these.</p>
+
+
+  <section class="da faq" id="faq">
+    <h2>Frequently asked questions</h2>
+    <div class="faqlist">
+      <details class="faq-item"><summary>What is density altitude in plain language?</summary>
+      <p class="a">Density altitude is <strong>pressure altitude corrected for temperature</strong> — in effect, the altitude at which the air is as thin as the air you’re actually flying in. Your wing, propeller, and engine all respond to <em>air density</em>, not to the number on your altimeter, so density altitude is the figure that predicts real performance.</p></details>
+      <details class="faq-item"><summary>What is considered a high density altitude?</summary>
+      <p class="a">There’s no single threshold. Performance loss is noticeable within a couple thousand feet of density altitude and becomes serious above roughly <strong>6,000–8,000&nbsp;ft</strong> for a normally-aspirated airplane. What matters is density altitude relative to <em>your</em> airplane and runway: 6,000&nbsp;ft is routine in a turbocharged twin and alarming in a loaded trainer on a short strip.</p></details>
+      <details class="faq-item"><summary>How do I lower density altitude?</summary>
+      <p class="a">You can’t change the air, but you can change how and when you fly: depart in the <strong>cool of early morning</strong>, reduce weight, use the longest runway, and lean the mixture for best power at altitude. Density altitude itself is fixed by field elevation, barometric pressure, and temperature.</p></details>
+      <details class="faq-item"><summary>Does humidity raise density altitude?</summary>
+      <p class="a">Yes, slightly. Water vapor is lighter than the dry air it displaces, so humid air is less dense at the same temperature and pressure. The effect is small next to temperature and elevation — a few hundred feet at most — but on a hot, humid day at a high field it stacks on top of everything else.</p></details>
+    </div>
+  </section>
+
+  <div class="article"><h2 style="margin-top:38px">Keep exploring</h2>
+    <p>Put the idea to work with the rest of the free DensityAlt tools:</p></div>
+  <section class="da" id="more-tools">
+    <h2>More free altitude tools</h2>
+    <p class="desc">DensityAlt is a set of free, no-signup aviation calculators. Explore the rest:</p>
+    <div class="grid">
+      <a class="card" href="/atmosphere-explorer" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Atmosphere &amp; Hypoxia Explorer</div>
+        <div class="pct">Drag an aircraft up and watch pressure, oxygen &amp; SpO₂ fall.</div></a>
+      <a class="card" href="/crosswind-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Crosswind Calculator</div>
+        <div class="pct">Split the wind into crosswind &amp; headwind on a runway diagram.</div></a>
+      <a class="card" href="/takeoff-landing-distance" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Takeoff &amp; Landing Distance</div>
+        <div class="pct">How density altitude stretches your ground roll &amp; rollout.</div></a>
+      <a class="card" href="/horsepower-at-altitude" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Horsepower at Altitude</div>
+        <div class="pct">How much power a piston engine loses with density altitude.</div></a>
+      <a class="card" href="/power-curve" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Power Curve &amp; Reversed Command</div>
+        <div class="pct">The back side of the power curve and your climb margins.</div></a>
+      <a class="card" href="/cabin-altitude-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Cabin Altitude</div>
+        <div class="pct">What cabin altitude your pressurization holds at cruise.</div></a>
+    </div>
+  </section>
+
+  <div class="article">  <div class="authorbox"><img src="/headshot.jpg" alt="Levan Sulakvelidze" width="54" height="54" loading="lazy" decoding="async"><div><strong>Levan Sulakvelidze</strong><p>Instrument-rated private pilot and the builder of DensityAlt. I fly out of high-and-hot fields in the western U.S., where density altitude isn’t a textbook abstraction — it’s the difference between a comfortable climb and staring down the far end of the runway. I built these tools to make the numbers obvious before the throttle goes up. <a href="https://www.linkedin.com/in/levansula" rel="noopener">LinkedIn</a> · <a href="https://github.com/levansula23" rel="noopener">GitHub</a></p></div></div></div>
+
+  <footer>
+    <h4>How the numbers are computed</h4>
+    <div class="calcrefs">
+      <div><b>Atmosphere</b> — International Standard Atmosphere (ISA): the barometric formula in the troposphere (1.98&nbsp;°C / 1000&nbsp;ft lapse) and the isothermal layer above the tropopause (~36,089&nbsp;ft).</div>
+      <div><b>Blood oxygen</b> — alveolar gas equation <code>P_AO₂ = 0.2095·(P − 47) − P_CO₂/0.8</code> feeding the Severinghaus SpO₂ curve. CO₂ falls with altitude, tuned to acute-exposure data (~87% @ 10k, ~72% @ 18k, ~50% @ 25k&nbsp;ft).</div>
+      <div><b>Density altitude</b> — <code>PA = elev + (29.92 − altimeter)·1000</code>, then <code>DA = PA + 120·(OAT − ISA&nbsp;temp)</code>.</div>
+      <div><b>Horsepower</b> — Gagg–Ferrar relation <code>HP ≈ rated·(1.132σ − 0.132)</code>, σ = density ratio at your density altitude; turbos hold rated power to a critical altitude.</div>
+      <div><b>Power curve</b> — parabolic drag polar <code>C_D = C_D0 + C_L²/(πAR·e)</code>; power required = drag × TAS. The region of reversed command is the band from stall up to the minimum-power speed. Drag values are representative estimates and V-speeds (Vs, Va, Vno, Vne) are typical published figures — check your POH; the climb readout is idealized (constant ~80% prop efficiency) and optimistic at low speed.</div>
+      <div><b>Cabin altitude</b> — <code>cabin_P = min(sea level, ambient + ΔP)</code> inverted to an altitude; ΔP is each aircraft's published max pressure differential.</div>
+      <div><b>Data sources</b> — bundled ~110 airports (offline elevation) plus <code>aviationweather.gov</code> METAR for live temp/altimeter (via a same-origin proxy once hosted), falling back to <code>open-meteo.com</code> current weather by coordinates for fields without a METAR.</div>
+      <div><b>References</b> — FAA <i>Pilot's Handbook of Aeronautical Knowledge</i> (FAA-H-8083-25) and <i>Airplane Flying Handbook</i> (FAA-H-8083-3) for density altitude, the FAR&nbsp;91.211 oxygen rules, and the power curve / region of reversed command; J.D.&nbsp;Anderson, <i>Introduction to Flight</i> (parabolic drag polar, power-required = drag&nbsp;×&nbsp;TAS); the alveolar gas equation and Severinghaus SpO₂ relation, with acute-exposure SaO₂ figures from high-altitude physiology literature (e.g. J.B.&nbsp;West). Power-curve V-speeds and the narrow trainer reversed-command band cross-checked against Van's Air Force, GoFly, and Boldmethod.</div>
+    </div>
+    <p class="disclaim">Educational models for healthy unacclimatized adults at acute exposure. Real SpO₂ varies with fitness, acclimatization, and individual physiology. Not for medical or operational flight-planning use.</p>
+    <p class="ghsrc"><strong>Open source.</strong> DensityAlt is built in the open — <a href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener">view the code on GitHub</a> to see exactly how every number is computed.</p>
+    <p class="rms">Made with <a href="https://readymadesites.com/" rel="noopener">ReadyMadeSites™</a> — custom calculators, interactive tools &amp; SEO-ready websites that rank.</p>
+  </footer>
+
+</div>
+
+<script src="/app.js"></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "What Is Density Altitude? A Pilot’s Guide",
+  "description": "A pilot’s guide to density altitude: what it is, how to calculate it, and what it does to aircraft performance.",
+  "image": "https://densityalt.com/og-image.png",
+  "author": {"@type": "Person", "name": "Levan Sulakvelidze", "description": "Instrument-rated private pilot", "sameAs": ["https://www.linkedin.com/in/levansula", "https://github.com/levansula23"]},
+  "publisher": {"@type": "Organization", "name": "DensityAlt", "logo": {"@type": "ImageObject", "url": "https://densityalt.com/og-image.png"}},
+  "datePublished": "2026-06-09",
+  "dateModified": "2026-06-09",
+  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://densityalt.com/learn/density-altitude"}
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"What is density altitude in plain language?","acceptedAnswer":{"@type":"Answer","text":"Density altitude is pressure altitude corrected for temperature — in effect, the altitude at which the air is as thin as the air you are actually flying in. Your wing, propeller, and engine all respond to air density, not to the number on your altimeter, so density altitude is the figure that predicts real performance."}},
+    {"@type":"Question","name":"What is considered a high density altitude?","acceptedAnswer":{"@type":"Answer","text":"There is no single threshold. Performance loss is noticeable within a couple thousand feet of density altitude and becomes serious above roughly 6,000 to 8,000 feet for a normally-aspirated airplane. What matters is density altitude relative to your airplane and runway: 6,000 feet is routine in a turbocharged twin and alarming in a loaded trainer on a short strip."}},
+    {"@type":"Question","name":"How do I lower density altitude?","acceptedAnswer":{"@type":"Answer","text":"You cannot change the air, but you can change how and when you fly: depart in the cool of early morning, reduce weight, use the longest runway, and lean the mixture for best power at altitude. Density altitude itself is fixed by field elevation, barometric pressure, and temperature."}},
+    {"@type":"Question","name":"Does humidity raise density altitude?","acceptedAnswer":{"@type":"Answer","text":"Yes, slightly. Water vapor is lighter than the dry air it displaces, so humid air is less dense at the same temperature and pressure. The effect is small next to temperature and elevation — a few hundred feet at most — but on a hot, humid day at a high field it stacks on top of everything else."}}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://densityalt.com/"},
+    {"@type":"ListItem","position":2,"name":"Learn","item":"https://densityalt.com/learn/"},
+    {"@type":"ListItem","position":3,"name":"What Is Density Altitude?","item":"https://densityalt.com/learn/density-altitude"}
+  ]
+}
+</script>
+</body>
+</html>
