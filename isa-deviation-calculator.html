@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#05070f">
+<title>ISA Temperature &amp; Deviation Calculator | DensityAlt</title>
+<meta name="description" content="ISA temperature at any altitude and your ISA deviation (ISA+10). The standard lapse rate, exam formulas, and what warmer-than-ISA air does to performance.">
+<link rel="canonical" href="https://densityalt.com/isa-deviation-calculator">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DensityAlt">
+<meta property="og:url" content="https://densityalt.com/isa-deviation-calculator">
+<meta property="og:title" content="ISA Temperature &amp; Deviation Calculator">
+<meta property="og:description" content="Standard atmosphere temperature at any altitude and your deviation from it — the ISA+10 number used in performance charts, exams, and cruise planning.">
+<meta property="og:image" content="https://densityalt.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ISA Temperature &amp; Deviation Calculator">
+<meta name="twitter:description" content="Standard atmosphere temperature at any altitude and your deviation from it — the ISA+10 number used in performance charts, exams, and cruise planning.">
+<meta name="twitter:image" content="https://densityalt.com/og-image.png">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<nav class="topnav"><div class="navin">
+  <a class="brand" href="/" style="text-decoration:none"><img src="/favicon.svg" alt=""><b>DensityAlt</b></a>
+  <div class="navlinks">
+    <a class="nl" href="/atmosphere-explorer">Explorer</a>
+    <a class="nl" href="/">Density Altitude</a>
+    <div class="nl-drop">
+      <button type="button" class="nl-trigger" aria-haspopup="true">Calculators<span class="caret" aria-hidden="true"></span></button>
+      <div class="nl-menu">
+        <a class="nl" href="/pressure-altitude-calculator">Pressure Altitude</a>
+        <a class="nl" href="/true-airspeed-calculator">True Airspeed</a>
+        <a class="nl" href="/crosswind-calculator">Crosswind</a>
+        <a class="nl" href="/takeoff-landing-distance">Takeoff &amp; Landing</a>
+        <a class="nl" href="/cloud-base-calculator">Cloud Base</a>
+        <a class="nl" href="/freezing-level-calculator">Freezing Level</a>
+        <a class="nl" href="/isa-deviation-calculator">ISA Deviation</a>
+        <a class="nl" href="/oxygen-at-altitude-calculator">Oxygen at Altitude</a>
+        <a class="nl" href="/pivotal-altitude-calculator">Pivotal Altitude</a>
+        <a class="nl" href="/horsepower-at-altitude">Horsepower</a>
+        <a class="nl" href="/power-curve">Power Curve</a>
+        <a class="nl" href="/cabin-altitude-calculator">Cabin Altitude</a>
+      </div>
+    </div>
+    <a class="nl" href="/learn/">Learn</a>
+    <a class="nl" href="/#about">About</a>
+  </div>
+  <a class="nav-gh" href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener" aria-label="DensityAlt source code on GitHub" title="Open source — view the code on GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+</div></nav>
+
+<div id="disclaimerBar" class="disclaimer-bar" hidden>
+  <span><strong>Educational estimates only.</strong> DensityAlt is not for flight planning, dispatch, or medical use — always use your POH and official sources.</span>
+  <button id="disclaimerOk" type="button">Got it</button>
+</div>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="kicker">Free aviation &amp; aerospace calculators</div>
+    <h1>ISA Temperature &amp; Deviation <span>Calculator</span></h1>
+    <p class="hero-sub">How far from "standard" is today's air?</p>
+    <p class="lead">The International Standard Atmosphere assumes 15&nbsp;°C at sea level, cooling 1.98&nbsp;°C per 1,000 ft up to the tropopause. Every performance chart is built on it — and today's air never matches it. Enter an altitude to get the ISA temperature, add your OAT to get the deviation ("ISA+10"), and see what it does to your <a href="/">density altitude</a>.</p>
+  </header>
+
+  <section class="da" id="isa-deviation">
+    <h2>ISA Temperature &amp; Deviation Calculator</h2>
+    <p class="desc">Use pressure altitude for chart work (set 29.92 or use the <a href="/pressure-altitude-calculator">pressure altitude calculator</a>); indicated altitude is close enough for a quick estimate.</p>
+    <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning or dispatch.</strong> Fly your POH numbers.</p>
+    <div class="da-grid">
+      <div class="field">
+        <label>Altitude (pressure altitude)</label>
+        <div class="in"><input id="isadPa" type="text" inputmode="numeric" value="8,000"><span class="unit">ft</span></div>
+      </div>
+      <div class="field">
+        <label>Outside Air Temp <span style="font-weight:400">(optional)</span></label>
+        <div class="in"><input id="isadOat" type="number" placeholder="—"><button type="button" id="isadUnit" class="unit unit-toggle" title="Switch between Celsius and Fahrenheit">°C</button></div>
+      </div>
+    </div>
+    <div class="da-out">
+      <div class="out hero"><div class="lbl">ISA Temperature</div><div class="v" style="color:var(--accent2)"><span id="isadTemp">−0.8</span> °C</div></div>
+      <div class="out"><div class="lbl">ISA Temp (°F)</div><div class="v"><span id="isadTempF">30.5</span> °F</div></div>
+      <div class="out"><div class="lbl">Your Deviation</div><div class="v" style="color:var(--warn)"><span id="isadDev">—</span></div></div>
+    </div>
+    <div class="da-note" id="isadNote"></div>
+  </section>
+
+  <section class="da" id="standard">
+    <h2>The ISA standard atmosphere in one table</h2>
+    <div class="tablewrap"><table class="reftable">
+      <tr><th>Altitude</th><th>ISA temp</th><th>Pressure</th><th>Notes</th></tr>
+      <tr><td><b>Sea level</b></td><td>+15 °C / 59 °F</td><td>29.92" / 1013 hPa</td><td>The reference everything starts from</td></tr>
+      <tr><td><b>5,000 ft</b></td><td>+5.1 °C</td><td>24.90"</td><td></td></tr>
+      <tr><td><b>10,000 ft</b></td><td>−4.8 °C</td><td>20.58"</td><td></td></tr>
+      <tr><td><b>18,000 ft</b></td><td>−20.7 °C</td><td>14.95"</td><td>≈ half the atmosphere below you</td></tr>
+      <tr><td><b>30,000 ft</b></td><td>−44.4 °C</td><td>8.89"</td><td></td></tr>
+      <tr><td><b>36,089 ft</b></td><td>−56.5 °C</td><td>6.68"</td><td>Tropopause — temperature stops falling</td></tr>
+    </table></div>
+    <p class="desc">Exam shortcut: <strong>ISA temp = 15 − (2 × altitude in thousands)</strong>. At 8,000 ft: 15 − 16 = −1&nbsp;°C. The precise lapse is 1.98&nbsp;°C/1,000 ft, which is why this calculator shows −0.8&nbsp;°C — close enough that exams accept both.</p>
+    <p class="desc"><strong>Why deviation matters:</strong> every degree warmer than ISA adds ~120 ft of density altitude. ISA+15 at an 8,000 ft pressure altitude means your aircraft performs like it's at ~9,800 ft. Turbine flight planning uses ISA deviation directly — cruise tables are published for ISA, ISA+10, ISA+20.</p>
+  </section>
+
+  <section class="da faq" id="faq">
+    <h2>Frequently asked questions</h2>
+    <div class="faqlist">
+      <details class="faq-item"><summary>How do you calculate ISA temperature at altitude?</summary>
+      <p class="a">Start at 15&nbsp;°C and subtract about 2&nbsp;°C per 1,000 ft (precisely 1.98&nbsp;°C) up to the tropopause near 36,000 ft, where it holds at −56.5&nbsp;°C. At 10,000 ft: 15 − 20 = about −5&nbsp;°C.</p></details>
+      <details class="faq-item"><summary>What does ISA+10 mean?</summary>
+      <p class="a">The outside air is 10&nbsp;°C warmer than the standard atmosphere predicts for that altitude. ISA+10 at 6,000 ft means an OAT of about +13&nbsp;°C instead of the standard +3&nbsp;°C — and roughly 1,200 ft of extra density altitude.</p></details>
+      <details class="faq-item"><summary>Does ISA deviation change aircraft performance?</summary>
+      <p class="a">Yes — it's the temperature half of density altitude. Warmer than ISA means thinner air: longer takeoff rolls, weaker climb, reduced engine power, and higher true airspeed for the same indicated. Colder than ISA improves all of them.</p></details>
+      <details class="faq-item"><summary>Should I use indicated or pressure altitude for ISA calculations?</summary>
+      <p class="a">Strictly, pressure altitude — ISA is defined against the standard 29.92 datum, and performance charts expect it. Below the transition altitude the difference is usually a few hundred feet, so indicated altitude gives a fine estimate when you don't have the altimeter setting handy.</p></details>
+    </div>
+  </section>
+
+  <section class="da" id="more-tools">
+    <h2>More free altitude tools</h2>
+    <p class="desc">DensityAlt is a set of free, no-signup aviation calculators. Explore the rest:</p>
+    <div class="grid">
+      <a class="card" href="/" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Density Altitude</div>
+        <div class="pct">The altitude your aircraft actually performs at — with live METAR.</div></a>
+      <a class="card" href="/pressure-altitude-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Pressure Altitude</div>
+        <div class="pct">PA from the altimeter setting — the chart-entry altitude.</div></a>
+      <a class="card" href="/true-airspeed-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">True Airspeed</div>
+        <div class="pct">TAS from IAS, pressure altitude &amp; temperature.</div></a>
+      <a class="card" href="/freezing-level-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Freezing Level</div>
+        <div class="pct">Estimate the 0&nbsp;°C altitude from surface temperature.</div></a>
+      <a class="card" href="/horsepower-at-altitude" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Horsepower at Altitude</div>
+        <div class="pct">How much power a piston engine loses with density altitude.</div></a>
+      <a class="card" href="/atmosphere-explorer" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Atmosphere &amp; Hypoxia Explorer</div>
+        <div class="pct">Drag an aircraft up and watch pressure, oxygen &amp; SpO₂ fall.</div></a>
+    </div>
+  </section>
+
+  <footer>
+    <h4>How the numbers are computed</h4>
+    <div class="calcrefs">
+      <div><b>ISA temperature</b> — <code>15 − 1.98 × (altitude ÷ 1,000) °C</code> in the troposphere; −56.5 °C above the tropopause (~36,089 ft). Deviation = OAT − ISA temp.</div>
+      <div><b>Density altitude</b> — <code>DA = PA + 120·(OAT − ISA&nbsp;temp)</code>.</div>
+      <div><b>Atmosphere</b> — International Standard Atmosphere (ISA): the barometric formula in the troposphere and the isothermal layer above the tropopause.</div>
+      <div><b>References</b> — ICAO Standard Atmosphere (Doc 7488), FAA <i>Pilot's Handbook of Aeronautical Knowledge</i> (FAA-H-8083-25).</div>
+    </div>
+    <p class="disclaim">Educational tool. Not for operational flight-planning use.</p>
+    <p class="ghsrc"><strong>Open source.</strong> DensityAlt is built in the open — <a href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener">view the code on GitHub</a> to see exactly how every number is computed.</p>
+    <p class="rms">Made with <a href="https://readymadesites.com/" rel="noopener">ReadyMadeSites™</a> — custom calculators, interactive tools &amp; SEO-ready websites that rank.</p>
+  </footer>
+
+</div>
+
+<script src="/app.js"></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "DensityAlt ISA Temperature & Deviation Calculator",
+  "url": "https://densityalt.com/isa-deviation-calculator",
+  "description": "ISA temperature at any altitude and the deviation from standard (ISA+10), with the standard-atmosphere reference table and density-altitude impact.",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Any (web browser)",
+  "browserRequirements": "Requires JavaScript",
+  "isAccessibleForFree": true,
+  "author": {"@type": "Person", "name": "Levan Sulakvelidze", "description": "Instrument-rated private pilot", "sameAs": ["https://www.linkedin.com/in/levansula", "https://www.instagram.com/levansula/", "https://github.com/levansula23"]},
+  "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+  "featureList": [
+    "ISA temperature at any altitude in °C and °F",
+    "ISA deviation (ISA± ) from your OAT",
+    "Density-altitude impact of the deviation",
+    "Standard atmosphere reference table"
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"How do you calculate ISA temperature at altitude?","acceptedAnswer":{"@type":"Answer","text":"Start at 15 °C and subtract about 2 °C per 1,000 feet (precisely 1.98 °C) up to the tropopause near 36,000 feet, where temperature holds at −56.5 °C. At 10,000 feet: 15 − 20 = about −5 °C."}},
+    {"@type":"Question","name":"What does ISA+10 mean?","acceptedAnswer":{"@type":"Answer","text":"The outside air is 10 °C warmer than the standard atmosphere predicts for that altitude. ISA+10 at 6,000 feet means an OAT of about +13 °C instead of the standard +3 °C — and roughly 1,200 feet of extra density altitude."}},
+    {"@type":"Question","name":"Does ISA deviation change aircraft performance?","acceptedAnswer":{"@type":"Answer","text":"Yes — it is the temperature half of density altitude. Warmer than ISA means thinner air: longer takeoff rolls, weaker climb, reduced engine power, and higher true airspeed for the same indicated airspeed. Colder than ISA improves all of them."}},
+    {"@type":"Question","name":"Should I use indicated or pressure altitude for ISA calculations?","acceptedAnswer":{"@type":"Answer","text":"Strictly, pressure altitude — ISA is defined against the standard 29.92 datum, and performance charts expect it. Below the transition altitude the difference is usually a few hundred feet, so indicated altitude gives a fine estimate when the altimeter setting is not handy."}}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Density Altitude Calculator","item":"https://densityalt.com/"},
+    {"@type":"ListItem","position":2,"name":"ISA Temperature & Deviation Calculator","item":"https://densityalt.com/isa-deviation-calculator"}
+  ]
+}
+</script>
+</body>
+</html>

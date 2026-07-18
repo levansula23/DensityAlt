@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#05070f">
+<title>Freezing Level Calculator — Estimate the 0°C Altitude</title>
+<meta name="description" content="Estimate the freezing level from surface temperature with the 2°C/1,000 ft lapse rate — instant MSL &amp; AGL results, plus icing awareness basics for pilots.">
+<link rel="canonical" href="https://densityalt.com/freezing-level-calculator">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DensityAlt">
+<meta property="og:url" content="https://densityalt.com/freezing-level-calculator">
+<meta property="og:title" content="Freezing Level Calculator — Where Is 0°C Today?">
+<meta property="og:description" content="Enter the surface temperature to estimate the freezing level in feet MSL and AGL, with the lapse-rate math and icing-awareness basics for pilots.">
+<meta property="og:image" content="https://densityalt.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Freezing Level Calculator — Where Is 0°C Today?">
+<meta name="twitter:description" content="Enter the surface temperature to estimate the freezing level in feet MSL and AGL, with the lapse-rate math and icing-awareness basics for pilots.">
+<meta name="twitter:image" content="https://densityalt.com/og-image.png">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<nav class="topnav"><div class="navin">
+  <a class="brand" href="/" style="text-decoration:none"><img src="/favicon.svg" alt=""><b>DensityAlt</b></a>
+  <div class="navlinks">
+    <a class="nl" href="/atmosphere-explorer">Explorer</a>
+    <a class="nl" href="/">Density Altitude</a>
+    <div class="nl-drop">
+      <button type="button" class="nl-trigger" aria-haspopup="true">Calculators<span class="caret" aria-hidden="true"></span></button>
+      <div class="nl-menu">
+        <a class="nl" href="/pressure-altitude-calculator">Pressure Altitude</a>
+        <a class="nl" href="/true-airspeed-calculator">True Airspeed</a>
+        <a class="nl" href="/crosswind-calculator">Crosswind</a>
+        <a class="nl" href="/takeoff-landing-distance">Takeoff &amp; Landing</a>
+        <a class="nl" href="/cloud-base-calculator">Cloud Base</a>
+        <a class="nl" href="/freezing-level-calculator">Freezing Level</a>
+        <a class="nl" href="/isa-deviation-calculator">ISA Deviation</a>
+        <a class="nl" href="/oxygen-at-altitude-calculator">Oxygen at Altitude</a>
+        <a class="nl" href="/pivotal-altitude-calculator">Pivotal Altitude</a>
+        <a class="nl" href="/horsepower-at-altitude">Horsepower</a>
+        <a class="nl" href="/power-curve">Power Curve</a>
+        <a class="nl" href="/cabin-altitude-calculator">Cabin Altitude</a>
+      </div>
+    </div>
+    <a class="nl" href="/learn/">Learn</a>
+    <a class="nl" href="/#about">About</a>
+  </div>
+  <a class="nav-gh" href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener" aria-label="DensityAlt source code on GitHub" title="Open source — view the code on GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+</div></nav>
+
+<div id="disclaimerBar" class="disclaimer-bar" hidden>
+  <span><strong>Educational estimates only.</strong> DensityAlt is not for flight planning, dispatch, or medical use — always use your POH and official sources.</span>
+  <button id="disclaimerOk" type="button">Got it</button>
+</div>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="kicker">Free aviation &amp; aerospace calculators</div>
+    <h1>Freezing Level <span>Calculator</span></h1>
+    <p class="hero-sub">Where does today's air hit 0&nbsp;°C?</p>
+    <p class="lead">Air cools roughly 2&nbsp;°C per 1,000 ft as you climb, so the surface temperature tells you approximately where the freezing level sits — the altitude where structural icing becomes a threat in visible moisture. Enter the surface temperature and field elevation for an instant estimate in MSL and AGL. Pairs with the <a href="/cloud-base-calculator">cloud base calculator</a> for the classic "is the cloud above or below freezing?" check.</p>
+  </header>
+
+  <section class="da" id="freezing-level">
+    <h2>Freezing Level Calculator</h2>
+    <p class="desc">Surface temperature comes straight off the METAR. The estimate assumes the standard lapse rate — verify with winds &amp; temps aloft and freezing-level graphics before real flight decisions.</p>
+    <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning or dispatch.</strong> Real lapse rates vary with inversions, fronts, and warm layers.</p>
+    <div class="da-grid">
+      <div class="field">
+        <label>Surface Temperature</label>
+        <div class="in"><input id="fzT" type="number" value="14"><button type="button" id="fzUnit" class="unit unit-toggle" title="Switch between Celsius and Fahrenheit">°C</button></div>
+      </div>
+      <div class="field">
+        <label>Field Elevation <span style="font-weight:400">(optional)</span></label>
+        <div class="in"><input id="fzElev" type="text" inputmode="numeric" value="0"><span class="unit">ft</span></div>
+      </div>
+    </div>
+    <div class="da-out">
+      <div class="out hero"><div class="lbl">Freezing Level</div><div class="v" style="color:var(--accent2)"><span id="fzMsl">7,000</span> ft MSL</div></div>
+      <div class="out"><div class="lbl">Above the Field</div><div class="v"><span id="fzAgl">7,000</span> ft</div></div>
+    </div>
+    <div class="da-note" id="fzNote"></div>
+  </section>
+
+  <section class="da" id="formula">
+    <h2>The freezing level formula</h2>
+    <p class="desc"><strong>Freezing level (ft above the surface) ≈ surface temperature in °C ÷ 2 × 1,000.</strong> A 14&nbsp;°C day puts the 0&nbsp;°C isotherm near 7,000 ft above the field; add elevation for MSL. It's the standard ~2&nbsp;°C per 1,000 ft lapse rate turned inside out.</p>
+    <p class="desc"><strong>Why pilots care:</strong> structural icing needs two ingredients — visible moisture and temperatures at or below freezing (the worst accretion typically between 0 and −20&nbsp;°C). Knowing the freezing level tells you whether tops, bases, and your cruise altitude keep you out of that band, and where "warm" air lives if you need an escape plan.</p>
+    <p class="desc"><strong>When the estimate breaks:</strong> temperature inversions (warm air over cold), frontal zones (freezing rain lives here), and mountain valleys on winter mornings can move the real 0&nbsp;°C level thousands of feet from this estimate — sometimes there are two freezing levels. Always cross-check the FB winds-and-temps forecast and freezing-level graphics.</p>
+  </section>
+
+  <section class="da faq" id="faq">
+    <h2>Frequently asked questions</h2>
+    <div class="faqlist">
+      <details class="faq-item"><summary>How do you estimate the freezing level?</summary>
+      <p class="a">Divide the surface temperature in °C by 2 and multiply by 1,000 — that's the approximate height of the 0&nbsp;°C level above the surface, using the standard 2&nbsp;°C per 1,000 ft lapse rate. From a 10&nbsp;°C field, expect freezing near 5,000 ft above the airport.</p></details>
+      <details class="faq-item"><summary>Can there be more than one freezing level?</summary>
+      <p class="a">Yes. A warm layer aloft (common near warm fronts) can put a melting layer above a sub-freezing layer — the classic freezing-rain setup where snow melts, then refreezes on your airframe. That's why official freezing-level products beat any lapse-rate estimate near fronts.</p></details>
+      <details class="faq-item"><summary>At what temperature does airframe icing occur?</summary>
+      <p class="a">Structural icing generally occurs from 0&nbsp;°C down to about −20&nbsp;°C in visible moisture, with the most severe accretion usually between 0 and −10&nbsp;°C — large supercooled droplets freeze on contact with your airframe. Clear of visible moisture, there is no structural icing regardless of temperature.</p></details>
+      <details class="faq-item"><summary>Is the freezing level reported anywhere officially?</summary>
+      <p class="a">Yes — winds and temperatures aloft forecasts (FB), area forecasts, graphical AIRMETs (icing/freezing level), and PIREPs all carry it. Use this calculator as a first sanity check, then confirm with those products.</p></details>
+    </div>
+  </section>
+
+  <section class="da" id="more-tools">
+    <h2>More free altitude tools</h2>
+    <p class="desc">DensityAlt is a set of free, no-signup aviation calculators. Explore the rest:</p>
+    <div class="grid">
+      <a class="card" href="/cloud-base-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Cloud Base</div>
+        <div class="pct">Estimate the cumulus base from temp &amp; dew point.</div></a>
+      <a class="card" href="/isa-deviation-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">ISA Deviation</div>
+        <div class="pct">Standard temperature at altitude and your ISA± number.</div></a>
+      <a class="card" href="/" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Density Altitude</div>
+        <div class="pct">The altitude your aircraft actually performs at — with live METAR.</div></a>
+      <a class="card" href="/pressure-altitude-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Pressure Altitude</div>
+        <div class="pct">PA from the altimeter setting — the chart-entry altitude.</div></a>
+      <a class="card" href="/true-airspeed-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">True Airspeed</div>
+        <div class="pct">TAS from IAS, pressure altitude &amp; temperature.</div></a>
+      <a class="card" href="/atmosphere-explorer" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Atmosphere &amp; Hypoxia Explorer</div>
+        <div class="pct">Drag an aircraft up and watch pressure, oxygen &amp; SpO₂ fall.</div></a>
+    </div>
+  </section>
+
+  <footer>
+    <h4>How the numbers are computed</h4>
+    <div class="calcrefs">
+      <div><b>Freezing level</b> — <code>surface temp (°C) ÷ 2 × 1,000 ft</code> above the surface: the standard ~2 °C per 1,000 ft lapse rate solved for the 0 °C isotherm.</div>
+      <div><b>Atmosphere</b> — International Standard Atmosphere (ISA): the barometric formula in the troposphere (1.98&nbsp;°C / 1000&nbsp;ft lapse) and the isothermal layer above the tropopause (~36,089&nbsp;ft).</div>
+      <div><b>References</b> — FAA <i>Aviation Weather Handbook</i> (FAA-H-8083-28) for lapse rates, icing conditions, and freezing-level products.</div>
+    </div>
+    <p class="disclaim">Educational tool. Real lapse rates vary — verify with official weather products. Not for operational flight-planning use.</p>
+    <p class="ghsrc"><strong>Open source.</strong> DensityAlt is built in the open — <a href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener">view the code on GitHub</a> to see exactly how every number is computed.</p>
+    <p class="rms">Made with <a href="https://readymadesites.com/" rel="noopener">ReadyMadeSites™</a> — custom calculators, interactive tools &amp; SEO-ready websites that rank.</p>
+  </footer>
+
+</div>
+
+<script src="/app.js"></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "DensityAlt Freezing Level Calculator",
+  "url": "https://densityalt.com/freezing-level-calculator",
+  "description": "Freezing level calculator: estimate the 0°C altitude from surface temperature using the standard lapse rate, in feet MSL and above the field.",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Any (web browser)",
+  "browserRequirements": "Requires JavaScript",
+  "isAccessibleForFree": true,
+  "author": {"@type": "Person", "name": "Levan Sulakvelidze", "description": "Instrument-rated private pilot", "sameAs": ["https://www.linkedin.com/in/levansula", "https://www.instagram.com/levansula/", "https://github.com/levansula23"]},
+  "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+  "featureList": [
+    "Freezing level in feet MSL and above the field",
+    "Celsius and Fahrenheit input",
+    "Standard lapse-rate math shown",
+    "Icing-awareness guidance"
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"How do you estimate the freezing level?","acceptedAnswer":{"@type":"Answer","text":"Divide the surface temperature in Celsius by 2 and multiply by 1,000 — that is the approximate height of the 0°C level above the surface, using the standard 2°C per 1,000 ft lapse rate. From a 10°C field, expect freezing near 5,000 feet above the airport."}},
+    {"@type":"Question","name":"Can there be more than one freezing level?","acceptedAnswer":{"@type":"Answer","text":"Yes. A warm layer aloft, common near warm fronts, can put a melting layer above a sub-freezing layer — the classic freezing-rain setup where snow melts and then refreezes on the airframe. Official freezing-level products beat any lapse-rate estimate near fronts."}},
+    {"@type":"Question","name":"At what temperature does airframe icing occur?","acceptedAnswer":{"@type":"Answer","text":"Structural icing generally occurs from 0°C down to about −20°C in visible moisture, with the most severe accretion usually between 0 and −10°C, where large supercooled droplets freeze on contact. Clear of visible moisture there is no structural icing regardless of temperature."}},
+    {"@type":"Question","name":"Is the freezing level reported anywhere officially?","acceptedAnswer":{"@type":"Answer","text":"Yes — winds and temperatures aloft forecasts (FB), graphical AIRMETs for icing and freezing level, and PIREPs all carry it. Use a lapse-rate calculator as a first sanity check, then confirm with those products."}}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Density Altitude Calculator","item":"https://densityalt.com/"},
+    {"@type":"ListItem","position":2,"name":"Freezing Level Calculator","item":"https://densityalt.com/freezing-level-calculator"}
+  ]
+}
+</script>
+</body>
+</html>

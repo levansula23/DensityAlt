@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#05070f">
+<title>Pivotal Altitude Calculator for Eights on Pylons</title>
+<meta name="description" content="Pivotal altitude = groundspeed² ÷ 11.3. Instant results in feet AGL and MSL for eights on pylons, plus why it changes with wind around the pylon.">
+<link rel="canonical" href="https://densityalt.com/pivotal-altitude-calculator">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DensityAlt">
+<meta property="og:url" content="https://densityalt.com/pivotal-altitude-calculator">
+<meta property="og:title" content="Pivotal Altitude Calculator — Eights on Pylons">
+<meta property="og:description" content="Enter your groundspeed to get pivotal altitude in feet AGL and MSL — with the GS² ÷ 11.3 formula and commercial-checkride technique notes.">
+<meta property="og:image" content="https://densityalt.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Pivotal Altitude Calculator — Eights on Pylons">
+<meta name="twitter:description" content="Enter your groundspeed to get pivotal altitude in feet AGL and MSL — with the GS² ÷ 11.3 formula and commercial-checkride technique notes.">
+<meta name="twitter:image" content="https://densityalt.com/og-image.png">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<nav class="topnav"><div class="navin">
+  <a class="brand" href="/" style="text-decoration:none"><img src="/favicon.svg" alt=""><b>DensityAlt</b></a>
+  <div class="navlinks">
+    <a class="nl" href="/atmosphere-explorer">Explorer</a>
+    <a class="nl" href="/">Density Altitude</a>
+    <div class="nl-drop">
+      <button type="button" class="nl-trigger" aria-haspopup="true">Calculators<span class="caret" aria-hidden="true"></span></button>
+      <div class="nl-menu">
+        <a class="nl" href="/pressure-altitude-calculator">Pressure Altitude</a>
+        <a class="nl" href="/true-airspeed-calculator">True Airspeed</a>
+        <a class="nl" href="/crosswind-calculator">Crosswind</a>
+        <a class="nl" href="/takeoff-landing-distance">Takeoff &amp; Landing</a>
+        <a class="nl" href="/cloud-base-calculator">Cloud Base</a>
+        <a class="nl" href="/freezing-level-calculator">Freezing Level</a>
+        <a class="nl" href="/isa-deviation-calculator">ISA Deviation</a>
+        <a class="nl" href="/oxygen-at-altitude-calculator">Oxygen at Altitude</a>
+        <a class="nl" href="/pivotal-altitude-calculator">Pivotal Altitude</a>
+        <a class="nl" href="/horsepower-at-altitude">Horsepower</a>
+        <a class="nl" href="/power-curve">Power Curve</a>
+        <a class="nl" href="/cabin-altitude-calculator">Cabin Altitude</a>
+      </div>
+    </div>
+    <a class="nl" href="/learn/">Learn</a>
+    <a class="nl" href="/#about">About</a>
+  </div>
+  <a class="nav-gh" href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener" aria-label="DensityAlt source code on GitHub" title="Open source — view the code on GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+</div></nav>
+
+<div id="disclaimerBar" class="disclaimer-bar" hidden>
+  <span><strong>Educational estimates only.</strong> DensityAlt is not for flight planning, dispatch, or medical use — always use your POH and official sources.</span>
+  <button id="disclaimerOk" type="button">Got it</button>
+</div>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="kicker">Free aviation &amp; aerospace calculators</div>
+    <h1>Pivotal Altitude <span>Calculator</span></h1>
+    <p class="hero-sub">The altitude where the pylon stands still.</p>
+    <p class="lead">In eights on pylons there's one altitude where your wingtip reference line stays pinned to the pylon — the pivotal altitude. It depends only on groundspeed: <strong>GS² ÷ 11.3</strong>. Enter your groundspeed to get it in feet AGL (and MSL over your terrain), then read why it keeps changing as the wind swings your groundspeed around the turn.</p>
+  </header>
+
+  <section class="da" id="pivotal-altitude">
+    <h2>Pivotal Altitude Calculator</h2>
+    <p class="desc">Groundspeed, not airspeed — that's the whole trick of the maneuver. Add your terrain elevation to see the MSL altitude to fly.</p>
+    <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning or dispatch.</strong> Fly the maneuver per the Airplane Flying Handbook and your instructor.</p>
+    <div class="da-grid">
+      <div class="field">
+        <label>Groundspeed</label>
+        <div class="in"><input id="pvGs" type="number" value="100"><span class="unit">kt</span></div>
+        <div class="field-hint">≈ <b><span id="pvMph">115</span></b> mph</div>
+      </div>
+      <div class="field">
+        <label>Terrain Elevation <span style="font-weight:400">(optional)</span></label>
+        <div class="in"><input id="pvElev" type="text" inputmode="numeric" value="0"><span class="unit">ft</span></div>
+      </div>
+    </div>
+    <div class="da-out">
+      <div class="out hero"><div class="lbl">Pivotal Altitude</div><div class="v" style="color:var(--accent2)"><span id="pvOut">885</span> ft AGL</div></div>
+      <div class="out"><div class="lbl">Altitude to Fly</div><div class="v"><span id="pvMsl">885</span> ft MSL</div></div>
+    </div>
+    <div class="da-note" id="pvNote"></div>
+  </section>
+
+  <section class="da" id="how">
+    <h2>How pivotal altitude works</h2>
+    <p class="desc"><strong>Pivotal altitude (ft AGL) = groundspeed² ÷ 11.3</strong> with groundspeed in knots (÷ 15 for mph). At 100 kt that's 885 ft AGL; at 110 kt, 1,071 ft. The physics: at exactly this height, your angular rate around the pylon matches the rate the pylon's bearing changes, so the lateral reference line appears frozen on it.</p>
+    <div class="tablewrap"><table class="reftable">
+      <tr><th>Groundspeed</th><th>Pivotal altitude</th></tr>
+      <tr><td><b>90 kt</b></td><td>717 ft AGL</td></tr>
+      <tr><td><b>100 kt</b></td><td>885 ft AGL</td></tr>
+      <tr><td><b>110 kt</b></td><td>1,071 ft AGL</td></tr>
+      <tr><td><b>120 kt</b></td><td>1,274 ft AGL</td></tr>
+      <tr><td><b>130 kt</b></td><td>1,496 ft AGL</td></tr>
+    </table></div>
+    <p class="desc"><strong>Why you're always climbing or descending:</strong> the wind changes your groundspeed continuously around the pylon — fastest on the downwind side, slowest upwind. Since pivotal altitude tracks GS², you climb as you accelerate through the downwind side and descend as you slow on the upwind side. The visual cue closes the loop: if the pylon appears to move <em>ahead</em> of your wingtip reference line, you're <strong>below</strong> the pivotal altitude for your current groundspeed — climb back to it. If the pylon appears to fall <em>behind</em> the line, you're <strong>above</strong> it — descend.</p>
+    <p class="desc">Commercial-checkride staple: examiners love asking for the pivotal altitude at your entry groundspeed. Compute a table for your typical maneuvering speeds before the ride — and remember your entry altitude also has to respect minimum-safe-altitude rules over the terrain. High-elevation practice areas change your <a href="/">density altitude</a> and the true airspeed behind any groundspeed — cross-check with the <a href="/true-airspeed-calculator">TAS calculator</a> on hot days.</p>
+  </section>
+
+  <section class="da faq" id="faq">
+    <h2>Frequently asked questions</h2>
+    <div class="faqlist">
+      <details class="faq-item"><summary>How do you calculate pivotal altitude?</summary>
+      <p class="a">Square the groundspeed in knots and divide by 11.3 to get feet AGL (with mph, divide by 15). At 100 kt groundspeed: 100² ÷ 11.3 ≈ 885 ft AGL. Add terrain elevation for the MSL altitude to fly.</p></details>
+      <details class="faq-item"><summary>Why does pivotal altitude change during eights on pylons?</summary>
+      <p class="a">Because it depends on groundspeed squared, and wind changes your groundspeed around each pylon — highest downwind, lowest upwind. You continuously descend into the upwind side and climb on the downwind side to stay on the pivotal altitude.</p></details>
+      <details class="faq-item"><summary>What do I do if the pylon moves ahead of my reference line?</summary>
+      <p class="a">The pylon appearing to move ahead means you are below the pivotal altitude for your current groundspeed — climb to catch it. If the pylon drifts behind the line, you are above pivotal altitude — descend. It's the same logic as the wind correction: groundspeed builds on the downwind side, raising the pivotal altitude, so the pylon starts creeping ahead and you climb.</p></details>
+      <details class="faq-item"><summary>Does bank angle or airspeed affect pivotal altitude?</summary>
+      <p class="a">No — only groundspeed. Bank angle determines how far from the pylon you fly (steeper bank, closer pylon), and indicated airspeed matters only through the groundspeed it produces with the wind. That's what makes the maneuver such a good test of wind awareness.</p></details>
+    </div>
+  </section>
+
+  <section class="da" id="more-tools">
+    <h2>More free altitude tools</h2>
+    <p class="desc">DensityAlt is a set of free, no-signup aviation calculators. Explore the rest:</p>
+    <div class="grid">
+      <a class="card" href="/true-airspeed-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">True Airspeed</div>
+        <div class="pct">TAS from IAS, pressure altitude &amp; temperature.</div></a>
+      <a class="card" href="/crosswind-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Crosswind Calculator</div>
+        <div class="pct">Split the wind into crosswind &amp; headwind on a runway diagram.</div></a>
+      <a class="card" href="/" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Density Altitude</div>
+        <div class="pct">The altitude your aircraft actually performs at — with live METAR.</div></a>
+      <a class="card" href="/power-curve" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Power Curve &amp; Reversed Command</div>
+        <div class="pct">The back side of the power curve and your climb margins.</div></a>
+      <a class="card" href="/takeoff-landing-distance" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Takeoff &amp; Landing Distance</div>
+        <div class="pct">How density altitude stretches your ground roll &amp; rollout.</div></a>
+      <a class="card" href="/atmosphere-explorer" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Atmosphere &amp; Hypoxia Explorer</div>
+        <div class="pct">Drag an aircraft up and watch pressure, oxygen &amp; SpO₂ fall.</div></a>
+    </div>
+  </section>
+
+  <footer>
+    <h4>How the numbers are computed</h4>
+    <div class="calcrefs">
+      <div><b>Pivotal altitude</b> — <code>GS² ÷ 11.3</code> ft AGL with groundspeed in knots (<code>GS² ÷ 15</code> in mph): derived from equating the turn's angular rate to the pylon bearing rate, g ≈ 32.2 ft/s².</div>
+      <div><b>References</b> — FAA <i>Airplane Flying Handbook</i> (FAA-H-8083-3), Chapter 7 (eights on pylons and pivotal altitude).</div>
+    </div>
+    <p class="disclaim">Educational tool. Fly the maneuver per the Airplane Flying Handbook, your POH, and applicable minimum-safe-altitude rules.</p>
+    <p class="ghsrc"><strong>Open source.</strong> DensityAlt is built in the open — <a href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener">view the code on GitHub</a> to see exactly how every number is computed.</p>
+    <p class="rms">Made with <a href="https://readymadesites.com/" rel="noopener">ReadyMadeSites™</a> — custom calculators, interactive tools &amp; SEO-ready websites that rank.</p>
+  </footer>
+
+</div>
+
+<script src="/app.js"></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "DensityAlt Pivotal Altitude Calculator",
+  "url": "https://densityalt.com/pivotal-altitude-calculator",
+  "description": "Pivotal altitude calculator for eights on pylons: groundspeed squared divided by 11.3, in feet AGL and MSL, with technique notes.",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Any (web browser)",
+  "browserRequirements": "Requires JavaScript",
+  "isAccessibleForFree": true,
+  "author": {"@type": "Person", "name": "Levan Sulakvelidze", "description": "Instrument-rated private pilot", "sameAs": ["https://www.linkedin.com/in/levansula", "https://www.instagram.com/levansula/", "https://github.com/levansula23"]},
+  "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+  "featureList": [
+    "Pivotal altitude from groundspeed (knots or mph)",
+    "Feet AGL and MSL output",
+    "Groundspeed reference table",
+    "Eights-on-pylons technique notes"
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"How do you calculate pivotal altitude?","acceptedAnswer":{"@type":"Answer","text":"Square the groundspeed in knots and divide by 11.3 to get feet AGL (with mph, divide by 15). At 100 knots groundspeed: 100² ÷ 11.3 ≈ 885 feet AGL. Add terrain elevation for the MSL altitude to fly."}},
+    {"@type":"Question","name":"Why does pivotal altitude change during eights on pylons?","acceptedAnswer":{"@type":"Answer","text":"Because it depends on groundspeed squared, and wind changes your groundspeed around each pylon — highest downwind, lowest upwind. You continuously descend into the upwind side and climb on the downwind side to stay on the pivotal altitude."}},
+    {"@type":"Question","name":"What do I do if the pylon moves ahead of my reference line?","acceptedAnswer":{"@type":"Answer","text":"The pylon appearing to move ahead means you are below the pivotal altitude for your current groundspeed — climb to catch it. If the pylon drifts behind the line, you are above pivotal altitude — descend."}},
+    {"@type":"Question","name":"Does bank angle or airspeed affect pivotal altitude?","acceptedAnswer":{"@type":"Answer","text":"No — only groundspeed. Bank angle determines how far from the pylon you fly, and indicated airspeed matters only through the groundspeed it produces with the wind. That is what makes eights on pylons such a good test of wind awareness."}}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Density Altitude Calculator","item":"https://densityalt.com/"},
+    {"@type":"ListItem","position":2,"name":"Pivotal Altitude Calculator","item":"https://densityalt.com/pivotal-altitude-calculator"}
+  ]
+}
+</script>
+</body>
+</html>

@@ -30,8 +30,15 @@
     <div class="nl-drop">
       <button type="button" class="nl-trigger" aria-haspopup="true">Calculators<span class="caret" aria-hidden="true"></span></button>
       <div class="nl-menu">
+        <a class="nl" href="/pressure-altitude-calculator">Pressure Altitude</a>
+        <a class="nl" href="/true-airspeed-calculator">True Airspeed</a>
         <a class="nl" href="/crosswind-calculator">Crosswind</a>
         <a class="nl" href="/takeoff-landing-distance">Takeoff &amp; Landing</a>
+        <a class="nl" href="/cloud-base-calculator">Cloud Base</a>
+        <a class="nl" href="/freezing-level-calculator">Freezing Level</a>
+        <a class="nl" href="/isa-deviation-calculator">ISA Deviation</a>
+        <a class="nl" href="/oxygen-at-altitude-calculator">Oxygen at Altitude</a>
+        <a class="nl" href="/pivotal-altitude-calculator">Pivotal Altitude</a>
         <a class="nl" href="/horsepower-at-altitude">Horsepower</a>
         <a class="nl" href="/power-curve">Power Curve</a>
         <a class="nl" href="/cabin-altitude-calculator">Cabin Altitude</a>
@@ -59,7 +66,7 @@
 
   <section class="da" id="horsepower">
     <h2>Aircraft Horsepower at Altitude Calculator</h2>
-    <p class="desc">Thin air carries less oxygen for combustion, so a piston engine loses power as density altitude rises. Pick your aircraft and a density altitude to see the horsepower you actually have. <a id="useDa">↑ use the density altitude from above</a></p>
+    <p class="desc">Thin air carries less oxygen for combustion, so a piston engine loses power as density altitude rises. Pick your aircraft and a density altitude to see the horsepower you actually have. First compute it with the <a href="/">density altitude calculator</a> (or the <a href="/pressure-altitude-calculator">pressure altitude calculator</a> on a standard day).</p>
     <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning, dispatch, or weight-and-balance.</strong> Always fly the numbers in your POH and current official weather.</p>
     <div class="da-grid">
       <div class="field">
@@ -82,6 +89,41 @@
     </div>
     <canvas id="hpChart" class="box" width="900" height="200"></canvas>
     <div class="da-note" id="hpNote"></div>
+  </section>
+
+  <section class="da faq" id="faq">
+    <h2>Frequently asked questions</h2>
+    <div class="faqlist">
+      <details class="faq-item"><summary>How much horsepower does an engine lose with altitude?</summary>
+      <p class="a">A normally-aspirated piston engine loses power roughly in proportion to air density — about 3% per 1,000 ft of density altitude (Gagg–Ferrar). At 8,000 ft density altitude a 180 hp engine makes closer to 135 hp. Turbocharged engines hold rated power up to a critical altitude, then fall off the same way.</p></details>
+      <details class="faq-item"><summary>Do jet (turbine) engines lose power at altitude?</summary>
+      <p class="a">Yes. Jet engines produce thrust, not horsepower, and thrust falls as you climb because thinner air means less mass flow through the engine — roughly with the ambient pressure ratio, so a turbofan at FL400 may make only about a third of its sea-level static thrust. Turboprops produce shaft horsepower and are usually flat-rated to a critical altitude, then lose power as density falls.</p></details>
+    </div>
+  </section>
+
+  <section class="da" id="more-tools">
+    <h2>More free altitude tools</h2>
+    <p class="desc">DensityAlt is a set of free, no-signup aviation calculators. Explore the rest:</p>
+    <div class="grid">
+      <a class="card" href="/" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Density Altitude</div>
+        <div class="pct">The altitude your aircraft actually performs at — with live METAR.</div></a>
+      <a class="card" href="/pressure-altitude-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Pressure Altitude</div>
+        <div class="pct">PA from the altimeter setting — the chart-entry altitude.</div></a>
+      <a class="card" href="/true-airspeed-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">True Airspeed</div>
+        <div class="pct">TAS from IAS, pressure altitude &amp; temperature.</div></a>
+      <a class="card" href="/takeoff-landing-distance" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Takeoff &amp; Landing Distance</div>
+        <div class="pct">How density altitude stretches your ground roll &amp; rollout.</div></a>
+      <a class="card" href="/power-curve" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Power Curve &amp; Reversed Command</div>
+        <div class="pct">The back side of the power curve and your climb margins.</div></a>
+      <a class="card" href="/isa-deviation-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">ISA Deviation</div>
+        <div class="pct">Standard temperature at altitude and your ISA± number.</div></a>
+    </div>
   </section>
 
   <footer>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#05070f">
+<title>Types of Altitude in Aviation: Indicated to Density</title>
+<meta name="description" content="All six types of altitude — indicated, pressure, density, true, absolute, calibrated — explained with formulas and worked examples for pilots.">
+<link rel="canonical" href="https://densityalt.com/learn/types-of-altitude">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DensityAlt">
+<meta property="og:url" content="https://densityalt.com/learn/types-of-altitude">
+<meta property="og:title" content="The 6 Types of Altitude Every Pilot Should Know">
+<meta property="og:description" content="Indicated, calibrated, pressure, density, true, and absolute altitude — what each one means, how to calculate it, and when it matters. With worked examples.">
+<meta property="og:image" content="https://densityalt.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The 6 Types of Altitude Every Pilot Should Know">
+<meta name="twitter:description" content="Indicated, calibrated, pressure, density, true, and absolute altitude — what each one means, how to calculate it, and when it matters. With worked examples.">
+<meta name="twitter:image" content="https://densityalt.com/og-image.png">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<nav class="topnav"><div class="navin">
+  <a class="brand" href="/" style="text-decoration:none"><img src="/favicon.svg" alt=""><b>DensityAlt</b></a>
+  <div class="navlinks">
+    <a class="nl" href="/atmosphere-explorer">Explorer</a>
+    <a class="nl" href="/">Density Altitude</a>
+    <div class="nl-drop">
+      <button type="button" class="nl-trigger" aria-haspopup="true">Calculators<span class="caret" aria-hidden="true"></span></button>
+      <div class="nl-menu">
+        <a class="nl" href="/pressure-altitude-calculator">Pressure Altitude</a>
+        <a class="nl" href="/true-airspeed-calculator">True Airspeed</a>
+        <a class="nl" href="/crosswind-calculator">Crosswind</a>
+        <a class="nl" href="/takeoff-landing-distance">Takeoff &amp; Landing</a>
+        <a class="nl" href="/cloud-base-calculator">Cloud Base</a>
+        <a class="nl" href="/freezing-level-calculator">Freezing Level</a>
+        <a class="nl" href="/isa-deviation-calculator">ISA Deviation</a>
+        <a class="nl" href="/oxygen-at-altitude-calculator">Oxygen at Altitude</a>
+        <a class="nl" href="/pivotal-altitude-calculator">Pivotal Altitude</a>
+        <a class="nl" href="/horsepower-at-altitude">Horsepower</a>
+        <a class="nl" href="/power-curve">Power Curve</a>
+        <a class="nl" href="/cabin-altitude-calculator">Cabin Altitude</a>
+      </div>
+    </div>
+    <a class="nl" href="/learn/">Learn</a>
+    <a class="nl" href="/#about">About</a>
+  </div>
+  <a class="nav-gh" href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener" aria-label="DensityAlt source code on GitHub" title="Open source — view the code on GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+</div></nav>
+
+<div id="disclaimerBar" class="disclaimer-bar" hidden>
+  <span><strong>Educational estimates only.</strong> DensityAlt is not for flight planning, dispatch, or medical use — always use your POH and official sources.</span>
+  <button id="disclaimerOk" type="button">Got it</button>
+</div>
+
+<div class="wrap">
+
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/learn/">Learn</a> › <span>Types of altitude</span></nav>
+  <header class="hero">
+    <div class="kicker">Learn · Altitude Fundamentals</div>
+    <h1>The 6 Types of Altitude Every Pilot Should Know</h1>
+    <p class="hero-sub">Same sky — six different numbers.</p>
+    <p class="lead">Six numbers, one sky: what each altitude means, how to get it, and a worked example for every formula — the exact breakdown examiners love to ask for.</p>
+  </header>
+  <div class="byline"><img src="/headshot.jpg" alt="Levan Sulakvelidze" width="34" height="34" loading="lazy" decoding="async"><span><strong>Levan Sulakvelidze</strong> · Instrument-rated private pilot · Updated July 2026 · ~8 min read</span></div>
+
+  <style>
+  .article{max-width:760px;margin:0 auto}
+  .crumbs{max-width:760px;margin:0 auto 4px;font-size:13px;color:var(--ink-dim)}
+  .crumbs a{color:var(--accent);text-decoration:none}
+  .crumbs span{color:var(--ink-dim)}
+  .byline{max-width:760px;margin:18px auto 0;display:flex;gap:10px;align-items:center;font-size:13.5px;color:var(--ink-dim)}
+  .byline img{width:34px;height:34px;border-radius:50%;flex:0 0 auto}
+  .article h2{font-size:23px;line-height:1.25;margin:38px 0 12px;scroll-margin-top:70px}
+  .article h3{font-size:17px;margin:24px 0 8px;color:var(--ink)}
+  .article p{font-size:16px;line-height:1.72;color:var(--ink);margin:0 0 16px}
+  .article ul,.article ol{font-size:16px;line-height:1.72;color:var(--ink);padding-left:22px;margin:0 0 18px}
+  .article li{margin:7px 0}
+  .article a{color:var(--accent)}
+  .article strong{color:#fff}
+  .toc{background:var(--panel);border:1px solid var(--panel-brd);border-radius:12px;padding:16px 20px}
+  .toc .toc-t{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-dim);margin:0 0 8px}
+  .toc ol{margin:0;padding-left:20px;font-size:15px;line-height:1.5}
+  .toc a{color:var(--accent);text-decoration:none}
+  .keybox{background:var(--panel);border:1px solid var(--panel-brd);border-left:3px solid var(--accent);border-radius:10px;padding:14px 18px;margin:0 0 20px;font-size:16px;line-height:1.6}
+  .formula{font-family:var(--mono);background:rgba(255,255,255,.05);border:1px solid var(--panel-brd);border-radius:10px;padding:13px 16px;margin:0 0 18px;font-size:14px;color:var(--accent2);overflow-x:auto}
+  .article table{width:100%;border-collapse:collapse;margin:0 0 20px;font-size:14.5px}
+  .article th,.article td{border:1px solid var(--panel-brd);padding:8px 12px;text-align:left}
+  .article th{color:var(--ink-dim);font-weight:600}
+  .article blockquote{border-left:3px solid var(--warn);margin:0 0 18px;padding:4px 0 4px 18px;color:var(--ink-dim);font-style:italic}
+  .calc-intro{max-width:760px;margin:0 auto}
+  .authorbox{max-width:760px;margin:40px auto 0;display:flex;gap:14px;align-items:flex-start;background:var(--panel);border:1px solid var(--panel-brd);border-radius:14px;padding:18px}
+  .authorbox img{width:54px;height:54px;border-radius:50%;flex:0 0 auto}
+  .authorbox p{font-size:14px;line-height:1.6;color:var(--ink-dim);margin:6px 0 0}
+  .authorbox a{color:var(--accent)}
+  .learn-card{display:block;background:var(--panel);border:1px solid var(--panel-brd);border-radius:14px;padding:22px;text-decoration:none;color:inherit;margin:0 0 14px}
+  .learn-card:hover{border-color:var(--accent)}
+  .learn-card .lc-k{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent)}
+  .learn-card .lc-t{font-size:20px;font-weight:700;margin:4px 0 6px;color:var(--ink)}
+  .learn-card .lc-d{font-size:14.5px;color:var(--ink-dim);line-height:1.5}
+  </style>
+
+  <div class="article">
+    <p>Pilots work with six types of altitude: <strong>indicated altitude</strong> (what the altimeter reads), <strong>calibrated altitude</strong> (indicated corrected for instrument error), <strong>pressure altitude</strong> (height above the 29.92&nbsp;inHg standard datum), <strong>density altitude</strong> (pressure altitude corrected for temperature), <strong>true altitude</strong> (actual height above mean sea level), and <strong>absolute altitude</strong> (height above the ground).</p>
+    <div class="keybox"><strong>Memory hook:</strong> indicated = what you read; calibrated = what a perfect instrument would read; pressure = read with 29.92 set; density = pressure corrected for temperature; true = height above the sea; absolute = height above the dirt.</div>
+    <div class="toc">
+      <div class="toc-t">In this guide</div>
+      <ol>
+        <li><a href="#at-a-glance">The six altitudes at a glance</a></li>
+        <li><a href="#indicated">Indicated altitude</a></li>
+        <li><a href="#calibrated">Calibrated altitude</a></li>
+        <li><a href="#pressure">Pressure altitude</a></li>
+        <li><a href="#density">Density altitude</a></li>
+        <li><a href="#true">True altitude</a></li>
+        <li><a href="#absolute">Absolute altitude</a></li>
+        <li><a href="#altimeter-shows">What altitude does your altimeter actually show?</a></li>
+        <li><a href="#pa-vs-da">Pressure altitude vs. density altitude</a></li>
+        <li><a href="#e6b">E6B vs. online</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ol>
+    </div>
+
+    <h2 id="at-a-glance">The six altitudes at a glance</h2>
+    <table>
+      <thead><tr><th>Altitude</th><th>Reference datum</th><th>How you get it</th><th>When it matters</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Indicated</strong></td><td>Local sea-level pressure (Kollsman setting)</td><td>Read straight off the altimeter with the current setting</td><td>Everyday flying, ATC altitude assignments below 18,000&nbsp;ft</td></tr>
+        <tr><td><strong>Calibrated</strong></td><td>Same as indicated</td><td>Indicated corrected for instrument and position error</td><td>The honest starting point for computing true altitude</td></tr>
+        <tr><td><strong>Pressure</strong></td><td>Standard datum plane, 29.92&nbsp;inHg</td><td>Set 29.92 and read, or PA = elev + (29.92 − setting) × 1,000</td><td>Performance charts, flight levels, first step of every DA calculation</td></tr>
+        <tr><td><strong>Density</strong></td><td>Standard atmosphere (equal air density)</td><td>PA corrected for temperature: DA = PA + 120 × (OAT − ISA)</td><td>Takeoff, climb, and landing performance — what the airplane feels</td></tr>
+        <tr><td><strong>True</strong></td><td>Mean sea level</td><td>Calibrated altitude corrected for non-standard temperature and pressure</td><td>Terrain and obstacle clearance, cold-weather operations</td></tr>
+        <tr><td><strong>Absolute</strong></td><td>The terrain directly below</td><td>Radar altimeter, or true altitude minus terrain elevation</td><td>AGL-based rules, low-level flight, decision heights</td></tr>
+      </tbody>
+    </table>
+
+    <h2 id="indicated">Indicated altitude: what you read</h2>
+    <p>Indicated altitude is simply the number on the face of the altimeter when the current local altimeter setting is dialed into the <strong>Kollsman window</strong>. It’s the altitude you fly, the altitude ATC assigns, and the altitude that keeps you separated from other traffic below 18,000&nbsp;ft — because everyone nearby is using the same setting and therefore making the same small errors together.</p>
+    <p><strong>Example.</strong> Holding short at a field that sits at 427&nbsp;ft MSL with the ATIS altimeter of 30.05 set, the needle should park at about 427&nbsp;ft. More than roughly 75&nbsp;ft off, and the instrument needs a shop visit before any IFR flying.</p>
+
+    <h2 id="calibrated">Calibrated altitude: indicated, minus the lies</h2>
+    <p>No altimeter is perfect. The mechanism has small internal error, and the <strong>static port</strong> feeding it sits in airflow that doesn’t always match the true outside pressure — <em>position error</em>, which varies with airspeed and configuration. Calibrated altitude is indicated altitude corrected for both, via the correction card or POH table.</p>
+    <p>In practice the correction is tens of feet — but it is the legally tested quantity (IFR altimeters are recertified every 24 calendar months) and the correct starting point for computing true altitude on a flight computer.</p>
+
+    <h2 id="pressure">Pressure altitude: your height above the standard datum</h2>
+    <p>Set 29.92 in the Kollsman window and the altimeter measures your height above the <strong>standard datum plane</strong> — the theoretical level where pressure equals 29.92&nbsp;inHg. That reading is pressure altitude: the currency of performance charts, flight levels, and every density-altitude calculation. You don’t need to touch the knob, though:</p>
+    <div class="formula">Pressure altitude = field elevation + (29.92 − altimeter setting) × 1,000 ft</div>
+    <p><strong>Worked example.</strong> Field elevation 4,200&nbsp;ft, altimeter setting 30.12. PA = 4,200 + (29.92 − 30.12) × 1,000 = 4,200 − 200 = <strong>4,000&nbsp;ft</strong>. On a high-pressure day your pressure altitude sits below field elevation; on a low-pressure day it climbs above it. The <a href="/pressure-altitude-calculator">pressure altitude calculator</a> does this in one step, and at or above 18,000&nbsp;ft everyone sets 29.92 permanently — a flight level is just pressure altitude in hundreds of feet (FL350 = 35,000&nbsp;ft PA).</p>
+
+    <h2 id="density">Density altitude: the performance altitude</h2>
+    <p>Pressure altitude tells you where you sit on the standard pressure ladder, but your wing, propeller, and engine respond to <em>air density</em> — and density also depends on temperature. Density altitude is pressure altitude corrected for non-standard temperature. Standard (ISA) temperature is 15&nbsp;°C at sea level, falling about 2&nbsp;°C per 1,000&nbsp;ft, and each degree above standard adds roughly 120&nbsp;ft:</p>
+    <div class="formula">ISA temp ≈ 15 − 2 × (PA / 1,000) °C<br>Density altitude ≈ PA + 120 × (OAT − ISA temp)</div>
+    <p><strong>Worked example.</strong> Continue from above: PA is 4,000&nbsp;ft, so ISA temperature there is 15 − 8 = 7&nbsp;°C. The OAT is a warm 27&nbsp;°C — 20&nbsp;°C above standard — so DA ≈ 4,000 + 120 × 20 = <strong>6,400&nbsp;ft</strong>. Your airplane takes off, climbs, and lands as if it were at 6,400&nbsp;ft on a standard day. This is the one altitude that predicts performance, which is why it gets its own <a href="/">density altitude calculator</a> and a full <a href="/learn/density-altitude">pilot’s guide to density altitude</a> on this site.</p>
+
+    <h2 id="true">True altitude: where you actually are — and the cold-weather trap</h2>
+    <p>True altitude is your real height above mean sea level — the number that terrain and obstacles care about. Your altimeter only matches it when the atmosphere matches the standard model it was calibrated to. Cold air is denser, so the pressure levels squeeze closer to the ground, and an altimeter flying through them <strong>overreads: it shows more altitude than you actually have</strong>. Hence the classic warning:</p>
+    <blockquote>From high to low, look out below — flying into lower pressure <em>or</em> colder air, your true altitude is lower than indicated.</blockquote>
+    <p><strong>Example.</strong> Cruising at an indicated 6,000&nbsp;ft over a near-sea-level station on a day 20&nbsp;°C below ISA, the rule of thumb of about 4&nbsp;ft of error per 1,000&nbsp;ft of height per degree of ISA deviation puts you roughly 4 × 6 × 20 ≈ 480&nbsp;ft lower than the needle claims. That’s why cold-temperature-restricted airports require corrected approach altitudes in winter. The same non-standard air splits indicated from true airspeed, too — the <a href="/true-airspeed-calculator">true airspeed calculator</a> quantifies it.</p>
+
+    <h2 id="absolute">Absolute altitude: height above the ground</h2>
+    <p>Absolute altitude is your height <strong>AGL</strong> — above the terrain directly beneath you. Cross a 5,000&nbsp;ft plateau at a true altitude of 7,500&nbsp;ft MSL and your absolute altitude is 2,500&nbsp;ft. It changes constantly with the terrain even when you hold a rock-steady MSL altitude.</p>
+    <p>Airliners measure it directly with a <strong>radar altimeter</strong> — the voice calling “fifty… forty… thirty” in the flare, and the basis of decision height on Category&nbsp;II/III approaches. Light-aircraft pilots mostly infer it from the chart, but plenty of rules are written in AGL: traffic-pattern altitude, the 500/1,000&nbsp;ft minimum safe altitudes, and cloud-clearance floors.</p>
+
+    <h2 id="altimeter-shows">What altitude does your altimeter actually show?</h2>
+    <p>Your altimeter shows <strong>indicated altitude</strong> — nothing more. It is an aneroid pressure gauge calibrated to the standard atmosphere, so it converts outside air pressure into feet <em>as if</em> the day were standard. With a current local setting, indicated altitude approximates true altitude near the reporting station, but it drifts as pressure and temperature depart from standard or you fly away from the station. It never shows density altitude and it never shows height above the ground — those take a calculation and a radar altimeter, respectively.</p>
+
+    <h2 id="pa-vs-da">What is the difference between pressure altitude and density altitude?</h2>
+    <p><strong>Pressure altitude is your height above the 29.92&nbsp;inHg standard datum; density altitude is that same number corrected for temperature.</strong> The two are equal only when the temperature is exactly standard. On a hot day density altitude climbs above pressure altitude — about 120&nbsp;ft for every degree Celsius above ISA — and on a cold day it drops below. Pressure altitude is the bookkeeping altitude you feed into charts and flight levels; density altitude is the physical altitude your airplane performs at. The two-step chain is always the same: altimeter setting gives you PA, temperature turns PA into DA.</p>
+
+    <h2 id="e6b">How to find pressure and density altitude on an E6B vs. online</h2>
+    <p>On a mechanical <strong>E6B</strong>, density altitude is a window job. First get pressure altitude — either read it off the altimeter with 29.92 set (then reset the local altimeter!) or use the formula above. Then, in the small pressure-altitude window, align your PA against the outside air temperature on the OAT scale, and read <strong>density altitude in the density-altitude window</strong>. Electronic E6Bs ask for the same two inputs and skip the squinting.</p>
+    <p>Online, the chain is one screen: the <a href="/">DensityAlt calculator</a> takes field elevation, temperature, and altimeter setting, shows PA, ISA deviation, and DA together, and can pull live airport weather by ICAO code; the <a href="/pressure-altitude-calculator">pressure altitude calculator</a> isolates the first step. For the intuition behind all six numbers — how pressure, density, and oxygen actually fall with height — drag an aircraft up through the <a href="/atmosphere-explorer">atmosphere explorer</a>.</p>
+    <p class="calc-disclaimer" style="margin-top:22px"><strong>Educational only.</strong> The figures here are rules of thumb to build intuition — always fly your POH numbers and current official weather, not these.</p>
+
+  <section class="da faq" id="faq">
+    <h2>Frequently asked questions</h2>
+    <div class="faqlist">
+      <details class="faq-item"><summary>What are the 6 types of altitude in aviation?</summary>
+      <p class="a">Indicated altitude (the altimeter reading with the local setting), calibrated altitude (indicated corrected for instrument and position error), pressure altitude (height above the 29.92&nbsp;inHg standard datum), density altitude (pressure altitude corrected for temperature), true altitude (actual height above mean sea level), and absolute altitude (height above the terrain below you).</p></details>
+      <details class="faq-item"><summary>Which altitude does ATC assign?</summary>
+      <p class="a">Below 18,000&nbsp;ft in the U.S., ATC assigns <strong>indicated altitude</strong> flown on the current local altimeter setting, so nearby aircraft share the same errors and stay separated. At and above 18,000&nbsp;ft everyone sets 29.92 and flies <strong>flight levels</strong>, which are pressure altitudes in hundreds of feet.</p></details>
+      <details class="faq-item"><summary>Which altitude determines aircraft performance?</summary>
+      <p class="a"><strong>Density altitude.</strong> Lift, propeller thrust, and engine power all scale with air density, and density altitude states that density as an equivalent standard-atmosphere altitude. Two airports at identical elevations can perform thousands of feet apart if one is hot and one is cold.</p></details>
+      <details class="faq-item"><summary>Why is my true altitude lower than indicated in cold weather?</summary>
+      <p class="a">Cold air is denser, so the atmosphere’s pressure levels sit closer to the ground than the standard model assumes. Your altimeter, calibrated to the standard atmosphere, converts pressure to feet optimistically and <strong>overreads</strong> — roughly 4&nbsp;ft per 1,000&nbsp;ft of height per degree Celsius below ISA. That is the reason for cold-temperature altitude corrections on winter approaches.</p></details>
+      <details class="faq-item"><summary>Is pressure altitude the same as a flight level?</summary>
+      <p class="a">Yes — a flight level is pressure altitude expressed in hundreds of feet with 29.92 set. FL350 means 35,000&nbsp;ft of pressure altitude. Below the transition altitude (18,000&nbsp;ft in the U.S.), altitudes are flown as indicated altitude on the local setting instead.</p></details>
+    </div>
+  </section>
+
+  <div class="article"><h2 style="margin-top:38px">Keep exploring</h2>
+    <p>See every one of these altitudes move with the free DensityAlt tools:</p></div>
+  <section class="da" id="more-tools">
+    <h2>More free altitude tools</h2>
+    <p class="desc">DensityAlt is a set of free, no-signup aviation calculators. Explore the rest:</p>
+    <div class="grid">
+      <a class="card" href="/atmosphere-explorer" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Atmosphere &amp; Hypoxia Explorer</div>
+        <div class="pct">Drag an aircraft up and watch pressure, oxygen &amp; SpO₂ fall.</div></a>
+      <a class="card" href="/crosswind-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Crosswind Calculator</div>
+        <div class="pct">Split the wind into crosswind &amp; headwind on a runway diagram.</div></a>
+      <a class="card" href="/takeoff-landing-distance" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Takeoff &amp; Landing Distance</div>
+        <div class="pct">How density altitude stretches your ground roll &amp; rollout.</div></a>
+      <a class="card" href="/horsepower-at-altitude" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Horsepower at Altitude</div>
+        <div class="pct">How much power a piston engine loses with density altitude.</div></a>
+      <a class="card" href="/power-curve" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Power Curve &amp; Reversed Command</div>
+        <div class="pct">The back side of the power curve and your climb margins.</div></a>
+      <a class="card" href="/cabin-altitude-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Cabin Altitude</div>
+        <div class="pct">What cabin altitude your pressurization holds at cruise.</div></a>
+    </div>
+  </section>
+
+  <div class="article">  <div class="authorbox"><img src="/headshot.jpg" alt="Levan Sulakvelidze" width="54" height="54" loading="lazy" decoding="async"><div><strong>Levan Sulakvelidze</strong><p>Instrument-rated private pilot and the builder of DensityAlt. I fly out of high-and-hot fields in the western U.S., where density altitude isn’t a textbook abstraction — it’s the difference between a comfortable climb and staring down the far end of the runway. I built these tools to make the numbers obvious before the throttle goes up. <a href="https://www.linkedin.com/in/levansula" rel="noopener">LinkedIn</a> · <a href="https://github.com/levansula23" rel="noopener">GitHub</a></p></div></div></div>
+
+  <footer>
+    <h4>How the numbers are computed</h4>
+    <div class="calcrefs">
+      <div><b>Atmosphere</b> — International Standard Atmosphere (ISA): the barometric formula in the troposphere (1.98&nbsp;°C / 1000&nbsp;ft lapse) and the isothermal layer above the tropopause (~36,089&nbsp;ft).</div>
+      <div><b>Blood oxygen</b> — alveolar gas equation <code>P_AO₂ = 0.2095·(P − 47) − P_CO₂/0.8</code> feeding the Severinghaus SpO₂ curve. CO₂ falls with altitude, tuned to acute-exposure data (~87% @ 10k, ~72% @ 18k, ~50% @ 25k&nbsp;ft).</div>
+      <div><b>Density altitude</b> — <code>PA = elev + (29.92 − altimeter)·1000</code>, then <code>DA = PA + 120·(OAT − ISA&nbsp;temp)</code>.</div>
+      <div><b>Horsepower</b> — Gagg–Ferrar relation <code>HP ≈ rated·(1.132σ − 0.132)</code>, σ = density ratio at your density altitude; turbos hold rated power to a critical altitude.</div>
+      <div><b>Power curve</b> — parabolic drag polar <code>C_D = C_D0 + C_L²/(πAR·e)</code>; power required = drag × TAS. The region of reversed command is the band from stall up to the minimum-power speed. Drag values are representative estimates and V-speeds (Vs, Va, Vno, Vne) are typical published figures — check your POH; the climb readout is idealized (constant ~80% prop efficiency) and optimistic at low speed.</div>
+      <div><b>Cabin altitude</b> — <code>cabin_P = min(sea level, ambient + ΔP)</code> inverted to an altitude; ΔP is each aircraft's published max pressure differential.</div>
+      <div><b>Data sources</b> — bundled ~110 airports (offline elevation) plus <code>aviationweather.gov</code> METAR for live temp/altimeter (via a same-origin proxy once hosted), falling back to <code>open-meteo.com</code> current weather by coordinates for fields without a METAR.</div>
+      <div><b>References</b> — FAA <i>Pilot's Handbook of Aeronautical Knowledge</i> (FAA-H-8083-25) and <i>Airplane Flying Handbook</i> (FAA-H-8083-3) for density altitude, the FAR&nbsp;91.211 oxygen rules, and the power curve / region of reversed command; J.D.&nbsp;Anderson, <i>Introduction to Flight</i> (parabolic drag polar, power-required = drag&nbsp;×&nbsp;TAS); the alveolar gas equation and Severinghaus SpO₂ relation, with acute-exposure SaO₂ figures from high-altitude physiology literature (e.g. J.B.&nbsp;West). Power-curve V-speeds and the narrow trainer reversed-command band cross-checked against Van's Air Force, GoFly, and Boldmethod.</div>
+    </div>
+    <p class="disclaim">Educational models for healthy unacclimatized adults at acute exposure. Real SpO₂ varies with fitness, acclimatization, and individual physiology. Not for medical or operational flight-planning use.</p>
+    <p class="ghsrc"><strong>Open source.</strong> DensityAlt is built in the open — <a href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener">view the code on GitHub</a> to see exactly how every number is computed.</p>
+    <p class="rms">Made with <a href="https://readymadesites.com/" rel="noopener">ReadyMadeSites™</a> — custom calculators, interactive tools &amp; SEO-ready websites that rank.</p>
+  </footer>
+
+</div>
+
+<script src="/app.js"></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "The 6 Types of Altitude Every Pilot Should Know",
+  "description": "All six types of altitude in aviation — indicated, calibrated, pressure, density, true, and absolute — explained with formulas and worked examples.",
+  "image": "https://densityalt.com/og-image.png",
+  "author": {"@type": "Person", "name": "Levan Sulakvelidze", "description": "Instrument-rated private pilot", "sameAs": ["https://www.linkedin.com/in/levansula", "https://github.com/levansula23"]},
+  "publisher": {"@type": "Organization", "name": "DensityAlt", "logo": {"@type": "ImageObject", "url": "https://densityalt.com/og-image.png"}},
+  "datePublished": "2026-07-18",
+  "dateModified": "2026-07-18",
+  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://densityalt.com/learn/types-of-altitude"}
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"What are the 6 types of altitude in aviation?","acceptedAnswer":{"@type":"Answer","text":"Indicated altitude (the altimeter reading with the local setting), calibrated altitude (indicated corrected for instrument and position error), pressure altitude (height above the 29.92 inHg standard datum), density altitude (pressure altitude corrected for temperature), true altitude (actual height above mean sea level), and absolute altitude (height above the terrain below you)."}},
+    {"@type":"Question","name":"Which altitude does ATC assign?","acceptedAnswer":{"@type":"Answer","text":"Below 18,000 feet in the U.S., ATC assigns indicated altitude flown on the current local altimeter setting, so nearby aircraft share the same errors and stay separated. At and above 18,000 feet everyone sets 29.92 and flies flight levels, which are pressure altitudes in hundreds of feet."}},
+    {"@type":"Question","name":"Which altitude determines aircraft performance?","acceptedAnswer":{"@type":"Answer","text":"Density altitude. Lift, propeller thrust, and engine power all scale with air density, and density altitude states that density as an equivalent standard-atmosphere altitude. Two airports at identical elevations can perform thousands of feet apart if one is hot and one is cold."}},
+    {"@type":"Question","name":"Why is my true altitude lower than indicated in cold weather?","acceptedAnswer":{"@type":"Answer","text":"Cold air is denser, so the atmosphere's pressure levels sit closer to the ground than the standard model assumes. Your altimeter, calibrated to the standard atmosphere, converts pressure to feet optimistically and overreads — roughly 4 feet per 1,000 feet of height per degree Celsius below ISA. That is the reason for cold-temperature altitude corrections on winter approaches."}},
+    {"@type":"Question","name":"Is pressure altitude the same as a flight level?","acceptedAnswer":{"@type":"Answer","text":"Yes — a flight level is pressure altitude expressed in hundreds of feet with 29.92 set. FL350 means 35,000 feet of pressure altitude. Below the transition altitude (18,000 feet in the U.S.), altitudes are flown as indicated altitude on the local setting instead."}}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://densityalt.com/"},
+    {"@type":"ListItem","position":2,"name":"Learn","item":"https://densityalt.com/learn/"},
+    {"@type":"ListItem","position":3,"name":"Types of Altitude","item":"https://densityalt.com/learn/types-of-altitude"}
+  ]
+}
+</script>
+</body>
+</html>
