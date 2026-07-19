@@ -252,3 +252,98 @@
   .reftable td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.06)}
   .reftable tr:last-child td{border-bottom:0}
   .reftable td b{font-family:var(--mono)}
+
+  /* =====================================================================
+     v2 REDESIGN — sitewide sleek pass + featured Explorer nav + homepage
+     tool-first layout. Additive; safe across all pages. (Generator is
+     stale — these live in styles.css, applied to real pages directly.)
+     ===================================================================== */
+
+  /* --- One disclaimer: retire the fixed bottom bar; soften inline notes --- */
+  .disclaimer-bar{display:none !important}
+  .calc-disclaimer{background:none;border:0;border-radius:0;padding:2px 0 0;margin:0 0 18px;
+    font:500 12px/1.5 var(--sans);color:var(--ink-dim)}
+  .calc-disclaimer strong{color:var(--warn);font-weight:600}
+
+  /* --- Featured "Explorer" nav link: says "check this out", not "you are here" --- */
+  .topnav a.nl[href="/atmosphere-explorer"]{
+    color:#eaf4ff;font-weight:700;
+    background:linear-gradient(100deg,rgba(78,161,255,.20),rgba(124,255,204,.15));
+    border:1px solid rgba(124,204,255,.5);
+    box-shadow:0 0 8px -2px rgba(124,204,255,.45);
+    animation:navGlow 3.2s ease-in-out infinite}
+  .topnav a.nl[href="/atmosphere-explorer"]::before{content:"✨";margin-right:5px;font-size:11px;
+    display:inline-block;animation:navTwinkle 2.4s ease-in-out infinite}
+  .topnav a.nl[href="/atmosphere-explorer"]:hover{color:#fff;border-color:var(--accent2);
+    background:linear-gradient(100deg,rgba(78,161,255,.34),rgba(124,255,204,.24))}
+  @keyframes navGlow{0%,100%{box-shadow:0 0 7px -2px rgba(124,204,255,.4)}
+    50%{box-shadow:0 0 15px 0 rgba(124,204,255,.7)}}
+  @keyframes navTwinkle{0%,100%{opacity:.55;transform:scale(.9)}50%{opacity:1;transform:scale(1.15)}}
+  @media(prefers-reduced-motion:reduce){
+    .topnav a.nl[href="/atmosphere-explorer"],
+    .topnav a.nl[href="/atmosphere-explorer"]::before{animation:none}}
+
+  /* --- Homepage hero: decluttered, one value line, one subtle disclaimer --- */
+  .rd-hero{padding:40px 0 20px;max-width:740px}
+  .rd-hero h1{font-size:clamp(30px,5.2vw,48px);margin:14px 0 12px}
+  .rd-lede{font:500 clamp(16px,2.4vw,21px)/1.45 var(--sans);color:var(--ink-dim);margin:0}
+  .rd-lede b{color:var(--ink);font-weight:600}
+  .rd-disc{display:inline-flex;align-items:center;gap:8px;margin-top:18px;
+    font:600 11.5px/1.3 var(--mono);letter-spacing:.02em;color:var(--ink-dim);
+    background:rgba(255,255,255,.035);border:1px solid var(--panel-brd);border-radius:999px;padding:8px 14px}
+  .rd-disc svg{width:13px;height:13px;opacity:.65;flex:0 0 auto}
+
+  /* --- The calculator as centerpiece --- */
+  .rd-tool{margin-top:10px;padding:26px 26px 26px;border-radius:20px;
+    background:radial-gradient(760px 260px at 82% -12%,rgba(78,161,255,.09),transparent 60%),var(--panel);
+    border:1px solid rgba(255,255,255,.12);box-shadow:0 34px 80px -34px rgba(0,0,0,.75)}
+  .rd-toolhead{margin:0 0 18px;font:700 15px/1 var(--mono);letter-spacing:.03em;color:var(--ink-dim);
+    text-transform:uppercase}
+  .rd-tool .airport-row{margin-bottom:18px}
+  .rd-tool .da-grid{gap:14px}
+  .rd-tool .icao-status{font-size:12px}
+
+  /* Result: density altitude dominant, PA + ISA as supporting stats */
+  .rd-result{margin-top:22px;display:flex;flex-direction:column;align-items:center;text-align:center;
+    gap:16px;padding:28px 18px 24px;border:1px solid var(--panel-brd);border-radius:16px;
+    background:radial-gradient(240px 140px at 50% 18%,rgba(255,184,77,.15),transparent 70%),rgba(0,0,0,.24)}
+  .rd-da .lbl{font:600 11px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--ink-dim)}
+  .rd-da-v{font:800 clamp(54px,12vw,88px)/1 var(--mono);letter-spacing:-.03em;color:var(--warn);
+    margin-top:10px;text-shadow:0 0 44px rgba(255,184,77,.32);font-variant-numeric:tabular-nums}
+  .rd-da-v .rd-unit{font-size:.38em;color:var(--ink-dim);font-weight:600;letter-spacing:0}
+  .rd-stats{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+  .rd-stat{display:flex;flex-direction:column;gap:6px;min-width:148px;padding:12px 22px;
+    border:1px solid var(--panel-brd);border-radius:12px;background:rgba(255,255,255,.03)}
+  .rd-stat .lbl{font:600 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-dim)}
+  .rd-stat b{font:700 24px/1 var(--mono);color:var(--ink);font-variant-numeric:tabular-nums}
+
+  .rd-cap{margin:14px 0 0;font-size:12.5px;color:var(--ink-dim);text-align:center}
+  .rd-toolnote{margin:16px 0 0;padding-top:14px;border-top:1px solid var(--panel-brd);
+    font:500 12px/1.5 var(--sans);color:var(--ink-dim);text-align:center}
+  .rd-explore-wrap{text-align:center}
+  .rd-explore{display:inline-flex;align-items:center;gap:7px;margin:24px auto 0;
+    font:600 14px/1 var(--sans);color:var(--accent);text-decoration:none;padding:11px 18px;
+    border:1px solid var(--panel-brd);border-radius:11px;transition:.15s}
+  .rd-explore:hover{background:rgba(78,161,255,.14);border-color:var(--accent);color:#dbeaff}
+
+  /* --- Depth-below: definition + formula under the tool --- */
+  .rd-formula{display:flex;flex-direction:column;gap:10px;margin:6px 0 4px;max-width:640px}
+  .rd-frow{display:flex;flex-direction:column;gap:7px;background:rgba(0,0,0,.28);
+    border:1px solid var(--panel-brd);border-radius:12px;padding:13px 16px}
+  .rd-frow span{font:600 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--accent2)}
+  .rd-frow code{font:600 15px/1.4 var(--mono);color:#bcd}
+  .rd-fnote{font:500 13px/1.5 var(--sans);color:var(--ink-dim);padding:4px 2px 0}
+  .rd-worked{margin-top:16px;border-top:1px solid var(--panel-brd)}
+  .rd-worked summary{font:700 15px/1.4 var(--sans);color:var(--ink);cursor:pointer;
+    padding:14px 30px 14px 0;list-style:none;position:relative}
+  .rd-worked summary::-webkit-details-marker{display:none}
+  .rd-worked summary::after{content:'+';position:absolute;right:4px;top:12px;font:400 22px/1 var(--mono);color:var(--accent2)}
+  .rd-worked[open] summary::after{content:'−'}
+  .rd-worked .a{margin:0 0 14px;font-size:14.5px;line-height:1.6;color:#cdd6e6}
+
+  @media(max-width:560px){
+    .rd-hero{padding:26px 0 14px}
+    .rd-tool{padding:18px 15px}
+    .rd-da-v{font-size:clamp(46px,15vw,64px)}
+    .rd-stat{min-width:0;flex:1 1 130px;padding:11px 14px}
+  }

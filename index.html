@@ -50,24 +50,21 @@
   <a class="nav-gh" href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener" aria-label="DensityAlt source code on GitHub" title="Open source — view the code on GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
 </div></nav>
 
-<div id="disclaimerBar" class="disclaimer-bar" hidden>
-  <span><strong>Educational estimates only.</strong> DensityAlt is not for flight planning, dispatch, or medical use — always use your POH and official sources.</span>
-  <button id="disclaimerOk" type="button">Got it</button>
-</div>
-
 <div class="wrap">
 
-  <header class="hero">
+  <header class="hero rd-hero">
     <div class="kicker">Free aviation &amp; aerospace calculators</div>
     <h1>Density Altitude <span>Calculator</span></h1>
-    <p class="hero-sub">Watch the air thin as you climb.</p>
-    <p class="lead">A free <strong>density altitude calculator</strong> with live airport weather, plus an interactive <a href="/atmosphere-explorer">atmosphere &amp; hypoxia explorer</a>, <a href="/pressure-altitude-calculator">pressure altitude</a>, <a href="/oxygen-at-altitude-calculator">oxygen at altitude</a>, <a href="/horsepower-at-altitude">horsepower</a>, <a href="/power-curve">power curve</a>, and <a href="/cabin-altitude-calculator">cabin altitude</a> tools — built for pilots, students &amp; AvGeeks. New here? Start with the guide: <a href="/learn/density-altitude">what is density altitude?</a>.</p>
+    <p class="rd-lede">Type any airport and get <b>density altitude instantly</b> from live weather — plus pressure altitude and ISA deviation, the moment you land on the page.</p>
+    <span class="rd-disc" title="DensityAlt is educational only">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Educational only — always fly your POH &amp; current weather
+    </span>
   </header>
 
-  <section class="da" id="density-altitude">
-    <h2>Density Altitude Calculator</h2>
-    <p class="desc"><strong>Density altitude is pressure altitude corrected for nonstandard temperature</strong> — the altitude in the standard atmosphere where the air density matches what your aircraft is actually flying in: <code>DA = PA + 120 × (OAT − ISA temp)</code>. It's the altitude your aircraft <em>thinks</em> it's at. On a hot day at a high-elevation field, thin air robs lift, propeller thrust, and engine power — even though your altimeter reads field elevation.</p>
-    <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning, dispatch, or weight-and-balance.</strong> Always fly the numbers in your POH and current official weather.</p>
+  <section class="rd-tool" id="density-altitude" aria-labelledby="rd-toolhead">
+    <h2 id="rd-toolhead" class="rd-toolhead">Calculate density altitude</h2>
+
     <div class="field airport-row">
       <label>Airport (ICAO) — autofills field elevation</label>
       <div class="lookup-wrap">
@@ -75,17 +72,18 @@
         <button id="icaoBtn" class="lookup">Look&nbsp;up</button>
         <button id="geoBtn" class="lookup" type="button">Use my location</button>
       </div>
-      <div class="icao-status" id="icaoStatus">Type any ICAO, tap a preset, or use your location. Works worldwide — elevation plus live temp/altimeter for almost any field.</div>
+      <div class="icao-status" id="icaoStatus">Any ICAO worldwide — autofills elevation plus live temp &amp; altimeter.</div>
       <div class="presets apset">
-        <button class="chip apchip" data-icao="L06">Furnace Creek &minus;210 ft (lowest US)</button>
+        <button class="chip apchip" data-icao="L06">Furnace Creek &minus;210 ft</button>
         <button class="chip apchip" data-icao="KDEN">Denver</button>
         <button class="chip apchip" data-icao="KASE">Aspen</button>
-        <button class="chip apchip" data-icao="KLXV">Leadville (highest US)</button>
+        <button class="chip apchip" data-icao="KLXV">Leadville</button>
         <button class="chip apchip" data-icao="SLLP">La Paz</button>
-        <button class="chip apchip" data-icao="VNLK">Lukla (Everest)</button>
-        <button class="chip apchip" data-icao="ZULS">Daocheng (highest, world)</button>
+        <button class="chip apchip" data-icao="VNLK">Lukla</button>
+        <button class="chip apchip" data-icao="ZULS">Daocheng</button>
       </div>
     </div>
+
     <div class="da-grid">
       <div class="field">
         <label>Field Elevation</label>
@@ -94,21 +92,44 @@
       <div class="field">
         <label>Outside Air Temp</label>
         <div class="in"><input id="oat" type="number" value="30"><button type="button" id="oatUnit" class="unit unit-toggle" title="Switch between Celsius and Fahrenheit">°C</button></div>
-        <div class="field-hint">tap the <b>°C</b> button to switch to <b>°F</b></div>
       </div>
       <div class="field">
         <label>Altimeter Setting</label>
         <div class="in"><input id="altim" type="number" step="0.01" value="29.92"><span class="unit">inHg</span></div>
       </div>
     </div>
-    <div class="da-out">
-      <div class="out"><div class="lbl">Pressure Altitude</div><div class="v"><span id="paOut">5,000</span> ft</div></div>
-      <div class="out"><div class="lbl">ISA Temp Deviation</div><div class="v"><span id="isaDev">+20</span> °C</div></div>
-      <div class="out hero"><div class="lbl">Density Altitude</div><div class="v" style="color:var(--warn)"><span id="daOut">7,400</span> ft</div></div>
+
+    <div class="rd-result">
+      <div class="rd-da">
+        <div class="lbl">Density Altitude</div>
+        <div class="rd-da-v"><span id="daOut">7,400</span> <span class="rd-unit">ft</span></div>
+      </div>
+      <div class="rd-stats">
+        <div class="rd-stat"><span class="lbl">Pressure Altitude</span><b><span id="paOut">5,000</span> ft</b></div>
+        <div class="rd-stat"><span class="lbl">ISA Deviation</span><b><span id="isaDev">+20</span> °C</b></div>
+      </div>
     </div>
+
     <canvas id="daChart" class="box" width="900" height="190"></canvas>
-    <p class="cap" style="margin:8px 0 0">Drag the chart to set temperature — at this field and altimeter, density altitude climbs about 120 ft for every °C above standard.</p>
+    <p class="rd-cap">Drag the chart to set temperature — density altitude climbs ~120 ft per °C above standard.</p>
     <div class="da-note" id="daNote"></div>
+
+    <p class="rd-toolnote">Educational estimates only — not for flight planning, dispatch, or weight-and-balance.</p>
+  </section>
+
+  <div class="rd-explore-wrap"><a class="rd-explore" href="#more-tools">Explore all 12 calculators →</a></div>
+
+  <section class="da" id="how-it-works">
+    <h2>How density altitude works</h2>
+    <p class="desc"><strong>Density altitude is pressure altitude corrected for nonstandard temperature</strong> — the altitude in the standard atmosphere where the air density matches what your aircraft is actually flying in. It's the altitude your aircraft <em>thinks</em> it's at. On a hot day at a high-elevation field, thin air robs lift, propeller thrust, and engine power — even though your altimeter still reads field elevation — which is why aircraft climb and accelerate so poorly when it's high and hot.</p>
+    <div class="rd-formula">
+      <div class="rd-frow"><span>1 · Pressure altitude</span><code>PA = field elevation + (29.92 − altimeter) × 1000</code></div>
+      <div class="rd-frow"><span>2 · Density altitude</span><code>DA = PA + 120 × (OAT − ISA temp)</code></div>
+      <div class="rd-fnote">ISA temperature = 15&nbsp;°C − about 2&nbsp;°C per 1,000&nbsp;ft of pressure altitude.</div>
+    </div>
+    <details class="rd-worked"><summary>Worked example — 5,000&nbsp;ft field, 30&nbsp;°C, 29.92&quot;</summary>
+      <p class="a">The altimeter is standard, so pressure altitude = the 5,000&nbsp;ft field elevation. ISA temperature at 5,000&nbsp;ft ≈ 15 − 2×5 = 5&nbsp;°C, so 30&nbsp;°C is 25&nbsp;°C warmer than standard (ISA+25). Density altitude = 5,000 + 120 × 25 = <b>8,000&nbsp;ft</b> — your aircraft performs as if it were most of the way to 8,000&nbsp;ft while parked at a 5,000&nbsp;ft field. The calculator above shows ≈7,988&nbsp;ft using the exact ISA lapse rate.</p>
+    </details>
   </section>
 
   <section class="da" id="more-tools">
