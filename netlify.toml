@@ -36,6 +36,50 @@
   from = "/learn/density-altitude"
   to = "/learn/density-altitude.html"
   status = 200
+[[redirects]]
+  from = "/learn/density-altitude-takeoff-performance"
+  to = "/learn/density-altitude-takeoff-performance.html"
+  status = 200
+[[redirects]]
+  from = "/learn/types-of-altitude"
+  to = "/learn/types-of-altitude.html"
+  status = 200
+[[redirects]]
+  from = "/learn/region-of-reversed-command"
+  to = "/learn/region-of-reversed-command.html"
+  status = 200
+[[redirects]]
+  from = "/learn/faa-oxygen-requirements"
+  to = "/learn/faa-oxygen-requirements.html"
+  status = 200
+[[redirects]]
+  from = "/pressure-altitude-calculator"
+  to = "/pressure-altitude-calculator.html"
+  status = 200
+[[redirects]]
+  from = "/oxygen-at-altitude-calculator"
+  to = "/oxygen-at-altitude-calculator.html"
+  status = 200
+[[redirects]]
+  from = "/cloud-base-calculator"
+  to = "/cloud-base-calculator.html"
+  status = 200
+[[redirects]]
+  from = "/isa-deviation-calculator"
+  to = "/isa-deviation-calculator.html"
+  status = 200
+[[redirects]]
+  from = "/freezing-level-calculator"
+  to = "/freezing-level-calculator.html"
+  status = 200
+[[redirects]]
+  from = "/true-airspeed-calculator"
+  to = "/true-airspeed-calculator.html"
+  status = 200
+[[redirects]]
+  from = "/pivotal-altitude-calculator"
+  to = "/pivotal-altitude-calculator.html"
+  status = 200
 
 # Redirect the .html forms to the canonical clean URLs (avoid duplicate content)
 [[redirects]]
@@ -65,6 +109,50 @@
 [[redirects]]
   from = "/learn/density-altitude.html"
   to = "/learn/density-altitude"
+  status = 301
+[[redirects]]
+  from = "/learn/density-altitude-takeoff-performance.html"
+  to = "/learn/density-altitude-takeoff-performance"
+  status = 301
+[[redirects]]
+  from = "/learn/types-of-altitude.html"
+  to = "/learn/types-of-altitude"
+  status = 301
+[[redirects]]
+  from = "/learn/region-of-reversed-command.html"
+  to = "/learn/region-of-reversed-command"
+  status = 301
+[[redirects]]
+  from = "/learn/faa-oxygen-requirements.html"
+  to = "/learn/faa-oxygen-requirements"
+  status = 301
+[[redirects]]
+  from = "/pressure-altitude-calculator.html"
+  to = "/pressure-altitude-calculator"
+  status = 301
+[[redirects]]
+  from = "/oxygen-at-altitude-calculator.html"
+  to = "/oxygen-at-altitude-calculator"
+  status = 301
+[[redirects]]
+  from = "/cloud-base-calculator.html"
+  to = "/cloud-base-calculator"
+  status = 301
+[[redirects]]
+  from = "/isa-deviation-calculator.html"
+  to = "/isa-deviation-calculator"
+  status = 301
+[[redirects]]
+  from = "/freezing-level-calculator.html"
+  to = "/freezing-level-calculator"
+  status = 301
+[[redirects]]
+  from = "/true-airspeed-calculator.html"
+  to = "/true-airspeed-calculator"
+  status = 301
+[[redirects]]
+  from = "/pivotal-altitude-calculator.html"
+  to = "/pivotal-altitude-calculator"
   status = 301
 
 [[redirects]]

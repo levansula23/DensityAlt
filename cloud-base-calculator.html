@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#05070f">
+<title>Cloud Base Calculator — Temp/Dew Point Spread | DensityAlt</title>
+<meta name="description" content="Estimate the cumulus cloud base from temperature and dew point: spread ÷ 2.5°C × 1,000 ft. Instant AGL and MSL results with the formula, examples, and FAQ.">
+<link rel="canonical" href="https://densityalt.com/cloud-base-calculator">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DensityAlt">
+<meta property="og:url" content="https://densityalt.com/cloud-base-calculator">
+<meta property="og:title" content="Cloud Base Calculator — From Temperature and Dew Point">
+<meta property="og:description" content="Enter temperature and dew point to estimate the cumulus cloud base in feet AGL and MSL — with a visual, the formula, and worked examples for pilots.">
+<meta property="og:image" content="https://densityalt.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cloud Base Calculator — From Temperature and Dew Point">
+<meta name="twitter:description" content="Enter temperature and dew point to estimate the cumulus cloud base in feet AGL and MSL — with a visual, the formula, and worked examples for pilots.">
+<meta name="twitter:image" content="https://densityalt.com/og-image.png">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<nav class="topnav"><div class="navin">
+  <a class="brand" href="/" style="text-decoration:none"><img src="/favicon.svg" alt=""><b>DensityAlt</b></a>
+  <div class="navlinks">
+    <a class="nl" href="/atmosphere-explorer">Explorer</a>
+    <a class="nl" href="/">Density Altitude</a>
+    <div class="nl-drop">
+      <button type="button" class="nl-trigger" aria-haspopup="true">Calculators<span class="caret" aria-hidden="true"></span></button>
+      <div class="nl-menu">
+        <a class="nl" href="/pressure-altitude-calculator">Pressure Altitude</a>
+        <a class="nl" href="/true-airspeed-calculator">True Airspeed</a>
+        <a class="nl" href="/crosswind-calculator">Crosswind</a>
+        <a class="nl" href="/takeoff-landing-distance">Takeoff &amp; Landing</a>
+        <a class="nl" href="/cloud-base-calculator">Cloud Base</a>
+        <a class="nl" href="/freezing-level-calculator">Freezing Level</a>
+        <a class="nl" href="/isa-deviation-calculator">ISA Deviation</a>
+        <a class="nl" href="/oxygen-at-altitude-calculator">Oxygen at Altitude</a>
+        <a class="nl" href="/pivotal-altitude-calculator">Pivotal Altitude</a>
+        <a class="nl" href="/horsepower-at-altitude">Horsepower</a>
+        <a class="nl" href="/power-curve">Power Curve</a>
+        <a class="nl" href="/cabin-altitude-calculator">Cabin Altitude</a>
+      </div>
+    </div>
+    <a class="nl" href="/learn/">Learn</a>
+    <a class="nl" href="/#about">About</a>
+  </div>
+  <a class="nav-gh" href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener" aria-label="DensityAlt source code on GitHub" title="Open source — view the code on GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+</div></nav>
+
+<div id="disclaimerBar" class="disclaimer-bar" hidden>
+  <span><strong>Educational estimates only.</strong> DensityAlt is not for flight planning, dispatch, or medical use — always use your POH and official sources.</span>
+  <button id="disclaimerOk" type="button">Got it</button>
+</div>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="kicker">Free aviation &amp; aerospace calculators</div>
+    <h1>Cloud Base <span>Calculator</span></h1>
+    <p class="hero-sub">Where will the cumulus form today?</p>
+    <p class="lead">Rising air cools at about 2.5&nbsp;°C per 1,000 ft faster than its dew point falls — so the gap between temperature and dew point tells you where cloud forms. Enter the surface temperature and dew point (straight off any METAR) to estimate the cumulus cloud base in feet AGL and MSL. Pairs naturally with the <a href="/">density altitude calculator</a> for a same-day performance picture.</p>
+  </header>
+
+  <section class="da" id="cloud-base">
+    <h2>Cloud Base Calculator</h2>
+    <p class="desc">Temperature and dew point are in every METAR (e.g. <b>25/13</b> = 25&nbsp;°C over a 13&nbsp;°C dew point). Add your field elevation to get the base in MSL too.</p>
+    <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning or dispatch.</strong> This rule estimates fair-weather cumulus bases; verify ceilings with METARs, TAFs, and area forecasts.</p>
+    <div class="da-grid">
+      <div class="field">
+        <label>Surface Temperature</label>
+        <div class="in"><input id="cbT" type="number" value="25"><button type="button" id="cbUnit" class="unit unit-toggle" title="Switch between Celsius and Fahrenheit">°C</button></div>
+      </div>
+      <div class="field">
+        <label>Dew Point</label>
+        <div class="in"><input id="cbTd" type="number" value="13"><button type="button" id="cbUnit2" class="unit unit-toggle" title="Switch between Celsius and Fahrenheit">°C</button></div>
+      </div>
+      <div class="field">
+        <label>Field Elevation <span style="font-weight:400">(optional)</span></label>
+        <div class="in"><input id="cbElev" type="text" inputmode="numeric" value="0"><span class="unit">ft</span></div>
+      </div>
+    </div>
+    <div class="da-out">
+      <div class="out hero"><div class="lbl">Cloud Base</div><div class="v" style="color:var(--accent2)"><span id="cbAgl">4,800</span> ft AGL</div></div>
+      <div class="out"><div class="lbl">Cloud Base MSL</div><div class="v"><span id="cbMsl">4,800</span> ft</div></div>
+      <div class="out"><div class="lbl">Temp / Dew Point Spread</div><div class="v"><span id="cbSpread">12.0 °C</span></div></div>
+    </div>
+    <canvas id="cbChart" class="box" width="900" height="280" aria-label="Estimated cloud base height diagram"></canvas>
+    <p class="cap" style="margin:8px 0 0">Estimated cumulus base above the ground for your temperature/dew point spread.</p>
+    <div class="da-note" id="cbNote"></div>
+  </section>
+
+  <section class="da" id="formula">
+    <h2>The cloud base formula</h2>
+    <p class="desc"><strong>Cloud base (ft AGL) ≈ (temperature − dew point) ÷ 2.5&nbsp;°C × 1,000</strong> — or ÷ 4.4 when working in °F. It works because unsaturated rising air cools at the dry adiabatic lapse rate (~3&nbsp;°C per 1,000 ft) while its dew point falls only ~0.5&nbsp;°C per 1,000 ft; the two converge at ~2.5&nbsp;°C per 1,000 ft, and where they meet, water vapor condenses into cloud.</p>
+    <p class="desc"><strong>Worked example:</strong> METAR reads 25/13. Spread = 12&nbsp;°C. Base ≈ 12 ÷ 2.5 × 1,000 = <strong>4,800 ft AGL</strong>. Over a 1,200 ft field elevation, that's a base near <strong>6,000 ft MSL</strong> — matching how ATIS and METARs report ceilings AGL while your altimeter reads MSL.</p>
+    <p class="desc">The rule only fits <strong>convective (cumulus) cloud in well-mixed daytime air</strong>. Stratus, frontal lifting, upslope cloud, and nighttime inversions don't obey it — that's why a summer afternoon forecast works beautifully and a marine-layer morning doesn't.</p>
+  </section>
+
+  <section class="da faq" id="faq">
+    <h2>Frequently asked questions</h2>
+    <div class="faqlist">
+      <details class="faq-item"><summary>How do you calculate cloud base from temperature and dew point?</summary>
+      <p class="a">Divide the temperature/dew point spread in °C by 2.5 and multiply by 1,000 to get the estimated cumulus base in feet above ground (in °F, divide by 4.4). A 10&nbsp;°C spread puts the base near 4,000 ft AGL. Add field elevation for the MSL value.</p></details>
+      <details class="faq-item"><summary>Is the calculated cloud base AGL or MSL?</summary>
+      <p class="a">The formula gives height above the ground (AGL), because the spread is measured at the surface. Add the field elevation to convert to MSL — the number that matches your altimeter. METAR and ATIS ceilings are reported AGL.</p></details>
+      <details class="faq-item"><summary>Why doesn't the estimate match the METAR ceiling?</summary>
+      <p class="a">The rule assumes convectively rising surface air, so it predicts fair-weather cumulus bases. If cloud formed by frontal lifting, stratus, or an inversion sits overhead, the real ceiling can be far from the estimate. Treat it as a planning cross-check, never a substitute for reported ceilings.</p></details>
+      <details class="faq-item"><summary>What happens when the spread is zero?</summary>
+      <p class="a">Temperature at the dew point means saturated surface air — fog or a ceiling at or near the surface. Watch converging temperature/dew point pairs at dusk: a closing spread is a classic fog setup.</p></details>
+    </div>
+  </section>
+
+  <section class="da" id="more-tools">
+    <h2>More free altitude tools</h2>
+    <p class="desc">DensityAlt is a set of free, no-signup aviation calculators. Explore the rest:</p>
+    <div class="grid">
+      <a class="card" href="/freezing-level-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Freezing Level</div>
+        <div class="pct">Estimate the 0&nbsp;°C altitude from surface temperature.</div></a>
+      <a class="card" href="/" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Density Altitude</div>
+        <div class="pct">The altitude your aircraft actually performs at — with live METAR.</div></a>
+      <a class="card" href="/crosswind-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Crosswind Calculator</div>
+        <div class="pct">Split the wind into crosswind &amp; headwind on a runway diagram.</div></a>
+      <a class="card" href="/takeoff-landing-distance" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Takeoff &amp; Landing Distance</div>
+        <div class="pct">How density altitude stretches your ground roll &amp; rollout.</div></a>
+      <a class="card" href="/isa-deviation-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">ISA Deviation</div>
+        <div class="pct">Standard temperature at altitude and your ISA± number.</div></a>
+      <a class="card" href="/atmosphere-explorer" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Atmosphere &amp; Hypoxia Explorer</div>
+        <div class="pct">Drag an aircraft up and watch pressure, oxygen &amp; SpO₂ fall.</div></a>
+    </div>
+  </section>
+
+  <footer>
+    <h4>How the numbers are computed</h4>
+    <div class="calcrefs">
+      <div><b>Cloud base</b> — <code>base (ft AGL) ≈ spread ÷ 2.5 °C × 1,000</code> (÷ 4.4 °F): the dry adiabatic lapse rate (~3 °C/1,000 ft) converging with the dew-point lapse (~0.5 °C/1,000 ft) in rising unsaturated air.</div>
+      <div><b>Atmosphere</b> — International Standard Atmosphere (ISA): the barometric formula in the troposphere (1.98&nbsp;°C / 1000&nbsp;ft lapse) and the isothermal layer above the tropopause (~36,089&nbsp;ft).</div>
+      <div><b>References</b> — FAA <i>Pilot's Handbook of Aeronautical Knowledge</i> (FAA-H-8083-25) and <i>Aviation Weather Handbook</i> (FAA-H-8083-28) for lapse rates and convective cloud formation.</div>
+    </div>
+    <p class="disclaim">Educational tool. Estimates convective cloud bases only — verify with official weather products. Not for operational flight-planning use.</p>
+    <p class="ghsrc"><strong>Open source.</strong> DensityAlt is built in the open — <a href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener">view the code on GitHub</a> to see exactly how every number is computed.</p>
+    <p class="rms">Made with <a href="https://readymadesites.com/" rel="noopener">ReadyMadeSites™</a> — custom calculators, interactive tools &amp; SEO-ready websites that rank.</p>
+  </footer>
+
+</div>
+
+<script src="/app.js"></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "DensityAlt Cloud Base Calculator",
+  "url": "https://densityalt.com/cloud-base-calculator",
+  "description": "Cloud base calculator using the temperature/dew point spread method: estimated cumulus base in feet AGL and MSL with a visual diagram.",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Any (web browser)",
+  "browserRequirements": "Requires JavaScript",
+  "isAccessibleForFree": true,
+  "author": {"@type": "Person", "name": "Levan Sulakvelidze", "description": "Instrument-rated private pilot", "sameAs": ["https://www.linkedin.com/in/levansula", "https://www.instagram.com/levansula/", "https://github.com/levansula23"]},
+  "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+  "featureList": [
+    "Cloud base in feet AGL from temperature and dew point",
+    "MSL cloud base with field elevation",
+    "Celsius and Fahrenheit input",
+    "Visual cloud-height diagram",
+    "Fog / saturation detection"
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"How do you calculate cloud base from temperature and dew point?","acceptedAnswer":{"@type":"Answer","text":"Divide the temperature/dew point spread in Celsius by 2.5 and multiply by 1,000 to get the estimated cumulus base in feet above ground (in Fahrenheit, divide by 4.4). A 10-degree-Celsius spread puts the base near 4,000 feet AGL. Add field elevation for the MSL value."}},
+    {"@type":"Question","name":"Is the calculated cloud base AGL or MSL?","acceptedAnswer":{"@type":"Answer","text":"The formula gives height above the ground (AGL), because the spread is measured at the surface. Add the field elevation to convert to MSL — the number that matches your altimeter. METAR and ATIS ceilings are reported AGL."}},
+    {"@type":"Question","name":"Why doesn't the estimate match the METAR ceiling?","acceptedAnswer":{"@type":"Answer","text":"The rule assumes convectively rising surface air, so it predicts fair-weather cumulus bases. If cloud formed by frontal lifting, stratus, or an inversion sits overhead, the real ceiling can be far from the estimate. Treat it as a planning cross-check, never a substitute for reported ceilings."}},
+    {"@type":"Question","name":"What happens when the spread is zero?","acceptedAnswer":{"@type":"Answer","text":"Temperature at the dew point means saturated surface air — fog or a ceiling at or near the surface. A closing temperature/dew point spread at dusk is a classic fog setup."}}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Density Altitude Calculator","item":"https://densityalt.com/"},
+    {"@type":"ListItem","position":2,"name":"Cloud Base Calculator","item":"https://densityalt.com/cloud-base-calculator"}
+  ]
+}
+</script>
+</body>
+</html>

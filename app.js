@@ -253,11 +253,7 @@ function fetchT(url,ms){ const c=new AbortController(); const t=setTimeout(()=>c
 const HOSTED=(location.protocol==='http:'||location.protocol==='https:');
 function wxURL(src,ids){ return HOSTED ? '/api/wx?src='+src+'&ids='+encodeURIComponent(ids)
   : 'https://aviationweather.gov/api/data/'+src+'?ids='+encodeURIComponent(ids)+'&format=json'; }
-async function lookupICAO(){
-  const raw=$('icao').value.trim().toUpperCase();
-  const st=$('icaoStatus');
-  if(!raw){ st.className='icao-status'; st.textContent=''; return; }
-  st.className='icao-status loading'; st.innerHTML='<span class="spin"></span>Looking up '+raw+' — fetching live elevation, temperature &amp; altimeter…';
+async function wxFetchStation(raw){
   let elevFt=null, tempC=null, altInHg=null, name=null, lat=null, lon=null;
 
   try{
@@ -296,6 +292,15 @@ async function lookupICAO(){
     }catch(e){}
   }
 
+  return {elevFt,tempC,altInHg,name};
+}
+
+async function lookupICAO(){
+  const raw=$('icao').value.trim().toUpperCase();
+  const st=$('icaoStatus');
+  if(!raw){ st.className='icao-status'; st.textContent=''; return; }
+  st.className='icao-status loading'; st.innerHTML='<span class="spin"></span>Looking up '+raw+' — fetching live elevation, temperature &amp; altimeter…';
+  const {elevFt,tempC,altInHg,name}=await wxFetchStation(raw);
   const got=[], missing=[];
   if(elevFt!=null){ $('elev').value=fmt(elevFt); got.push('elevation '+Math.round(elevFt).toLocaleString('en-US')+' ft'); } else missing.push('elevation');
   if(tempC!=null){ $('oat').value=Math.round(tempC); got.push('temp '+Math.round(tempC)+'°C'); } else missing.push('temp');
@@ -981,6 +986,311 @@ function setupPC(){
   return true;
 }
 
+// ---- Pressure altitude calculator: altimeter setting + field elevation -> PA (+ DA) ----
+let pacUnit='inHg', pacTempU='C';
+function isaTempC(paFt){ return paFt<=36089 ? 15-1.98*(paFt/1000) : -56.5; }
+function calcPAC(){
+  const elev=commaInt($('pacElev').value);
+  const rawSet=parseFloat($('pacSet').value);
+  const inHg=isNaN(rawSet)?29.92:(pacUnit==='hPa'?rawSet*0.0295300:rawSet);
+  const corr=(29.92-inHg)*1000;
+  const pa=elev+corr;
+  $('pacPA').textContent=fmt(pa);
+  $('pacCorr').textContent=(corr>=0?'+':'')+fmt(corr);
+  const isaT=isaTempC(pa);
+  let oat=parseFloat($('pacOat').value);
+  if(pacTempU==='F'&&!isNaN(oat)) oat=(oat-32)*5/9;
+  let daTxt;
+  if(isNaN(oat)){ $('pacDA').textContent='—';
+    daTxt=' Add the outside air temperature to also get density altitude.'; }
+  else { const da=pa+120*(oat-isaT); $('pacDA').textContent=fmt(da);
+    daTxt=' With OAT '+Math.round(pacTempU==='F'?oat*9/5+32:oat)+'°'+pacTempU+' (ISA '+(oat-isaT>=0?'+':'')+Math.round(oat-isaT)+'), density altitude is <strong>'+fmt(da)+' ft</strong> — the altitude your aircraft <em>performs</em> at.'; }
+  $('pacNote').innerHTML='PA = '+fmt(elev)+' ft + (29.92 − '+inHg.toFixed(2)+') × 1,000 = <strong>'+fmt(pa)+' ft</strong>.'+daTxt;
+}
+async function lookupPAC(){
+  const raw=$('pacIcao').value.trim().toUpperCase();
+  const st=$('pacIcaoStatus');
+  if(!raw){ st.className='icao-status'; st.textContent=''; return; }
+  st.className='icao-status loading'; st.innerHTML='<span class="spin"></span>Looking up '+raw+' — fetching live elevation, altimeter &amp; temperature…';
+  const {elevFt,tempC,altInHg,name}=await wxFetchStation(raw);
+  const got=[], missing=[];
+  if(elevFt!=null){ $('pacElev').value=fmt(elevFt); got.push('elevation '+Math.round(elevFt).toLocaleString('en-US')+' ft'); } else missing.push('elevation');
+  if(altInHg!=null){ $('pacSet').value=pacUnit==='hPa'?Math.round(altInHg/0.0295300):altInHg.toFixed(2); got.push('altimeter '+altInHg.toFixed(2)+'"'); } else missing.push('altimeter');
+  if(tempC!=null){ $('pacOat').value=pacTempU==='F'?Math.round(tempC*9/5+32):Math.round(tempC); got.push('temp '+Math.round(tempC)+'°C'); } else missing.push('temp');
+  calcPAC();
+  if(!got.length){
+    st.className='icao-status err';
+    st.textContent='Couldn’t reach live data for '+raw+'. '+(HOSTED?'The station may be unlisted or the weather service is momentarily down.':'Live data needs the hosted site.')+' Enter values manually.';
+    return;
+  }
+  st.className='icao-status '+(missing.length?'info':'ok');
+  st.innerHTML='<strong>'+raw+'</strong>'+(name?' · '+name:'')+' — set '+got.join(', ')+'.'+(missing.length?' Enter '+missing.join(' & ')+' manually.':'');
+}
+function setupPAC(){
+  if(!$('pacPA')) return false;
+  ['pacElev','pacSet','pacOat'].forEach(id=>$(id).addEventListener('input',calcPAC));
+  $('pacUnit').addEventListener('click',()=>{ const i=$('pacSet'); const v=parseFloat(i.value);
+    if(pacUnit==='inHg'){ pacUnit='hPa'; if(!isNaN(v)) i.value=Math.round(v/0.0295300); $('pacUnit').textContent='hPa'; }
+    else { pacUnit='inHg'; if(!isNaN(v)) i.value=(v*0.0295300).toFixed(2); $('pacUnit').textContent='inHg'; }
+    calcPAC(); });
+  $('pacTempUnit').addEventListener('click',()=>{ const i=$('pacOat'); const v=parseFloat(i.value);
+    if(pacTempU==='C'){ pacTempU='F'; if(!isNaN(v)) i.value=Math.round(v*9/5+32); $('pacTempUnit').textContent='°F'; }
+    else { pacTempU='C'; if(!isNaN(v)) i.value=Math.round((v-32)*5/9); $('pacTempUnit').textContent='°C'; }
+    calcPAC(); });
+  $('pacBtn').addEventListener('click',lookupPAC);
+  $('pacIcao').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();lookupPAC();}});
+  $('pacIcao').addEventListener('blur',lookupPAC);
+  $('pacElev').addEventListener('blur',()=>{ const v=$('pacElev').value.trim(); if(v!=='') $('pacElev').value=fmt(commaInt(v)); });
+  document.querySelectorAll('.pacchip').forEach(c=>c.addEventListener('click',()=>{ $('pacIcao').value=c.dataset.icao; lookupPAC(); }));
+  calcPAC();
+  return true;
+}
+
+// ---- Oxygen at altitude: pressure, effective O2 %, PO2, estimated SpO2, TUC ----
+let o2Unit='ft', o2Cv, o2c, o2Dim, o2CurFt=8000;
+function calcO2(){
+  const v=commaInt($('o2Alt').value);
+  let ft=o2Unit==='m'?v*FT_PER_M:v;
+  ft=Math.max(-1400,Math.min(40000,ft));
+  o2CurFt=ft;
+  const {P}=isa(ft/FT_PER_M);
+  const Pmm=P*MMHG_PER_PA;
+  const eff=20.95*P/P0;
+  const po2=FIO2*Pmm;
+  const pao2=Math.max(0,FIO2*(Pmm-PH2O)-paCO2(ft)/RQ);
+  const s=spo2(pao2);
+  const pct=Math.round(P/P0*100);
+  $('o2Eff').textContent=eff.toFixed(1);
+  $('o2Spo2').textContent=Math.round(s);
+  $('o2Po2').textContent=Math.round(po2);
+  $('o2Press').textContent=Math.round(P/100)+' hPa · '+(P/PA_PER_INHG).toFixed(2)+'"';
+  const t=tuc(ft);
+  let feel;
+  if(ft<5000) feel='Essentially no effect for healthy people at rest.';
+  else if(ft<8000) feel='Mild — slight breathlessness on exertion; night vision starts to degrade above ~5,000 ft.';
+  else if(ft<10000) feel='About an airliner cabin at cruise. Noticeable on exertion; mild fatigue or headache possible after hours.';
+  else if(ft<12500) feel='Judgment and night vision measurably degrade with time — the FAA recommends supplemental oxygen above 10,000 ft.';
+  else if(ft<14000) feel='FAR 91.211 territory: required crew oxygen after 30 minutes here. Headache, fatigue, and impaired thinking are common.';
+  else if(ft<18000) feel='Most unacclimatized people develop clear hypoxia symptoms — crew oxygen is required continuously above 14,000 ft.';
+  else if(ft<25000) feel='Severe hypoxia. Acclimatized mountaineers function here; unacclimatized people deteriorate quickly.';
+  else feel='Extreme altitude — consciousness fades rapidly without supplemental oxygen.';
+  $('o2Note').innerHTML='At <strong>'+fmt(ft)+' ft</strong> ('+fmt(ft/FT_PER_M)+' m) each breath contains <strong>'+pct+'%</strong> of the oxygen molecules it holds at sea level — like breathing <strong>'+eff.toFixed(1)+'% oxygen</strong> air. Estimated SpO₂ for an unacclimatized adult ≈ <strong>'+Math.round(s)+'%</strong>. '+feel+(t?' <strong>Time of useful consciousness ≈ '+t+'.</strong>':'');
+  drawO2(ft,s);
+}
+function drawO2(ft,sNow){
+  const w=o2Dim.w,h=o2Dim.h,padL=44,padR=14,padT=14,padB=26,aMax=30000;
+  o2c.clearRect(0,0,w,h);
+  const X=a=>padL+(a/aMax)*(w-padL-padR);
+  const Y=s=>padT+(1-(s-40)/60)*(h-padT-padB);
+  o2c.fillStyle='rgba(255,77,77,.07)';
+  o2c.fillRect(padL,Y(80),w-padL-padR,Y(40)-Y(80));
+  o2c.font='9px ui-monospace,Menlo,monospace';o2c.textBaseline='alphabetic';
+  o2c.strokeStyle='rgba(255,255,255,.08)';o2c.fillStyle='rgba(255,255,255,.5)';o2c.lineWidth=1;
+  for(let s=50;s<=100;s+=10){ const yy=Y(s); o2c.beginPath();o2c.moveTo(padL,yy);o2c.lineTo(w-padR,yy);o2c.stroke(); o2c.fillText(s+'%',8,yy+3); }
+  for(let a=0;a<=aMax;a+=5000){ o2c.fillText((a/1000)+'k',X(a)-6,h-8); }
+  o2c.fillStyle='rgba(255,255,255,.55)';o2c.fillText('altitude ft',w-56,h-8);
+  o2c.fillStyle='rgba(255,77,77,.6)';o2c.fillText('hypoxia danger',padL+6,Y(80)+11);
+  o2c.strokeStyle='#7cc8ff';o2c.lineWidth=2.4;o2c.beginPath();
+  for(let a=0;a<=aMax;a+=250){
+    const {P}=isa(a/FT_PER_M), Pmm=P*MMHG_PER_PA;
+    const s=spo2(Math.max(0,FIO2*(Pmm-PH2O)-paCO2(a)/RQ));
+    const xx=X(a),yy=Y(Math.max(40,s));
+    if(a===0)o2c.moveTo(xx,yy);else o2c.lineTo(xx,yy);
+  }
+  o2c.stroke();
+  const mft=Math.max(0,Math.min(aMax,ft)), mx=X(mft), my=Y(Math.max(40,sNow));
+  o2c.strokeStyle='rgba(255,255,255,.25)';o2c.setLineDash([3,3]);o2c.beginPath();o2c.moveTo(mx,h-padB);o2c.lineTo(mx,my);o2c.lineTo(padL,my);o2c.stroke();o2c.setLineDash([]);
+  o2c.fillStyle='#ffb84d';o2c.shadowColor='#ffb84d';o2c.shadowBlur=10;o2c.beginPath();o2c.arc(mx,my,5,0,7);o2c.fill();o2c.shadowBlur=0;
+  o2c.font='700 11px ui-monospace,Menlo,monospace';o2c.fillStyle='#ffd24d';
+  const lbl=Math.round(sNow)+'% SpO₂',tw=o2c.measureText(lbl).width;
+  o2c.fillText(lbl,Math.min(mx+8,w-padR-tw),Math.max(padT+10,my-7));
+}
+function setupO2(){
+  o2Cv=$('o2Chart'); if(!o2Cv) return false;
+  o2c=o2Cv.getContext('2d'); o2Dim=fit(o2Cv,o2c);
+  $('o2Alt').addEventListener('input',calcO2);
+  $('o2Alt').addEventListener('blur',()=>{ const v=$('o2Alt').value.trim(); if(v!=='') $('o2Alt').value=fmt(commaInt(v)); });
+  $('o2UnitBtn').addEventListener('click',()=>{ const i=$('o2Alt');
+    if(o2Unit==='ft'){ o2Unit='m'; i.value=fmt(o2CurFt/FT_PER_M); $('o2UnitBtn').textContent='m'; }
+    else { o2Unit='ft'; i.value=fmt(o2CurFt); $('o2UnitBtn').textContent='ft'; }
+    calcO2(); });
+  document.querySelectorAll('.o2chip').forEach(c=>c.addEventListener('click',()=>{ const ft=+c.dataset.ft; $('o2Alt').value=fmt(o2Unit==='m'?ft/FT_PER_M:ft); calcO2(); }));
+  (function(){ let drag=false;
+    const toAlt=e=>{ const r=o2Cv.getBoundingClientRect(),padL=44,padR=14; let f=(e.clientX-r.left-padL)/(r.width-padL-padR); f=Math.max(0,Math.min(1,f)); return Math.round(f*30000/100)*100; };
+    const set=e=>{ const ft=toAlt(e); $('o2Alt').value=fmt(o2Unit==='m'?ft/FT_PER_M:ft); calcO2(); };
+    o2Cv.addEventListener('pointerdown',e=>{drag=true;o2Cv.setPointerCapture(e.pointerId);set(e);});
+    o2Cv.addEventListener('pointermove',e=>{if(drag)set(e);});
+    o2Cv.addEventListener('pointerup',()=>drag=false);
+  })();
+  calcO2();
+  return true;
+}
+
+// ---- Cloud base: temperature / dew point spread ----
+let cbTempU='C', cbCv, cldc, cldDim;
+function calcCB(){
+  const tRaw=parseFloat($('cbT').value), tdRaw=parseFloat($('cbTd').value);
+  const elev=commaInt($('cbElev').value);
+  if(isNaN(tRaw)||isNaN(tdRaw)){ $('cbAgl').textContent='—'; $('cbMsl').textContent='—'; $('cbSpread').textContent='—';
+    $('cbNote').innerHTML='Enter the surface temperature and dew point to estimate the cumulus cloud base.'; drawCB(null,elev); return; }
+  let tC=tRaw, tdC=tdRaw;
+  if(cbTempU==='F'){ tC=(tRaw-32)*5/9; tdC=(tdRaw-32)*5/9; }
+  const spread=tC-tdC;
+  $('cbSpread').textContent=(cbTempU==='F'?(spread*9/5).toFixed(1)+' °F':spread.toFixed(1)+' °C');
+  if(spread<=0){ $('cbAgl').textContent='0'; $('cbMsl').textContent=fmt(elev);
+    $('cbNote').innerHTML='Temperature is at or below the dew point — the air is saturated at the surface. Expect <strong>fog or a very low ceiling</strong>, not a usable VFR cloud base.'; drawCB(0,elev); return; }
+  const agl=spread/2.5*1000;
+  const msl=agl+elev;
+  $('cbAgl').textContent=fmt(agl); $('cbMsl').textContent=fmt(msl);
+  $('cbNote').innerHTML='Estimated cumulus base ≈ <strong>'+fmt(agl)+' ft AGL</strong>'+(elev?' (<strong>'+fmt(msl)+' ft MSL</strong> with your '+fmt(elev)+' ft field elevation)':'')+'. Formula: spread ÷ 2.5 °C × 1,000 ft (÷ 4.4 °F). It estimates <em>convective</em> (cumulus) bases in well-mixed daytime air — stratus, frontal cloud, and inversions don’t follow it. Always check METARs and area forecasts.';
+  drawCB(agl,elev);
+}
+function drawCB(agl,elev){
+  const w=cldDim.w,h=cldDim.h,padL=44,padR=14,padT=14,padB=26,aMax=12000;
+  cldc.clearRect(0,0,w,h);
+  const Y=a=>padT+(1-Math.max(0,Math.min(aMax,a))/aMax)*(h-padT-padB);
+  cldc.font='9px ui-monospace,Menlo,monospace';cldc.textBaseline='alphabetic';
+  cldc.strokeStyle='rgba(255,255,255,.08)';cldc.fillStyle='rgba(255,255,255,.5)';cldc.lineWidth=1;
+  for(let a=0;a<=aMax;a+=2000){ const yy=Y(a); cldc.beginPath();cldc.moveTo(padL,yy);cldc.lineTo(w-padR,yy);cldc.stroke(); if(a<aMax) cldc.fillText(fmt(a),6,yy+3); }
+  cldc.fillStyle='rgba(255,255,255,.55)';cldc.fillText('ft AGL',6,padT+3);
+  cldc.fillStyle='rgba(102,210,131,.25)';
+  cldc.fillRect(padL,Y(0),w-padL-padR,h-padB-Y(0)+2);
+  cldc.fillStyle='rgba(255,255,255,.45)';cldc.fillText('ground'+(elev?' · '+fmt(elev)+' ft MSL':''),padL+8,h-padB+12);
+  if(agl==null) return;
+  const yy=Y(agl);
+  cldc.fillStyle='rgba(255,255,255,.16)';
+  for(let x=padL+16;x<w-padR-30;x+=64){
+    cldc.beginPath();
+    cldc.arc(x,yy,13,Math.PI*.5,Math.PI*1.5);
+    cldc.arc(x+14,yy-9,11,Math.PI,Math.PI*1.9);
+    cldc.arc(x+30,yy-7,9,Math.PI*1.1,Math.PI*1.95);
+    cldc.arc(x+40,yy,12,Math.PI*1.5,Math.PI*.5);
+    cldc.closePath();cldc.fill();
+  }
+  cldc.strokeStyle='#7cc8ff';cldc.setLineDash([5,4]);cldc.lineWidth=1.4;
+  cldc.beginPath();cldc.moveTo(padL,yy);cldc.lineTo(w-padR,yy);cldc.stroke();cldc.setLineDash([]);
+  cldc.font='700 11px ui-monospace,Menlo,monospace';cldc.fillStyle='#ffd24d';
+  const lbl='base ≈ '+fmt(agl)+' ft AGL';
+  cldc.fillText(lbl,w-padR-cldc.measureText(lbl).width-4,Math.max(padT+10,yy-8));
+}
+function setupCB(){
+  cbCv=$('cbChart'); if(!cbCv) return false;
+  cldc=cbCv.getContext('2d'); cldDim=fit(cbCv,cldc);
+  ['cbT','cbTd','cbElev'].forEach(id=>$(id).addEventListener('input',calcCB));
+  $('cbElev').addEventListener('blur',()=>{ const v=$('cbElev').value.trim(); if(v!=='') $('cbElev').value=fmt(commaInt(v)); });
+  $('cbUnit').addEventListener('click',()=>{ const t=$('cbT'),td=$('cbTd'); const tv=parseFloat(t.value),tdv=parseFloat(td.value);
+    if(cbTempU==='C'){ cbTempU='F'; if(!isNaN(tv)) t.value=Math.round(tv*9/5+32); if(!isNaN(tdv)) td.value=Math.round(tdv*9/5+32); $('cbUnit').textContent='°F'; $('cbUnit2').textContent='°F'; }
+    else { cbTempU='C'; if(!isNaN(tv)) t.value=Math.round((tv-32)*5/9); if(!isNaN(tdv)) td.value=Math.round((tdv-32)*5/9); $('cbUnit').textContent='°C'; $('cbUnit2').textContent='°C'; }
+    calcCB(); });
+  $('cbUnit2').addEventListener('click',()=>$('cbUnit').click());
+  calcCB();
+  return true;
+}
+
+// ---- ISA temperature & deviation ----
+let isadTempU='C';
+function calcISADev(){
+  const pa=commaInt($('isadPa').value);
+  const t=isaTempC(pa);
+  $('isadTemp').textContent=t.toFixed(1);
+  $('isadTempF').textContent=(t*9/5+32).toFixed(1);
+  let oat=parseFloat($('isadOat').value);
+  if(isadTempU==='F'&&!isNaN(oat)) oat=(oat-32)*5/9;
+  if(isNaN(oat)){ $('isadDev').textContent='—';
+    $('isadNote').innerHTML='ISA temperature at '+fmt(pa)+' ft = 15 − 1.98 × '+(pa/1000).toFixed(1)+' = <strong>'+t.toFixed(1)+' °C</strong>. Add your outside air temperature to get the deviation.'; return; }
+  const dev=oat-t;
+  $('isadDev').textContent='ISA'+(dev>=0?'+':'−')+Math.abs(Math.round(dev));
+  const da=pa+120*dev;
+  $('isadNote').innerHTML='ISA temperature at '+fmt(pa)+' ft is <strong>'+t.toFixed(1)+' °C</strong>; your OAT is '+(dev>=0?'<strong>'+Math.round(dev)+' °C warmer</strong>':'<strong>'+Math.abs(Math.round(dev))+' °C colder</strong>')+' — that’s <strong>ISA'+(dev>=0?'+':'−')+Math.abs(Math.round(dev))+'</strong>. Density altitude becomes ≈ <strong>'+fmt(da)+' ft</strong>'+(dev>0?' (worse performance than standard)':dev<0?' (better performance than standard)':'')+'.';
+}
+function setupISADev(){
+  if(!$('isadTemp')) return false;
+  ['isadPa','isadOat'].forEach(id=>$(id).addEventListener('input',calcISADev));
+  $('isadPa').addEventListener('blur',()=>{ const v=$('isadPa').value.trim(); if(v!=='') $('isadPa').value=fmt(commaInt(v)); });
+  $('isadUnit').addEventListener('click',()=>{ const i=$('isadOat'); const v=parseFloat(i.value);
+    if(isadTempU==='C'){ isadTempU='F'; if(!isNaN(v)) i.value=Math.round(v*9/5+32); $('isadUnit').textContent='°F'; }
+    else { isadTempU='C'; if(!isNaN(v)) i.value=Math.round((v-32)*5/9); $('isadUnit').textContent='°C'; }
+    calcISADev(); });
+  calcISADev();
+  return true;
+}
+
+// ---- Freezing level estimate ----
+let fzTempU='C';
+function calcFZ(){
+  const raw=parseFloat($('fzT').value);
+  const elev=commaInt($('fzElev').value);
+  if(isNaN(raw)){ $('fzMsl').textContent='—'; $('fzAgl').textContent='—';
+    $('fzNote').innerHTML='Enter the surface temperature to estimate the freezing level.'; return; }
+  const tC=fzTempU==='F'?(raw-32)*5/9:raw;
+  if(tC<=0){ $('fzMsl').textContent=fmt(elev); $('fzAgl').textContent='0';
+    $('fzNote').innerHTML='It’s already at or below freezing at the surface — expect <strong>ice from the ground up</strong>. Structural icing is possible in any visible moisture.'; return; }
+  const agl=tC/2*1000;
+  const msl=elev+agl;
+  $('fzMsl').textContent=fmt(msl); $('fzAgl').textContent=fmt(agl);
+  $('fzNote').innerHTML='Freezing level ≈ <strong>'+fmt(agl)+' ft above the field</strong> ('+fmt(msl)+' ft MSL) using the standard ~2 °C per 1,000 ft lapse rate. Real lapse rates vary — inversions, warm layers, and frontal zones can move the 0 °C level thousands of feet. Verify with winds &amp; temps aloft (FB) and freezing-level graphics before flight in visible moisture.';
+}
+function setupFZ(){
+  if(!$('fzMsl')) return false;
+  ['fzT','fzElev'].forEach(id=>$(id).addEventListener('input',calcFZ));
+  $('fzElev').addEventListener('blur',()=>{ const v=$('fzElev').value.trim(); if(v!=='') $('fzElev').value=fmt(commaInt(v)); });
+  $('fzUnit').addEventListener('click',()=>{ const i=$('fzT'); const v=parseFloat(i.value);
+    if(fzTempU==='C'){ fzTempU='F'; if(!isNaN(v)) i.value=Math.round(v*9/5+32); $('fzUnit').textContent='°F'; }
+    else { fzTempU='C'; if(!isNaN(v)) i.value=Math.round((v-32)*5/9); $('fzUnit').textContent='°C'; }
+    calcFZ(); });
+  calcFZ();
+  return true;
+}
+
+// ---- True airspeed from IAS/CAS + altitude + temperature ----
+let tasTempU='C';
+function calcTAS(){
+  const cas=parseFloat($('tasCas').value)||0;
+  const pa=commaInt($('tasPa').value);
+  let oat=parseFloat($('tasOat').value);
+  if(tasTempU==='F'&&!isNaN(oat)) oat=(oat-32)*5/9;
+  const isaT=isaTempC(pa);
+  const dev=(isNaN(oat)?isaT:oat)-isaT;
+  const da=pa+120*dev;
+  const sigma=isa(Math.max(-600,da)/FT_PER_M).rho/RHO0;
+  const tas=cas/Math.sqrt(sigma);
+  const Tk=(isNaN(oat)?isaT:oat)+273.15;
+  const mach=tas*0.514444/Math.sqrt(1.4*287.05*Tk);
+  $('tasOut').textContent=Math.round(tas);
+  $('tasDa').textContent=fmt(da);
+  $('tasMach').textContent=mach.toFixed(2);
+  $('tasNote').innerHTML='At <strong>'+fmt(da)+' ft density altitude</strong> the air is '+Math.round((1-sigma)*100)+'% less dense than sea level, so '+Math.round(cas)+' kt calibrated reads ≈ <strong>'+Math.round(tas)+' kt true</strong> (TAS = CAS ÷ √σ). Rule of thumb — add ~2% per 1,000 ft: ≈ '+Math.round(cas*(1+0.02*Math.max(0,da)/1000))+' kt. Groundspeed = TAS ± wind.';
+}
+function setupTAS(){
+  if(!$('tasOut')) return false;
+  ['tasCas','tasPa','tasOat'].forEach(id=>$(id).addEventListener('input',calcTAS));
+  $('tasPa').addEventListener('blur',()=>{ const v=$('tasPa').value.trim(); if(v!=='') $('tasPa').value=fmt(commaInt(v)); });
+  $('tasUnit').addEventListener('click',()=>{ const i=$('tasOat'); const v=parseFloat(i.value);
+    if(tasTempU==='C'){ tasTempU='F'; if(!isNaN(v)) i.value=Math.round(v*9/5+32); $('tasUnit').textContent='°F'; }
+    else { tasTempU='C'; if(!isNaN(v)) i.value=Math.round((v-32)*5/9); $('tasUnit').textContent='°C'; }
+    calcTAS(); });
+  calcTAS();
+  return true;
+}
+
+// ---- Pivotal altitude (eights on pylons) ----
+function calcPV(){
+  const gs=parseFloat($('pvGs').value)||0;
+  const elev=commaInt($('pvElev').value);
+  const agl=gs*gs/11.3;
+  $('pvOut').textContent=fmt(agl);
+  $('pvMsl').textContent=fmt(agl+elev);
+  $('pvMph').textContent=Math.round(gs*1.15078);
+  $('pvNote').innerHTML='Pivotal altitude = GS² ÷ 11.3 = <strong>'+fmt(agl)+' ft AGL</strong>'+(elev?' — fly ≈ <strong>'+fmt(agl+elev)+' ft MSL</strong> over your '+fmt(elev)+' ft terrain':'')+'. Groundspeed changes constantly around the pylon with the wind, so pivotal altitude changes too: <strong>descend on the downwind side, climb on the upwind side</strong>. (In mph: GS² ÷ 15.)';
+}
+function setupPV(){
+  if(!$('pvOut')) return false;
+  ['pvGs','pvElev'].forEach(id=>$(id).addEventListener('input',calcPV));
+  $('pvElev').addEventListener('blur',()=>{ const v=$('pvElev').value.trim(); if(v!=='') $('pvElev').value=fmt(commaInt(v)); });
+  calcPV();
+  return true;
+}
+
 const hasExplorer=setupExplorer();
 const hasDA=setupDA();
 const hasCabin=setupCabin();
@@ -988,6 +1298,13 @@ const hasHP=setupHP();
 const hasPC=setupPC();
 const hasKoch=setupKoch();
 const hasCross=setupCross();
+const hasPAC=setupPAC();
+const hasO2=setupO2();
+const hasCB=setupCB();
+const hasISADev=setupISADev();
+const hasFZ=setupFZ();
+const hasTAS=setupTAS();
+const hasPV=setupPV();
 
 window.addEventListener('resize',()=>{
   if(hasExplorer){skyDim=fit(sky,skc);stars=null;airDim=fit(air,ac);curveDim=fit(curve,cc);parts=[];update(alt);}
@@ -997,6 +1314,8 @@ window.addEventListener('resize',()=>{
   if(hasDA){daDim=fit(daChart,dac);calcDA();}
   if(hasKoch){kDim=fit(kChart,kc);calcKoch();}
   if(hasCross){xDim=fit(xChart,xc);calcCross();}
+  if(hasO2){o2Dim=fit(o2Cv,o2c);calcO2();}
+  if(hasCB){cldDim=fit(cbCv,cldc);calcCB();}
 });
 
 (function(){ const b=$('disclaimerBar'); if(!b)return; b.hidden=false;

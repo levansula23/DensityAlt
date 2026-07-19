@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="theme-color" content="#05070f">
-<title>Crosswind Calculator — Crosswind & Headwind Components | DensityAlt</title>
-<meta name="description" content="Free visual crosswind calculator: enter runway heading and wind, or drag the wind around the runway, to get crosswind and headwind/tailwind components in knots.">
+<title>Crosswind Calculator — Runway Wind Components</title>
+<meta name="description" content="Free visual crosswind calculator: enter runway heading and wind, or drag the wind around the runway, for crosswind and headwind components in knots.">
 <link rel="canonical" href="https://densityalt.com/crosswind-calculator">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <meta property="og:type" content="website">
@@ -30,8 +30,15 @@
     <div class="nl-drop">
       <button type="button" class="nl-trigger" aria-haspopup="true">Calculators<span class="caret" aria-hidden="true"></span></button>
       <div class="nl-menu">
+        <a class="nl" href="/pressure-altitude-calculator">Pressure Altitude</a>
+        <a class="nl" href="/true-airspeed-calculator">True Airspeed</a>
         <a class="nl" href="/crosswind-calculator">Crosswind</a>
         <a class="nl" href="/takeoff-landing-distance">Takeoff &amp; Landing</a>
+        <a class="nl" href="/cloud-base-calculator">Cloud Base</a>
+        <a class="nl" href="/freezing-level-calculator">Freezing Level</a>
+        <a class="nl" href="/isa-deviation-calculator">ISA Deviation</a>
+        <a class="nl" href="/oxygen-at-altitude-calculator">Oxygen at Altitude</a>
+        <a class="nl" href="/pivotal-altitude-calculator">Pivotal Altitude</a>
         <a class="nl" href="/horsepower-at-altitude">Horsepower</a>
         <a class="nl" href="/power-curve">Power Curve</a>
         <a class="nl" href="/cabin-altitude-calculator">Cabin Altitude</a>
@@ -95,6 +102,31 @@
       <p class="a">The maximum demonstrated crosswind is the strongest crosswind a test pilot demonstrated at certification — a capability figure, not a hard limit, but beyond it you're in untested territory. Many light trainers show ~15&nbsp;kt. Know your aircraft's number and set a personal limit below it.</p></details>
       <details class="faq-item"><summary>Does a crosswind also reduce your headwind?</summary>
       <p class="a">Yes. The more the wind is off the runway heading, the more becomes crosswind and the less becomes headwind. Past 90° off the nose it's a <em>tailwind</em> — which lengthens takeoff and landing distance and may favor the reciprocal runway.</p></details>
+    </div>
+  </section>
+
+  <section class="da" id="more-tools">
+    <h2>More free altitude tools</h2>
+    <p class="desc">DensityAlt is a set of free, no-signup aviation calculators. Explore the rest:</p>
+    <div class="grid">
+      <a class="card" href="/takeoff-landing-distance" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Takeoff &amp; Landing Distance</div>
+        <div class="pct">How density altitude stretches your ground roll &amp; rollout.</div></a>
+      <a class="card" href="/" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Density Altitude</div>
+        <div class="pct">The altitude your aircraft actually performs at — with live METAR.</div></a>
+      <a class="card" href="/pivotal-altitude-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Pivotal Altitude</div>
+        <div class="pct">GS² ÷ 11.3 for eights on pylons, in AGL and MSL.</div></a>
+      <a class="card" href="/cloud-base-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Cloud Base</div>
+        <div class="pct">Estimate the cumulus base from temp &amp; dew point.</div></a>
+      <a class="card" href="/freezing-level-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Freezing Level</div>
+        <div class="pct">Estimate the 0&nbsp;°C altitude from surface temperature.</div></a>
+      <a class="card" href="/true-airspeed-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">True Airspeed</div>
+        <div class="pct">TAS from IAS, pressure altitude &amp; temperature.</div></a>
     </div>
   </section>
 

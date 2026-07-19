@@ -30,8 +30,15 @@
     <div class="nl-drop">
       <button type="button" class="nl-trigger" aria-haspopup="true">Calculators<span class="caret" aria-hidden="true"></span></button>
       <div class="nl-menu">
+        <a class="nl" href="/pressure-altitude-calculator">Pressure Altitude</a>
+        <a class="nl" href="/true-airspeed-calculator">True Airspeed</a>
         <a class="nl" href="/crosswind-calculator">Crosswind</a>
         <a class="nl" href="/takeoff-landing-distance">Takeoff &amp; Landing</a>
+        <a class="nl" href="/cloud-base-calculator">Cloud Base</a>
+        <a class="nl" href="/freezing-level-calculator">Freezing Level</a>
+        <a class="nl" href="/isa-deviation-calculator">ISA Deviation</a>
+        <a class="nl" href="/oxygen-at-altitude-calculator">Oxygen at Altitude</a>
+        <a class="nl" href="/pivotal-altitude-calculator">Pivotal Altitude</a>
         <a class="nl" href="/horsepower-at-altitude">Horsepower</a>
         <a class="nl" href="/power-curve">Power Curve</a>
         <a class="nl" href="/cabin-altitude-calculator">Cabin Altitude</a>
@@ -59,7 +66,7 @@
 
   <section class="da" id="power-curve">
     <h2>Power Curve &amp; Region of Reversed Command</h2>
-    <p class="desc"><strong>Parasite drag</strong> increases with the <em>square</em> of speed, while <strong>lift-induced drag</strong> is higher at lower speed. The bottom of the curve is the <strong>L/Dmax</strong> speed. Flying at very slow speeds requires high angle of attack (AoA, or alpha), so it takes <em>more</em> power to fly <em>slower</em> — the <strong>region of reversed command</strong>. Inside this region, altitude is controlled with <em>power</em> and airspeed with <em>pitch</em>. Drag the speed across the chart and watch the power change. <a id="usePcDa">↑ use the density altitude from above</a></p>
+    <p class="desc"><strong>Parasite drag</strong> increases with the <em>square</em> of speed, while <strong>lift-induced drag</strong> is higher at lower speed. The bottom of the curve is the <strong>L/Dmax</strong> speed. Flying at very slow speeds requires high angle of attack (AoA, or alpha), so it takes <em>more</em> power to fly <em>slower</em> — the <strong>region of reversed command</strong>. Inside this region, altitude is controlled with <em>power</em> and airspeed with <em>pitch</em>. Drag the speed across the chart and watch the power change. Get your number from the <a href="/">density altitude calculator</a> first.</p>
     <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning, dispatch, or weight-and-balance.</strong> Always fly the numbers in your POH and current official weather.</p>
     <div class="da-grid pcin">
       <div class="field">
@@ -115,6 +122,31 @@
       <p class="a">The slow-speed part of the power-required curve, left of its lowest point (the <strong>minimum-power speed</strong>). On the <em>front</em> side faster needs more power; on the <em>back</em> side slower needs more power. Dragging it in low and slow on a short-field approach is a classic factor in undershoot and stall-spin accidents.</p></details>
       <details class="faq-item"><summary>How does density altitude affect the power curve?</summary>
       <p class="a">It shifts everything against you: <strong>power available</strong> falls as the air thins while the <strong>power required</strong> (in true airspeed) stays about the same. The gap between them, your excess power for climb and maneuvering, shrinks, so your margins are thinnest exactly when high, hot fields demand the most. Get yours from the <a href="/">density altitude calculator</a>.</p></details>
+    </div>
+  </section>
+
+  <section class="da" id="more-tools">
+    <h2>More free altitude tools</h2>
+    <p class="desc">DensityAlt is a set of free, no-signup aviation calculators. Explore the rest:</p>
+    <div class="grid">
+      <a class="card" href="/" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Density Altitude</div>
+        <div class="pct">The altitude your aircraft actually performs at — with live METAR.</div></a>
+      <a class="card" href="/horsepower-at-altitude" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Horsepower at Altitude</div>
+        <div class="pct">How much power a piston engine loses with density altitude.</div></a>
+      <a class="card" href="/true-airspeed-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">True Airspeed</div>
+        <div class="pct">TAS from IAS, pressure altitude &amp; temperature.</div></a>
+      <a class="card" href="/takeoff-landing-distance" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Takeoff &amp; Landing Distance</div>
+        <div class="pct">How density altitude stretches your ground roll &amp; rollout.</div></a>
+      <a class="card" href="/atmosphere-explorer" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Atmosphere &amp; Hypoxia Explorer</div>
+        <div class="pct">Drag an aircraft up and watch pressure, oxygen &amp; SpO₂ fall.</div></a>
+      <a class="card" href="/pivotal-altitude-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Pivotal Altitude</div>
+        <div class="pct">GS² ÷ 11.3 for eights on pylons, in AGL and MSL.</div></a>
     </div>
   </section>
 

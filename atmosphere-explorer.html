@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="theme-color" content="#05070f">
-<title>Atmosphere & Hypoxia Explorer — Air, O₂ & SpO₂ vs Altitude | DensityAlt</title>
+<title>Atmosphere & Hypoxia Explorer — O₂ & SpO₂ vs Altitude</title>
 <meta name="description" content="Interactive atmosphere & hypoxia explorer: drag an aircraft up and watch air pressure, density, oxygen & blood oxygen (SpO₂) fall with altitude. Free.">
 <link rel="canonical" href="https://densityalt.com/atmosphere-explorer">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -30,8 +30,15 @@
     <div class="nl-drop">
       <button type="button" class="nl-trigger" aria-haspopup="true">Calculators<span class="caret" aria-hidden="true"></span></button>
       <div class="nl-menu">
+        <a class="nl" href="/pressure-altitude-calculator">Pressure Altitude</a>
+        <a class="nl" href="/true-airspeed-calculator">True Airspeed</a>
         <a class="nl" href="/crosswind-calculator">Crosswind</a>
         <a class="nl" href="/takeoff-landing-distance">Takeoff &amp; Landing</a>
+        <a class="nl" href="/cloud-base-calculator">Cloud Base</a>
+        <a class="nl" href="/freezing-level-calculator">Freezing Level</a>
+        <a class="nl" href="/isa-deviation-calculator">ISA Deviation</a>
+        <a class="nl" href="/oxygen-at-altitude-calculator">Oxygen at Altitude</a>
+        <a class="nl" href="/pivotal-altitude-calculator">Pivotal Altitude</a>
         <a class="nl" href="/horsepower-at-altitude">Horsepower</a>
         <a class="nl" href="/power-curve">Power Curve</a>
         <a class="nl" href="/cabin-altitude-calculator">Cabin Altitude</a>
@@ -150,6 +157,31 @@
       <p class="a">As pressure drops, the partial pressure of oxygen drops with it, so each breath delivers less oxygen to your blood. Under FAR&nbsp;91.211, U.S. pilots need oxygen above 12,500&nbsp;ft cabin altitude (after 30&nbsp;min), continuously above 14,000&nbsp;ft, and must provide it to passengers above 15,000&nbsp;ft.</p></details>
       <details class="faq-item"><summary>What is your blood oxygen (SpO₂) at altitude?</summary>
       <p class="a">For an unacclimatized person, SpO₂ falls from ~97% at sea level to ~87% at 10,000&nbsp;ft, ~72% at 18,000&nbsp;ft, and ~50% at 25,000&nbsp;ft. The drop accelerates because the oxygen–hemoglobin curve falls off a cliff below ~60&nbsp;mmHg PaO₂.</p></details>
+    </div>
+  </section>
+
+  <section class="da" id="more-tools">
+    <h2>More free altitude tools</h2>
+    <p class="desc">DensityAlt is a set of free, no-signup aviation calculators. Explore the rest:</p>
+    <div class="grid">
+      <a class="card" href="/oxygen-at-altitude-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Oxygen at Altitude</div>
+        <div class="pct">Effective O₂ %, pressure &amp; SpO₂ from Denver to Everest.</div></a>
+      <a class="card" href="/" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Density Altitude</div>
+        <div class="pct">The altitude your aircraft actually performs at — with live METAR.</div></a>
+      <a class="card" href="/cabin-altitude-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Cabin Altitude</div>
+        <div class="pct">What cabin altitude your pressurization holds at cruise.</div></a>
+      <a class="card" href="/pressure-altitude-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Pressure Altitude</div>
+        <div class="pct">PA from the altimeter setting — the chart-entry altitude.</div></a>
+      <a class="card" href="/horsepower-at-altitude" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Horsepower at Altitude</div>
+        <div class="pct">How much power a piston engine loses with density altitude.</div></a>
+      <a class="card" href="/takeoff-landing-distance" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Takeoff &amp; Landing Distance</div>
+        <div class="pct">How density altitude stretches your ground roll &amp; rollout.</div></a>
     </div>
   </section>
 

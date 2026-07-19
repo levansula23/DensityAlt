@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#05070f">
+<title>FAA Oxygen Requirements (FAR 91.211) Made Simple</title>
+<meta name="description" content="FAR 91.211 made simple: crew oxygen above 12,500 ft after 30 minutes, always above 14,000 ft, passengers provided above 15,000 ft — plus hypoxia basics.">
+<link rel="canonical" href="https://densityalt.com/learn/faa-oxygen-requirements">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DensityAlt">
+<meta property="og:url" content="https://densityalt.com/learn/faa-oxygen-requirements">
+<meta property="og:title" content="FAA Oxygen Requirements (FAR 91.211) Made Simple">
+<meta property="og:description" content="The three altitude tiers of FAR 91.211, the cabin-altitude subtlety most pilots miss, and the hypoxia physiology behind the rule.">
+<meta property="og:image" content="https://densityalt.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="FAA Oxygen Requirements (FAR 91.211) Made Simple">
+<meta name="twitter:description" content="The three altitude tiers of FAR 91.211, the cabin-altitude subtlety most pilots miss, and the hypoxia physiology behind the rule.">
+<meta name="twitter:image" content="https://densityalt.com/og-image.png">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<nav class="topnav"><div class="navin">
+  <a class="brand" href="/" style="text-decoration:none"><img src="/favicon.svg" alt=""><b>DensityAlt</b></a>
+  <div class="navlinks">
+    <a class="nl" href="/atmosphere-explorer">Explorer</a>
+    <a class="nl" href="/">Density Altitude</a>
+    <div class="nl-drop">
+      <button type="button" class="nl-trigger" aria-haspopup="true">Calculators<span class="caret" aria-hidden="true"></span></button>
+      <div class="nl-menu">
+        <a class="nl" href="/pressure-altitude-calculator">Pressure Altitude</a>
+        <a class="nl" href="/true-airspeed-calculator">True Airspeed</a>
+        <a class="nl" href="/crosswind-calculator">Crosswind</a>
+        <a class="nl" href="/takeoff-landing-distance">Takeoff &amp; Landing</a>
+        <a class="nl" href="/cloud-base-calculator">Cloud Base</a>
+        <a class="nl" href="/freezing-level-calculator">Freezing Level</a>
+        <a class="nl" href="/isa-deviation-calculator">ISA Deviation</a>
+        <a class="nl" href="/oxygen-at-altitude-calculator">Oxygen at Altitude</a>
+        <a class="nl" href="/pivotal-altitude-calculator">Pivotal Altitude</a>
+        <a class="nl" href="/horsepower-at-altitude">Horsepower</a>
+        <a class="nl" href="/power-curve">Power Curve</a>
+        <a class="nl" href="/cabin-altitude-calculator">Cabin Altitude</a>
+      </div>
+    </div>
+    <a class="nl" href="/learn/">Learn</a>
+    <a class="nl" href="/#about">About</a>
+  </div>
+  <a class="nav-gh" href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener" aria-label="DensityAlt source code on GitHub" title="Open source — view the code on GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+</div></nav>
+
+<div id="disclaimerBar" class="disclaimer-bar" hidden>
+  <span><strong>Educational estimates only.</strong> DensityAlt is not for flight planning, dispatch, or medical use — always use your POH and official sources.</span>
+  <button id="disclaimerOk" type="button">Got it</button>
+</div>
+
+<div class="wrap">
+
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/learn/">Learn</a> › <span>FAR 91.211 oxygen requirements</span></nav>
+  <header class="hero">
+    <div class="kicker">Learn · Oxygen &amp; Hypoxia</div>
+    <h1>FAR 91.211 Oxygen Requirements and Hypoxia, Explained</h1>
+    <p class="hero-sub">Three altitudes, one rule — and the physiology behind it.</p>
+    <p class="lead">The FAA’s supplemental oxygen rule fits on an index card, yet it trips up checkride candidates constantly. Here are the three tiers of FAR 91.211, the cabin-altitude subtlety most pilots miss, the pressurized-aircraft rules in plain English, and the hypoxia physiology that makes oxygen worth using long before the regulation demands it.</p>
+  </header>
+  <div class="byline"><img src="/headshot.jpg" alt="Levan Sulakvelidze" width="34" height="34" loading="lazy" decoding="async"><span><strong>Levan Sulakvelidze</strong> · Instrument-rated private pilot · Updated July 2026 · ~8 min read</span></div>
+
+  <style>
+  .article{max-width:760px;margin:0 auto}
+  .crumbs{max-width:760px;margin:0 auto 4px;font-size:13px;color:var(--ink-dim)}
+  .crumbs a{color:var(--accent);text-decoration:none}
+  .crumbs span{color:var(--ink-dim)}
+  .byline{max-width:760px;margin:18px auto 0;display:flex;gap:10px;align-items:center;font-size:13.5px;color:var(--ink-dim)}
+  .byline img{width:34px;height:34px;border-radius:50%;flex:0 0 auto}
+  .article h2{font-size:23px;line-height:1.25;margin:38px 0 12px;scroll-margin-top:70px}
+  .article h3{font-size:17px;margin:24px 0 8px;color:var(--ink)}
+  .article p{font-size:16px;line-height:1.72;color:var(--ink);margin:0 0 16px}
+  .article ul,.article ol{font-size:16px;line-height:1.72;color:var(--ink);padding-left:22px;margin:0 0 18px}
+  .article li{margin:7px 0}
+  .article a{color:var(--accent)}
+  .article strong{color:#fff}
+  .toc{background:var(--panel);border:1px solid var(--panel-brd);border-radius:12px;padding:16px 20px}
+  .toc .toc-t{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-dim);margin:0 0 8px}
+  .toc ol{margin:0;padding-left:20px;font-size:15px;line-height:1.5}
+  .toc a{color:var(--accent);text-decoration:none}
+  .keybox{background:var(--panel);border:1px solid var(--panel-brd);border-left:3px solid var(--accent);border-radius:10px;padding:14px 18px;margin:0 0 20px;font-size:16px;line-height:1.6}
+  .formula{font-family:var(--mono);background:rgba(255,255,255,.05);border:1px solid var(--panel-brd);border-radius:10px;padding:13px 16px;margin:0 0 18px;font-size:14px;color:var(--accent2);overflow-x:auto}
+  .article table{width:100%;border-collapse:collapse;margin:0 0 20px;font-size:14.5px}
+  .article th,.article td{border:1px solid var(--panel-brd);padding:8px 12px;text-align:left}
+  .article th{color:var(--ink-dim);font-weight:600}
+  .article blockquote{border-left:3px solid var(--warn);margin:0 0 18px;padding:4px 0 4px 18px;color:var(--ink-dim);font-style:italic}
+  .calc-intro{max-width:760px;margin:0 auto}
+  .authorbox{max-width:760px;margin:40px auto 0;display:flex;gap:14px;align-items:flex-start;background:var(--panel);border:1px solid var(--panel-brd);border-radius:14px;padding:18px}
+  .authorbox img{width:54px;height:54px;border-radius:50%;flex:0 0 auto}
+  .authorbox p{font-size:14px;line-height:1.6;color:var(--ink-dim);margin:6px 0 0}
+  .authorbox a{color:var(--accent)}
+  .learn-card{display:block;background:var(--panel);border:1px solid var(--panel-brd);border-radius:14px;padding:22px;text-decoration:none;color:inherit;margin:0 0 14px}
+  .learn-card:hover{border-color:var(--accent)}
+  .learn-card .lc-k{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent)}
+  .learn-card .lc-t{font-size:20px;font-weight:700;margin:4px 0 6px;color:var(--ink)}
+  .learn-card .lc-d{font-size:14.5px;color:var(--ink-dim);line-height:1.5}
+  </style>
+
+  <div class="article">
+    <p>Under FAR 91.211, the required flight crew must use supplemental oxygen for any portion of a flight above a cabin pressure altitude of <strong>12,500 feet</strong> that lasts more than <strong>30 minutes</strong>, and at all times above <strong>14,000 feet</strong>. Above <strong>15,000 feet</strong>, every occupant — passengers included — must be <em>provided</em> with supplemental oxygen.</p>
+    <div class="keybox"><strong>The index-card version:</strong> 12.5 &rarr; crew, after 30 minutes. 14 &rarr; crew, the whole time. 15 &rarr; everyone gets offered oxygen. All three numbers are <em>cabin pressure altitudes</em>, and the rule lives at 14&nbsp;CFR&nbsp;91.211.</div>
+    <div class="toc">
+      <div class="toc-t">In this guide</div>
+      <ol>
+        <li><a href="#three-tiers">The three tiers of FAR 91.211</a></li>
+        <li><a href="#cabin-altitude">It’s cabin pressure altitude, not aircraft altitude</a></li>
+        <li><a href="#pressurized">Pressurized aircraft: FL250 and FL350 rules</a></li>
+        <li><a href="#legal-vs-smart">Legal vs. smart: when to use oxygen anyway</a></li>
+        <li><a href="#hypoxia">Hypoxia: the reason the rule exists</a></li>
+        <li><a href="#direct-answer">At what altitude do pilots need oxygen?</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ol>
+    </div>
+
+    <h2 id="three-tiers">The three tiers of FAR 91.211</h2>
+    <p>For unpressurized aircraft — which in practice means most piston GA — 91.211(a) sets three stacked thresholds. Each one adds to the ones below it:</p>
+    <table>
+      <thead><tr><th>Cabin pressure altitude</th><th>Who</th><th>Requirement</th></tr></thead>
+      <tbody>
+        <tr><td>Above 12,500&nbsp;ft up to and including 14,000&nbsp;ft</td><td>Required minimum flight crew</td><td>Must be provided with <em>and use</em> supplemental oxygen for the part of the flight at those altitudes that exceeds <strong>30 minutes</strong></td></tr>
+        <tr><td>Above 14,000&nbsp;ft</td><td>Required minimum flight crew</td><td>Must use supplemental oxygen for the <strong>entire time</strong> at those altitudes — no 30-minute grace</td></tr>
+        <tr><td>Above 15,000&nbsp;ft</td><td>Every occupant</td><td>Must be <strong>provided</strong> with supplemental oxygen — passengers are not required to actually use it</td></tr>
+      </tbody>
+    </table>
+    <p>Two details in the wording matter. First, the crew requirement says <strong>“provided with and uses”</strong> — a bottle sitting in the baggage compartment doesn’t satisfy it. Second, the 30-minute clock in the first tier applies to the part of the flight spent in the 12,500–14,000&nbsp;ft band: cross a ridge at 13,000&nbsp;ft for 20 minutes and no oxygen is legally required; cruise there for 31 minutes and the crew must be on it. The passenger tier is the one that surprises people — above 15,000&nbsp;ft you must <em>offer</em> your passengers oxygen, but the regulation never forces them to breathe it.</p>
+
+    <h2 id="cabin-altitude">The key subtlety: it’s cabin pressure altitude, not aircraft altitude</h2>
+    <p>Every threshold in 91.211 is written against <strong>cabin pressure altitude</strong> — the pressure altitude of the air your body is actually sitting in — not the aircraft’s MSL altitude. In an unpressurized airplane the two are effectively the same, and note that on a low-pressure day your <em>pressure</em> altitude can sit a few hundred feet above what the altimeter shows with the local setting dialed in.</p>
+    <p>In a pressurized airplane the distinction is the whole point. A jet cruising at FL450 might hold a cabin at 6,000–8,000&nbsp;ft, so nobody on board is anywhere near the 91.211(a) thresholds even though the airplane is nine miles up. Lose pressurization, though, and the cabin climbs toward the outside altitude — which is exactly why paragraph (b) exists. To see what cabin altitude a given aircraft holds at cruise, and where it goes when the differential fails, try the <a href="/cabin-altitude-calculator">cabin altitude calculator</a>.</p>
+
+    <h2 id="pressurized">Pressurized aircraft: the 91.211(b) rules in plain English</h2>
+    <p>Paragraph (b) adds equipment and mask-wearing rules on top of everything above:</p>
+    <ul>
+      <li><strong>Above FL250:</strong> at least a <strong>10-minute supply</strong> of supplemental oxygen must be available for <em>each occupant</em> — in addition to any oxygen required by 91.211(a) — to cover an emergency descent after a loss of cabin pressurization.</li>
+      <li><strong>Above FL350:</strong> one pilot at the controls must be <strong>wearing and using</strong> an oxygen mask that is secured and sealed, supplying oxygen at all times or automatically whenever the cabin climbs above 14,000&nbsp;ft. <strong>Exception:</strong> at or below <strong>FL410</strong>, neither pilot has to wear a mask if <em>two</em> pilots are at the controls and each has a <strong>quick-donning</strong> mask — one that can be placed on the face, sealed, and supplying oxygen <strong>with one hand within 5 seconds</strong>.</li>
+      <li><strong>If one pilot leaves the controls</strong> above FL350, the remaining pilot must put on and use an oxygen mask until the other pilot returns.</li>
+    </ul>
+    <p>The logic tracks the physiology: above FL350 a decompression gives you well under a minute of useful consciousness, so the mask has to be either already on a face or five seconds away from one.</p>
+
+    <h2 id="legal-vs-smart">Legal vs. smart: when to use oxygen anyway</h2>
+    <p>The regulation is a floor, not a recommendation, and the FAA says so itself. Its aeromedical guidance encourages pilots to use supplemental oxygen above <strong>10,000&nbsp;ft during the day</strong> and above <strong>5,000&nbsp;ft at night</strong> — far below any legal trigger. Night vision is the canary: the retina is one of the most oxygen-hungry tissues in the body, and its low-light performance measurably degrades starting around <strong>5,000&nbsp;ft</strong>, thousands of feet before you’d feel anything else.</p>
+    <p>A pulse oximeter turns this from guesswork into a number. A common aeromedical rule of thumb is to keep SpO₂ at <strong>90% or above</strong> and go on oxygen when it drops below that — many pilots at legal-but-high cabin altitudes are surprised to see the mid-80s. To build the intuition before you ever clip a sensor on, open the <a href="/atmosphere-explorer">interactive atmosphere &amp; hypoxia explorer</a> and <strong>watch your blood oxygen fall as you climb</strong> — drag the aircraft up and see pressure, oxygen, and SpO₂ slide together. For the raw numbers, the <a href="/oxygen-at-altitude-calculator">oxygen at altitude calculator</a> shows how much of sea-level oxygen is left at any height.</p>
+
+    <h2 id="hypoxia">Hypoxia: the reason the rule exists</h2>
+    <p>Ground school recognizes <strong>four types of hypoxia</strong>, and only the first is cured by descending:</p>
+    <ul>
+      <li><strong>Hypoxic hypoxia</strong> — not enough oxygen pressure in the air you’re breathing. This is altitude hypoxia, the one 91.211 targets.</li>
+      <li><strong>Hypemic hypoxia</strong> — the blood can’t carry enough oxygen: carbon monoxide poisoning (a leaking exhaust heater is the classic aviation case), anemia, or recent blood donation.</li>
+      <li><strong>Stagnant hypoxia</strong> — the blood isn’t moving well: sustained G-loading, shock, or cold-restricted circulation.</li>
+      <li><strong>Histotoxic hypoxia</strong> — the cells can’t use the oxygen delivered to them: alcohol, narcotics, and certain poisons.</li>
+    </ul>
+    <p>What makes hypoxic hypoxia dangerous is its <strong>insidious onset</strong>. The first casualty is judgment — the very faculty you’d use to notice something is wrong. Euphoria and a false sense of well-being are early hallmarks, alongside headache, dizziness, tingling in the fingers, visual dimming, and cyanosis (blue-tinged lips and fingernails). Victims routinely insist they feel fine. Symptoms and their order vary from person to person, which is why altitude-chamber and mask-off training exist: to teach you <em>your</em> signature before you need it.</p>
+    <h3>Time of useful consciousness</h3>
+    <p>Above the high teens, the question stops being comfort and becomes how long you can still act deliberately. Typical values for a resting, unacclimatized person after sudden exposure:</p>
+    <table>
+      <thead><tr><th>Altitude</th><th>Time of useful consciousness</th></tr></thead>
+      <tbody>
+        <tr><td>18,000&nbsp;ft</td><td>20–30 minutes</td></tr>
+        <tr><td>22,000&nbsp;ft</td><td>5–10 minutes</td></tr>
+        <tr><td>25,000&nbsp;ft</td><td>3–5 minutes</td></tr>
+        <tr><td>30,000&nbsp;ft</td><td>1–2 minutes</td></tr>
+        <tr><td>35,000&nbsp;ft</td><td>30–60 seconds</td></tr>
+        <tr><td>40,000&nbsp;ft</td><td>15–20 seconds</td></tr>
+      </tbody>
+    </table>
+    <p>Rapid decompression roughly halves these times. Read the table next to the 91.211(b) rules and the FL350 mask requirement stops looking like bureaucracy.</p>
+
+    <h2 id="direct-answer">At what altitude do pilots need oxygen?</h2>
+    <div class="keybox"><strong>Direct answer:</strong> under U.S. rules (FAR 91.211), pilots must use supplemental oxygen above a cabin pressure altitude of <strong>12,500&nbsp;ft</strong> when that portion of the flight exceeds 30 minutes, and at all times above <strong>14,000&nbsp;ft</strong>. Passengers must be <em>provided</em> oxygen above <strong>15,000&nbsp;ft</strong>. Physiologically, the FAA encourages oxygen above 10,000&nbsp;ft by day and 5,000&nbsp;ft at night.</div>
+    <p class="calc-disclaimer" style="margin-top:22px"><strong>Educational only.</strong> This article summarizes 14&nbsp;CFR&nbsp;91.211 and FAA aeromedical guidance for ground-school study — it is not legal, operational, or medical advice. Always check the current regulation text and your AFM/POH, and see an aviation medical examiner for anything physiological. More study guides live in the <a href="/learn/">Learn hub</a>.</p>
+
+
+  <section class="da faq" id="faq">
+    <h2>Frequently asked questions</h2>
+    <div class="faqlist">
+      <details class="faq-item"><summary>At what altitude do pilots legally need oxygen?</summary>
+      <p class="a">Under FAR 91.211, required flight crew must use supplemental oxygen for the portion of a flight above a cabin pressure altitude of <strong>12,500&nbsp;ft</strong> that lasts more than 30 minutes, and at all times above <strong>14,000&nbsp;ft</strong>. These are legal minimums — the FAA encourages oxygen use starting at 10,000&nbsp;ft by day and 5,000&nbsp;ft at night.</p></details>
+      <details class="faq-item"><summary>Do passengers have to use oxygen above 15,000 feet?</summary>
+      <p class="a">No. Above a cabin pressure altitude of 15,000&nbsp;ft the pilot must <strong>provide</strong> each occupant with supplemental oxygen, but the regulation does not require passengers to actually use it. The crew, by contrast, must be provided with <em>and use</em> oxygen at their thresholds.</p></details>
+      <details class="faq-item"><summary>Does FAR 91.211 use aircraft altitude or cabin altitude?</summary>
+      <p class="a">Cabin pressure altitude. In an unpressurized airplane that is essentially the aircraft’s pressure altitude, but in a pressurized aircraft the cabin may sit at 6,000–8,000&nbsp;ft while the airplane cruises in the flight levels — so the 91.211(a) tiers aren’t triggered unless pressurization is lost. Separate rules in 91.211(b) cover pressurized aircraft above FL250 and FL350.</p></details>
+      <details class="faq-item"><summary>What are the oxygen rules for pressurized aircraft?</summary>
+      <p class="a">Above FL250, a 10-minute supply of supplemental oxygen must be available for each occupant in case of a pressurization loss. Above FL350, one pilot at the controls must wear and use an oxygen mask — unless the flight is at or below FL410 with two pilots at the controls, each with a quick-donning mask that can be put on with one hand within 5 seconds. If one pilot leaves the controls above FL350, the remaining pilot must put a mask on.</p></details>
+      <details class="faq-item"><summary>What is the time of useful consciousness at 25,000 feet?</summary>
+      <p class="a">Roughly <strong>3 to 5 minutes</strong> for a resting, unacclimatized person after sudden exposure — and about half that after a rapid decompression. At 18,000&nbsp;ft it is 20–30 minutes; at 35,000&nbsp;ft it collapses to 30–60 seconds, which is why one pilot must be on a mask (or seconds from one) above FL350.</p></details>
+    </div>
+  </section>
+
+  <div class="article"><h2 style="margin-top:38px">Keep exploring</h2>
+    <p>See the physiology behind the rule with the rest of the free DensityAlt tools:</p></div>
+  <section class="da" id="more-tools">
+    <h2>More free altitude tools</h2>
+    <p class="desc">DensityAlt is a set of free, no-signup aviation calculators. Explore the rest:</p>
+    <div class="grid">
+      <a class="card" href="/atmosphere-explorer" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Atmosphere &amp; Hypoxia Explorer</div>
+        <div class="pct">Drag an aircraft up and watch pressure, oxygen &amp; SpO₂ fall.</div></a>
+      <a class="card" href="/cabin-altitude-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Cabin Altitude</div>
+        <div class="pct">What cabin altitude your pressurization holds at cruise.</div></a>
+      <a class="card" href="/crosswind-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Crosswind Calculator</div>
+        <div class="pct">Split the wind into crosswind &amp; headwind on a runway diagram.</div></a>
+      <a class="card" href="/takeoff-landing-distance" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Takeoff &amp; Landing Distance</div>
+        <div class="pct">How density altitude stretches your ground roll &amp; rollout.</div></a>
+      <a class="card" href="/horsepower-at-altitude" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Horsepower at Altitude</div>
+        <div class="pct">How much power a piston engine loses with density altitude.</div></a>
+      <a class="card" href="/power-curve" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Power Curve &amp; Reversed Command</div>
+        <div class="pct">The back side of the power curve and your climb margins.</div></a>
+    </div>
+  </section>
+
+  <div class="article">  <div class="authorbox"><img src="/headshot.jpg" alt="Levan Sulakvelidze" width="54" height="54" loading="lazy" decoding="async"><div><strong>Levan Sulakvelidze</strong><p>Instrument-rated private pilot and the builder of DensityAlt. I fly out of high-and-hot fields in the western U.S., where density altitude isn’t a textbook abstraction — it’s the difference between a comfortable climb and staring down the far end of the runway. I built these tools to make the numbers obvious before the throttle goes up. <a href="https://www.linkedin.com/in/levansula" rel="noopener">LinkedIn</a> · <a href="https://github.com/levansula23" rel="noopener">GitHub</a></p></div></div></div>
+
+  <footer>
+    <h4>How the numbers are computed</h4>
+    <div class="calcrefs">
+      <div><b>Atmosphere</b> — International Standard Atmosphere (ISA): the barometric formula in the troposphere (1.98&nbsp;°C / 1000&nbsp;ft lapse) and the isothermal layer above the tropopause (~36,089&nbsp;ft).</div>
+      <div><b>Blood oxygen</b> — alveolar gas equation <code>P_AO₂ = 0.2095·(P − 47) − P_CO₂/0.8</code> feeding the Severinghaus SpO₂ curve. CO₂ falls with altitude, tuned to acute-exposure data (~87% @ 10k, ~72% @ 18k, ~50% @ 25k&nbsp;ft).</div>
+      <div><b>Density altitude</b> — <code>PA = elev + (29.92 − altimeter)·1000</code>, then <code>DA = PA + 120·(OAT − ISA&nbsp;temp)</code>.</div>
+      <div><b>Horsepower</b> — Gagg–Ferrar relation <code>HP ≈ rated·(1.132σ − 0.132)</code>, σ = density ratio at your density altitude; turbos hold rated power to a critical altitude.</div>
+      <div><b>Power curve</b> — parabolic drag polar <code>C_D = C_D0 + C_L²/(πAR·e)</code>; power required = drag × TAS. The region of reversed command is the band from stall up to the minimum-power speed. Drag values are representative estimates and V-speeds (Vs, Va, Vno, Vne) are typical published figures — check your POH; the climb readout is idealized (constant ~80% prop efficiency) and optimistic at low speed.</div>
+      <div><b>Cabin altitude</b> — <code>cabin_P = min(sea level, ambient + ΔP)</code> inverted to an altitude; ΔP is each aircraft's published max pressure differential.</div>
+      <div><b>Data sources</b> — bundled ~110 airports (offline elevation) plus <code>aviationweather.gov</code> METAR for live temp/altimeter (via a same-origin proxy once hosted), falling back to <code>open-meteo.com</code> current weather by coordinates for fields without a METAR.</div>
+      <div><b>References</b> — FAA <i>Pilot's Handbook of Aeronautical Knowledge</i> (FAA-H-8083-25) and <i>Airplane Flying Handbook</i> (FAA-H-8083-3) for density altitude, the FAR&nbsp;91.211 oxygen rules, and the power curve / region of reversed command; J.D.&nbsp;Anderson, <i>Introduction to Flight</i> (parabolic drag polar, power-required = drag&nbsp;×&nbsp;TAS); the alveolar gas equation and Severinghaus SpO₂ relation, with acute-exposure SaO₂ figures from high-altitude physiology literature (e.g. J.B.&nbsp;West). Power-curve V-speeds and the narrow trainer reversed-command band cross-checked against Van's Air Force, GoFly, and Boldmethod.</div>
+    </div>
+    <p class="disclaim">Educational models for healthy unacclimatized adults at acute exposure. Real SpO₂ varies with fitness, acclimatization, and individual physiology. Not for medical or operational flight-planning use.</p>
+    <p class="ghsrc"><strong>Open source.</strong> DensityAlt is built in the open — <a href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener">view the code on GitHub</a> to see exactly how every number is computed.</p>
+    <p class="rms">Made with <a href="https://readymadesites.com/" rel="noopener">ReadyMadeSites™</a> — custom calculators, interactive tools &amp; SEO-ready websites that rank.</p>
+  </footer>
+
+</div>
+
+<script src="/app.js"></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "FAR 91.211 Oxygen Requirements and Hypoxia, Explained",
+  "description": "The three altitude tiers of FAR 91.211, the cabin-altitude subtlety most pilots miss, pressurized-aircraft rules in plain English, and the hypoxia physiology behind the rule.",
+  "image": "https://densityalt.com/og-image.png",
+  "author": {"@type": "Person", "name": "Levan Sulakvelidze", "description": "Instrument-rated private pilot", "sameAs": ["https://www.linkedin.com/in/levansula", "https://github.com/levansula23"]},
+  "publisher": {"@type": "Organization", "name": "DensityAlt", "logo": {"@type": "ImageObject", "url": "https://densityalt.com/og-image.png"}},
+  "datePublished": "2026-07-18",
+  "dateModified": "2026-07-18",
+  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://densityalt.com/learn/faa-oxygen-requirements"}
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"At what altitude do pilots legally need oxygen?","acceptedAnswer":{"@type":"Answer","text":"Under FAR 91.211, required flight crew must use supplemental oxygen for the portion of a flight above a cabin pressure altitude of 12,500 feet that lasts more than 30 minutes, and at all times above 14,000 feet. These are legal minimums — the FAA encourages oxygen use starting at 10,000 feet by day and 5,000 feet at night."}},
+    {"@type":"Question","name":"Do passengers have to use oxygen above 15,000 feet?","acceptedAnswer":{"@type":"Answer","text":"No. Above a cabin pressure altitude of 15,000 feet the pilot must provide each occupant with supplemental oxygen, but the regulation does not require passengers to actually use it. The crew, by contrast, must be provided with and use oxygen at their thresholds."}},
+    {"@type":"Question","name":"Does FAR 91.211 use aircraft altitude or cabin altitude?","acceptedAnswer":{"@type":"Answer","text":"Cabin pressure altitude. In an unpressurized airplane that is essentially the aircraft's pressure altitude, but in a pressurized aircraft the cabin may sit at 6,000 to 8,000 feet while the airplane cruises in the flight levels — so the 91.211(a) tiers aren't triggered unless pressurization is lost. Separate rules in 91.211(b) cover pressurized aircraft above FL250 and FL350."}},
+    {"@type":"Question","name":"What are the oxygen rules for pressurized aircraft?","acceptedAnswer":{"@type":"Answer","text":"Above FL250, a 10-minute supply of supplemental oxygen must be available for each occupant in case of a pressurization loss. Above FL350, one pilot at the controls must wear and use an oxygen mask — unless the flight is at or below FL410 with two pilots at the controls, each with a quick-donning mask that can be put on with one hand within 5 seconds. If one pilot leaves the controls above FL350, the remaining pilot must put a mask on."}},
+    {"@type":"Question","name":"What is the time of useful consciousness at 25,000 feet?","acceptedAnswer":{"@type":"Answer","text":"Roughly 3 to 5 minutes for a resting, unacclimatized person after sudden exposure — and about half that after a rapid decompression. At 18,000 feet it is 20 to 30 minutes; at 35,000 feet it collapses to 30 to 60 seconds, which is why one pilot must be on a mask, or seconds from one, above FL350."}}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://densityalt.com/"},
+    {"@type":"ListItem","position":2,"name":"Learn","item":"https://densityalt.com/learn/"},
+    {"@type":"ListItem","position":3,"name":"FAA Oxygen Requirements (FAR 91.211)","item":"https://densityalt.com/learn/faa-oxygen-requirements"}
+  ]
+}
+</script>
+</body>
+</html>

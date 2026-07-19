@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#05070f">
+<title>Region of Reversed Command, Explained Simply</title>
+<meta name="description" content="The region of reversed command is the speed range where flying slower takes more power. What the back side of the power curve means and how to escape it.">
+<link rel="canonical" href="https://densityalt.com/learn/region-of-reversed-command">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DensityAlt">
+<meta property="og:url" content="https://densityalt.com/learn/region-of-reversed-command">
+<meta property="og:title" content="Region of Reversed Command, Explained Simply">
+<meta property="og:description" content="Why flying slower can take more power: the back side of the power curve, where the region really sits in a trainer, and how to fly out of it.">
+<meta property="og:image" content="https://densityalt.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Region of Reversed Command, Explained Simply">
+<meta name="twitter:description" content="Why flying slower can take more power: the back side of the power curve, where the region really sits in a trainer, and how to fly out of it.">
+<meta name="twitter:image" content="https://densityalt.com/og-image.png">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<nav class="topnav"><div class="navin">
+  <a class="brand" href="/" style="text-decoration:none"><img src="/favicon.svg" alt=""><b>DensityAlt</b></a>
+  <div class="navlinks">
+    <a class="nl" href="/atmosphere-explorer">Explorer</a>
+    <a class="nl" href="/">Density Altitude</a>
+    <div class="nl-drop">
+      <button type="button" class="nl-trigger" aria-haspopup="true">Calculators<span class="caret" aria-hidden="true"></span></button>
+      <div class="nl-menu">
+        <a class="nl" href="/pressure-altitude-calculator">Pressure Altitude</a>
+        <a class="nl" href="/true-airspeed-calculator">True Airspeed</a>
+        <a class="nl" href="/crosswind-calculator">Crosswind</a>
+        <a class="nl" href="/takeoff-landing-distance">Takeoff &amp; Landing</a>
+        <a class="nl" href="/cloud-base-calculator">Cloud Base</a>
+        <a class="nl" href="/freezing-level-calculator">Freezing Level</a>
+        <a class="nl" href="/isa-deviation-calculator">ISA Deviation</a>
+        <a class="nl" href="/oxygen-at-altitude-calculator">Oxygen at Altitude</a>
+        <a class="nl" href="/pivotal-altitude-calculator">Pivotal Altitude</a>
+        <a class="nl" href="/horsepower-at-altitude">Horsepower</a>
+        <a class="nl" href="/power-curve">Power Curve</a>
+        <a class="nl" href="/cabin-altitude-calculator">Cabin Altitude</a>
+      </div>
+    </div>
+    <a class="nl" href="/learn/">Learn</a>
+    <a class="nl" href="/#about">About</a>
+  </div>
+  <a class="nav-gh" href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener" aria-label="DensityAlt source code on GitHub" title="Open source — view the code on GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+</div></nav>
+
+<div id="disclaimerBar" class="disclaimer-bar" hidden>
+  <span><strong>Educational estimates only.</strong> DensityAlt is not for flight planning, dispatch, or medical use — always use your POH and official sources.</span>
+  <button id="disclaimerOk" type="button">Got it</button>
+</div>
+
+<div class="wrap">
+
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/learn/">Learn</a> › <span>Region of reversed command</span></nav>
+  <header class="hero">
+    <div class="kicker">Learn · Aerodynamics</div>
+    <h1>The Region of Reversed Command (Behind the Power Curve)</h1>
+    <p class="hero-sub">Why flying slower can take more power.</p>
+    <p class="lead">A plain-language guide to the back side of the power curve — what actually reverses, where the region really sits in a trainer, and how to fly out of it. With an interactive power-required curve you can drag.</p>
+  </header>
+  <div class="byline"><img src="/headshot.jpg" alt="Levan Sulakvelidze" width="34" height="34" loading="lazy" decoding="async"><span><strong>Levan Sulakvelidze</strong> · Instrument-rated private pilot · Updated July 2026 · ~7 min read</span></div>
+
+  <style>
+  .article{max-width:760px;margin:0 auto}
+  .crumbs{max-width:760px;margin:0 auto 4px;font-size:13px;color:var(--ink-dim)}
+  .crumbs a{color:var(--accent);text-decoration:none}
+  .crumbs span{color:var(--ink-dim)}
+  .byline{max-width:760px;margin:18px auto 0;display:flex;gap:10px;align-items:center;font-size:13.5px;color:var(--ink-dim)}
+  .byline img{width:34px;height:34px;border-radius:50%;flex:0 0 auto}
+  .article h2{font-size:23px;line-height:1.25;margin:38px 0 12px;scroll-margin-top:70px}
+  .article h3{font-size:17px;margin:24px 0 8px;color:var(--ink)}
+  .article p{font-size:16px;line-height:1.72;color:var(--ink);margin:0 0 16px}
+  .article ul,.article ol{font-size:16px;line-height:1.72;color:var(--ink);padding-left:22px;margin:0 0 18px}
+  .article li{margin:7px 0}
+  .article a{color:var(--accent)}
+  .article strong{color:#fff}
+  .toc{background:var(--panel);border:1px solid var(--panel-brd);border-radius:12px;padding:16px 20px}
+  .toc .toc-t{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-dim);margin:0 0 8px}
+  .toc ol{margin:0;padding-left:20px;font-size:15px;line-height:1.5}
+  .toc a{color:var(--accent);text-decoration:none}
+  .keybox{background:var(--panel);border:1px solid var(--panel-brd);border-left:3px solid var(--accent);border-radius:10px;padding:14px 18px;margin:0 0 20px;font-size:16px;line-height:1.6}
+  .formula{font-family:var(--mono);background:rgba(255,255,255,.05);border:1px solid var(--panel-brd);border-radius:10px;padding:13px 16px;margin:0 0 18px;font-size:14px;color:var(--accent2);overflow-x:auto}
+  .article table{width:100%;border-collapse:collapse;margin:0 0 20px;font-size:14.5px}
+  .article th,.article td{border:1px solid var(--panel-brd);padding:8px 12px;text-align:left}
+  .article th{color:var(--ink-dim);font-weight:600}
+  .article blockquote{border-left:3px solid var(--warn);margin:0 0 18px;padding:4px 0 4px 18px;color:var(--ink-dim);font-style:italic}
+  .calc-intro{max-width:760px;margin:0 auto}
+  .authorbox{max-width:760px;margin:40px auto 0;display:flex;gap:14px;align-items:flex-start;background:var(--panel);border:1px solid var(--panel-brd);border-radius:14px;padding:18px}
+  .authorbox img{width:54px;height:54px;border-radius:50%;flex:0 0 auto}
+  .authorbox p{font-size:14px;line-height:1.6;color:var(--ink-dim);margin:6px 0 0}
+  .authorbox a{color:var(--accent)}
+  .learn-card{display:block;background:var(--panel);border:1px solid var(--panel-brd);border-radius:14px;padding:22px;text-decoration:none;color:inherit;margin:0 0 14px}
+  .learn-card:hover{border-color:var(--accent)}
+  .learn-card .lc-k{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent)}
+  .learn-card .lc-t{font-size:20px;font-weight:700;margin:4px 0 6px;color:var(--ink)}
+  .learn-card .lc-d{font-size:14.5px;color:var(--ink-dim);line-height:1.5}
+  </style>
+
+  <div class="article">
+    <p>The <strong>region of reversed command</strong> is the range of airspeeds below an airplane’s minimum-power speed where flying <em>slower</em> requires <em>more</em> power to hold altitude — not less. On this “back side” of the power curve, the familiar relationship between speed and power runs backwards: raise the nose, get slower, and you must add throttle just to stay level.</p>
+    <div class="keybox"><strong>The name is the hard part, not the physics.</strong> At low airspeed the wing needs a big angle of attack to keep lifting, and the drag bundled with lift — induced drag — balloons. Slow enough and it grows faster than the drag you shed by slowing, so the total power needed to stay level rises again. Everything below that turnaround is the region of reversed command.</div>
+    <div class="toc">
+      <div class="toc-t">In this guide</div>
+      <ol>
+        <li><a href="#power-curve-shape">The power-required curve: why it’s a bucket</a></li>
+        <li><a href="#front-side-back-side">Front side vs. back side — what “reversed” means</a></li>
+        <li><a href="#where-it-sits">Where the region really sits in a trainer</a></li>
+        <li><a href="#when-it-bites">When it bites</a></li>
+        <li><a href="#recognition-escape">Recognizing it — and getting out</a></li>
+        <li><a href="#pitch-power-debate">The “pitch for airspeed, power for altitude” debate</a></li>
+        <li><a href="#checkride">Checkride oral questions</a></li>
+        <li><a href="#slow-flight">Is slow flight behind the power curve?</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ol>
+    </div>
+
+    <h2 id="power-curve-shape">The power-required curve: why it’s a bucket</h2>
+    <p>Plot the power an airplane needs to hold level flight against airspeed and you always get the same shape: a bucket. Two kinds of drag dig it.</p>
+    <ul>
+      <li><strong>Parasite drag</strong> — skin friction, form drag, everything hanging in the breeze. It grows with the square of airspeed — the power to beat it with the cube — and owns the fast side of the chart.</li>
+      <li><strong>Induced drag</strong> — the unavoidable byproduct of lift. As you slow, angle of attack rises and induced drag balloons; the power to fight it <em>climbs as speed falls</em>. It owns the slow side.</li>
+    </ul>
+    <p>Add them and you get the power-required curve: falling as you slow from cruise, bottoming at the <strong>minimum-power airspeed</strong> (your best-endurance speed), then rising toward the stall. Watch the two contributions summed live on the <a href="/power-curve">interactive power curve</a> — drag the airspeed marker into the shaded band and see power required turn around.</p>
+
+    <h2 id="front-side-back-side">Front side vs. back side — what “reversed” actually means</h2>
+    <p>On the <strong>front side</strong> of the curve — everything faster than minimum-power speed — flying works the way cruise taught you: to fly slower and stay level, reduce power. That’s the region of <em>normal</em> command.</p>
+    <p>Below the bottom of the bucket the trend flips: slower now means <em>more</em> power, because induced drag grows faster than parasite drag shrinks. That is all “reversed command” means. The controls do not reverse — elevator and throttle work as they always have. What reverses is the relationship between the airspeed you hold and the power it takes to stay level.</p>
+    <p>Numbers make it concrete. In a Cessna 172 holding altitude:</p>
+    <table>
+      <tr><th>Airspeed (level flight)</th><th>Side of the curve</th><th>Power to hold altitude</th></tr>
+      <tr><td>90 KIAS</td><td>Front side</td><td>High — parasite drag dominates</td></tr>
+      <tr><td>75 → 65 KIAS</td><td>Front side</td><td>Lower and lower</td></tr>
+      <tr><td>~56–57 KIAS</td><td>Bottom of the bucket</td><td>Minimum</td></tr>
+      <tr><td>55 → 50 KIAS</td><td>Back side</td><td>Rising again — more than at 65</td></tr>
+      <tr><td>~48 KIAS</td><td>Clean stall</td><td>The wing quits before the curve gets dramatic</td></tr>
+    </table>
+    <p>Try it: level at 65 knots, a 172 is content at a modest power setting. Slow to 55 — below the minimum-power speed — and the throttle creeps <em>forward</em> to keep the altimeter frozen; hold 50 and you’re carrying close to climb power just to fly level. The textbook curve rises gently at first; the real airplane is steeper, because flow separation adds drag near the stall and a propeller works poorly at very low airspeed.</p>
+
+    <h2 id="where-it-sits">Where the region really sits in a trainer</h2>
+    <p>Here’s the part most explanations skip: in a typical trainer the region of reversed command is <strong>narrow</strong>. In a 172 near maximum gross weight, the clean stall (V<sub>S1</sub>) sits around <strong>48 KIAS</strong> and the minimum-power speed around <strong>56–57 KIAS</strong> — the entire region spans roughly eight or nine knots. The stall-warning horn, required to sound at least 5 knots before the stall, starts complaining when you’ve barely crossed into it.</p>
+    <p>Said precisely: the steeply-rising part of the power-required curve lies mostly at speeds a trainer’s wing can’t sustain — <strong>you may reach the stall before you ever get deeply into the region</strong>. That’s why the concept feels theoretical in a 172, and why it stops being theoretical in heavier, cleaner, swept-wing aircraft with a far wider back side.</p>
+
+    <h2 id="when-it-bites">When it bites: short fields, go-arounds, and high density altitude</h2>
+    <p>The region matters exactly where airplanes spend time slow and low:</p>
+    <ul>
+      <li><strong>Short-field approaches.</strong> Dragging it in at 1.2&nbsp;V<sub>S0</sub> with power puts you behind the curve on purpose — fine, as long as the engine keeps delivering and you never stretch the glide with elevator alone.</li>
+      <li><strong>Go-arounds at high density altitude.</strong> The ugly combination. Power <em>available</em> falls roughly 3% per 1,000&nbsp;ft of density altitude while the power <em>required</em> to fly level (a true-airspeed quantity) rises in thin air. The curves pinch together, and an airplane that climbs away easily at sea level can end up level at full throttle, behind the curve, out of options. Run your day’s number on the <a href="https://densityalt.com/">density altitude calculator</a>, and see the companion guide to <a href="/learn/density-altitude-takeoff-performance">density altitude and takeoff performance</a> for the departure side of the same trap.</li>
+      <li><strong>Seaplane and soft-field work.</strong> Lifting off at minimum speed in ground effect and staggering along behind the curve while the airplane accelerates is standard technique — and a standard place to settle back on if you climb too soon.</li>    </ul>
+
+    <h2 id="recognition-escape">Recognizing it — and getting out</h2>
+    <p>The signature is unmistakable: <strong>nose high, power high, airspeed low, and the airplane sinking anyway</strong>. Controls feel mushy, the stall horn may be chirping, and pulling harder — exactly what instinct suggests — only deepens the sink.</p>
+    <p>The escape is the same every time: <strong>lower the nose, apply full power, and accept some altitude loss</strong>. Reducing angle of attack collapses the induced drag, the airplane accelerates through the minimum-power speed, and the normal rules return. The altitude given up is the price of admission; trying to save it with elevator is how behind-the-curve encounters near the ground become stall/spin accidents.</p>
+
+    <h2 id="pitch-power-debate">The “pitch for airspeed, power for altitude” debate</h2>
+    <p>One school teaches <em>pitch controls airspeed, power controls altitude</em> — and behind the curve that model earns its keep, because pointing the nose down really is how you fix decaying airspeed. The other school teaches the reverse for normal approaches, and energy-management thinking says both camps describe one system: pitch and power together manage total energy, and every input affects both speed and path.</p>
+    <p>Both views are defensible — the FAA’s own handbooks have carried language from each. What the region makes non-negotiable is practical: when you are slow and sinking, <strong>angle of attack must come down before anything else gets better</strong>, and no amount of elevator substitutes for the power the back side demands.</p>
+
+    <h2 id="checkride">Checkride oral: how this gets asked</h2>
+    <div class="keybox">
+      <strong>Quick answers examiners are listening for:</strong>
+      <ul style="margin:10px 0 0">
+        <li><strong>“What is the region of reversed command?”</strong> — Airspeeds below minimum-power speed, where holding altitude at a slower speed requires more power.</li>
+        <li><strong>“Where does it begin?”</strong> — At the bottom of the power-required curve: the minimum-power (best-endurance) airspeed, roughly 55–60 knots in a light trainer.</li>
+        <li><strong>“Do the controls reverse?”</strong> — No. The power-vs-airspeed <em>relationship</em> reverses; the controls work normally.</li>
+        <li><strong>“How do you recover behind the curve on final?”</strong> — Lower the nose, full power, accept altitude loss, accelerate back to the front side, then go around.</li>
+        <li><strong>“What changes the region?”</strong> — Weight, flaps, load factor, and density altitude move both the stall speed and the minimum-power speed.</li>
+      </ul>
+    </div>
+
+    <h2 id="slow-flight">Is slow flight behind the power curve?</h2>
+    <p><strong>Yes — that’s the point of the maneuver.</strong> Slow flight as practiced for the private and commercial ACS puts you at or just above the speed where the stall warning sounds — in a trainer, inside or brushing the region of reversed command. It exists so you can feel the reversed relationship with your hands: lots of power, little speed, mushy controls, altitude held with throttle while pitch minds the airspeed. If you have flown slow flight, you have flown the back side of the power curve.</p>
+    <p class="calc-disclaimer" style="margin-top:22px"><strong>Educational only.</strong> Speeds and power figures are representative of a typical 172 — your airplane’s numbers live in your POH and change with weight and configuration.</p>
+
+
+  <section class="da faq" id="faq">
+    <h2>Frequently asked questions</h2>
+    <div class="faqlist">
+      <details class="faq-item"><summary>What is the region of reversed command in simple terms?</summary>
+      <p class="a">The range of speeds below the minimum-power airspeed where flying <strong>slower takes more power</strong> to hold altitude, because induced drag balloons at high angles of attack. It’s also called the back side of the power curve; the controls themselves work normally.</p></details>
+      <details class="faq-item"><summary>At what airspeed does the region of reversed command start?</summary>
+      <p class="a">At the <strong>minimum-power (best-endurance) airspeed</strong> — the bottom of the power-required curve. In a Cessna 172 that’s roughly 56–57 KIAS, with the clean stall near 48 KIAS, so the whole region spans only eight or nine knots.</p></details>
+      <details class="faq-item"><summary>Is it dangerous to fly in the region of reversed command?</summary>
+      <p class="a">Not inherently — soft-field liftoffs, seaplane ops, and slow flight all happen there deliberately. It becomes dangerous <strong>close to the ground with limited power</strong>, especially at high density altitude, because the instinctive response to sinking (pulling up) increases drag and makes the sink worse.</p></details>
+      <details class="faq-item"><summary>How do you recover from behind the power curve?</summary>
+      <p class="a"><strong>Lower the nose, apply full power, and accept some altitude loss.</strong> Reducing angle of attack cuts induced drag, the airplane accelerates past the minimum-power speed, and normal command returns. Trying to hold altitude with elevator alone invites a stall.</p></details>
+      <details class="faq-item"><summary>Do jets have a region of reversed command?</summary>
+      <p class="a">Yes — wider and more consequential. Swept, highly loaded wings put jet approach speeds closer to the back side, and jet engines spool up slowly, so getting slow on final is treated far more seriously. The aerodynamics is identical; only the margins differ.</p></details>
+    </div>
+  </section>
+
+  <div class="article"><h2 style="margin-top:38px">Keep exploring</h2>
+    <p>Put the curve under your fingers with the interactive <a href="/power-curve">power curve &amp; reversed command tool</a>, or browse the rest of the free guides in the <a href="/learn/">Learn hub</a>:</p></div>
+  <section class="da" id="more-tools">
+    <h2>More free altitude tools</h2>
+    <p class="desc">DensityAlt is a set of free, no-signup aviation calculators. Explore the rest:</p>
+    <div class="grid">
+      <a class="card" href="/atmosphere-explorer" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Atmosphere &amp; Hypoxia Explorer</div>
+        <div class="pct">Drag an aircraft up and watch pressure, oxygen &amp; SpO₂ fall.</div></a>
+      <a class="card" href="/crosswind-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Crosswind Calculator</div>
+        <div class="pct">Split the wind into crosswind &amp; headwind on a runway diagram.</div></a>
+      <a class="card" href="/takeoff-landing-distance" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Takeoff &amp; Landing Distance</div>
+        <div class="pct">How density altitude stretches your ground roll &amp; rollout.</div></a>
+      <a class="card" href="/horsepower-at-altitude" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Horsepower at Altitude</div>
+        <div class="pct">How much power a piston engine loses with density altitude.</div></a>
+      <a class="card" href="/power-curve" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Power Curve &amp; Reversed Command</div>
+        <div class="pct">The back side of the power curve and your climb margins.</div></a>
+      <a class="card" href="/cabin-altitude-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Cabin Altitude</div>
+        <div class="pct">What cabin altitude your pressurization holds at cruise.</div></a>
+    </div>
+  </section>
+
+  <div class="article">  <div class="authorbox"><img src="/headshot.jpg" alt="Levan Sulakvelidze" width="54" height="54" loading="lazy" decoding="async"><div><strong>Levan Sulakvelidze</strong><p>Instrument-rated private pilot and the builder of DensityAlt. I fly out of high-and-hot fields in the western U.S., where density altitude isn’t a textbook abstraction — it’s the difference between a comfortable climb and staring down the far end of the runway. I built these tools to make the numbers obvious before the throttle goes up. <a href="https://www.linkedin.com/in/levansula" rel="noopener">LinkedIn</a> · <a href="https://github.com/levansula23" rel="noopener">GitHub</a></p></div></div></div>
+
+  <footer>
+    <h4>How the numbers are computed</h4>
+    <div class="calcrefs">
+      <div><b>Atmosphere</b> — International Standard Atmosphere (ISA): the barometric formula in the troposphere (1.98&nbsp;°C / 1000&nbsp;ft lapse) and the isothermal layer above the tropopause (~36,089&nbsp;ft).</div>
+      <div><b>Blood oxygen</b> — alveolar gas equation <code>P_AO₂ = 0.2095·(P − 47) − P_CO₂/0.8</code> feeding the Severinghaus SpO₂ curve. CO₂ falls with altitude, tuned to acute-exposure data (~87% @ 10k, ~72% @ 18k, ~50% @ 25k&nbsp;ft).</div>
+      <div><b>Density altitude</b> — <code>PA = elev + (29.92 − altimeter)·1000</code>, then <code>DA = PA + 120·(OAT − ISA&nbsp;temp)</code>.</div>
+      <div><b>Horsepower</b> — Gagg–Ferrar relation <code>HP ≈ rated·(1.132σ − 0.132)</code>, σ = density ratio at your density altitude; turbos hold rated power to a critical altitude.</div>
+      <div><b>Power curve</b> — parabolic drag polar <code>C_D = C_D0 + C_L²/(πAR·e)</code>; power required = drag × TAS. The region of reversed command is the band from stall up to the minimum-power speed. Drag values are representative estimates and V-speeds (Vs, Va, Vno, Vne) are typical published figures — check your POH; the climb readout is idealized (constant ~80% prop efficiency) and optimistic at low speed.</div>
+      <div><b>Cabin altitude</b> — <code>cabin_P = min(sea level, ambient + ΔP)</code> inverted to an altitude; ΔP is each aircraft's published max pressure differential.</div>
+      <div><b>Data sources</b> — bundled ~110 airports (offline elevation) plus <code>aviationweather.gov</code> METAR for live temp/altimeter (via a same-origin proxy once hosted), falling back to <code>open-meteo.com</code> current weather by coordinates for fields without a METAR.</div>
+      <div><b>References</b> — FAA <i>Pilot's Handbook of Aeronautical Knowledge</i> (FAA-H-8083-25) and <i>Airplane Flying Handbook</i> (FAA-H-8083-3) for density altitude, the FAR&nbsp;91.211 oxygen rules, and the power curve / region of reversed command; J.D.&nbsp;Anderson, <i>Introduction to Flight</i> (parabolic drag polar, power-required = drag&nbsp;×&nbsp;TAS); the alveolar gas equation and Severinghaus SpO₂ relation, with acute-exposure SaO₂ figures from high-altitude physiology literature (e.g. J.B.&nbsp;West). Power-curve V-speeds and the narrow trainer reversed-command band cross-checked against Van's Air Force, GoFly, and Boldmethod.</div>
+    </div>
+    <p class="disclaim">Educational models for healthy unacclimatized adults at acute exposure. Real SpO₂ varies with fitness, acclimatization, and individual physiology. Not for medical or operational flight-planning use.</p>
+    <p class="ghsrc"><strong>Open source.</strong> DensityAlt is built in the open — <a href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener">view the code on GitHub</a> to see exactly how every number is computed.</p>
+    <p class="rms">Made with <a href="https://readymadesites.com/" rel="noopener">ReadyMadeSites™</a> — custom calculators, interactive tools &amp; SEO-ready websites that rank.</p>
+  </footer>
+
+</div>
+
+<script src="/app.js"></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "The Region of Reversed Command (Behind the Power Curve)",
+  "description": "A plain-language guide to the region of reversed command: why flying slower can take more power, where the back side of the power curve sits in a trainer, and how to recover.",
+  "image": "https://densityalt.com/og-image.png",
+  "author": {"@type": "Person", "name": "Levan Sulakvelidze", "description": "Instrument-rated private pilot", "sameAs": ["https://www.linkedin.com/in/levansula", "https://github.com/levansula23"]},
+  "publisher": {"@type": "Organization", "name": "DensityAlt", "logo": {"@type": "ImageObject", "url": "https://densityalt.com/og-image.png"}},
+  "datePublished": "2026-07-18",
+  "dateModified": "2026-07-18",
+  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://densityalt.com/learn/region-of-reversed-command"}
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"What is the region of reversed command in simple terms?","acceptedAnswer":{"@type":"Answer","text":"The range of speeds below the minimum-power airspeed where flying slower takes more power to hold altitude, because induced drag balloons at high angles of attack. It is also called the back side of the power curve; the controls themselves work normally."}},
+    {"@type":"Question","name":"At what airspeed does the region of reversed command start?","acceptedAnswer":{"@type":"Answer","text":"At the minimum-power (best-endurance) airspeed — the bottom of the power-required curve. In a Cessna 172 that is roughly 56 to 57 KIAS, with the clean stall near 48 KIAS, so the whole region spans only eight or nine knots."}},
+    {"@type":"Question","name":"Is it dangerous to fly in the region of reversed command?","acceptedAnswer":{"@type":"Answer","text":"Not inherently — soft-field liftoffs, seaplane operations, and slow flight all happen there deliberately. It becomes dangerous close to the ground with limited power, especially at high density altitude, because the instinctive response to sinking (pulling up) increases drag and makes the sink worse."}},
+    {"@type":"Question","name":"How do you recover from behind the power curve?","acceptedAnswer":{"@type":"Answer","text":"Lower the nose, apply full power, and accept some altitude loss. Reducing angle of attack cuts induced drag, the airplane accelerates past the minimum-power speed, and normal command returns. Trying to hold altitude with elevator alone invites a stall."}},
+    {"@type":"Question","name":"Do jets have a region of reversed command?","acceptedAnswer":{"@type":"Answer","text":"Yes — wider and more consequential. Swept, highly loaded wings put jet approach speeds closer to the back side, and jet engines spool up slowly, so getting slow on final is treated far more seriously. The aerodynamics is identical; only the margins differ."}}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://densityalt.com/"},
+    {"@type":"ListItem","position":2,"name":"Learn","item":"https://densityalt.com/learn/"},
+    {"@type":"ListItem","position":3,"name":"The Region of Reversed Command","item":"https://densityalt.com/learn/region-of-reversed-command"}
+  ]
+}
+</script>
+</body>
+</html>

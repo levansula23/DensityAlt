@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#05070f">
+<title>True Airspeed Calculator — TAS from IAS &amp; Altitude</title>
+<meta name="description" content="Convert indicated/calibrated airspeed to true airspeed from pressure altitude and temperature — exact density-ratio math plus the 2% per 1,000 ft rule.">
+<link rel="canonical" href="https://densityalt.com/true-airspeed-calculator">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DensityAlt">
+<meta property="og:url" content="https://densityalt.com/true-airspeed-calculator">
+<meta property="og:title" content="True Airspeed Calculator — TAS from IAS and Altitude">
+<meta property="og:description" content="Enter indicated airspeed, pressure altitude, and OAT to get true airspeed, density altitude, and Mach — with the density-ratio math shown.">
+<meta property="og:image" content="https://densityalt.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="True Airspeed Calculator — TAS from IAS and Altitude">
+<meta name="twitter:description" content="Enter indicated airspeed, pressure altitude, and OAT to get true airspeed, density altitude, and Mach — with the density-ratio math shown.">
+<meta name="twitter:image" content="https://densityalt.com/og-image.png">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<nav class="topnav"><div class="navin">
+  <a class="brand" href="/" style="text-decoration:none"><img src="/favicon.svg" alt=""><b>DensityAlt</b></a>
+  <div class="navlinks">
+    <a class="nl" href="/atmosphere-explorer">Explorer</a>
+    <a class="nl" href="/">Density Altitude</a>
+    <div class="nl-drop">
+      <button type="button" class="nl-trigger" aria-haspopup="true">Calculators<span class="caret" aria-hidden="true"></span></button>
+      <div class="nl-menu">
+        <a class="nl" href="/pressure-altitude-calculator">Pressure Altitude</a>
+        <a class="nl" href="/true-airspeed-calculator">True Airspeed</a>
+        <a class="nl" href="/crosswind-calculator">Crosswind</a>
+        <a class="nl" href="/takeoff-landing-distance">Takeoff &amp; Landing</a>
+        <a class="nl" href="/cloud-base-calculator">Cloud Base</a>
+        <a class="nl" href="/freezing-level-calculator">Freezing Level</a>
+        <a class="nl" href="/isa-deviation-calculator">ISA Deviation</a>
+        <a class="nl" href="/oxygen-at-altitude-calculator">Oxygen at Altitude</a>
+        <a class="nl" href="/pivotal-altitude-calculator">Pivotal Altitude</a>
+        <a class="nl" href="/horsepower-at-altitude">Horsepower</a>
+        <a class="nl" href="/power-curve">Power Curve</a>
+        <a class="nl" href="/cabin-altitude-calculator">Cabin Altitude</a>
+      </div>
+    </div>
+    <a class="nl" href="/learn/">Learn</a>
+    <a class="nl" href="/#about">About</a>
+  </div>
+  <a class="nav-gh" href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener" aria-label="DensityAlt source code on GitHub" title="Open source — view the code on GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+</div></nav>
+
+<div id="disclaimerBar" class="disclaimer-bar" hidden>
+  <span><strong>Educational estimates only.</strong> DensityAlt is not for flight planning, dispatch, or medical use — always use your POH and official sources.</span>
+  <button id="disclaimerOk" type="button">Got it</button>
+</div>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="kicker">Free aviation &amp; aerospace calculators</div>
+    <h1>True Airspeed <span>Calculator</span></h1>
+    <p class="hero-sub">What you're actually doing through the air.</p>
+    <p class="lead">Your airspeed indicator measures dynamic pressure, not speed — in thin air it under-reads. True airspeed corrects indicated (calibrated) airspeed for the air density at your altitude and temperature: TAS = CAS ÷ √σ. Enter your numbers to get TAS, the <a href="/">density altitude</a> doing the work, and your Mach number.</p>
+  </header>
+
+  <section class="da" id="true-airspeed">
+    <h2>True Airspeed Calculator</h2>
+    <p class="desc">Uses pressure altitude (29.92 set — or compute it with the <a href="/pressure-altitude-calculator">pressure altitude calculator</a>) and outside air temperature. IAS is assumed equal to CAS — close for most cruise regimes.</p>
+    <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning or dispatch.</strong> Fly your POH numbers.</p>
+    <div class="da-grid">
+      <div class="field">
+        <label>Indicated / Calibrated Airspeed</label>
+        <div class="in"><input id="tasCas" type="number" value="120"><span class="unit">kt</span></div>
+      </div>
+      <div class="field">
+        <label>Pressure Altitude</label>
+        <div class="in"><input id="tasPa" type="text" inputmode="numeric" value="8,000"><span class="unit">ft</span></div>
+      </div>
+      <div class="field">
+        <label>Outside Air Temp</label>
+        <div class="in"><input id="tasOat" type="number" value="5"><button type="button" id="tasUnit" class="unit unit-toggle" title="Switch between Celsius and Fahrenheit">°C</button></div>
+      </div>
+    </div>
+    <div class="da-out">
+      <div class="out hero"><div class="lbl">True Airspeed</div><div class="v" style="color:var(--accent2)"><span id="tasOut">136</span> kt</div></div>
+      <div class="out"><div class="lbl">Density Altitude</div><div class="v" style="color:var(--warn)"><span id="tasDa">8,700</span> ft</div></div>
+      <div class="out"><div class="lbl">Mach</div><div class="v"><span id="tasMach">0.21</span></div></div>
+    </div>
+    <div class="da-note" id="tasNote"></div>
+  </section>
+
+  <section class="da" id="how">
+    <h2>How true airspeed is calculated</h2>
+    <p class="desc"><strong>TAS = CAS ÷ √σ</strong>, where σ is the density ratio — the air density at your <a href="/">density altitude</a> divided by sea-level density. The airspeed indicator is a pressure gauge calibrated for sea-level air; at altitude the same true speed produces less dynamic pressure, so the needle reads low. Dividing by √σ undoes that.</p>
+    <p class="desc"><strong>The rule of thumb:</strong> add roughly <strong>2% per 1,000 ft</strong> of altitude. At 8,000 ft, 120 KIAS ≈ 120 × 1.16 ≈ 139 KTAS. The exact math usually lands a few knots lower than the rule — both are shown above so you can see the spread.</p>
+    <p class="desc"><strong>Why it matters:</strong> flight planning runs on TAS (groundspeed = TAS ± wind), cruise tables quote TAS, and the gap between IAS and TAS is exactly why "high density altitude approaches feel fast" — your groundspeed is higher at the same indicated speed. That's also the link to <a href="/learn/density-altitude-takeoff-performance">density altitude's effect on takeoff and landing</a>.</p>
+    <div class="tablewrap"><table class="reftable">
+      <tr><th>Pressure altitude (ISA)</th><th>120 KIAS ≈ TAS</th><th>σ (density ratio)</th></tr>
+      <tr><td><b>Sea level</b></td><td>120 kt</td><td>1.000</td></tr>
+      <tr><td><b>4,000 ft</b></td><td>127 kt</td><td>0.888</td></tr>
+      <tr><td><b>8,000 ft</b></td><td>135 kt</td><td>0.786</td></tr>
+      <tr><td><b>12,000 ft</b></td><td>144 kt</td><td>0.693</td></tr>
+    </table></div>
+  </section>
+
+  <section class="da faq" id="faq">
+    <h2>Frequently asked questions</h2>
+    <div class="faqlist">
+      <details class="faq-item"><summary>How do you convert IAS to TAS?</summary>
+      <p class="a">Divide calibrated airspeed by the square root of the density ratio at your density altitude: TAS = CAS ÷ √σ. Or use the rule of thumb — add about 2% per 1,000 ft of altitude. 120 KIAS at 8,000 ft is roughly 135–139 KTAS.</p></details>
+      <details class="faq-item"><summary>Why is true airspeed higher than indicated at altitude?</summary>
+      <p class="a">The airspeed indicator measures dynamic pressure, which depends on both speed and air density. Thinner air produces less pressure at the same true speed, so the instrument under-reads — and the gap grows with altitude and temperature.</p></details>
+      <details class="faq-item"><summary>Is TAS the same as groundspeed?</summary>
+      <p class="a">No. TAS is your speed through the air mass; groundspeed is TAS corrected for wind — a 20-kt headwind turns 140 KTAS into 120 kt over the ground. GPS shows groundspeed, never TAS.</p></details>
+      <details class="faq-item"><summary>Does temperature change TAS?</summary>
+      <p class="a">Yes. Warmer than ISA means thinner air (higher density altitude), so the same indicated airspeed converts to a higher TAS. That's why this calculator asks for OAT rather than assuming a standard day.</p></details>
+    </div>
+  </section>
+
+  <section class="da" id="more-tools">
+    <h2>More free altitude tools</h2>
+    <p class="desc">DensityAlt is a set of free, no-signup aviation calculators. Explore the rest:</p>
+    <div class="grid">
+      <a class="card" href="/" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Density Altitude</div>
+        <div class="pct">The altitude your aircraft actually performs at — with live METAR.</div></a>
+      <a class="card" href="/pressure-altitude-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Pressure Altitude</div>
+        <div class="pct">PA from the altimeter setting — the chart-entry altitude.</div></a>
+      <a class="card" href="/isa-deviation-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">ISA Deviation</div>
+        <div class="pct">Standard temperature at altitude and your ISA± number.</div></a>
+      <a class="card" href="/horsepower-at-altitude" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Horsepower at Altitude</div>
+        <div class="pct">How much power a piston engine loses with density altitude.</div></a>
+      <a class="card" href="/power-curve" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Power Curve &amp; Reversed Command</div>
+        <div class="pct">The back side of the power curve and your climb margins.</div></a>
+      <a class="card" href="/crosswind-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Crosswind Calculator</div>
+        <div class="pct">Split the wind into crosswind &amp; headwind on a runway diagram.</div></a>
+    </div>
+  </section>
+
+  <footer>
+    <h4>How the numbers are computed</h4>
+    <div class="calcrefs">
+      <div><b>True airspeed</b> — <code>TAS = CAS ÷ √σ</code>, σ = air density at your density altitude ÷ sea-level density (1.225 kg/m³). Mach = TAS ÷ speed of sound at your OAT (<code>a = √(γRT)</code>).</div>
+      <div><b>Density altitude</b> — <code>DA = PA + 120·(OAT − ISA&nbsp;temp)</code>, ISA temp = 15 − 1.98 °C per 1,000 ft.</div>
+      <div><b>Atmosphere</b> — International Standard Atmosphere (ISA): the barometric formula in the troposphere (1.98&nbsp;°C / 1000&nbsp;ft lapse) and the isothermal layer above the tropopause (~36,089&nbsp;ft).</div>
+      <div><b>References</b> — FAA <i>Pilot's Handbook of Aeronautical Knowledge</i> (FAA-H-8083-25); J.D.&nbsp;Anderson, <i>Introduction to Flight</i> (airspeed measurement and the density ratio).</div>
+    </div>
+    <p class="disclaim">Educational tool. IAS is assumed equal to CAS; compressibility is ignored (fine below ~200 kt / FL180). Not for operational flight-planning use.</p>
+    <p class="ghsrc"><strong>Open source.</strong> DensityAlt is built in the open — <a href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener">view the code on GitHub</a> to see exactly how every number is computed.</p>
+    <p class="rms">Made with <a href="https://readymadesites.com/" rel="noopener">ReadyMadeSites™</a> — custom calculators, interactive tools &amp; SEO-ready websites that rank.</p>
+  </footer>
+
+</div>
+
+<script src="/app.js"></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "DensityAlt True Airspeed Calculator",
+  "url": "https://densityalt.com/true-airspeed-calculator",
+  "description": "True airspeed calculator: TAS from indicated/calibrated airspeed, pressure altitude, and temperature via the exact density ratio, plus density altitude and Mach number.",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Any (web browser)",
+  "browserRequirements": "Requires JavaScript",
+  "isAccessibleForFree": true,
+  "author": {"@type": "Person", "name": "Levan Sulakvelidze", "description": "Instrument-rated private pilot", "sameAs": ["https://www.linkedin.com/in/levansula", "https://www.instagram.com/levansula/", "https://github.com/levansula23"]},
+  "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+  "featureList": [
+    "TAS from IAS/CAS, pressure altitude, and OAT",
+    "Exact density-ratio calculation with rule-of-thumb comparison",
+    "Density altitude output",
+    "Mach number",
+    "Celsius and Fahrenheit input"
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"How do you convert IAS to TAS?","acceptedAnswer":{"@type":"Answer","text":"Divide calibrated airspeed by the square root of the density ratio at your density altitude: TAS = CAS ÷ √σ. Or use the rule of thumb — add about 2% per 1,000 feet of altitude. 120 KIAS at 8,000 feet is roughly 135–139 KTAS."}},
+    {"@type":"Question","name":"Why is true airspeed higher than indicated at altitude?","acceptedAnswer":{"@type":"Answer","text":"The airspeed indicator measures dynamic pressure, which depends on both speed and air density. Thinner air produces less pressure at the same true speed, so the instrument under-reads — and the gap grows with altitude and temperature."}},
+    {"@type":"Question","name":"Is TAS the same as groundspeed?","acceptedAnswer":{"@type":"Answer","text":"No. TAS is your speed through the air mass; groundspeed is TAS corrected for wind — a 20-knot headwind turns 140 KTAS into 120 knots over the ground. GPS shows groundspeed, never TAS."}},
+    {"@type":"Question","name":"Does temperature change TAS?","acceptedAnswer":{"@type":"Answer","text":"Yes. Warmer than ISA means thinner air and a higher density altitude, so the same indicated airspeed converts to a higher true airspeed. That is why a TAS calculator asks for outside air temperature rather than assuming a standard day."}}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Density Altitude Calculator","item":"https://densityalt.com/"},
+    {"@type":"ListItem","position":2,"name":"True Airspeed Calculator","item":"https://densityalt.com/true-airspeed-calculator"}
+  ]
+}
+</script>
+</body>
+</html>

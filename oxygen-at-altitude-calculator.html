@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#05070f">
+<title>Oxygen at Altitude Calculator: O2 Levels by Elevation</title>
+<meta name="description" content="See effective oxygen %, air pressure, and estimated blood oxygen (SpO2) at any altitude — Denver to Everest to a jet cabin. Free interactive calculator.">
+<link rel="canonical" href="https://densityalt.com/oxygen-at-altitude-calculator">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DensityAlt">
+<meta property="og:url" content="https://densityalt.com/oxygen-at-altitude-calculator">
+<meta property="og:title" content="Oxygen at Altitude — How Much O2 Is at Your Elevation?">
+<meta property="og:description" content="Interactive calculator: effective oxygen percentage, air pressure, and estimated SpO2 at any altitude, with a reference table from sea level to Everest.">
+<meta property="og:image" content="https://densityalt.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Oxygen at Altitude — How Much O2 Is at Your Elevation?">
+<meta name="twitter:description" content="Interactive calculator: effective oxygen percentage, air pressure, and estimated SpO2 at any altitude, with a reference table from sea level to Everest.">
+<meta name="twitter:image" content="https://densityalt.com/og-image.png">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<nav class="topnav"><div class="navin">
+  <a class="brand" href="/" style="text-decoration:none"><img src="/favicon.svg" alt=""><b>DensityAlt</b></a>
+  <div class="navlinks">
+    <a class="nl" href="/atmosphere-explorer">Explorer</a>
+    <a class="nl" href="/">Density Altitude</a>
+    <div class="nl-drop">
+      <button type="button" class="nl-trigger" aria-haspopup="true">Calculators<span class="caret" aria-hidden="true"></span></button>
+      <div class="nl-menu">
+        <a class="nl" href="/pressure-altitude-calculator">Pressure Altitude</a>
+        <a class="nl" href="/true-airspeed-calculator">True Airspeed</a>
+        <a class="nl" href="/crosswind-calculator">Crosswind</a>
+        <a class="nl" href="/takeoff-landing-distance">Takeoff &amp; Landing</a>
+        <a class="nl" href="/cloud-base-calculator">Cloud Base</a>
+        <a class="nl" href="/freezing-level-calculator">Freezing Level</a>
+        <a class="nl" href="/isa-deviation-calculator">ISA Deviation</a>
+        <a class="nl" href="/oxygen-at-altitude-calculator">Oxygen at Altitude</a>
+        <a class="nl" href="/pivotal-altitude-calculator">Pivotal Altitude</a>
+        <a class="nl" href="/horsepower-at-altitude">Horsepower</a>
+        <a class="nl" href="/power-curve">Power Curve</a>
+        <a class="nl" href="/cabin-altitude-calculator">Cabin Altitude</a>
+      </div>
+    </div>
+    <a class="nl" href="/learn/">Learn</a>
+    <a class="nl" href="/#about">About</a>
+  </div>
+  <a class="nav-gh" href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener" aria-label="DensityAlt source code on GitHub" title="Open source — view the code on GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+</div></nav>
+
+<div id="disclaimerBar" class="disclaimer-bar" hidden>
+  <span><strong>Educational estimates only.</strong> DensityAlt is not for flight planning, dispatch, or medical use — always use your POH and official sources.</span>
+  <button id="disclaimerOk" type="button">Got it</button>
+</div>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="kicker">Free aviation &amp; aerospace calculators</div>
+    <h1>Oxygen at Altitude <span>Calculator</span></h1>
+    <p class="hero-sub">How much oxygen is really in each breath up there?</p>
+    <p class="lead">The air is always about 21% oxygen — but with less pressure pushing it into your lungs, every breath at altitude delivers fewer oxygen molecules. Enter any altitude (or tap Denver, Everest, or a jet cabin) to see the air pressure, the <strong>effective oxygen percentage</strong>, and an estimated <strong>blood oxygen saturation (SpO₂)</strong> for an unacclimatized adult. For the full physics-to-physiology chain, drag an aircraft up the <a href="/atmosphere-explorer">atmosphere &amp; hypoxia explorer</a>.</p>
+  </header>
+
+  <section class="da" id="oxygen">
+    <h2>Oxygen at Altitude Calculator</h2>
+    <p class="desc">Type an altitude or tap a preset — drag the marker on the chart to explore. SpO₂ estimates are for healthy, unacclimatized adults at acute exposure.</p>
+    <p class="calc-disclaimer">Educational estimates only — <strong>not for medical, mountaineering, or flight-planning use.</strong> Individual physiology varies widely.</p>
+    <div class="da-grid">
+      <div class="field">
+        <label>Altitude</label>
+        <div class="in"><input id="o2Alt" type="text" inputmode="numeric" value="8,000"><button type="button" id="o2UnitBtn" class="unit unit-toggle" title="Switch between feet and metres">ft</button></div>
+      </div>
+    </div>
+    <div class="presets">
+      <button class="chip o2chip" data-ft="0">Sea level</button>
+      <button class="chip o2chip" data-ft="5280">Denver 5,280&nbsp;ft</button>
+      <button class="chip o2chip" data-ft="8000">Jet cabin ~8,000&nbsp;ft</button>
+      <button class="chip o2chip" data-ft="11152">Cusco 11,152&nbsp;ft</button>
+      <button class="chip o2chip" data-ft="12500">FAA O₂ rule 12,500&nbsp;ft</button>
+      <button class="chip o2chip" data-ft="14115">Pikes Peak 14,115&nbsp;ft</button>
+      <button class="chip o2chip" data-ft="17598">Everest Base Camp</button>
+      <button class="chip o2chip" data-ft="29032">Everest summit</button>
+    </div>
+    <div class="da-out">
+      <div class="out hero"><div class="lbl">Effective Oxygen</div><div class="v" style="color:var(--accent2)"><span id="o2Eff">17.3</span> %</div></div>
+      <div class="out"><div class="lbl">Est. Blood Oxygen (SpO₂)</div><div class="v" style="color:var(--warn)"><span id="o2Spo2">93</span> %</div></div>
+      <div class="out"><div class="lbl">O₂ Partial Pressure</div><div class="v"><span id="o2Po2">118</span> mmHg</div></div>
+      <div class="out"><div class="lbl">Air Pressure</div><div class="v" style="font-size:20px"><span id="o2Press">753 hPa · 22.23"</span></div></div>
+    </div>
+    <canvas id="o2Chart" class="box" width="900" height="300" aria-label="Blood oxygen saturation versus altitude curve"></canvas>
+    <p class="cap" style="margin:8px 0 0">Estimated SpO₂ vs altitude for an unacclimatized adult. Drag anywhere on the chart to set the altitude.</p>
+    <div class="da-note" id="o2Note"></div>
+  </section>
+
+  <section class="da" id="how-it-works">
+    <h2>Why there's less oxygen at altitude (it's not the percentage)</h2>
+    <p class="desc"><strong>The oxygen fraction of air stays at 20.9% from sea level to the stratosphere.</strong> What falls is the air pressure — at 10,000 ft it's about 69% of sea level, at Everest's summit about 33%. Fewer air molecules per breath means proportionally fewer oxygen molecules, so breathing at altitude feels like breathing air with a lower oxygen percentage at sea level. That equivalent number is the <strong>effective oxygen percentage</strong> this calculator reports.</p>
+    <p class="desc">Your blood doesn't track it linearly. Hemoglobin holds ~90%+ saturation until the oxygen partial pressure drops past a knee in the oxygen–hemoglobin dissociation curve, then falls off fast — that's why you feel roughly fine at 8,000 ft, degraded at 15,000 ft, and lose useful consciousness in minutes at 25,000 ft. Watch that S-curve move in real time in the <a href="/atmosphere-explorer">atmosphere &amp; hypoxia explorer</a>.</p>
+  </section>
+
+  <section class="da" id="reference-table">
+    <h2>Oxygen levels by altitude — reference table</h2>
+    <div class="tablewrap"><table class="reftable">
+      <tr><th>Altitude</th><th>Example</th><th>Air pressure (% of sea level)</th><th>Effective O₂ %</th><th>Est. SpO₂</th></tr>
+      <tr><td><b>0 ft</b></td><td>Sea level</td><td>100%</td><td><b>20.9%</b></td><td>~98%</td></tr>
+      <tr><td><b>5,280 ft</b></td><td>Denver</td><td>83%</td><td><b>17.3%</b></td><td>~95%</td></tr>
+      <tr><td><b>8,000 ft</b></td><td>Airliner cabin at cruise</td><td>74%</td><td><b>15.6%</b></td><td>~90–93%</td></tr>
+      <tr><td><b>10,000 ft</b></td><td>FAA O₂ recommendation</td><td>69%</td><td><b>14.4%</b></td><td>~87–90%</td></tr>
+      <tr><td><b>12,500 ft</b></td><td>FAR 91.211 threshold</td><td>63%</td><td><b>13.2%</b></td><td>~85–87%</td></tr>
+      <tr><td><b>14,115 ft</b></td><td>Pikes Peak summit</td><td>60%</td><td><b>12.5%</b></td><td>~83–85%</td></tr>
+      <tr><td><b>17,598 ft</b></td><td>Everest Base Camp</td><td>53%</td><td><b>11.1%</b></td><td>~75–80%</td></tr>
+      <tr><td><b>25,000 ft</b></td><td>"Death zone" begins ~26,000 ft</td><td>37%</td><td><b>7.8%</b></td><td>~50–60%</td></tr>
+      <tr><td><b>29,032 ft</b></td><td>Everest summit</td><td>33%</td><td><b>6.9%</b></td><td>&lt;50% unacclimatized</td></tr>
+    </table></div>
+    <p class="desc">SpO₂ ranges are modeled for healthy, <em>unacclimatized</em> adults at acute exposure — climbers acclimatize over weeks and run meaningfully higher. Values calibrated to published acute-exposure data (see footer).</p>
+  </section>
+
+  <section class="da" id="pilots">
+    <h2>For pilots: when the FAA says you need oxygen</h2>
+    <div class="tablewrap"><table class="reftable">
+      <tr><th>Cabin pressure altitude</th><th>FAR 91.211 requirement</th></tr>
+      <tr><td><b>12,500 – 14,000 ft</b></td><td>Required flight crew must use O₂ for the portion of flight over 30 minutes</td></tr>
+      <tr><td><b>Above 14,000 ft</b></td><td>Required flight crew must use O₂ the entire time</td></tr>
+      <tr><td><b>Above 15,000 ft</b></td><td>Every occupant must be <em>provided</em> supplemental O₂</td></tr>
+    </table></div>
+    <p class="desc">Those are legal minimums, not physiology: night vision measurably degrades above ~5,000 ft and the FAA recommends oxygen above 10,000 ft by day. The full rules, hypoxia types, and time-of-useful-consciousness tables are in our guide to <a href="/learn/faa-oxygen-requirements">FAR 91.211 oxygen requirements &amp; hypoxia</a>. Flying pressurized? Check what your <a href="/cabin-altitude-calculator">cabin altitude</a> really is at cruise.</p>
+  </section>
+
+  <section class="da faq" id="faq">
+    <h2>Frequently asked questions</h2>
+    <div class="faqlist">
+      <details class="faq-item"><summary>How much oxygen is there at 10,000 feet?</summary>
+      <p class="a">The air is still 20.9% oxygen, but at 10,000 ft the pressure is only about 69% of sea level — so each breath delivers about 69% of the oxygen molecules, equivalent to breathing 14.4% oxygen at sea level. Most healthy people sit around 87–90% SpO₂ there before acclimatization.</p></details>
+      <details class="faq-item"><summary>What is the oxygen level on an airliner?</summary>
+      <p class="a">Airliner cabins are pressurized to a cabin altitude of roughly 6,000–8,000 ft at cruise, an effective oxygen percentage of about 15.5–16.5%. That's why a long flight can leave you tired and slightly headachy — your SpO₂ typically runs 92–95% instead of 98%.</p></details>
+      <details class="faq-item"><summary>At what altitude do pilots need supplemental oxygen?</summary>
+      <p class="a">Under FAR 91.211, required crew use oxygen above 12,500 ft cabin pressure altitude when that portion of the flight exceeds 30 minutes, continuously above 14,000 ft, and every occupant must be provided oxygen above 15,000 ft. The FAA additionally recommends it above 10,000 ft by day and 5,000 ft at night.</p></details>
+      <details class="faq-item"><summary>What is the oxygen level at the top of Mount Everest?</summary>
+      <p class="a">At 29,032 ft the pressure is about a third of sea level — an effective oxygen percentage near 7%. An unacclimatized person would lose useful consciousness in one to two minutes; climbers survive through weeks of acclimatization, and most still use bottled oxygen.</p></details>
+      <details class="faq-item"><summary>Is 88% SpO₂ normal at high altitude?</summary>
+      <p class="a">Readings in the high 80s are common for visitors above ~10,000 ft and usually improve over days of acclimatization. But numbers that would be alarming at sea level still warrant attention at altitude — descend and seek medical advice for symptoms like severe headache, ataxia, or breathlessness at rest. This tool is educational, not medical guidance.</p></details>
+    </div>
+  </section>
+
+  <section class="da" id="more-tools">
+    <h2>More free altitude tools</h2>
+    <p class="desc">DensityAlt is a set of free, no-signup aviation calculators. Explore the rest:</p>
+    <div class="grid">
+      <a class="card" href="/atmosphere-explorer" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Atmosphere &amp; Hypoxia Explorer</div>
+        <div class="pct">Drag an aircraft up and watch pressure, oxygen &amp; SpO₂ fall.</div></a>
+      <a class="card" href="/cabin-altitude-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Cabin Altitude</div>
+        <div class="pct">What cabin altitude your pressurization holds at cruise.</div></a>
+      <a class="card" href="/" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Density Altitude</div>
+        <div class="pct">The altitude your aircraft actually performs at — with live METAR.</div></a>
+      <a class="card" href="/pressure-altitude-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Pressure Altitude</div>
+        <div class="pct">PA from the altimeter setting — the chart-entry altitude.</div></a>
+      <a class="card" href="/horsepower-at-altitude" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Horsepower at Altitude</div>
+        <div class="pct">How much power a piston engine loses with density altitude.</div></a>
+      <a class="card" href="/learn/faa-oxygen-requirements" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Guide</div><div class="val" style="font-size:18px">FAA Oxygen Rules</div>
+        <div class="pct">FAR 91.211 tiers, hypoxia types &amp; TUC, made simple.</div></a>
+    </div>
+  </section>
+
+  <footer>
+    <h4>How the numbers are computed</h4>
+    <div class="calcrefs">
+      <div><b>Atmosphere</b> — International Standard Atmosphere (ISA): the barometric formula in the troposphere (1.98&nbsp;°C / 1000&nbsp;ft lapse) and the isothermal layer above the tropopause (~36,089&nbsp;ft).</div>
+      <div><b>Effective oxygen %</b> — 20.9% × (pressure at altitude ÷ sea-level pressure): the constant O₂ fraction scaled by how much thinner the air is.</div>
+      <div><b>Blood oxygen</b> — alveolar gas equation <code>P_AO₂ = 0.2095·(P − 47) − P_CO₂/0.8</code> feeding the Severinghaus SpO₂ curve. CO₂ falls with altitude, tuned to acute-exposure data (~87% @ 10k, ~72% @ 18k, ~50% @ 25k&nbsp;ft).</div>
+      <div><b>References</b> — FAA <i>Pilot's Handbook of Aeronautical Knowledge</i> (FAA-H-8083-25) and the FAR&nbsp;91.211 oxygen rules; the alveolar gas equation and Severinghaus SpO₂ relation, with acute-exposure SaO₂ figures from high-altitude physiology literature (e.g. J.B.&nbsp;West).</div>
+    </div>
+    <p class="disclaim">Educational models for healthy unacclimatized adults at acute exposure. Real SpO₂ varies with fitness, acclimatization, and individual physiology. Not for medical or operational flight-planning use.</p>
+    <p class="ghsrc"><strong>Open source.</strong> DensityAlt is built in the open — <a href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener">view the code on GitHub</a> to see exactly how every number is computed.</p>
+    <p class="rms">Made with <a href="https://readymadesites.com/" rel="noopener">ReadyMadeSites™</a> — custom calculators, interactive tools &amp; SEO-ready websites that rank.</p>
+  </footer>
+
+</div>
+
+<script src="/app.js"></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "DensityAlt Oxygen at Altitude Calculator",
+  "url": "https://densityalt.com/oxygen-at-altitude-calculator",
+  "description": "Interactive oxygen-at-altitude calculator: air pressure, effective oxygen percentage, oxygen partial pressure, and estimated blood oxygen saturation (SpO2) at any altitude.",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Any (web browser)",
+  "browserRequirements": "Requires JavaScript",
+  "isAccessibleForFree": true,
+  "author": {"@type": "Person", "name": "Levan Sulakvelidze", "description": "Instrument-rated private pilot", "sameAs": ["https://www.linkedin.com/in/levansula", "https://www.instagram.com/levansula/", "https://github.com/levansula23"]},
+  "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+  "featureList": [
+    "Effective oxygen percentage at any altitude",
+    "Estimated blood oxygen saturation (SpO2)",
+    "Oxygen partial pressure and air pressure",
+    "Draggable SpO2 vs altitude chart",
+    "Presets from Denver to the Everest summit",
+    "Feet and metres input",
+    "Oxygen-by-altitude reference table"
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"How much oxygen is there at 10,000 feet?","acceptedAnswer":{"@type":"Answer","text":"The air is still 20.9% oxygen, but at 10,000 feet the pressure is only about 69% of sea level — so each breath delivers about 69% of the oxygen molecules, equivalent to breathing 14.4% oxygen at sea level. Most healthy people sit around 87–90% SpO2 there before acclimatization."}},
+    {"@type":"Question","name":"What is the oxygen level on an airliner?","acceptedAnswer":{"@type":"Answer","text":"Airliner cabins are pressurized to a cabin altitude of roughly 6,000–8,000 feet at cruise, an effective oxygen percentage of about 15.5–16.5%. That is why a long flight can leave you tired and slightly headachy — SpO2 typically runs 92–95% instead of 98%."}},
+    {"@type":"Question","name":"At what altitude do pilots need supplemental oxygen?","acceptedAnswer":{"@type":"Answer","text":"Under FAR 91.211, required crew use oxygen above 12,500 feet cabin pressure altitude when that portion of the flight exceeds 30 minutes, continuously above 14,000 feet, and every occupant must be provided oxygen above 15,000 feet. The FAA additionally recommends oxygen above 10,000 feet by day and 5,000 feet at night."}},
+    {"@type":"Question","name":"What is the oxygen level at the top of Mount Everest?","acceptedAnswer":{"@type":"Answer","text":"At 29,032 feet the pressure is about a third of sea level — an effective oxygen percentage near 7%. An unacclimatized person would lose useful consciousness in one to two minutes; climbers survive through weeks of acclimatization, and most still use bottled oxygen."}},
+    {"@type":"Question","name":"Is 88% SpO2 normal at high altitude?","acceptedAnswer":{"@type":"Answer","text":"Readings in the high 80s are common for visitors above about 10,000 feet and usually improve over days of acclimatization. But numbers that would be alarming at sea level still warrant attention at altitude — descend and seek medical advice for symptoms like severe headache, ataxia, or breathlessness at rest."}}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Density Altitude Calculator","item":"https://densityalt.com/"},
+    {"@type":"ListItem","position":2,"name":"Oxygen at Altitude Calculator","item":"https://densityalt.com/oxygen-at-altitude-calculator"}
+  ]
+}
+</script>
+</body>
+</html>

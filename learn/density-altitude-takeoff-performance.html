@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#05070f">
+<title>How Density Altitude Affects Takeoff Distance &amp; Climb</title>
+<meta name="description" content="How density altitude stretches your takeoff roll and cuts climb rate — FAA figures, the Koch chart explained, and a worked Cessna 172 hot-day example.">
+<link rel="canonical" href="https://densityalt.com/learn/density-altitude-takeoff-performance">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DensityAlt">
+<meta property="og:url" content="https://densityalt.com/learn/density-altitude-takeoff-performance">
+<meta property="og:title" content="How Density Altitude Affects Takeoff Distance &amp; Climb">
+<meta property="og:description" content="Thin air means a longer roll and a flatter climb. FAA figures, the Koch chart explained, and a worked Cessna 172 hot-day example — with free calculators.">
+<meta property="og:image" content="https://densityalt.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How Density Altitude Affects Takeoff Distance &amp; Climb">
+<meta name="twitter:description" content="Thin air means a longer roll and a flatter climb. FAA figures, the Koch chart explained, and a worked Cessna 172 hot-day example — with free calculators.">
+<meta name="twitter:image" content="https://densityalt.com/og-image.png">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<nav class="topnav"><div class="navin">
+  <a class="brand" href="/" style="text-decoration:none"><img src="/favicon.svg" alt=""><b>DensityAlt</b></a>
+  <div class="navlinks">
+    <a class="nl" href="/atmosphere-explorer">Explorer</a>
+    <a class="nl" href="/">Density Altitude</a>
+    <div class="nl-drop">
+      <button type="button" class="nl-trigger" aria-haspopup="true">Calculators<span class="caret" aria-hidden="true"></span></button>
+      <div class="nl-menu">
+        <a class="nl" href="/pressure-altitude-calculator">Pressure Altitude</a>
+        <a class="nl" href="/true-airspeed-calculator">True Airspeed</a>
+        <a class="nl" href="/crosswind-calculator">Crosswind</a>
+        <a class="nl" href="/takeoff-landing-distance">Takeoff &amp; Landing</a>
+        <a class="nl" href="/cloud-base-calculator">Cloud Base</a>
+        <a class="nl" href="/freezing-level-calculator">Freezing Level</a>
+        <a class="nl" href="/isa-deviation-calculator">ISA Deviation</a>
+        <a class="nl" href="/oxygen-at-altitude-calculator">Oxygen at Altitude</a>
+        <a class="nl" href="/pivotal-altitude-calculator">Pivotal Altitude</a>
+        <a class="nl" href="/horsepower-at-altitude">Horsepower</a>
+        <a class="nl" href="/power-curve">Power Curve</a>
+        <a class="nl" href="/cabin-altitude-calculator">Cabin Altitude</a>
+      </div>
+    </div>
+    <a class="nl" href="/learn/">Learn</a>
+    <a class="nl" href="/#about">About</a>
+  </div>
+  <a class="nav-gh" href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener" aria-label="DensityAlt source code on GitHub" title="Open source — view the code on GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+</div></nav>
+
+<div id="disclaimerBar" class="disclaimer-bar" hidden>
+  <span><strong>Educational estimates only.</strong> DensityAlt is not for flight planning, dispatch, or medical use — always use your POH and official sources.</span>
+  <button id="disclaimerOk" type="button">Got it</button>
+</div>
+
+<div class="wrap">
+
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/learn/">Learn</a> › <span>Takeoff &amp; climb performance</span></nav>
+  <header class="hero">
+    <div class="kicker">Learn · Takeoff Performance</div>
+    <h1>How Density Altitude Affects Takeoff Distance and Climb Performance</h1>
+    <p class="hero-sub">The runway gets longer. The climb gets flatter.</p>
+    <p class="lead">How much runway and climb a high, hot day takes from a light airplane — the FAA’s own figures, the Koch chart explained, and a step-by-step Cessna&nbsp;172 example.</p>
+  </header>
+  <div class="byline"><img src="/headshot.jpg" alt="Levan Sulakvelidze" width="34" height="34" loading="lazy" decoding="async"><span><strong>Levan Sulakvelidze</strong> · Instrument-rated private pilot · Updated July 2026 · ~7 min read</span></div>
+
+  <style>
+  .article{max-width:760px;margin:0 auto}
+  .crumbs{max-width:760px;margin:0 auto 4px;font-size:13px;color:var(--ink-dim)}
+  .crumbs a{color:var(--accent);text-decoration:none}
+  .crumbs span{color:var(--ink-dim)}
+  .byline{max-width:760px;margin:18px auto 0;display:flex;gap:10px;align-items:center;font-size:13.5px;color:var(--ink-dim)}
+  .byline img{width:34px;height:34px;border-radius:50%;flex:0 0 auto}
+  .article h2{font-size:23px;line-height:1.25;margin:38px 0 12px;scroll-margin-top:70px}
+  .article h3{font-size:17px;margin:24px 0 8px;color:var(--ink)}
+  .article p{font-size:16px;line-height:1.72;color:var(--ink);margin:0 0 16px}
+  .article ul,.article ol{font-size:16px;line-height:1.72;color:var(--ink);padding-left:22px;margin:0 0 18px}
+  .article li{margin:7px 0}
+  .article a{color:var(--accent)}
+  .article strong{color:#fff}
+  .toc{background:var(--panel);border:1px solid var(--panel-brd);border-radius:12px;padding:16px 20px}
+  .toc .toc-t{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-dim);margin:0 0 8px}
+  .toc ol{margin:0;padding-left:20px;font-size:15px;line-height:1.5}
+  .toc a{color:var(--accent);text-decoration:none}
+  .keybox{background:var(--panel);border:1px solid var(--panel-brd);border-left:3px solid var(--accent);border-radius:10px;padding:14px 18px;margin:0 0 20px;font-size:16px;line-height:1.6}
+  .formula{font-family:var(--mono);background:rgba(255,255,255,.05);border:1px solid var(--panel-brd);border-radius:10px;padding:13px 16px;margin:0 0 18px;font-size:14px;color:var(--accent2);overflow-x:auto}
+  .article table{width:100%;border-collapse:collapse;margin:0 0 20px;font-size:14.5px}
+  .article th,.article td{border:1px solid var(--panel-brd);padding:8px 12px;text-align:left}
+  .article th{color:var(--ink-dim);font-weight:600}
+  .article blockquote{border-left:3px solid var(--warn);margin:0 0 18px;padding:4px 0 4px 18px;color:var(--ink-dim);font-style:italic}
+  .calc-intro{max-width:760px;margin:0 auto}
+  .authorbox{max-width:760px;margin:40px auto 0;display:flex;gap:14px;align-items:flex-start;background:var(--panel);border:1px solid var(--panel-brd);border-radius:14px;padding:18px}
+  .authorbox img{width:54px;height:54px;border-radius:50%;flex:0 0 auto}
+  .authorbox p{font-size:14px;line-height:1.6;color:var(--ink-dim);margin:6px 0 0}
+  .authorbox a{color:var(--accent)}
+  .learn-card{display:block;background:var(--panel);border:1px solid var(--panel-brd);border-radius:14px;padding:22px;text-decoration:none;color:inherit;margin:0 0 14px}
+  .learn-card:hover{border-color:var(--accent)}
+  .learn-card .lc-k{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent)}
+  .learn-card .lc-t{font-size:20px;font-weight:700;margin:4px 0 6px;color:var(--ink)}
+  .learn-card .lc-d{font-size:14.5px;color:var(--ink-dim);line-height:1.5}
+  </style>
+
+  <div class="article">
+    <p><strong>High density altitude increases takeoff distance and reduces climb rate because thin air robs an airplane of lift, engine power, and propeller thrust all at once.</strong> Per FAA guidance, a 100&nbsp;°F day at a 6,000-foot-elevation airport can stretch the takeoff roll by about 230% and cut rate of climb by roughly 76% compared with sea level.</p>
+    <div class="keybox"><strong>Rules of thumb</strong> for a normally-aspirated single: about 3.5% of engine power per 1,000&nbsp;ft of density altitude, 7–8% of climb rate per 1,000&nbsp;ft — and a takeoff roll that grows faster than either. Get today’s number with the free <a href="/">density altitude calculator</a>.</div>
+    <div class="toc">
+      <div class="toc-t">In this guide</div>
+      <ol>
+        <li><a href="#why-thin-air">Why thin air hurts lift, power, and thrust</a></li>
+        <li><a href="#how-much">How much performance you actually lose</a></li>
+        <li><a href="#koch-chart">The Koch chart, explained</a></li>
+        <li><a href="#worked-example">Worked example: a Cessna 172 on a 100 °F day</a></li>
+        <li><a href="#high-da">What is considered high density altitude?</a></li>
+        <li><a href="#humidity">Does humidity affect density altitude?</a></li>
+        <li><a href="#high-hot-heavy">High, hot, and heavy: the accident pattern</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ol>
+    </div>
+
+    <h2 id="why-thin-air">Why thin air hurts lift, power, and thrust</h2>
+    <p>Density altitude is pressure altitude corrected for non-standard temperature — the altitude your airplane <em>performs</em> as if it were at. (New to the concept? Start with the full <a href="/learn/density-altitude">guide to density altitude</a>.) When it climbs, the airplane loses three things at once:</p>
+    <ul>
+      <li><strong>Lift.</strong> The wing makes lift in proportion to air density. In thin air it must move faster to generate the same lift, so the airplane lifts off at a higher <em>true</em> airspeed even though the indicated speed stays the same — more speed to gain, more runway to gain it on.</li>
+      <li><strong>Engine power.</strong> A normally-aspirated piston makes power from the oxygen mass in each intake stroke. Figure roughly <strong>3.5% of rated power lost per 1,000&nbsp;ft of density altitude</strong> — at 8,000&nbsp;ft, a 180&nbsp;hp engine behaves like a 130-something-hp engine. See exactly how much on the <a href="/horsepower-at-altitude">horsepower-at-altitude calculator</a>.</li>
+      <li><strong>Propeller thrust.</strong> A propeller blade is a rotating wing. In thin air it accelerates less air mass per revolution, so even the power that survives converts to less thrust.</li>
+    </ul>
+    <p>These losses multiply: a weaker engine turning a less effective propeller must accelerate the airplane to a <em>higher</em> true liftoff speed, which is why takeoff distance grows non-linearly. And because climb runs on <em>excess</em> power — what’s left after staying airborne — a modest power loss erases most of it.</p>
+
+    <h2 id="how-much">How much performance you actually lose</h2>
+    <p>The FAA puts hard numbers on this in its <em>Density Altitude</em> pamphlet (FAA-P-8740-2). Its worked example: an airport at <strong>6,000&nbsp;ft elevation on a 100&nbsp;°F day</strong> — an ordinary July afternoon out west — produces a density altitude of roughly 10,000&nbsp;ft. For a typical light airplane, that means about a <strong>230% increase in takeoff distance</strong> (3.3 times the sea-level roll) and roughly a <strong>76% decrease in rate of climb</strong>.</p>
+    <table>
+      <thead><tr><th>Performance figure</th><th>Sea level, 59 °F (standard day)</th><th>6,000 ft field, 100 °F</th></tr></thead>
+      <tbody>
+        <tr><td>Density altitude</td><td>≈ 0 ft</td><td>≈ 10,000 ft</td></tr>
+        <tr><td>Engine power (180 hp, normally aspirated)</td><td>180 hp (100%)</td><td>≈ 126 hp (~70%)</td></tr>
+        <tr><td>Takeoff distance</td><td>POH book figure</td><td>≈ 3.3× the book figure (+230%)</td></tr>
+        <tr><td>Rate of climb</td><td>POH book figure</td><td>≈ 24% of the book figure (−76%)</td></tr>
+        <tr><td>True airspeed at liftoff (same indicated)</td><td>≈ indicated</td><td>≈ 16% faster than indicated</td></tr>
+      </tbody>
+    </table>
+    <p>Notice the last row: obstacle clearance depends on climb <em>gradient</em> — feet gained per foot traveled — and high density altitude attacks it twice, collapsing climb rate while groundspeed rises.</p>
+
+    <h2 id="koch-chart">The Koch chart, explained</h2>
+    <p>The <strong>Koch chart</strong>, published in the same FAA pamphlet, is the classic back-of-the-envelope tool for this problem: <strong>airport temperature</strong> (°F) on the left, <strong>pressure altitude</strong> on the right. Lay a straightedge between them and it crosses two inner scales — the <strong>percentage to add to your normal takeoff distance</strong>, and the <strong>percentage decrease in your rate of climb</strong>.</p>
+    <p>The FAA’s example above is the chart’s own: connect 100&nbsp;°F to 6,000&nbsp;ft pressure altitude and the line reads <strong>+230% takeoff distance, −76% climb</strong>. Two things to know before you trust it:</p>
+    <ul>
+      <li>It’s built for a <strong>“typical” light airplane</strong> and is deliberately conservative. When your POH publishes takeoff and climb charts, the POH wins — the Koch chart is for intuition and for airplanes without good published data.</li>
+      <li>It wants <strong>pressure altitude</strong>, not field elevation. On a standard 29.92 day they match; otherwise run your altimeter setting through the <a href="/pressure-altitude-calculator">pressure altitude calculator</a> first.</li>
+    </ul>
+    <p>You can skip the straightedge entirely: the <a href="/takeoff-landing-distance">takeoff &amp; landing distance tool</a> is an interactive version of the same idea — drag the conditions and watch the ground roll stretch.</p>
+
+    <h2 id="worked-example">Worked example: a Cessna 172 on a 100 °F day</h2>
+    <p>Put a real airplane on the FAA’s numbers. A Cessna 172S: 180&nbsp;hp, max gross 2,550&nbsp;lb, sea-level short-field ground roll about 960&nbsp;ft, sea-level climb about 730&nbsp;fpm. Now fly it to a 6,000-ft field on a 100&nbsp;°F (38&nbsp;°C) afternoon, altimeter 29.92:</p>
+    <ol>
+      <li><strong>Pressure altitude.</strong> Altimeter is standard, so pressure altitude = field elevation = <strong>6,000&nbsp;ft</strong>.</li>
+      <li><strong>Temperature vs. standard.</strong> ISA temperature at 6,000&nbsp;ft is 15&nbsp;−&nbsp;2&nbsp;×&nbsp;6 ≈ <strong>3&nbsp;°C</strong>. The OAT is 38&nbsp;°C — a full <strong>35&nbsp;°C above standard</strong>.</li>
+      <li><strong>Density altitude.</strong> 6,000 + 120&nbsp;×&nbsp;35 ≈ <strong>10,200&nbsp;ft</strong>. The airplane is about to perform as if it were at 10,000&nbsp;ft.</li>
+      <li><strong>Power.</strong> At ~10,000&nbsp;ft density altitude the normally-aspirated engine delivers roughly 70% of rated power: about <strong>126&nbsp;hp of the placarded 180</strong>.</li>
+      <li><strong>Takeoff roll.</strong> The Koch chart says add ~230%: the 960-ft sea-level roll becomes roughly <strong>3,200&nbsp;ft</strong>.</li>
+      <li><strong>Climb.</strong> Cut 730&nbsp;fpm by ~76% and you’re left with roughly <strong>175&nbsp;fpm</strong> at gross weight — about 30&nbsp;minutes to gain 5,000&nbsp;ft, assuming nothing rises in front of you.</li>
+    </ol>
+    <p>A 3,000-ft strip that felt generous at sea level is now flatly too short — before grass, slope, or a whisper of tailwind. Your POH short-field table will typically beat the Koch estimate; fly the POH figures, then add margin on top.</p>
+    <blockquote>The airplane doesn’t read the airport elevation sign. It reads the air. On a hot afternoon, a 6,000-ft field is a 10,000-ft field wearing a disguise.</blockquote>
+
+    <h2 id="high-da">What is considered high density altitude?</h2>
+    <p>There is no regulatory threshold — the FAA defines the term, not a limit. In practice, for a normally-aspirated light single, performance loss is noticeable by <strong>5,000&nbsp;ft of density altitude</strong>, anything above roughly <strong>6,000&nbsp;ft counts as high</strong>, and <strong>8,000–10,000&nbsp;ft demands deliberate planning</strong>. Denver-area airports routinely post density altitudes above 8,000&nbsp;ft on July afternoons. What counts as high is always relative to <em>your</em> airplane: 8,000&nbsp;ft is routine for a turbocharged retract on a 9,000-ft runway and genuinely dangerous for a loaded trainer on 3,000&nbsp;ft of grass.</p>
+
+    <h2 id="humidity">Does humidity affect density altitude?</h2>
+    <p>Yes — slightly. Water vapor is lighter than the dry air it displaces (molecular weight ~18 vs. ~29), so <strong>humid air is less dense</strong> at the same temperature and pressure, and high humidity raises the effective density altitude — but only by a few hundred feet at most, even on a muggy day. The standard formula and most simple calculators, including the ones here, assume dry air and ignore humidity entirely. Treat it as one more reason to pad margins, not a number to compute.</p>
+
+    <h2 id="high-hot-heavy">High, hot, and heavy: the accident pattern</h2>
+    <p>Density-altitude accidents repeat the same script: a <strong>high field</strong>, a <strong>hot afternoon</strong>, an airplane <strong>near gross weight</strong> — three factors eating the same margin. The airplane staggers off in ground effect, can’t climb out of it, and mushes into terrain beyond the departure end. Lifting off is not the same as being able to climb. The defenses are decided before the throttle goes up:</p>
+    <ul>
+      <li><strong>Depart in the cool of early morning.</strong> Versus a 100&nbsp;°F afternoon, a 60&nbsp;°F morning is worth thousands of feet of density altitude.</li>
+      <li><strong>Lighten the airplane.</strong> Getting below roughly <strong>90% of max gross</strong> improves the roll and the climb out of proportion to the weight removed — plan a fuel stop instead of full tanks.</li>
+      <li><strong>Lean for altitude, per your POH.</strong> Full rich at high density altitude is over-fueled and down on power; most POHs call for leaning to maximum power above about 3,000&nbsp;ft of density altitude.</li>
+      <li><strong>Demand runway margin.</strong> Plan with the 50-ft-obstacle figure, not the ground roll, add at least 50% on top, and pick an abort point before you roll.</li>
+      <li><strong>Run the numbers, every hot day.</strong> Density altitude is invisible — no gauge shows it. Compute it, then compute what it does.</li>
+    </ul>
+    <div class="keybox"><strong>Before the throttle goes up:</strong> run today’s field elevation, temperature, and altimeter setting through the free <a href="/">density altitude calculator</a>, then see what it does to your ground roll on the <a href="/takeoff-landing-distance">takeoff &amp; landing distance tool</a>.</div>
+    <p class="calc-disclaimer" style="margin-top:22px"><strong>Educational only.</strong> The figures here are FAA rules of thumb and representative examples to build intuition — always fly your POH numbers and current official weather, not these.</p>
+
+
+  <section class="da faq" id="faq">
+    <h2>Frequently asked questions</h2>
+    <div class="faqlist">
+      <details class="faq-item"><summary>Why does density altitude increase takeoff distance?</summary>
+      <p class="a">Three effects stack: the wing needs a <strong>higher true airspeed</strong> to lift off in thin air, the engine makes <strong>less power</strong> (about 3.5% per 1,000&nbsp;ft of density altitude, normally aspirated), and the propeller converts that power into <strong>less thrust</strong>. Less thrust accelerating to a higher liftoff speed makes the ground roll grow non-linearly.</p></details>
+      <details class="faq-item"><summary>How much does density altitude reduce climb rate?</summary>
+      <p class="a">Figure roughly <strong>7–8% of sea-level climb rate lost per 1,000&nbsp;ft of density altitude</strong> for a normally-aspirated single. The FAA’s Koch-chart example: at 6,000&nbsp;ft pressure altitude and 100&nbsp;°F, rate of climb drops about <strong>76%</strong> — a 730&nbsp;fpm airplane becomes a 175&nbsp;fpm airplane.</p></details>
+      <details class="faq-item"><summary>What is the Koch chart?</summary>
+      <p class="a">A rule-of-thumb chart from the FAA’s <em>Density Altitude</em> pamphlet (FAA-P-8740-2): connect airport temperature and pressure altitude with a straightedge and read off the <strong>percentage increase in takeoff distance</strong> and <strong>decrease in rate of climb</strong> for a typical light airplane. It’s deliberately conservative — use your POH charts when you have them.</p></details>
+      <details class="faq-item"><summary>Does a turbocharged engine fix high density altitude?</summary>
+      <p class="a">Only partly. A turbocharger restores <strong>engine power</strong> up to its critical altitude, which is a big help. But the wing and propeller still fly in thin air: liftoff happens at a higher true airspeed and the ground roll is still longer than at sea level. Turbocharging shrinks the penalty — it does not remove it.</p></details>
+      <details class="faq-item"><summary>What density altitude is dangerous for a Cessna 172?</summary>
+      <p class="a">There’s no single red line — the danger is density altitude combined with weight and runway length. A lightly loaded 172 handles 8,000&nbsp;ft of density altitude on a long runway routinely; at max gross on a 3,000-ft strip the same airplane has little or no margin — roughly triple the sea-level takeoff distance and a climb in the low hundreds of feet per minute. Run the POH numbers and demand at least a 50% runway margin.</p></details>
+    </div>
+  </section>
+
+  <div class="article"><h2 style="margin-top:38px">Keep exploring</h2>
+    <p>Put the numbers to work with the rest of the free DensityAlt tools:</p></div>
+  <section class="da" id="more-tools">
+    <h2>More free altitude tools</h2>
+    <p class="desc">DensityAlt is a set of free, no-signup aviation calculators. Explore the rest:</p>
+    <div class="grid">
+      <a class="card" href="/atmosphere-explorer" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Atmosphere &amp; Hypoxia Explorer</div>
+        <div class="pct">Drag an aircraft up and watch pressure, oxygen &amp; SpO₂ fall.</div></a>
+      <a class="card" href="/crosswind-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Crosswind Calculator</div>
+        <div class="pct">Split the wind into crosswind &amp; headwind on a runway diagram.</div></a>
+      <a class="card" href="/takeoff-landing-distance" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Takeoff &amp; Landing Distance</div>
+        <div class="pct">How density altitude stretches your ground roll &amp; rollout.</div></a>
+      <a class="card" href="/horsepower-at-altitude" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Horsepower at Altitude</div>
+        <div class="pct">How much power a piston engine loses with density altitude.</div></a>
+      <a class="card" href="/power-curve" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Power Curve &amp; Reversed Command</div>
+        <div class="pct">The back side of the power curve and your climb margins.</div></a>
+      <a class="card" href="/cabin-altitude-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Cabin Altitude</div>
+        <div class="pct">What cabin altitude your pressurization holds at cruise.</div></a>
+    </div>
+  </section>
+
+  <div class="article">  <div class="authorbox"><img src="/headshot.jpg" alt="Levan Sulakvelidze" width="54" height="54" loading="lazy" decoding="async"><div><strong>Levan Sulakvelidze</strong><p>Instrument-rated private pilot and the builder of DensityAlt. I fly out of high-and-hot fields in the western U.S., where density altitude isn’t a textbook abstraction — it’s the difference between a comfortable climb and staring down the far end of the runway. I built these tools to make the numbers obvious before the throttle goes up. <a href="https://www.linkedin.com/in/levansula" rel="noopener">LinkedIn</a> · <a href="https://github.com/levansula23" rel="noopener">GitHub</a></p></div></div></div>
+
+  <footer>
+    <h4>How the numbers are computed</h4>
+    <div class="calcrefs">
+      <div><b>Atmosphere</b> — International Standard Atmosphere (ISA): the barometric formula in the troposphere (1.98&nbsp;°C / 1000&nbsp;ft lapse) and the isothermal layer above the tropopause (~36,089&nbsp;ft).</div>
+      <div><b>Blood oxygen</b> — alveolar gas equation <code>P_AO₂ = 0.2095·(P − 47) − P_CO₂/0.8</code> feeding the Severinghaus SpO₂ curve. CO₂ falls with altitude, tuned to acute-exposure data (~87% @ 10k, ~72% @ 18k, ~50% @ 25k&nbsp;ft).</div>
+      <div><b>Density altitude</b> — <code>PA = elev + (29.92 − altimeter)·1000</code>, then <code>DA = PA + 120·(OAT − ISA&nbsp;temp)</code>.</div>
+      <div><b>Horsepower</b> — Gagg–Ferrar relation <code>HP ≈ rated·(1.132σ − 0.132)</code>, σ = density ratio at your density altitude; turbos hold rated power to a critical altitude.</div>
+      <div><b>Power curve</b> — parabolic drag polar <code>C_D = C_D0 + C_L²/(πAR·e)</code>; power required = drag × TAS. The region of reversed command is the band from stall up to the minimum-power speed. Drag values are representative estimates and V-speeds (Vs, Va, Vno, Vne) are typical published figures — check your POH; the climb readout is idealized (constant ~80% prop efficiency) and optimistic at low speed.</div>
+      <div><b>Cabin altitude</b> — <code>cabin_P = min(sea level, ambient + ΔP)</code> inverted to an altitude; ΔP is each aircraft's published max pressure differential.</div>
+      <div><b>Data sources</b> — bundled ~110 airports (offline elevation) plus <code>aviationweather.gov</code> METAR for live temp/altimeter (via a same-origin proxy once hosted), falling back to <code>open-meteo.com</code> current weather by coordinates for fields without a METAR.</div>
+      <div><b>References</b> — FAA <i>Pilot's Handbook of Aeronautical Knowledge</i> (FAA-H-8083-25) and <i>Airplane Flying Handbook</i> (FAA-H-8083-3) for density altitude, the FAR&nbsp;91.211 oxygen rules, and the power curve / region of reversed command; J.D.&nbsp;Anderson, <i>Introduction to Flight</i> (parabolic drag polar, power-required = drag&nbsp;×&nbsp;TAS); the alveolar gas equation and Severinghaus SpO₂ relation, with acute-exposure SaO₂ figures from high-altitude physiology literature (e.g. J.B.&nbsp;West). Power-curve V-speeds and the narrow trainer reversed-command band cross-checked against Van's Air Force, GoFly, and Boldmethod.</div>
+    </div>
+    <p class="disclaim">Educational models for healthy unacclimatized adults at acute exposure. Real SpO₂ varies with fitness, acclimatization, and individual physiology. Not for medical or operational flight-planning use.</p>
+    <p class="ghsrc"><strong>Open source.</strong> DensityAlt is built in the open — <a href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener">view the code on GitHub</a> to see exactly how every number is computed.</p>
+    <p class="rms">Made with <a href="https://readymadesites.com/" rel="noopener">ReadyMadeSites™</a> — custom calculators, interactive tools &amp; SEO-ready websites that rank.</p>
+  </footer>
+
+</div>
+</div>
+
+<script src="/app.js"></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How Density Altitude Affects Takeoff Distance and Climb Performance",
+  "description": "How density altitude stretches takeoff roll and cuts climb rate — FAA figures, the Koch chart explained, and a worked Cessna 172 hot-day example.",
+  "image": "https://densityalt.com/og-image.png",
+  "author": {"@type": "Person", "name": "Levan Sulakvelidze", "description": "Instrument-rated private pilot", "sameAs": ["https://www.linkedin.com/in/levansula", "https://github.com/levansula23"]},
+  "publisher": {"@type": "Organization", "name": "DensityAlt", "logo": {"@type": "ImageObject", "url": "https://densityalt.com/og-image.png"}},
+  "datePublished": "2026-07-18",
+  "dateModified": "2026-07-18",
+  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://densityalt.com/learn/density-altitude-takeoff-performance"}
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"Why does density altitude increase takeoff distance?","acceptedAnswer":{"@type":"Answer","text":"Three effects stack: the wing needs a higher true airspeed to lift off in thin air, the engine makes less power (about 3.5% per 1,000 ft of density altitude, normally aspirated), and the propeller converts that power into less thrust. Less thrust accelerating to a higher liftoff speed makes the ground roll grow non-linearly."}},
+    {"@type":"Question","name":"How much does density altitude reduce climb rate?","acceptedAnswer":{"@type":"Answer","text":"Figure roughly 7–8% of sea-level climb rate lost per 1,000 ft of density altitude for a normally-aspirated single. The FAA's Koch-chart example: at 6,000 ft pressure altitude and 100 °F, rate of climb drops about 76% — a 730 fpm airplane becomes a 175 fpm airplane."}},
+    {"@type":"Question","name":"What is the Koch chart?","acceptedAnswer":{"@type":"Answer","text":"A rule-of-thumb chart from the FAA's Density Altitude pamphlet (FAA-P-8740-2): connect airport temperature and pressure altitude with a straightedge and read off the percentage increase in takeoff distance and decrease in rate of climb for a typical light airplane. It is deliberately conservative — use your POH charts when you have them."}},
+    {"@type":"Question","name":"Does a turbocharged engine fix high density altitude?","acceptedAnswer":{"@type":"Answer","text":"Only partly. A turbocharger restores engine power up to its critical altitude, which is a big help. But the wing and propeller still fly in thin air: liftoff happens at a higher true airspeed and the ground roll is still longer than at sea level. Turbocharging shrinks the penalty — it does not remove it."}},
+    {"@type":"Question","name":"What density altitude is dangerous for a Cessna 172?","acceptedAnswer":{"@type":"Answer","text":"There is no single red line — the danger is density altitude combined with weight and runway length. A lightly loaded 172 handles 8,000 ft of density altitude on a long runway routinely; at max gross on a 3,000-ft strip the same airplane has little or no margin — roughly triple the sea-level takeoff distance and a climb in the low hundreds of feet per minute. Run the POH numbers and demand at least a 50% runway margin."}}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://densityalt.com/"},
+    {"@type":"ListItem","position":2,"name":"Learn","item":"https://densityalt.com/learn/"},
+    {"@type":"ListItem","position":3,"name":"How Density Altitude Affects Takeoff Distance and Climb Performance","item":"https://densityalt.com/learn/density-altitude-takeoff-performance"}
+  ]
+}
+</script>
+</body>
+</html>

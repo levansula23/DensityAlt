@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#05070f">
+<title>Pressure Altitude Calculator (PA + DA) | DensityAlt</title>
+<meta name="description" content="Free pressure altitude calculator with live METAR autofill — altimeter setting + field elevation, the 29.92 formula, worked examples, and density altitude.">
+<link rel="canonical" href="https://densityalt.com/pressure-altitude-calculator">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DensityAlt">
+<meta property="og:url" content="https://densityalt.com/pressure-altitude-calculator">
+<meta property="og:title" content="Pressure Altitude Calculator — PA and DA in One Tool">
+<meta property="og:description" content="Enter an altimeter setting and field elevation — or type an airport ID for live METAR autofill — to get pressure altitude and density altitude instantly.">
+<meta property="og:image" content="https://densityalt.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Pressure Altitude Calculator — PA and DA in One Tool">
+<meta name="twitter:description" content="Enter an altimeter setting and field elevation — or type an airport ID for live METAR autofill — to get pressure altitude and density altitude instantly.">
+<meta name="twitter:image" content="https://densityalt.com/og-image.png">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<nav class="topnav"><div class="navin">
+  <a class="brand" href="/" style="text-decoration:none"><img src="/favicon.svg" alt=""><b>DensityAlt</b></a>
+  <div class="navlinks">
+    <a class="nl" href="/atmosphere-explorer">Explorer</a>
+    <a class="nl" href="/">Density Altitude</a>
+    <div class="nl-drop">
+      <button type="button" class="nl-trigger" aria-haspopup="true">Calculators<span class="caret" aria-hidden="true"></span></button>
+      <div class="nl-menu">
+        <a class="nl" href="/pressure-altitude-calculator">Pressure Altitude</a>
+        <a class="nl" href="/true-airspeed-calculator">True Airspeed</a>
+        <a class="nl" href="/crosswind-calculator">Crosswind</a>
+        <a class="nl" href="/takeoff-landing-distance">Takeoff &amp; Landing</a>
+        <a class="nl" href="/cloud-base-calculator">Cloud Base</a>
+        <a class="nl" href="/freezing-level-calculator">Freezing Level</a>
+        <a class="nl" href="/isa-deviation-calculator">ISA Deviation</a>
+        <a class="nl" href="/oxygen-at-altitude-calculator">Oxygen at Altitude</a>
+        <a class="nl" href="/pivotal-altitude-calculator">Pivotal Altitude</a>
+        <a class="nl" href="/horsepower-at-altitude">Horsepower</a>
+        <a class="nl" href="/power-curve">Power Curve</a>
+        <a class="nl" href="/cabin-altitude-calculator">Cabin Altitude</a>
+      </div>
+    </div>
+    <a class="nl" href="/learn/">Learn</a>
+    <a class="nl" href="/#about">About</a>
+  </div>
+  <a class="nav-gh" href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener" aria-label="DensityAlt source code on GitHub" title="Open source — view the code on GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+</div></nav>
+
+<div id="disclaimerBar" class="disclaimer-bar" hidden>
+  <span><strong>Educational estimates only.</strong> DensityAlt is not for flight planning, dispatch, or medical use — always use your POH and official sources.</span>
+  <button id="disclaimerOk" type="button">Got it</button>
+</div>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="kicker">Free aviation &amp; aerospace calculators</div>
+    <h1>Pressure Altitude <span>Calculator</span></h1>
+    <p class="hero-sub">What the standard-datum sky says your altitude is.</p>
+    <p class="lead">Pressure altitude is your height above the standard 29.92 inHg pressure level — the altitude your POH performance charts, flight levels, and <a href="/">density altitude</a> all start from. Enter an altimeter setting and field elevation, or type any airport ID to autofill both from the live METAR, and get pressure altitude and density altitude in one shot.</p>
+  </header>
+
+  <section class="da" id="pressure-altitude">
+    <h2>Pressure Altitude Calculator</h2>
+    <p class="desc">Type an airport for live data, or enter the altimeter setting and elevation yourself. Add the outside air temperature to also get density altitude — the "PA + DA" combo.</p>
+    <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning or dispatch.</strong> Fly your POH numbers and official weather sources.</p>
+    <div class="da-grid airport-row">
+      <div class="field" style="flex:1 1 100%">
+        <label>Airport lookup (optional)</label>
+        <div class="lookup-wrap" style="display:flex;gap:8px;flex-wrap:wrap">
+          <div class="in" style="flex:1;min-width:260px"><input id="pacIcao" type="text" placeholder="e.g. KGAI, KDEN, KASE" maxlength="4"></div>
+          <button id="pacBtn" class="lookup">Look&nbsp;up</button>
+        </div>
+        <div class="icao-status" id="pacIcaoStatus">Type any ICAO / airport ID — elevation and the current altimeter setting fill in from the live METAR.</div>
+        <div class="presets apset">
+          <button class="chip pacchip" data-icao="KDEN">Denver</button>
+          <button class="chip pacchip" data-icao="KASE">Aspen</button>
+          <button class="chip pacchip" data-icao="KLXV">Leadville</button>
+          <button class="chip pacchip" data-icao="KMYF">San Diego</button>
+          <button class="chip pacchip" data-icao="EGLL">London Heathrow</button>
+        </div>
+      </div>
+    </div>
+    <div class="da-grid">
+      <div class="field">
+        <label>Altimeter Setting</label>
+        <div class="in"><input id="pacSet" type="number" step="0.01" value="29.92"><button type="button" id="pacUnit" class="unit unit-toggle" title="Switch between inches of mercury and hectopascals">inHg</button></div>
+        <div class="field-hint">from the METAR / ATIS (e.g. <b>30.12</b> or <b>1013</b> hPa)</div>
+      </div>
+      <div class="field">
+        <label>Field Elevation</label>
+        <div class="in"><input id="pacElev" type="text" inputmode="numeric" value="5,434"><span class="unit">ft</span></div>
+      </div>
+      <div class="field">
+        <label>Outside Air Temp <span style="font-weight:400">(optional, for DA)</span></label>
+        <div class="in"><input id="pacOat" type="number" placeholder="—"><button type="button" id="pacTempUnit" class="unit unit-toggle" title="Switch between Celsius and Fahrenheit">°C</button></div>
+      </div>
+    </div>
+    <div class="da-out">
+      <div class="out hero"><div class="lbl">Pressure Altitude</div><div class="v" style="color:var(--accent2)"><span id="pacPA">5,434</span> ft</div></div>
+      <div class="out"><div class="lbl">Correction vs Field Elev</div><div class="v"><span id="pacCorr">+0</span> ft</div></div>
+      <div class="out"><div class="lbl">Density Altitude</div><div class="v" style="color:var(--warn)"><span id="pacDA">—</span> ft</div></div>
+    </div>
+    <div class="da-note" id="pacNote"></div>
+  </section>
+
+  <section class="da" id="what-is">
+    <h2>What is pressure altitude?</h2>
+    <p class="desc"><strong>Pressure altitude is the altitude indicated when the altimeter is set to 29.92 inHg (1013.25 hPa)</strong> — your height above the standard datum plane rather than above sea level. It's the altitude aviation performance data is built on: POH takeoff and landing charts, <a href="/true-airspeed-calculator">true airspeed</a> math, and all flight levels above the transition altitude use pressure altitude.</p>
+    <p class="desc">The formula every student pilot memorizes:</p>
+    <p class="desc" style="font-family:var(--mono)"><code>Pressure Altitude = Field Elevation + (29.92 − Altimeter Setting) × 1,000</code></p>
+    <p class="desc"><strong>Worked example 1:</strong> Denver (field elevation 5,434 ft) with an altimeter setting of 29.62: PA = 5,434 + (29.92 − 29.62) × 1,000 = 5,434 + 300 = <strong>5,734 ft</strong>. Low pressure raises pressure altitude.</p>
+    <p class="desc"><strong>Worked example 2:</strong> The same field on a high-pressure day, altimeter 30.22: PA = 5,434 + (29.92 − 30.22) × 1,000 = 5,434 − 300 = <strong>5,134 ft</strong>. When the setting is above 29.92, the correction is negative — pressure altitude can even be below sea level.</p>
+    <p class="desc">Add temperature and you get <a href="/">density altitude</a>: DA = PA + 120 × (OAT − ISA temperature). That's why this page's calculator asks for OAT — it's the classic "PA/DA" one-two used on every performance chart.</p>
+  </section>
+
+  <section class="da" id="altitude-types">
+    <h2>Pressure altitude vs the other altitudes</h2>
+    <div class="tablewrap"><table class="reftable">
+      <tr><th>Altitude</th><th>Reference</th><th>How you get it</th><th>When it matters</th></tr>
+      <tr><td><b>Indicated</b></td><td>Local altimeter setting</td><td>Read the altimeter</td><td>Everyday flying below 18,000 ft</td></tr>
+      <tr><td><b>Pressure</b></td><td>29.92 inHg standard datum</td><td>Set 29.92, or this formula</td><td>Performance charts, flight levels</td></tr>
+      <tr><td><b>Density</b></td><td>PA corrected for temperature</td><td><a href="/">DA calculator</a></td><td>Aircraft performance — the one that bites</td></tr>
+      <tr><td><b>True</b></td><td>Mean sea level</td><td>Indicated corrected for temp/pressure</td><td>Terrain &amp; obstacle clearance</td></tr>
+      <tr><td><b>Absolute</b></td><td>Ground below you</td><td>Radar altimeter</td><td>AGL minimums, pattern height</td></tr>
+    </table></div>
+    <p class="desc">Full explainer with examples: <a href="/learn/types-of-altitude">the 6 types of altitude every pilot should know</a>.</p>
+  </section>
+
+  <section class="da" id="conversion">
+    <h2>Quick reference — altimeter setting → pressure altitude correction</h2>
+    <div class="tablewrap"><table class="reftable">
+      <tr><th>Altimeter (inHg)</th><th>≈ hPa</th><th>Correction to field elevation</th></tr>
+      <tr><td><b>28.92</b></td><td>979</td><td><b>+1,000 ft</b></td></tr>
+      <tr><td><b>29.42</b></td><td>996</td><td><b>+500 ft</b></td></tr>
+      <tr><td><b>29.92</b></td><td>1013</td><td><b>0 ft</b> (standard day)</td></tr>
+      <tr><td><b>30.42</b></td><td>1030</td><td><b>−500 ft</b></td></tr>
+      <tr><td><b>30.92</b></td><td>1047</td><td><b>−1,000 ft</b></td></tr>
+    </table></div>
+    <p class="desc">Rule of thumb: every 0.10 inHg away from 29.92 moves pressure altitude 100 ft — lower pressure, higher PA.</p>
+  </section>
+
+  <section class="da faq" id="faq">
+    <h2>Frequently asked questions</h2>
+    <div class="faqlist">
+      <details class="faq-item"><summary>Why is 29.92 inHg the standard?</summary>
+      <p class="a">29.92 inHg (1013.25 hPa) is the sea-level pressure of the International Standard Atmosphere — the agreed reference so that performance data, instruments, and flight levels mean the same thing everywhere. Above the transition altitude (18,000 ft in the US) everyone sets 29.92 so traffic separation uses the same datum.</p></details>
+      <details class="faq-item"><summary>Can pressure altitude be negative?</summary>
+      <p class="a">Yes. On a high-pressure day (altimeter above 29.92) the correction is negative, and at a low-elevation field pressure altitude can compute below zero — e.g., a sea-level airport with a 30.42 setting has a pressure altitude of about −500 ft. Your aircraft simply performs a little better than book sea-level numbers.</p></details>
+      <details class="faq-item"><summary>Is pressure altitude the same as field elevation?</summary>
+      <p class="a">Only on a standard day. When the altimeter setting is exactly 29.92, pressure altitude equals field elevation. Any other setting moves it: about 100 ft per 0.10 inHg, higher PA when pressure is lower.</p></details>
+      <details class="faq-item"><summary>How do I find pressure altitude in the airplane without a calculator?</summary>
+      <p class="a">Set the altimeter to 29.92 and read it — that is pressure altitude by definition. Then reset the local altimeter setting. Alternatively apply the rule of thumb: add or subtract 100 ft per 0.10 inHg the setting differs from 29.92.</p></details>
+      <details class="faq-item"><summary>What's the difference between pressure altitude and density altitude?</summary>
+      <p class="a">Pressure altitude only accounts for pressure; density altitude adds temperature. DA = PA + 120 × (OAT − ISA temp). On a hot day the density altitude is far above the pressure altitude — and density altitude is what actually drives takeoff distance, climb rate, and engine power.</p></details>
+    </div>
+  </section>
+
+  <section class="da" id="more-tools">
+    <h2>More free altitude tools</h2>
+    <p class="desc">DensityAlt is a set of free, no-signup aviation calculators. Explore the rest:</p>
+    <div class="grid">
+      <a class="card" href="/" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Density Altitude</div>
+        <div class="pct">The altitude your aircraft actually performs at — with live METAR.</div></a>
+      <a class="card" href="/true-airspeed-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">True Airspeed</div>
+        <div class="pct">TAS from IAS, pressure altitude &amp; temperature.</div></a>
+      <a class="card" href="/isa-deviation-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">ISA Deviation</div>
+        <div class="pct">Standard temperature at altitude and your ISA± number.</div></a>
+      <a class="card" href="/takeoff-landing-distance" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Takeoff &amp; Landing Distance</div>
+        <div class="pct">How density altitude stretches your ground roll &amp; rollout.</div></a>
+      <a class="card" href="/atmosphere-explorer" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Interactive</div><div class="val" style="font-size:18px">Atmosphere &amp; Hypoxia Explorer</div>
+        <div class="pct">Drag an aircraft up and watch pressure, oxygen &amp; SpO₂ fall.</div></a>
+      <a class="card" href="/cabin-altitude-calculator" style="text-decoration:none;color:inherit;display:block">
+        <div class="lbl">Calculator</div><div class="val" style="font-size:18px">Cabin Altitude</div>
+        <div class="pct">What cabin altitude your pressurization holds at cruise.</div></a>
+    </div>
+  </section>
+
+  <footer>
+    <h4>How the numbers are computed</h4>
+    <div class="calcrefs">
+      <div><b>Pressure altitude</b> — <code>PA = field elevation + (29.92 − altimeter setting) × 1,000</code>; hPa settings are converted at 1 inHg = 33.8639 hPa.</div>
+      <div><b>Density altitude</b> — <code>DA = PA + 120·(OAT − ISA&nbsp;temp)</code>, ISA temp = 15 − 1.98 °C per 1,000 ft of PA.</div>
+      <div><b>Atmosphere</b> — International Standard Atmosphere (ISA): the barometric formula in the troposphere (1.98&nbsp;°C / 1000&nbsp;ft lapse) and the isothermal layer above the tropopause (~36,089&nbsp;ft).</div>
+      <div><b>Data sources</b> — bundled ~110 airports (offline elevation) plus <code>aviationweather.gov</code> METAR for live elevation, temperature &amp; altimeter (via a same-origin proxy), falling back to <code>open-meteo.com</code> current weather by coordinates for fields without a METAR.</div>
+      <div><b>References</b> — FAA <i>Pilot's Handbook of Aeronautical Knowledge</i> (FAA-H-8083-25), FAA AIM 7-2 (altimeter setting procedures), and the ICAO Standard Atmosphere.</div>
+    </div>
+    <p class="disclaim">Educational tool. Not for medical or operational flight-planning use.</p>
+    <p class="ghsrc"><strong>Open source.</strong> DensityAlt is built in the open — <a href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener">view the code on GitHub</a> to see exactly how every number is computed.</p>
+    <p class="rms">Made with <a href="https://readymadesites.com/" rel="noopener">ReadyMadeSites™</a> — custom calculators, interactive tools &amp; SEO-ready websites that rank.</p>
+  </footer>
+
+</div>
+
+<script src="/app.js"></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "DensityAlt Pressure Altitude Calculator",
+  "url": "https://densityalt.com/pressure-altitude-calculator",
+  "description": "Pressure altitude calculator with live METAR autofill: enter an altimeter setting and field elevation, or an airport ID, to get pressure altitude and density altitude.",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Any (web browser)",
+  "browserRequirements": "Requires JavaScript",
+  "isAccessibleForFree": true,
+  "author": {"@type": "Person", "name": "Levan Sulakvelidze", "description": "Instrument-rated private pilot", "sameAs": ["https://www.linkedin.com/in/levansula", "https://www.instagram.com/levansula/", "https://github.com/levansula23"]},
+  "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+  "featureList": [
+    "Pressure altitude from altimeter setting and field elevation",
+    "Live METAR autofill by airport ID",
+    "inHg and hPa altimeter settings",
+    "Density altitude from outside air temperature",
+    "Altimeter-setting quick-reference table"
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"Why is 29.92 inHg the standard?","acceptedAnswer":{"@type":"Answer","text":"29.92 inHg (1013.25 hPa) is the sea-level pressure of the International Standard Atmosphere — the agreed reference so that performance data, instruments, and flight levels mean the same thing everywhere. Above the transition altitude (18,000 ft in the US) everyone sets 29.92, so traffic separation uses the same datum."}},
+    {"@type":"Question","name":"Can pressure altitude be negative?","acceptedAnswer":{"@type":"Answer","text":"Yes. On a high-pressure day the correction is negative, and at a low-elevation field pressure altitude can compute below zero — for example, a sea-level airport with a 30.42 inHg setting has a pressure altitude of about minus 500 feet. The aircraft simply performs slightly better than book sea-level numbers."}},
+    {"@type":"Question","name":"Is pressure altitude the same as field elevation?","acceptedAnswer":{"@type":"Answer","text":"Only on a standard day. When the altimeter setting is exactly 29.92 inHg, pressure altitude equals field elevation. Any other setting moves it by about 100 feet per 0.10 inHg, with higher pressure altitude when the pressure is lower."}},
+    {"@type":"Question","name":"How do I find pressure altitude in the airplane without a calculator?","acceptedAnswer":{"@type":"Answer","text":"Set the altimeter to 29.92 and read it — that is pressure altitude by definition. Then reset the local altimeter setting. Alternatively, apply the rule of thumb: add or subtract 100 feet for every 0.10 inHg the setting differs from 29.92."}},
+    {"@type":"Question","name":"What's the difference between pressure altitude and density altitude?","acceptedAnswer":{"@type":"Answer","text":"Pressure altitude only accounts for pressure; density altitude adds temperature: DA = PA + 120 × (OAT − ISA temperature). On a hot day density altitude is far above pressure altitude, and density altitude is what actually drives takeoff distance, climb rate, and engine power."}}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Density Altitude Calculator","item":"https://densityalt.com/"},
+    {"@type":"ListItem","position":2,"name":"Pressure Altitude Calculator","item":"https://densityalt.com/pressure-altitude-calculator"}
+  ]
+}
+</script>
+</body>
+</html>
