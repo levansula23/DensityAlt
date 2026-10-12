@@ -253,6 +253,72 @@ function fetchT(url,ms){ const c=new AbortController(); const t=setTimeout(()=>c
 const HOSTED=(location.protocol==='http:'||location.protocol==='https:');
 function wxURL(src,ids){ return HOSTED ? '/api/wx?src='+src+'&ids='+encodeURIComponent(ids)
   : 'https://aviationweather.gov/api/data/'+src+'?ids='+encodeURIComponent(ids)+'&format=json'; }
+function wxBoxURL(a0,o0,a1,o1){ const b=[a0,o0,a1,o1].map(v=>v.toFixed(2)).join(',');
+  return HOSTED ? '/api/wx?src=metar&bbox='+b : 'https://aviationweather.gov/api/data/metar?bbox='+b+'&format=json'; }
+
+const NEAR_NM=25, LAPSE_C_PER_FT=0.00198;
+function distNm(a1,o1,a2,o2){ const r=Math.PI/180;
+  const h=Math.pow(Math.sin((a2-a1)*r/2),2)+Math.cos(a1*r)*Math.cos(a2*r)*Math.pow(Math.sin((o2-o1)*r/2),2);
+  return 2*3440.065*Math.asin(Math.min(1,Math.sqrt(h))); }
+function altimFromSurface(hPa,elevM){ return Math.pow(Math.pow(hPa-0.3,0.190284)+8.4228807e-5*elevM,1/0.190284)*0.0295300; }
+
+async function nearestMetar(lat,lon,skip){
+  const dA=NEAR_NM/60, dO=dA/Math.max(0.3,Math.cos(lat*Math.PI/180));
+  try{
+    const r=await fetchT(wxBoxURL(lat-dA,lon-dO,lat+dA,lon+dO),5000);
+    const d=r.ok?await r.json():null; if(!Array.isArray(d)) return null;
+    const now=Date.now()/1000; let best=null;
+    for(const m of d){
+      if(m.altim==null || m.lat==null || m.lon==null || m.icaoId===skip) continue;
+      if(m.obsTime && now-m.obsTime>3*3600) continue;
+      const nm=distNm(lat,lon,m.lat,m.lon);
+      if(nm<=NEAR_NM && (!best || nm<best.nm)) best={ id:m.icaoId, name:m.name?m.name.trim():'', nm,
+        elevFt:m.elev!=null?m.elev*FT_PER_M:null, tempC:m.temp!=null?m.temp:null, altInHg:m.altim*0.0295300 };
+    }
+    return best;
+  }catch(e){ return null; }
+}
+
+async function modelWxAt(lat,lon){
+  try{
+    const r=await fetchT('https://api.open-meteo.com/v1/forecast?latitude='+lat.toFixed(4)+'&longitude='+lon.toFixed(4)+'&current=temperature_2m,surface_pressure',6000);
+    const d=r.ok?await r.json():null, cur=d&&d.current; if(!cur) return null;
+    const elevM=d.elevation!=null?d.elevation:null;
+    return { elevFt:elevM!=null?elevM*FT_PER_M:null, tempC:cur.temperature_2m!=null?cur.temperature_2m:null,
+      altInHg:(cur.surface_pressure!=null && elevM!=null)?altimFromSurface(cur.surface_pressure,elevM):null };
+  }catch(e){ return null; }
+}
+
+async function nearbyWx(lat,lon,elevFt,tempC,altInHg,skip){
+  const [met,mod]=await Promise.all([nearestMetar(lat,lon,skip), modelWxAt(lat,lon)]);
+  const from={}, modElev=mod&&mod.elevFt!=null, metElev=met&&met.elevFt!=null;
+  if(elevFt==null){
+    if(metElev && (met.nm<=2 || !modElev)){ elevFt=met.elevFt; from.elevation=met.id; }
+    else if(modElev){ elevFt=mod.elevFt; from.elevation='model'; }
+  }
+  let tempAdjusted=false;
+  if(altInHg==null && met){ altInHg=met.altInHg; from.altimeter=met.id; }
+  if(tempC==null && met && met.tempC!=null){
+    const dh=(elevFt!=null && metElev)?met.elevFt-elevFt:0;
+    tempAdjusted=Math.abs(dh)>=500; tempC=met.tempC+(tempAdjusted?dh*LAPSE_C_PER_FT:0); from.temp=met.id; }
+  if(altInHg==null && mod && mod.altInHg!=null){ altInHg=mod.altInHg; from.altimeter='model'; }
+  if(tempC==null && mod && mod.tempC!=null){ tempC=mod.tempC; from.temp='model'; }
+  return { elevFt, tempC, altInHg, met, mod, from, tempAdjusted };
+}
+
+function wxSourceNote(w){
+  const by={};
+  ['temp','altimeter'].forEach(k=>{ const s=w.from[k]; if(s) (by[s]=by[s]||[]).push(k); });
+  const parts=[];
+  for(const s in by){ const f=by[s].join(' &amp; ');
+    parts.push(s==='model' ? f+' from a weather model (no METAR within '+NEAR_NM+' nm)'
+      : f+' from nearest METAR <strong>'+s+'</strong>'+(w.met.name?' · '+w.met.name:'')+', '+Math.max(1,Math.round(w.met.nm))+' nm'); }
+  let s=parts.length?' '+parts.join('; ').replace(/^./,c=>c.toUpperCase())+'.':'';
+  if(w.tempAdjusted) s+=' '+w.met.id+' reports '+Math.round(w.met.tempC)+'°C at '+fmt(w.met.elevFt)+' ft — adjusted to this elevation.';
+  if(w.from.altimeter==='model') s+=' Model altimeter is an estimate: pressure altitude ±~200 ft.';
+  return s;
+}
+
 async function wxFetchStation(raw){
   let elevFt=null, tempC=null, altInHg=null, name=null, lat=null, lon=null;
 
@@ -281,18 +347,13 @@ async function wxFetchStation(raw){
   if(elevFt==null && AIRPORTS[raw]!=null) elevFt=AIRPORTS[raw];
   if(lat==null && COORDS[raw]){ lat=COORDS[raw][0]; lon=COORDS[raw][1]; }
 
+  let note='', estimated=false;
   if((tempC==null || altInHg==null) && lat!=null && lon!=null){
-    try{
-      const r=await fetchT('https://api.open-meteo.com/v1/forecast?latitude='+lat.toFixed(4)+'&longitude='+lon.toFixed(4)+'&current=temperature_2m,pressure_msl',6000);
-      const d=r.ok?await r.json():null, cur=d&&d.current;
-      if(cur){
-        if(tempC==null && cur.temperature_2m!=null) tempC=cur.temperature_2m;
-        if(altInHg==null && cur.pressure_msl!=null) altInHg=cur.pressure_msl*0.0295300;
-      }
-    }catch(e){}
+    const w=await nearbyWx(lat,lon,elevFt,tempC,altInHg,raw);
+    tempC=w.tempC; altInHg=w.altInHg; note=wxSourceNote(w); estimated=w.from.altimeter==='model';
   }
 
-  return {elevFt,tempC,altInHg,name};
+  return {elevFt,tempC,altInHg,name,note,estimated};
 }
 
 async function lookupICAO(){
@@ -300,10 +361,10 @@ async function lookupICAO(){
   const st=$('icaoStatus');
   if(!raw){ st.className='icao-status'; st.textContent=''; return; }
   st.className='icao-status loading'; st.innerHTML='<span class="spin"></span>Looking up '+raw+' — fetching live elevation, temperature &amp; altimeter…';
-  const {elevFt,tempC,altInHg,name}=await wxFetchStation(raw);
+  const {elevFt,tempC,altInHg,name,note,estimated}=await wxFetchStation(raw);
   const got=[], missing=[];
   if(elevFt!=null){ $('elev').value=fmt(elevFt); got.push('elevation '+Math.round(elevFt).toLocaleString('en-US')+' ft'); } else missing.push('elevation');
-  if(tempC!=null){ $('oat').value=Math.round(tempC); got.push('temp '+Math.round(tempC)+'°C'); } else missing.push('temp');
+  if(tempC!=null){ $('oat').value=(tempUnit==='F')?Math.round(tempC*9/5+32):Math.round(tempC); got.push('temp '+Math.round(tempC)+'°C'); } else missing.push('temp');
   if(altInHg!=null){ $('altim').value=altInHg.toFixed(2); got.push('altimeter '+altInHg.toFixed(2)+'"'); } else missing.push('altimeter');
   calcDA();
 
@@ -312,13 +373,13 @@ async function lookupICAO(){
     st.textContent='Couldn’t reach live data for '+raw+'. '+(HOSTED?'The station may be unlisted or the weather service is momentarily down.':'Live temp/altimeter needs the hosted site (it runs through a server-side proxy).')+' Listed airports still work offline for elevation — otherwise enter values manually.';
     return;
   }
-  let msg='<strong>'+raw+'</strong>'+(name?' · '+name:'')+' — set '+got.join(', ')+'.';
+  let msg='<strong>'+raw+'</strong>'+(name?' · '+name:'')+' — set '+got.join(', ')+'.'+note;
   if(missing.length){
     const noElev=missing.includes('elevation');
     st.className='icao-status '+(noElev?'err':'info');
     msg+=' No live '+missing.join(' & ')+' published for this field — enter '+(missing.length>1?'them':'it')+' manually.';
   }
-  else st.className='icao-status ok';
+  else st.className='icao-status '+(estimated?'info':'ok');
   st.innerHTML=msg;
 }
 
@@ -328,22 +389,17 @@ function useMyLocation(){
   st.className='icao-status loading'; st.innerHTML='<span class="spin"></span>Getting your location…';
   navigator.geolocation.getCurrentPosition(async pos=>{
     const lat=pos.coords.latitude, lon=pos.coords.longitude, got=[], missing=[];
-    try{
-      const r=await fetchT('https://api.open-meteo.com/v1/elevation?latitude='+lat.toFixed(4)+'&longitude='+lon.toFixed(4),6000);
-      const d=r.ok?await r.json():null, m=(d&&d.elevation&&d.elevation[0]!=null)?d.elevation[0]:null;
-      if(m!=null){ const ft=Math.round(m*FT_PER_M); $('elev').value=fmt(ft); got.push('elevation '+ft.toLocaleString('en-US')+' ft'); } else missing.push('elevation');
-    }catch(e){ missing.push('elevation'); }
-    try{
-      const r=await fetchT('https://api.open-meteo.com/v1/forecast?latitude='+lat.toFixed(4)+'&longitude='+lon.toFixed(4)+'&current=temperature_2m,pressure_msl',6000);
-      const d=r.ok?await r.json():null, cur=d&&d.current;
-      if(cur&&cur.temperature_2m!=null){ const c=cur.temperature_2m; $('oat').value=(tempUnit==='F')?Math.round(c*9/5+32):Math.round(c); got.push('temp '+Math.round(c)+'°C'); } else missing.push('temp');
-      if(cur&&cur.pressure_msl!=null){ const inHg=cur.pressure_msl*0.0295300; $('altim').value=inHg.toFixed(2); got.push('altimeter '+inHg.toFixed(2)+'"'); } else missing.push('altimeter');
-    }catch(e){ missing.push('temp'); missing.push('altimeter'); }
+    st.innerHTML='<span class="spin"></span>Finding the nearest METAR &amp; your elevation…';
+    const w=await nearbyWx(lat,lon,null,null,null,null);
+    const elevFt=w.elevFt, fieldId=w.from.elevation!=='model'?w.from.elevation:null;
+    if(elevFt!=null){ $('elev').value=fmt(elevFt); got.push('elevation '+fmt(elevFt)+' ft'+(fieldId?' ('+fieldId+' field)':'')); } else missing.push('elevation');
+    if(w.tempC!=null){ const c=w.tempC; $('oat').value=(tempUnit==='F')?Math.round(c*9/5+32):Math.round(c); got.push('temp '+Math.round(c)+'°C'); } else missing.push('temp');
+    if(w.altInHg!=null){ $('altim').value=w.altInHg.toFixed(2); got.push('altimeter '+w.altInHg.toFixed(2)+'"'); } else missing.push('altimeter');
     calcDA();
     if(!got.length){ st.className='icao-status err'; st.textContent='Got your location, but couldn’t fetch its data — enter values manually.'; return; }
-    let msg='Current conditions at your location ('+lat.toFixed(2)+', '+lon.toFixed(2)+') — set '+got.join(', ')+'.';
+    let msg='Current conditions at your location ('+lat.toFixed(2)+', '+lon.toFixed(2)+') — set '+got.join(', ')+'.'+wxSourceNote(w);
     if(missing.length){ st.className='icao-status err'; msg+=' Couldn’t get '+missing.join(' &amp; ')+' — set '+(missing.length>1?'those':'it')+' manually.'; }
-    else st.className='icao-status ok';
+    else st.className='icao-status '+(w.from.altimeter==='model'?'info':'ok');
     st.innerHTML=msg;
   }, err=>{
     st.className='icao-status err';
@@ -1012,7 +1068,7 @@ async function lookupPAC(){
   const st=$('pacIcaoStatus');
   if(!raw){ st.className='icao-status'; st.textContent=''; return; }
   st.className='icao-status loading'; st.innerHTML='<span class="spin"></span>Looking up '+raw+' — fetching live elevation, altimeter &amp; temperature…';
-  const {elevFt,tempC,altInHg,name}=await wxFetchStation(raw);
+  const {elevFt,tempC,altInHg,name,note,estimated}=await wxFetchStation(raw);
   const got=[], missing=[];
   if(elevFt!=null){ $('pacElev').value=fmt(elevFt); got.push('elevation '+Math.round(elevFt).toLocaleString('en-US')+' ft'); } else missing.push('elevation');
   if(altInHg!=null){ $('pacSet').value=pacUnit==='hPa'?Math.round(altInHg/0.0295300):altInHg.toFixed(2); got.push('altimeter '+altInHg.toFixed(2)+'"'); } else missing.push('altimeter');
@@ -1023,8 +1079,8 @@ async function lookupPAC(){
     st.textContent='Couldn’t reach live data for '+raw+'. '+(HOSTED?'The station may be unlisted or the weather service is momentarily down.':'Live data needs the hosted site.')+' Enter values manually.';
     return;
   }
-  st.className='icao-status '+(missing.length?'info':'ok');
-  st.innerHTML='<strong>'+raw+'</strong>'+(name?' · '+name:'')+' — set '+got.join(', ')+'.'+(missing.length?' Enter '+missing.join(' & ')+' manually.':'');
+  st.className='icao-status '+(missing.length||estimated?'info':'ok');
+  st.innerHTML='<strong>'+raw+'</strong>'+(name?' · '+name:'')+' — set '+got.join(', ')+'.'+note+(missing.length?' Enter '+missing.join(' & ')+' manually.':'');
 }
 function setupPAC(){
   if(!$('pacPA')) return false;
