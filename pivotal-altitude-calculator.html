@@ -57,17 +57,18 @@
 
 <div class="wrap">
 
-  <header class="hero">
+  <header class="hero rd-hero">
     <div class="kicker">Free aviation &amp; aerospace calculators</div>
     <h1>Pivotal Altitude <span>Calculator</span></h1>
-    <p class="hero-sub">The altitude where the pylon stands still.</p>
-    <p class="lead">In eights on pylons there's one altitude where your wingtip reference line stays pinned to the pylon — the pivotal altitude. It depends only on groundspeed: <strong>GS² ÷ 11.3</strong>. Enter your groundspeed to get it in feet AGL (and MSL over your terrain), then read why it keeps changing as the wind swings your groundspeed around the turn.</p>
+    <p class="rd-lede">Enter your groundspeed and get your <b>pivotal altitude instantly</b> in feet AGL, plus the MSL altitude over your terrain.</p>
+    <span class="rd-disc" title="DensityAlt is educational only">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Educational only — always fly your POH &amp; current weather
+    </span>
   </header>
 
-  <section class="da" id="pivotal-altitude">
-    <h2>Pivotal Altitude Calculator</h2>
-    <p class="desc">Groundspeed, not airspeed — that's the whole trick of the maneuver. Add your terrain elevation to see the MSL altitude to fly.</p>
-    <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning or dispatch.</strong> Fly the maneuver per the Airplane Flying Handbook and your instructor.</p>
+  <section class="rd-tool" id="pivotal-altitude" aria-labelledby="rd-toolhead">
+    <h2 id="rd-toolhead" class="rd-toolhead">Calculate pivotal altitude</h2>
     <div class="da-grid">
       <div class="field">
         <label>Groundspeed</label>
@@ -79,15 +80,22 @@
         <div class="in"><input id="pvElev" type="text" inputmode="numeric" value="0"><span class="unit">ft</span></div>
       </div>
     </div>
-    <div class="da-out">
-      <div class="out hero"><div class="lbl">Pivotal Altitude</div><div class="v" style="color:var(--accent2)"><span id="pvOut">885</span> ft AGL</div></div>
-      <div class="out"><div class="lbl">Altitude to Fly</div><div class="v"><span id="pvMsl">885</span> ft MSL</div></div>
+    <div class="rd-result">
+      <div class="rd-da"><div class="lbl">Pivotal Altitude</div><div class="rd-da-v"><span id="pvOut">885</span> <span class="rd-unit">ft AGL</span></div></div>
+      <div class="rd-stats">
+        <div class="rd-stat"><span class="lbl">Altitude to Fly</span><b><span id="pvMsl">885</span> ft MSL</b></div>
+      </div>
     </div>
     <div class="da-note" id="pvNote"></div>
+    <p class="rd-toolnote">Educational estimates only — <strong>not for flight planning or dispatch.</strong> Fly the maneuver per the Airplane Flying Handbook and your instructor.</p>
   </section>
+
+  <div class="rd-explore-wrap"><a class="rd-explore" href="#more-tools">Explore all 12 calculators →</a></div>
 
   <section class="da" id="how">
     <h2>How pivotal altitude works</h2>
+    <p class="desc">In eights on pylons there's one altitude where your wingtip reference line stays pinned to the pylon — the pivotal altitude. It depends only on groundspeed: <strong>GS² ÷ 11.3</strong>. Enter your groundspeed to get it in feet AGL (and MSL over your terrain), then read why it keeps changing as the wind swings your groundspeed around the turn.</p>
+    <p class="desc">Groundspeed, not airspeed — that's the whole trick of the maneuver. Add your terrain elevation to see the MSL altitude to fly.</p>
     <p class="desc"><strong>Pivotal altitude (ft AGL) = groundspeed² ÷ 11.3</strong> with groundspeed in knots (÷ 15 for mph). At 100 kt that's 885 ft AGL; at 110 kt, 1,071 ft. The physics: at exactly this height, your angular rate around the pylon matches the rate the pylon's bearing changes, so the lateral reference line appears frozen on it.</p>
     <h3>Pivotal altitude chart</h3>
     <div class="tablewrap"><table class="reftable">

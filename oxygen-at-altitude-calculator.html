@@ -57,17 +57,18 @@
 
 <div class="wrap">
 
-  <header class="hero">
+  <header class="hero rd-hero">
     <div class="kicker">Free aviation &amp; aerospace calculators</div>
     <h1>Oxygen at Altitude <span>Calculator</span></h1>
-    <p class="hero-sub">How much oxygen is really in each breath up there?</p>
-    <p class="lead">The air is always about 21% oxygen — but with less pressure pushing it into your lungs, every breath at altitude delivers fewer oxygen molecules. Enter any altitude (or tap Denver, Everest, or a jet cabin) to see the air pressure, the <strong>effective oxygen percentage</strong>, and an estimated <strong>blood oxygen saturation (SpO₂)</strong> for an unacclimatized adult. For the full physics-to-physiology chain, drag an aircraft up the <a href="/atmosphere-explorer">atmosphere &amp; hypoxia explorer</a>.</p>
+    <p class="rd-lede">Enter any altitude and see the <b>effective oxygen percentage</b> in each breath, plus estimated blood oxygen (SpO₂).</p>
+    <span class="rd-disc" title="DensityAlt is educational only">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Educational only — always fly your POH &amp; current weather
+    </span>
   </header>
 
-  <section class="da" id="oxygen">
-    <h2>Oxygen at Altitude Calculator</h2>
-    <p class="desc">Type an altitude or tap a preset — drag the marker on the chart to explore. SpO₂ estimates are for healthy, unacclimatized adults at acute exposure.</p>
-    <p class="calc-disclaimer">Educational estimates only — <strong>not for medical, mountaineering, or flight-planning use.</strong> Individual physiology varies widely.</p>
+  <section class="rd-tool" id="oxygen" aria-labelledby="rd-toolhead">
+    <h2 id="rd-toolhead" class="rd-toolhead">Calculate oxygen at altitude</h2>
     <div class="da-grid">
       <div class="field">
         <label>Altitude</label>
@@ -84,19 +85,29 @@
       <button class="chip o2chip" data-ft="17598">Everest Base Camp</button>
       <button class="chip o2chip" data-ft="29032">Everest summit</button>
     </div>
-    <div class="da-out">
-      <div class="out hero"><div class="lbl">Effective Oxygen</div><div class="v" style="color:var(--accent2)"><span id="o2Eff">17.3</span> %</div></div>
-      <div class="out"><div class="lbl">Est. Blood Oxygen (SpO₂)</div><div class="v" style="color:var(--warn)"><span id="o2Spo2">93</span> %</div></div>
-      <div class="out"><div class="lbl">O₂ Partial Pressure</div><div class="v"><span id="o2Po2">118</span> mmHg</div></div>
-      <div class="out"><div class="lbl">Air Pressure</div><div class="v" style="font-size:20px"><span id="o2Press">753 hPa · 22.23"</span></div></div>
+    <div class="rd-result">
+      <div class="rd-da">
+        <div class="lbl">Effective Oxygen</div>
+        <div class="rd-da-v" style="color:var(--accent2);text-shadow:none"><span id="o2Eff">17.3</span> <span class="rd-unit">%</span></div>
+      </div>
+      <div class="rd-stats">
+        <div class="rd-stat"><span class="lbl">Est. Blood Oxygen (SpO₂)</span><b style="color:var(--warn)"><span id="o2Spo2">93</span> %</b></div>
+        <div class="rd-stat"><span class="lbl">O₂ Partial Pressure</span><b><span id="o2Po2">118</span> mmHg</b></div>
+        <div class="rd-stat"><span class="lbl">Air Pressure</span><b style="font-size:18px"><span id="o2Press">753 hPa · 22.23"</span></b></div>
+      </div>
     </div>
     <canvas id="o2Chart" class="box" width="900" height="300" aria-label="Blood oxygen saturation versus altitude curve"></canvas>
-    <p class="cap" style="margin:8px 0 0">Estimated SpO₂ vs altitude for an unacclimatized adult. Drag anywhere on the chart to set the altitude.</p>
+    <p class="rd-cap">Estimated SpO₂ vs altitude for an unacclimatized adult. Drag anywhere on the chart to set the altitude.</p>
     <div class="da-note" id="o2Note"></div>
+    <p class="rd-toolnote">Educational estimates only — <strong>not for medical, mountaineering, or flight-planning use.</strong> Individual physiology varies widely.</p>
   </section>
+
+  <div class="rd-explore-wrap"><a class="rd-explore" href="#more-tools">Explore all 12 calculators →</a></div>
 
   <section class="da" id="how-it-works">
     <h2>Why there's less oxygen at altitude (it's not the percentage)</h2>
+    <p class="desc">The air is always about 21% oxygen — but with less pressure pushing it into your lungs, every breath at altitude delivers fewer oxygen molecules. Enter any altitude (or tap Denver, Everest, or a jet cabin) to see the air pressure, the <strong>effective oxygen percentage</strong>, and an estimated <strong>blood oxygen saturation (SpO₂)</strong> for an unacclimatized adult. For the full physics-to-physiology chain, drag an aircraft up the <a href="/atmosphere-explorer">atmosphere &amp; hypoxia explorer</a>.</p>
+    <p class="desc">Type an altitude or tap a preset — drag the marker on the chart to explore. SpO₂ estimates are for healthy, unacclimatized adults at acute exposure.</p>
     <p class="desc"><strong>The oxygen fraction of air stays at 20.9% from sea level to the stratosphere.</strong> What falls is the air pressure — at 10,000 ft it's about 69% of sea level, at Everest's summit about 33%. Fewer air molecules per breath means proportionally fewer oxygen molecules, so breathing at altitude feels like breathing air with a lower oxygen percentage at sea level. That equivalent number is the <strong>effective oxygen percentage</strong> this calculator reports.</p>
     <p class="desc">Your blood doesn't track it linearly. Hemoglobin holds ~90%+ saturation until the oxygen partial pressure drops past a knee in the oxygen–hemoglobin dissociation curve, then falls off fast — that's why you feel roughly fine at 8,000 ft, degraded at 15,000 ft, and lose useful consciousness in minutes at 25,000 ft. Watch that S-curve move in real time in the <a href="/atmosphere-explorer">atmosphere &amp; hypoxia explorer</a>.</p>
   </section>

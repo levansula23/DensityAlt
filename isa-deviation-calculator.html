@@ -57,17 +57,18 @@
 
 <div class="wrap">
 
-  <header class="hero">
+  <header class="hero rd-hero">
     <div class="kicker">Free aviation &amp; aerospace calculators</div>
     <h1>ISA Temperature &amp; Deviation <span>Calculator</span></h1>
-    <p class="hero-sub">How far from "standard" is today's air?</p>
-    <p class="lead">The International Standard Atmosphere assumes 15&nbsp;°C at sea level, cooling 1.98&nbsp;°C per 1,000 ft up to the tropopause. Every performance chart is built on it — and today's air never matches it. Enter an altitude to get the ISA temperature, add your OAT to get the deviation ("ISA+10"), and see what it does to your <a href="/">density altitude</a>.</p>
+    <p class="rd-lede">Enter an altitude and get the <b>ISA standard temperature instantly</b> — add your OAT for the deviation (ISA+10) and its density altitude effect.</p>
+    <span class="rd-disc" title="DensityAlt is educational only">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Educational only — always fly your POH &amp; current weather
+    </span>
   </header>
 
-  <section class="da" id="isa-deviation">
-    <h2>ISA Temperature &amp; Deviation Calculator</h2>
-    <p class="desc">Use pressure altitude for chart work (set 29.92 or use the <a href="/pressure-altitude-calculator">pressure altitude calculator</a>); indicated altitude is close enough for a quick estimate.</p>
-    <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning or dispatch.</strong> Fly your POH numbers.</p>
+  <section class="rd-tool" id="isa-deviation" aria-labelledby="rd-toolhead">
+    <h2 id="rd-toolhead" class="rd-toolhead">Calculate ISA temperature &amp; deviation</h2>
     <div class="da-grid">
       <div class="field">
         <label>Altitude (pressure altitude)</label>
@@ -78,16 +79,23 @@
         <div class="in"><input id="isadOat" type="number" placeholder="—"><button type="button" id="isadUnit" class="unit unit-toggle" title="Switch between Celsius and Fahrenheit">°C</button></div>
       </div>
     </div>
-    <div class="da-out">
-      <div class="out hero"><div class="lbl">ISA Temperature</div><div class="v" style="color:var(--accent2)"><span id="isadTemp">−0.8</span> °C</div></div>
-      <div class="out"><div class="lbl">ISA Temp (°F)</div><div class="v"><span id="isadTempF">30.5</span> °F</div></div>
-      <div class="out"><div class="lbl">Your Deviation</div><div class="v" style="color:var(--warn)"><span id="isadDev">—</span></div></div>
+    <div class="rd-result">
+      <div class="rd-da"><div class="lbl">ISA Temperature</div><div class="rd-da-v"><span id="isadTemp">−0.8</span> <span class="rd-unit">°C</span></div></div>
+      <div class="rd-stats">
+        <div class="rd-stat"><span class="lbl">ISA Temp (°F)</span><b><span id="isadTempF">30.5</span> °F</b></div>
+        <div class="rd-stat"><span class="lbl">Your Deviation</span><b><span id="isadDev">—</span></b></div>
+      </div>
     </div>
     <div class="da-note" id="isadNote"></div>
+    <p class="rd-toolnote">Educational estimates only — <strong>not for flight planning or dispatch.</strong> Fly your POH numbers.</p>
   </section>
+
+  <div class="rd-explore-wrap"><a class="rd-explore" href="#more-tools">Explore all 12 calculators →</a></div>
 
   <section class="da" id="isa-formula">
     <h2>ISA deviation formula</h2>
+    <p class="desc">The International Standard Atmosphere assumes 15&nbsp;°C at sea level, cooling 1.98&nbsp;°C per 1,000 ft up to the tropopause. Every performance chart is built on it — and today's air never matches it. Enter an altitude to get the ISA temperature, add your OAT to get the deviation ("ISA+10"), and see what it does to your <a href="/">density altitude</a>.</p>
+    <p class="desc">Use pressure altitude for chart work (set 29.92 or use the <a href="/pressure-altitude-calculator">pressure altitude calculator</a>); indicated altitude is close enough for a quick estimate.</p>
     <p class="desc"><strong>ISA temp = 15&nbsp;°C − 1.98&nbsp;°C per 1,000 ft of pressure altitude</strong> (−56.5&nbsp;°C above 36,089 ft).</p>
     <p class="desc"><strong>ISA deviation = OAT − ISA temp.</strong> Example: 25&nbsp;°C at 5,000 ft → ISA 5&nbsp;°C → ISA+20.</p>
   </section>

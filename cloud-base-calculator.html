@@ -57,17 +57,19 @@
 
 <div class="wrap">
 
-  <header class="hero">
+  <header class="hero rd-hero">
     <div class="kicker">Free aviation &amp; aerospace calculators</div>
     <h1>Cloud Base <span>Calculator</span></h1>
-    <p class="hero-sub">Where will the cumulus form today?</p>
-    <p class="lead">Rising air cools at about 2.5&nbsp;°C per 1,000 ft faster than its dew point falls — so the gap between temperature and dew point tells you where cloud forms. Enter the surface temperature and dew point (straight off any METAR) to estimate the cumulus cloud base in feet AGL and MSL. Pairs naturally with the <a href="/">density altitude calculator</a> for a same-day performance picture.</p>
+    <p class="rd-lede">Enter temperature and dew point from any METAR and see the <b>cumulus cloud base in feet AGL and MSL</b> instantly.</p>
+    <span class="rd-disc" title="DensityAlt is educational only">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Educational only — always fly your POH &amp; current weather
+    </span>
   </header>
 
-  <section class="da" id="cloud-base">
-    <h2>Cloud Base Calculator</h2>
-    <p class="desc">Temperature and dew point are in every METAR (e.g. <b>25/13</b> = 25&nbsp;°C over a 13&nbsp;°C dew point). Add your field elevation to get the base in MSL too.</p>
-    <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning or dispatch.</strong> This rule estimates fair-weather cumulus bases; verify ceilings with METARs, TAFs, and area forecasts.</p>
+  <section class="rd-tool" id="cloud-base" aria-labelledby="rd-toolhead">
+    <h2 id="rd-toolhead" class="rd-toolhead">Calculate cloud base</h2>
+    <p class="rd-cap" style="margin:0 0 16px">Temp/dew point are in every METAR, e.g. 25/13. Add field elevation for MSL.</p>
     <div class="da-grid">
       <div class="field">
         <label>Surface Temperature</label>
@@ -82,18 +84,25 @@
         <div class="in"><input id="cbElev" type="text" inputmode="numeric" value="0"><span class="unit">ft</span></div>
       </div>
     </div>
-    <div class="da-out">
-      <div class="out hero"><div class="lbl">Cloud Base</div><div class="v" style="color:var(--accent2)"><span id="cbAgl">4,800</span> ft AGL</div></div>
-      <div class="out"><div class="lbl">Cloud Base MSL</div><div class="v"><span id="cbMsl">4,800</span> ft</div></div>
-      <div class="out"><div class="lbl">Temp / Dew Point Spread</div><div class="v"><span id="cbSpread">12.0 °C</span></div></div>
+    <div class="rd-result">
+      <div class="rd-da"><div class="lbl">Cloud Base</div><div class="rd-da-v"><span id="cbAgl">4,800</span> <span class="rd-unit">ft AGL</span></div></div>
+      <div class="rd-stats">
+        <div class="rd-stat"><span class="lbl">Cloud Base MSL</span><b><span id="cbMsl">4,800</span> ft</b></div>
+        <div class="rd-stat"><span class="lbl">Temp / Dew Point Spread</span><b><span id="cbSpread">12.0 °C</span></b></div>
+      </div>
     </div>
     <canvas id="cbChart" class="box" width="900" height="280" aria-label="Estimated cloud base height diagram"></canvas>
-    <p class="cap" style="margin:8px 0 0">Estimated cumulus base above the ground for your temperature/dew point spread.</p>
+    <p class="rd-cap">Estimated cumulus base above the ground for your temperature/dew point spread.</p>
     <div class="da-note" id="cbNote"></div>
+    <p class="rd-toolnote">Educational estimates only — <strong>not for flight planning or dispatch.</strong></p>
   </section>
+
+  <div class="rd-explore-wrap"><a class="rd-explore" href="#more-tools">Explore all 12 calculators →</a></div>
 
   <section class="da" id="formula">
     <h2>The cloud base formula</h2>
+    <p class="desc">Rising air cools at about 2.5&nbsp;°C per 1,000 ft faster than its dew point falls — so the gap between temperature and dew point tells you where cloud forms. Enter the surface temperature and dew point (straight off any METAR) to estimate the cumulus cloud base in feet AGL and MSL. Pairs naturally with the <a href="/">density altitude calculator</a> for a same-day performance picture.</p>
+    <p class="desc">Temperature and dew point are in every METAR (e.g. <b>25/13</b> = 25&nbsp;°C over a 13&nbsp;°C dew point). Add your field elevation to get the base in MSL too. This rule estimates fair-weather cumulus bases; verify ceilings with METARs, TAFs, and area forecasts.</p>
     <p class="desc"><strong>Cloud base (ft AGL) ≈ (temperature − dew point) ÷ 2.5&nbsp;°C × 1,000</strong> — or ÷ 4.4 when working in °F. It works because unsaturated rising air cools at the dry adiabatic lapse rate (~3&nbsp;°C per 1,000 ft) while its dew point falls only ~0.5&nbsp;°C per 1,000 ft; the two converge at ~2.5&nbsp;°C per 1,000 ft, and where they meet, water vapor condenses into cloud.</p>
     <p class="desc"><strong>Worked example:</strong> METAR reads 25/13. Spread = 12&nbsp;°C. Base ≈ 12 ÷ 2.5 × 1,000 = <strong>4,800 ft AGL</strong>. Over a 1,200 ft field elevation, that's a base near <strong>6,000 ft MSL</strong> — matching how ATIS and METARs report ceilings AGL while your altimeter reads MSL.</p>
     <p class="desc">The rule only fits <strong>convective (cumulus) cloud in well-mixed daytime air</strong>. Stratus, frontal lifting, upslope cloud, and nighttime inversions don't obey it — that's why a summer afternoon forecast works beautifully and a marine-layer morning doesn't.</p>

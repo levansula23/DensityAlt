@@ -57,17 +57,18 @@
 
 <div class="wrap">
 
-  <header class="hero">
+  <header class="hero rd-hero">
     <div class="kicker">Free aviation &amp; aerospace calculators</div>
     <h1>Pressure Altitude <span>Calculator</span></h1>
-    <p class="hero-sub">What the standard-datum sky says your altitude is.</p>
-    <p class="lead">Pressure altitude is your height above the standard 29.92 inHg pressure level — the altitude your POH performance charts, flight levels, and <a href="/">density altitude</a> all start from. Enter an altimeter setting and field elevation, or type any airport ID to autofill both from the live METAR, and get pressure altitude and density altitude in one shot.</p>
+    <p class="rd-lede">Enter an altimeter setting and elevation, or any airport ID, and get <b>pressure altitude instantly</b> — plus density altitude with a temperature.</p>
+    <span class="rd-disc" title="DensityAlt is educational only">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Educational only — always fly your POH &amp; current weather
+    </span>
   </header>
 
-  <section class="da" id="pressure-altitude">
-    <h2>Pressure Altitude Calculator</h2>
-    <p class="desc">Type an airport for live data, or enter the altimeter setting and elevation yourself. Add the outside air temperature to also get density altitude — the "PA + DA" combo.</p>
-    <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning or dispatch.</strong> Fly your POH numbers and official weather sources.</p>
+  <section class="rd-tool" id="pressure-altitude" aria-labelledby="rd-toolhead">
+    <h2 id="rd-toolhead" class="rd-toolhead">Calculate pressure altitude</h2>
     <div class="da-grid airport-row">
       <div class="field" style="flex:1 1 100%">
         <label>Airport lookup (optional)</label>
@@ -100,16 +101,28 @@
         <div class="in"><input id="pacOat" type="number" placeholder="—"><button type="button" id="pacTempUnit" class="unit unit-toggle" title="Switch between Celsius and Fahrenheit">°C</button></div>
       </div>
     </div>
-    <div class="da-out">
-      <div class="out hero"><div class="lbl">Pressure Altitude</div><div class="v" style="color:var(--accent2)"><span id="pacPA">5,434</span> ft</div></div>
-      <div class="out"><div class="lbl">Correction vs Field Elev</div><div class="v"><span id="pacCorr">+0</span> ft</div></div>
-      <div class="out"><div class="lbl">Density Altitude</div><div class="v" style="color:var(--warn)"><span id="pacDA">—</span> ft</div></div>
+    <div class="rd-result">
+      <div class="rd-da">
+        <div class="lbl">Pressure Altitude</div>
+        <div class="rd-da-v"><span id="pacPA">5,434</span> <span class="rd-unit">ft</span></div>
+      </div>
+      <div class="rd-stats">
+        <div class="rd-stat"><span class="lbl">Correction vs Field Elev</span><b><span id="pacCorr">+0</span> ft</b></div>
+        <div class="rd-stat"><span class="lbl">Density Altitude</span><b><span id="pacDA">—</span> ft</b></div>
+      </div>
     </div>
     <div class="da-note" id="pacNote"></div>
+
+    <p class="rd-toolnote">Educational estimates only — <strong>not for flight planning or dispatch.</strong> Fly your POH numbers and official weather sources.</p>
   </section>
+
+  <div class="rd-explore-wrap"><a class="rd-explore" href="#more-tools">Explore all 12 calculators →</a></div>
 
   <section class="da" id="what-is">
     <h2>What is pressure altitude?</h2>
+    <p class="desc">Pressure altitude is your height above the standard 29.92 inHg pressure level — the altitude your POH performance charts, flight levels, and <a href="/">density altitude</a> all start from. Enter an altimeter setting and field elevation, or type any airport ID to autofill both from the live METAR, and get pressure altitude and density altitude in one shot.</p>
+    <p class="desc">Type an airport for live data, or enter the altimeter setting and elevation yourself. Add the outside air temperature to also get density altitude — the "PA + DA" combo.</p>
+    <p class="desc">Educational estimates only — <strong>not for flight planning or dispatch.</strong> Fly your POH numbers and official weather sources.</p>
     <p class="desc"><strong>Pressure altitude is the altitude indicated when the altimeter is set to 29.92 inHg (1013.25 hPa)</strong> — your height above the standard datum plane rather than above sea level. It's the altitude aviation performance data is built on: POH takeoff and landing charts, <a href="/true-airspeed-calculator">true airspeed</a> math, and all flight levels above the transition altitude use pressure altitude.</p>
     <p class="desc">The formula every student pilot memorizes:</p>
     <p class="desc" style="font-family:var(--mono)"><code>Pressure Altitude = Field Elevation + (29.92 − Altimeter Setting) × 1,000</code></p>

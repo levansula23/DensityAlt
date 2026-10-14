@@ -57,17 +57,18 @@
 
 <div class="wrap">
 
-  <header class="hero">
+  <header class="hero rd-hero">
     <div class="kicker">Free aviation &amp; aerospace calculators</div>
     <h1>Freezing Level <span>Calculator</span></h1>
-    <p class="hero-sub">Where does today's air hit 0&nbsp;°C?</p>
-    <p class="lead">Air cools roughly 2&nbsp;°C per 1,000 ft as you climb, so the surface temperature tells you approximately where the freezing level sits — the altitude where structural icing becomes a threat in visible moisture. Enter the surface temperature and field elevation for an instant estimate in MSL and AGL. Pairs with the <a href="/cloud-base-calculator">cloud base calculator</a> for the classic "is the cloud above or below freezing?" check.</p>
+    <p class="rd-lede">Enter surface temperature and field elevation to see the <b>freezing level in feet MSL and AGL</b> instantly.</p>
+    <span class="rd-disc" title="DensityAlt is educational only">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Educational only — always fly your POH &amp; current weather
+    </span>
   </header>
 
-  <section class="da" id="freezing-level">
-    <h2>Freezing Level Calculator</h2>
-    <p class="desc">Surface temperature comes straight off the METAR. The estimate assumes the standard lapse rate — verify with winds &amp; temps aloft and freezing-level graphics before real flight decisions.</p>
-    <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning or dispatch.</strong> Real lapse rates vary with inversions, fronts, and warm layers.</p>
+  <section class="rd-tool" id="freezing-level" aria-labelledby="rd-toolhead">
+    <h2 id="rd-toolhead" class="rd-toolhead">Calculate freezing level</h2>
     <div class="da-grid">
       <div class="field">
         <label>Surface Temperature</label>
@@ -78,15 +79,22 @@
         <div class="in"><input id="fzElev" type="text" inputmode="numeric" value="0"><span class="unit">ft</span></div>
       </div>
     </div>
-    <div class="da-out">
-      <div class="out hero"><div class="lbl">Freezing Level</div><div class="v" style="color:var(--accent2)"><span id="fzMsl">7,000</span> ft MSL</div></div>
-      <div class="out"><div class="lbl">Above the Field</div><div class="v"><span id="fzAgl">7,000</span> ft</div></div>
+    <div class="rd-result">
+      <div class="rd-da"><div class="lbl">Freezing Level</div><div class="rd-da-v"><span id="fzMsl">7,000</span> <span class="rd-unit">ft MSL</span></div></div>
+      <div class="rd-stats">
+        <div class="rd-stat"><span class="lbl">Above the Field</span><b><span id="fzAgl">7,000</span> ft</b></div>
+      </div>
     </div>
     <div class="da-note" id="fzNote"></div>
+    <p class="rd-toolnote">Educational estimates only — <strong>not for flight planning or dispatch.</strong></p>
   </section>
+
+  <div class="rd-explore-wrap"><a class="rd-explore" href="#more-tools">Explore all 12 calculators →</a></div>
 
   <section class="da" id="formula">
     <h2>The freezing level formula</h2>
+    <p class="desc">Air cools roughly 2&nbsp;°C per 1,000 ft as you climb, so the surface temperature tells you approximately where the freezing level sits — the altitude where structural icing becomes a threat in visible moisture. Enter the surface temperature and field elevation for an instant estimate in MSL and AGL. Pairs with the <a href="/cloud-base-calculator">cloud base calculator</a> for the classic "is the cloud above or below freezing?" check.</p>
+    <p class="desc">Surface temperature comes straight off the METAR. The estimate assumes the standard lapse rate — verify with winds &amp; temps aloft and freezing-level graphics before real flight decisions. Real lapse rates vary with inversions, fronts, and warm layers.</p>
     <p class="desc"><strong>Freezing level (ft above the surface) ≈ surface temperature in °C ÷ 2 × 1,000.</strong> A 14&nbsp;°C day puts the 0&nbsp;°C isotherm near 7,000 ft above the field; add elevation for MSL. It's the standard ~2&nbsp;°C per 1,000 ft lapse rate turned inside out.</p>
     <p class="desc"><strong>Why pilots care:</strong> structural icing needs two ingredients — visible moisture and temperatures at or below freezing (the worst accretion typically between 0 and −20&nbsp;°C). Knowing the freezing level tells you whether tops, bases, and your cruise altitude keep you out of that band, and where "warm" air lives if you need an escape plan.</p>
     <p class="desc"><strong>When the estimate breaks:</strong> temperature inversions (warm air over cold), frontal zones (freezing rain lives here), and mountain valleys on winter mornings can move the real 0&nbsp;°C level thousands of feet from this estimate — sometimes there are two freezing levels. Always cross-check the FB winds-and-temps forecast and freezing-level graphics.</p>
