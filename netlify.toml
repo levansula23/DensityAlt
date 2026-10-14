@@ -3,6 +3,22 @@
   functions = "netlify/functions"
 
 [[redirects]]
+  from = "https://densityalt.netlify.app/*"
+  to = "https://densityalt.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/density-altitude-calculator"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/isa-temperature-deviation-calculator"
+  to = "/isa-deviation-calculator"
+  status = 301
+
+[[redirects]]
   from = "/api/wx"
   to = "/.netlify/functions/wx"
   status = 200
@@ -157,15 +173,15 @@
 
 [[redirects]]
   from = "/HANDOFF.md"
-  to = "/"
+  to = "/404.html"
   status = 404
 
 [[redirects]]
   from = "/make_og_image.py"
-  to = "/"
+  to = "/404.html"
   status = 404
 
 [[redirects]]
   from = "/netlify.toml"
-  to = "/"
+  to = "/404.html"
   status = 404

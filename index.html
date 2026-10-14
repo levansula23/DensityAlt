@@ -6,18 +6,19 @@
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="theme-color" content="#05070f">
 <title>Density Altitude Calculator — Free, Live Airport Weather</title>
-<meta name="description" content="Type any airport ID — density altitude computed instantly from live METAR, plus pressure altitude, ISA deviation, and takeoff performance impact. Free.">
+<meta name="description" content="What's the density altitude right now? Tap Use my location or enter any airport ID for live METAR density altitude, pressure altitude and ISA deviation. Free.">
+<meta name="msvalidate.01" content="5A1300BE79B2097025D9EE2855E16668">
 <link rel="canonical" href="https://densityalt.com/">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="DensityAlt">
 <meta property="og:url" content="https://densityalt.com/">
-<meta property="og:title" content="DensityAlt — Watch Air, Oxygen & Engine Power Thin With Altitude">
-<meta property="og:description" content="Interactive: drag an aircraft up and watch pressure, air density, blood oxygen (SpO2), and horsepower collapse. Plus free density altitude, horsepower, and cabin altitude calculators.">
+<meta property="og:title" content="Density Altitude Calculator — Live at Any Airport">
+<meta property="og:description" content="What's the density altitude right now? Tap Use my location or enter any airport ID for live METAR density altitude, pressure altitude and ISA deviation. Free.">
 <meta property="og:image" content="https://densityalt.com/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="DensityAlt — Watch Air, Oxygen & Engine Power Thin With Altitude">
-<meta name="twitter:description" content="Interactive: drag an aircraft up and watch pressure, air density, blood oxygen (SpO2), and horsepower collapse. Plus free density altitude, horsepower, and cabin altitude calculators.">
+<meta name="twitter:title" content="Density Altitude Calculator — Live at Any Airport">
+<meta name="twitter:description" content="What's the density altitude right now? Tap Use my location or enter any airport ID for live METAR density altitude, pressure altitude and ISA deviation. Free.">
 <meta name="twitter:image" content="https://densityalt.com/og-image.png">
 <link rel="stylesheet" href="/styles.css">
 </head>
@@ -80,7 +81,7 @@
         <button class="chip apchip" data-icao="KLXV">Leadville</button>
         <button class="chip apchip" data-icao="SLLP">La Paz</button>
         <button class="chip apchip" data-icao="VNLK">Lukla</button>
-        <button class="chip apchip" data-icao="ZULS">Daocheng</button>
+        <button class="chip apchip" data-icao="ZUDC">Daocheng</button>
       </div>
     </div>
 
@@ -119,6 +120,11 @@
 
   <div class="rd-explore-wrap"><a class="rd-explore" href="#more-tools">Explore all 12 calculators →</a></div>
 
+  <section class="da" id="right-now">
+    <h2>What's the density altitude right now?</h2>
+    <p class="desc">Tap <strong>Use my location</strong> and the calculator pulls the nearest METAR within 25&nbsp;nm — altimeter setting and temperature — plus your elevation. Or type any airport ICAO code; the density altitude updates instantly, along with pressure altitude and ISA deviation.</p>
+  </section>
+
   <section class="da" id="how-it-works">
     <h2>How density altitude works</h2>
     <p class="desc"><strong>Density altitude is pressure altitude corrected for nonstandard temperature</strong> — the altitude in the standard atmosphere where the air density matches what your aircraft is actually flying in. It's the altitude your aircraft <em>thinks</em> it's at. On a hot day at a high-elevation field, thin air robs lift, propeller thrust, and engine power — even though your altimeter still reads field elevation — which is why aircraft climb and accelerate so poorly when it's high and hot.</p>
@@ -130,6 +136,7 @@
     <details class="rd-worked"><summary>Worked example — 5,000&nbsp;ft field, 30&nbsp;°C, 29.92&quot;</summary>
       <p class="a">The altimeter is standard, so pressure altitude = the 5,000&nbsp;ft field elevation. ISA temperature at 5,000&nbsp;ft ≈ 15 − 2×5 = 5&nbsp;°C, so 30&nbsp;°C is 25&nbsp;°C warmer than standard (ISA+25). Density altitude = 5,000 + 120 × 25 = <b>8,000&nbsp;ft</b> — your aircraft performs as if it were most of the way to 8,000&nbsp;ft while parked at a 5,000&nbsp;ft field. The calculator above shows ≈7,988&nbsp;ft using the exact ISA lapse rate.</p>
     </details>
+    <p class="desc">Read the full guide: <a href="/learn/density-altitude">What is density altitude?</a></p>
   </section>
 
   <section class="da" id="more-tools">
@@ -185,22 +192,16 @@
       <p class="a">Density altitude is pressure altitude corrected for non-standard temperature — the altitude at which the air density you're flying in would occur in the standard atmosphere. On a hot day at a high field, density altitude can be thousands of feet above your actual elevation, which is why aircraft climb and accelerate so poorly in those conditions.</p></details>
       <details class="faq-item"><summary>How do you calculate density altitude?</summary>
       <p class="a">First find pressure altitude: <code>PA = field elevation + (29.92 − altimeter setting) × 1000</code>. Then correct for temperature: <code>DA = PA + 120 × (OAT − ISA temperature)</code>, where ISA temperature is 15&nbsp;°C minus about 2&nbsp;°C per 1,000&nbsp;ft of pressure altitude. The calculator above does this for you.</p></details>
-      <details class="faq-item"><summary>How many layers does the atmosphere have?</summary>
-      <p class="a">Five, stacked by temperature. From the ground up: the <strong>troposphere</strong> (to ~7&nbsp;miles), where weather and most of the air's mass sit; the <strong>stratosphere</strong> (to ~31&nbsp;miles), home of the ozone layer, where airliners cruise; the <strong>mesosphere</strong> (to ~53&nbsp;miles), the coldest layer, where meteors burn up; the <strong>thermosphere</strong> (to ~370&nbsp;miles), where auroras glow and the ISS orbits; and the <strong>exosphere</strong>, which fades into space. The edge of space — the Kármán line — sits at about 62&nbsp;miles.</p></details>
-      <details class="faq-item"><summary>Does the composition of the atmosphere change with altitude?</summary>
-      <p class="a">No — the mix stays remarkably constant. Turbulent mixing keeps the lower atmosphere (the <em>homosphere</em>) uniform up to about 100&nbsp;km (~62&nbsp;miles), far above any flying. By volume, dry air is ~78% nitrogen, ~21% oxygen, ~0.9% argon, and ~0.04% carbon dioxide, with trace amounts of neon, helium, methane, krypton, and hydrogen making up the rest. What changes with altitude is the <em>pressure</em>, not the recipe: at 18,000&nbsp;ft the air is still ~21% oxygen, but there are roughly half as many molecules in each breath — which is why partial pressure, not percentage, drives hypoxia. Only above ~62&nbsp;miles do the gases begin to separate out by weight.</p></details>
-      <details class="faq-item"><summary>What is the temperature lapse rate?</summary>
-      <p class="a">The lapse rate is how fast air cools as you climb — about 2&nbsp;°C per 1,000&nbsp;ft on a standard day. It also tells you whether the air is stable. A rising pocket of dry air cools at the <em>dry adiabatic lapse rate</em>, about 3&nbsp;°C per 1,000&nbsp;ft. If the surrounding air cools <em>faster</em> than that, the pocket keeps rising — unstable air, with cumulus clouds, thermals, gusts, and a bumpy ride. If it cools <em>slower</em>, or warms with height (an inversion), the air is stable: smooth, hazy, with flat layered clouds.</p></details>
-      <details class="faq-item"><summary>Why do you need supplemental oxygen at altitude?</summary>
-      <p class="a">As air pressure drops, the partial pressure of oxygen drops with it, so each breath delivers less oxygen to your blood. Hypoxia can begin degrading night vision as low as ~5,000&nbsp;ft, and judgment well before you'd notice. Under FAR&nbsp;91.211, U.S. pilots need oxygen above 12,500&nbsp;ft cabin altitude (after 30&nbsp;minutes), continuously above 14,000&nbsp;ft, and must provide it to passengers above 15,000&nbsp;ft.</p></details>
-      <details class="faq-item"><summary>What is your blood oxygen (SpO₂) at altitude?</summary>
-      <p class="a">For an unacclimatized person breathing cabin air, SpO₂ falls from ~97% at sea level to roughly 87% at 10,000&nbsp;ft, ~72% at 18,000&nbsp;ft, and ~50% at 25,000&nbsp;ft. The drop accelerates because the oxygen–hemoglobin curve falls off a cliff once arterial oxygen pressure drops below ~60&nbsp;mmHg.</p></details>
-      <details class="faq-item"><summary>How much horsepower does an engine lose with altitude?</summary>
-      <p class="a">A normally-aspirated piston engine loses power roughly in proportion to air density — about 3% per 1,000&nbsp;ft of density altitude (Gagg–Ferrar). At 8,000&nbsp;ft density altitude a 180&nbsp;hp engine makes closer to 135&nbsp;hp. Turbocharged engines hold rated power up to a critical altitude, then fall off the same way.</p></details>
-      <details class="faq-item"><summary>Do jet (turbine) engines lose power at altitude?</summary>
-      <p class="a">Yes — it's a myth that they don't. Jet engines produce <em>thrust</em> (not horsepower), and thrust falls as you climb because thinner air means less mass flowing through the engine — roughly in proportion to the ambient pressure ratio, so a turbofan at FL400 may make only a third of its sea-level static thrust. Turboprops produce shaft horsepower and are usually <em>flat-rated</em> to a critical altitude (like a turbocharged piston), then lose power as density falls. Jets cruise high not because they keep their power, but because drag drops even faster up there and fuel efficiency improves — so the reduced thrust carries them further per pound of fuel.</p></details>
-      <details class="faq-item"><summary>Why are airliner cabins pressurized to about 8,000 feet?</summary>
-      <p class="a">The fuselage can only hold a limited pressure difference (ΔP) between inside and outside. At cruise the system maintains that maximum differential, which works out to a cabin altitude near 8,000&nbsp;ft for most airliners. Newer composite jets like the 787 and A350 tolerate a higher ΔP and target ~6,000&nbsp;ft, which reduces fatigue on long flights.</p></details>
+      <details class="faq-item"><summary>What's the density altitude right now at my location?</summary>
+      <p class="a">Tap <strong>Use my location</strong> above. The calculator pulls the nearest METAR (altimeter setting and temperature) within 25&nbsp;nm, combines it with your elevation, and shows density altitude, pressure altitude and ISA deviation. If there's no METAR nearby, it falls back to a weather-model estimate (typically within ±200&nbsp;ft, more at very high fields) and tells you so.</p></details>
+      <details class="faq-item"><summary>What counts as a high density altitude?</summary>
+      <p class="a">Any density altitude well above field elevation matters. As a rule of thumb, a normally-aspirated light single needs roughly 10% more takeoff distance for every 1,000&nbsp;ft of density altitude and loses about 3% of its power per 1,000&nbsp;ft. Above roughly 5,000–8,000&nbsp;ft, many light singles become noticeably sluggish. These are rough estimates — always use your POH performance charts.</p></details>
+      <details class="faq-item"><summary>What's the difference between density altitude and pressure altitude?</summary>
+      <p class="a">Pressure altitude is your altitude in the standard atmosphere for the current pressure: <code>PA = elevation + (29.92 − altimeter) × 1000</code>. Density altitude corrects that for non-standard temperature: <code>DA ≈ PA + 120 × (OAT − ISA temperature)</code>. Pressure altitude is what you enter performance charts with; density altitude is how the air actually performs. See the <a href="/pressure-altitude-calculator">pressure altitude calculator</a>.</p></details>
+      <details class="faq-item"><summary>How do I find the density altitude at an airport?</summary>
+      <p class="a">Type the airport's ICAO code (for example KDEN or KASE) and tap Look&nbsp;up. The live METAR autofills elevation, temperature and altimeter setting, and the density altitude is computed instantly. Fields without a METAR use the nearest reporting station within 25&nbsp;nm.</p></details>
+      <details class="faq-item"><summary>How does density altitude affect takeoff?</summary>
+      <p class="a">Thinner air means less engine power, less propeller thrust and less wing lift at a given indicated airspeed. The result is a longer ground roll, a higher true airspeed at liftoff and a reduced climb rate. The <a href="/takeoff-landing-distance">takeoff and landing distance calculator</a> gives a Koch-chart style estimate of the effect.</p></details>
     </div>
   </section>
 
@@ -294,14 +295,11 @@
   "mainEntity": [
     {"@type":"Question","name":"What is density altitude?","acceptedAnswer":{"@type":"Answer","text":"Density altitude is pressure altitude corrected for non-standard temperature — the altitude at which the air density you're flying in would occur in the standard atmosphere. On a hot day at a high field it can be thousands of feet above your actual elevation, which is why aircraft climb and accelerate poorly in those conditions."}},
     {"@type":"Question","name":"How do you calculate density altitude?","acceptedAnswer":{"@type":"Answer","text":"First find pressure altitude: PA = field elevation + (29.92 − altimeter setting) × 1000. Then correct for temperature: DA = PA + 120 × (OAT − ISA temperature), where ISA temperature is 15 °C minus about 2 °C per 1,000 ft of pressure altitude."}},
-    {"@type":"Question","name":"How many layers does the atmosphere have?","acceptedAnswer":{"@type":"Answer","text":"Five, stacked by temperature. From the ground up: the troposphere (to about 7 miles), where weather and most of the air's mass sit; the stratosphere (to about 31 miles), home of the ozone layer, where airliners cruise; the mesosphere (to about 53 miles), the coldest layer, where meteors burn up; the thermosphere (to about 370 miles), where auroras glow and the ISS orbits; and the exosphere, which fades into space. The edge of space — the Kármán line — sits at about 62 miles."}},
-    {"@type":"Question","name":"Does the composition of the atmosphere change with altitude?","acceptedAnswer":{"@type":"Answer","text":"No — the mix stays remarkably constant. Turbulent mixing keeps the lower atmosphere (the homosphere) uniform up to about 100 km (about 62 miles), far above any flying. By volume, dry air is about 78% nitrogen, 21% oxygen, 0.9% argon, and 0.04% carbon dioxide, with trace amounts of neon, helium, methane, krypton, and hydrogen making up the rest. What changes with altitude is the pressure, not the recipe: at 18,000 ft the air is still about 21% oxygen, but there are roughly half as many molecules in each breath, which is why partial pressure rather than percentage drives hypoxia. Only above about 62 miles do the gases begin to separate out by weight."}},
-    {"@type":"Question","name":"What is the temperature lapse rate?","acceptedAnswer":{"@type":"Answer","text":"The lapse rate is how fast air cools as you climb — about 2 °C per 1,000 ft on a standard day. It also tells you whether the air is stable. A rising pocket of dry air cools at the dry adiabatic lapse rate, about 3 °C per 1,000 ft. If the surrounding air cools faster than that, the pocket keeps rising — unstable air, with cumulus clouds, thermals, gusts, and a bumpy ride. If it cools slower, or warms with height (an inversion), the air is stable: smooth, hazy, with flat layered clouds."}},
-    {"@type":"Question","name":"Why do you need supplemental oxygen at altitude?","acceptedAnswer":{"@type":"Answer","text":"As air pressure drops, the partial pressure of oxygen drops too, so each breath delivers less oxygen to your blood. Under FAR 91.211, U.S. pilots need oxygen above 12,500 ft cabin altitude after 30 minutes, continuously above 14,000 ft, and must provide it to passengers above 15,000 ft."}},
-    {"@type":"Question","name":"What is your blood oxygen (SpO2) at altitude?","acceptedAnswer":{"@type":"Answer","text":"For an unacclimatized person breathing cabin air, SpO2 falls from about 97% at sea level to roughly 87% at 10,000 ft, 72% at 18,000 ft, and 50% at 25,000 ft. The drop accelerates because the oxygen–hemoglobin curve falls off sharply once arterial oxygen pressure drops below about 60 mmHg."}},
-    {"@type":"Question","name":"How much horsepower does an engine lose with altitude?","acceptedAnswer":{"@type":"Answer","text":"A normally-aspirated piston engine loses power roughly in proportion to air density — about 3% per 1,000 ft of density altitude. At 8,000 ft density altitude a 180 hp engine makes closer to 135 hp. Turbocharged engines hold rated power up to a critical altitude, then fall off similarly."}},
-    {"@type":"Question","name":"Do jet (turbine) engines lose power at altitude?","acceptedAnswer":{"@type":"Answer","text":"Yes. Jet engines produce thrust, not horsepower, and thrust falls as you climb because thinner air means less mass flow through the engine — roughly with the ambient pressure ratio, so a turbofan at FL400 may make only about a third of its sea-level static thrust. Turboprops produce shaft horsepower and are usually flat-rated to a critical altitude, then lose power as density falls. Jets cruise high because drag drops even faster up there and fuel efficiency improves, not because they keep their thrust."}},
-    {"@type":"Question","name":"Why are airliner cabins pressurized to about 8,000 feet?","acceptedAnswer":{"@type":"Answer","text":"The fuselage can only hold a limited pressure difference between inside and outside. At cruise the system maintains that maximum differential, which works out to a cabin altitude near 8,000 ft for most airliners. Composite jets like the 787 and A350 tolerate a higher differential and target about 6,000 ft."}}
+    {"@type":"Question","name":"What's the density altitude right now at my location?","acceptedAnswer":{"@type":"Answer","text":"Tap Use my location above. The calculator pulls the nearest METAR (altimeter setting and temperature) within 25 nm, combines it with your elevation, and shows density altitude, pressure altitude and ISA deviation. If there's no METAR nearby, it falls back to a weather-model estimate (typically within ±200 ft, more at very high fields) and tells you so."}},
+    {"@type":"Question","name":"What counts as a high density altitude?","acceptedAnswer":{"@type":"Answer","text":"Any density altitude well above field elevation matters. As a rule of thumb, a normally-aspirated light single needs roughly 10% more takeoff distance for every 1,000 ft of density altitude and loses about 3% of its power per 1,000 ft. Above roughly 5,000–8,000 ft, many light singles become noticeably sluggish. These are rough estimates — always use your POH performance charts."}},
+    {"@type":"Question","name":"What's the difference between density altitude and pressure altitude?","acceptedAnswer":{"@type":"Answer","text":"Pressure altitude is your altitude in the standard atmosphere for the current pressure: PA = elevation + (29.92 − altimeter) × 1000. Density altitude corrects that for non-standard temperature: DA ≈ PA + 120 × (OAT − ISA temperature). Pressure altitude is what you enter performance charts with; density altitude is how the air actually performs."}},
+    {"@type":"Question","name":"How do I find the density altitude at an airport?","acceptedAnswer":{"@type":"Answer","text":"Type the airport's ICAO code (for example KDEN or KASE) and tap Look up. The live METAR autofills elevation, temperature and altimeter setting, and the density altitude is computed instantly. Fields without a METAR use the nearest reporting station within 25 nm."}},
+    {"@type":"Question","name":"How does density altitude affect takeoff?","acceptedAnswer":{"@type":"Answer","text":"Thinner air means less engine power, less propeller thrust and less wing lift at a given indicated airspeed. The result is a longer ground roll, a higher true airspeed at liftoff and a reduced climb rate. The takeoff and landing distance calculator gives a Koch-chart style estimate of the effect."}}
   ]
 }
 </script>
@@ -309,17 +307,9 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "HowTo",
-  "name": "How to calculate density altitude",
-  "description": "Calculate density altitude from field elevation, altimeter setting, and outside air temperature.",
-  "totalTime": "PT1M",
-  "tool": [{"@type": "HowToTool", "name": "DensityAlt density altitude calculator"}],
-  "step": [
-    {"@type": "HowToStep", "name": "Enter field elevation", "text": "Enter the airport field elevation in feet MSL, or look it up by ICAO identifier to autofill it.", "url": "https://densityalt.com/#density-altitude"},
-    {"@type": "HowToStep", "name": "Enter the altimeter setting", "text": "Enter the current altimeter setting in inches of mercury (inHg) to compute pressure altitude: PA = field elevation + (29.92 − altimeter) × 1000."},
-    {"@type": "HowToStep", "name": "Enter outside air temperature", "text": "Enter the outside air temperature. Density altitude corrects pressure altitude for non-standard temperature: DA = PA + 120 × (OAT − ISA temperature)."},
-    {"@type": "HowToStep", "name": "Read the density altitude", "text": "The calculator displays pressure altitude, ISA temperature deviation, and the resulting density altitude in feet."}
-  ]
+  "@type": "WebSite",
+  "name": "DensityAlt",
+  "url": "https://densityalt.com/"
 }
 </script>
 </body>

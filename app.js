@@ -235,7 +235,7 @@ const AIRPORTS={
  CYYZ:569,CYVR:14,CYUL:118,
  MMMX:7316,SBGR:2461,SAEZ:67,SCEL:1555,SKBO:8361,SPJC:113,
  FAOR:5558,HECA:382,DNMM:135,HAAB:7625,
- SLLP:13325,ZULS:14472,VQPR:7333,SPZO:10860,VNKT:4390,VNLK:9334,
+ SLLP:13325,ZUDC:14472,VQPR:7333,SPZO:10860,VNKT:4390,VNLK:9334,
  KSDL:1510,KTUS:2643,KABQ:5355,KBOI:2871,KRNO:4415,KGEG:2376,KBZN:4473,KCOS:6187,KGJT:4858,KSUN:5318,KTVL:6264,KMMH:7135,KBIH:4124,KPRC:5045,
  KSAT:809,KMSY:4,KBNA:599,KSTL:618,KMCI:1026,KCLE:791,KPIT:1203,KCVG:896,KIND:797,KCMH:815,KMKE:723,KSAV:51,KJAX:30,KTPA:26,KPBI:19,KRDU:435,KMEM:341,KOKC:1295,KTUL:677,KOMA:984,KONT:944,KSNA:56,KLGB:60,KVNY:802,KPAO:4,
  PANC:152,PAFA:434,PAJN:21,PHNL:13,PHOG:54,PHTO:38,PHKO:47,
@@ -247,7 +247,7 @@ const AIRPORTS={
  NZQN:1171,NZWN:41,NZCH:123,YBBN:13,YPPH:67,YPAD:20,YBCG:21,NFFN:59,NTAA:5,
  TNCM:13,MDPC:47,TJSJ:9,MKJP:10,MWCR:8,TBPB:169,TFFJ:49,TNCS:60
 };
-const COORDS={ L06:[36.4636,-116.8811], VNLK:[27.6861,86.7297], ZULS:[29.3231,100.0533] };
+const COORDS={ L06:[36.4636,-116.8811], VNLK:[27.6861,86.7297], ZUDC:[29.3231,100.0533] };
 function fetchT(url,ms){ const c=new AbortController(); const t=setTimeout(()=>c.abort(),ms); return fetch(url,{cache:'no-store',signal:c.signal}).finally(()=>clearTimeout(t)); }
 
 const HOSTED=(location.protocol==='http:'||location.protocol==='https:');
@@ -315,7 +315,7 @@ function wxSourceNote(w){
       : f+' from nearest METAR <strong>'+s+'</strong>'+(w.met.name?' · '+w.met.name:'')+', '+Math.max(1,Math.round(w.met.nm))+' nm'); }
   let s=parts.length?' '+parts.join('; ').replace(/^./,c=>c.toUpperCase())+'.':'';
   if(w.tempAdjusted) s+=' '+w.met.id+' reports '+Math.round(w.met.tempC)+'°C at '+fmt(w.met.elevFt)+' ft — adjusted to this elevation.';
-  if(w.from.altimeter==='model') s+=' Model altimeter is an estimate: pressure altitude ±~200 ft.';
+  if(w.from.altimeter==='model') s+=' Model altimeter is an estimate: pressure altitude typically ±200 ft, more at very high fields.';
   return s;
 }
 
@@ -358,6 +358,7 @@ async function wxFetchStation(raw){
 
 async function lookupICAO(){
   const raw=$('icao').value.trim().toUpperCase();
+  $('icao').dataset.done=raw;
   const st=$('icaoStatus');
   if(!raw){ st.className='icao-status'; st.textContent=''; return; }
   st.className='icao-status loading'; st.innerHTML='<span class="spin"></span>Looking up '+raw+' — fetching live elevation, temperature &amp; altimeter…';
@@ -981,7 +982,7 @@ function setupDA(){
     else { tempUnit='C'; if(!isNaN(v)) inp.value=Math.round((v-32)*5/9); $('oatUnit').textContent='°C'; }
     calcDA(); });
   $('icao').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();lookupICAO();}});
-  $('icao').addEventListener('blur',lookupICAO);
+  $('icao').addEventListener('blur',()=>{ const v=$('icao').value.trim().toUpperCase(); if(v && v!==$('icao').dataset.done) lookupICAO(); });
   $('elev').addEventListener('blur',()=>{ const v=$('elev').value.trim(); if(v!=='') $('elev').value=fmt(commaInt(v)); });
   calcDA();
   return true;
@@ -1065,6 +1066,7 @@ function calcPAC(){
 }
 async function lookupPAC(){
   const raw=$('pacIcao').value.trim().toUpperCase();
+  $('pacIcao').dataset.done=raw;
   const st=$('pacIcaoStatus');
   if(!raw){ st.className='icao-status'; st.textContent=''; return; }
   st.className='icao-status loading'; st.innerHTML='<span class="spin"></span>Looking up '+raw+' — fetching live elevation, altimeter &amp; temperature…';
@@ -1095,7 +1097,7 @@ function setupPAC(){
     calcPAC(); });
   $('pacBtn').addEventListener('click',lookupPAC);
   $('pacIcao').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();lookupPAC();}});
-  $('pacIcao').addEventListener('blur',lookupPAC);
+  $('pacIcao').addEventListener('blur',()=>{ const v=$('pacIcao').value.trim().toUpperCase(); if(v && v!==$('pacIcao').dataset.done) lookupPAC(); });
   $('pacElev').addEventListener('blur',()=>{ const v=$('pacElev').value.trim(); if(v!=='') $('pacElev').value=fmt(commaInt(v)); });
   document.querySelectorAll('.pacchip').forEach(c=>c.addEventListener('click',()=>{ $('pacIcao').value=c.dataset.icao; lookupPAC(); }));
   calcPAC();
