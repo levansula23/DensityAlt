@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#05070f">
+<title>Free Live Density Altitude Badge for Airports | DensityAlt</title>
+<meta name="description" content="Show pilots today's density altitude at your field. A free badge that updates itself from the METAR: no signup, no script. Paste one line of HTML.">
+<link rel="canonical" href="https://densityalt.com/airport-badge">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DensityAlt">
+<meta property="og:url" content="https://densityalt.com/airport-badge">
+<meta property="og:title" content="A Free, Live Density Altitude Badge for Your Airport's Website">
+<meta property="og:description" content="Show pilots today's density altitude at your field. Updates itself from the METAR: no signup, no script, works on any website.">
+<meta property="og:image" content="https://densityalt.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="A Free, Live Density Altitude Badge for Your Airport's Website">
+<meta name="twitter:description" content="Show pilots today's density altitude at your field. Updates itself from the METAR: no signup, no script, works on any website.">
+<meta name="twitter:image" content="https://densityalt.com/og-image.png">
+<link rel="stylesheet" href="/styles.css">
+<style>
+  /* ---- airport-badge page ---- */
+  .bd-hero{max-width:none;display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,1fr);gap:44px;align-items:center}
+  .bd-hero h1{font-size:clamp(30px,4.4vw,46px);line-height:1.08}
+  .bd-pills{list-style:none;padding:0;margin:20px 0 0;display:flex;flex-wrap:wrap;gap:8px}
+  .bd-pills li{display:inline-flex;align-items:center;gap:7px;font:600 12px/1 var(--mono);color:var(--ink);
+    background:rgba(255,255,255,.04);border:1px solid var(--panel-brd);border-radius:999px;padding:8px 12px}
+  .bd-pills li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--good);flex:0 0 auto}
+  .bd-cta{display:inline-flex;align-items:center;gap:8px;margin-top:24px;background:var(--accent);color:#04121f;
+    font:700 15px/1 var(--sans);padding:14px 22px;border-radius:11px;text-decoration:none;transition:.15s}
+  .bd-cta:hover{background:#7cf}
+  .bd-mockwrap{margin:0}
+  .bd-mock{background:#fff;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.16);
+    box-shadow:0 34px 70px -30px rgba(0,0,0,.85)}
+  .bd-mock-bar{display:flex;align-items:center;gap:6px;padding:9px 12px;background:#eef1f6;border-bottom:1px solid #dde3ec}
+  .bd-mock-bar i{width:9px;height:9px;border-radius:50%;background:#cfd6e2;flex:0 0 auto}
+  .bd-mock-bar span{margin-left:8px;flex:1;min-width:0;font:500 11px/1 var(--sans);color:#6b7a90;background:#fff;
+    border:1px solid #dde3ec;border-radius:6px;padding:5px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .bd-mock-body{padding:18px 20px 22px}
+  .bd-mock-nav{display:flex;gap:14px;margin-bottom:14px;font:600 11px/1 var(--sans);color:#8693a8}
+  .bd-mock-h{font:700 19px/1.2 var(--sans);color:#1d2735;margin:0 0 10px}
+  .bd-sk{height:8px;border-radius:4px;background:#e7ebf1;margin:8px 0}
+  .bd-sk.w90{width:90%}.bd-sk.w75{width:75%}.bd-sk.w60{width:60%}.bd-sk.w45{width:45%}
+  .bd-mock-badge{display:block;margin:16px 0;line-height:0}
+  .bd-mock-badge img{max-width:100%;height:auto}
+  .bd-mockwrap figcaption{margin-top:12px;font:500 12.5px/1.45 var(--sans);color:var(--ink-dim);text-align:center}
+  .bd-live{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--good);margin-right:6px;
+    vertical-align:1px;box-shadow:0 0 0 0 rgba(55,214,122,.6);animation:bdPulse 2s infinite}
+  @keyframes bdPulse{0%{box-shadow:0 0 0 0 rgba(55,214,122,.55)}70%{box-shadow:0 0 0 7px rgba(55,214,122,0)}100%{box-shadow:0 0 0 0 rgba(55,214,122,0)}}
+  @media(prefers-reduced-motion:reduce){.bd-live{animation:none}}
+
+  /* builder */
+  .bd-tool{margin-top:26px}
+  .bd-controls{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:start}
+  .bd-lookup{display:flex;gap:10px;max-width:520px}
+  .bd-lookup .in{flex:1;min-width:0}
+  #bdIcao{text-transform:uppercase;letter-spacing:.12em}
+  #bdIcao::placeholder{letter-spacing:.04em;color:#56627a;font-weight:600}
+  .bd-chips{margin-top:12px}
+  .bd-chips .chip b{font-family:var(--mono);font-weight:700;margin-right:5px;color:var(--accent2)}
+  .bd-seg{display:inline-flex;gap:4px;padding:4px;background:rgba(0,0,0,.3);border:1px solid var(--panel-brd);border-radius:10px}
+  .bd-seg button{font:600 14px/1 var(--sans);color:var(--ink-dim);background:none;border:0;border-radius:7px;
+    padding:12px 18px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:.15s}
+  .bd-seg button:hover{color:var(--ink)}
+  .bd-seg button i{width:12px;height:12px;border-radius:3px;border:1px solid rgba(255,255,255,.35);flex:0 0 auto}
+  .bd-seg button[data-theme=dark] i{background:#0b1020}
+  .bd-seg button[data-theme=light] i{background:#fff}
+  .bd-seg button[aria-pressed=true]{background:var(--accent);color:#04121f}
+  .bd-seg button[aria-pressed=true] i{border-color:rgba(4,18,31,.45)}
+  .bd-theme-field .field-hint{max-width:230px;line-height:1.45;font-family:var(--sans);font-weight:500;font-size:12px}
+  .bd-sub{margin:28px 0 12px;font:700 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent2)}
+  .bd-previews{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  .bd-prev{display:flex;flex-direction:column;gap:11px;min-width:0;border:1px solid var(--panel-brd);border-radius:14px;
+    background:rgba(0,0,0,.22);padding:14px}
+  .bd-prev-h{display:flex;align-items:center;gap:9px;flex-wrap:wrap;font:600 14px/1.2 var(--sans)}
+  .bd-prev-h span:not(.bd-rec){font-weight:500;font-size:12.5px;color:var(--ink-dim)}
+  .bd-rec{font:700 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#04121f;background:var(--good);
+    padding:4px 7px;border-radius:5px}
+  .bd-stage{display:flex;align-items:center;justify-content:center;min-height:226px;padding:16px 10px;border-radius:10px;
+    background:#151c2d;border:1px solid var(--panel-brd);transition:background .2s,border-color .2s}
+  .bd-stage[data-theme=light]{background:#fff;border-color:#dde3ec}
+  .bd-stage a{display:block;line-height:0;max-width:100%}
+  .bd-stage img{display:block;max-width:100%;height:auto}
+  .bd-stage iframe{display:block;width:100%;max-width:320px;height:190px;border:0;background:transparent}
+  .bd-empty{font:500 13px/1.4 var(--sans);color:#8693a8;text-align:center}
+  .bd-prev-note{margin:0;font-size:12.5px;line-height:1.45;color:var(--ink-dim)}
+  .bd-snip{min-width:0;border:1px solid var(--panel-brd);border-radius:14px;background:rgba(0,0,0,.24);padding:14px 16px 16px}
+  .bd-snip-main{border-color:rgba(55,214,122,.42);
+    background:radial-gradient(520px 160px at 0% 0%,rgba(55,214,122,.07),transparent 70%),rgba(0,0,0,.24)}
+  .bd-snip-h{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:11px}
+  .bd-snip-h h4{margin:0;font:700 15px/1.3 var(--sans);color:var(--ink);display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+  .bd-snip-h p{margin:5px 0 0;font-size:13px;line-height:1.45;color:var(--ink-dim)}
+  .bd-code{margin:0;font:500 12.5px/1.6 var(--mono);color:#bcd;background:rgba(0,0,0,.42);border:1px solid var(--panel-brd);
+    border-radius:9px;padding:11px 13px;white-space:pre-wrap;overflow-wrap:anywhere;cursor:text}
+  .bd-snip-main .bd-code{font-size:13.5px;color:#d4e2f2}
+  .bd-snips{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:14px}
+  .bd-snips .bd-snip-h{flex-direction:column;align-items:stretch}
+  .bd-snips .bd-copy{align-self:flex-start}
+  .bd-copy{flex:0 0 auto;font:700 13px/1 var(--sans);color:#dbeaff;background:rgba(78,161,255,.16);border:1px solid var(--accent);
+    border-radius:9px;padding:10px 14px;cursor:pointer;white-space:nowrap;transition:.15s;min-width:96px}
+  .bd-copy:hover{background:rgba(78,161,255,.32)}
+  .bd-copy.primary{background:var(--accent);color:#04121f;padding:13px 20px;font-size:14px;min-width:128px}
+  .bd-copy.primary:hover{background:#7cf}
+  .bd-copy.done{background:var(--good)!important;border-color:var(--good)!important;color:#04121f!important}
+  .bd-copy:disabled{opacity:.45;cursor:not-allowed}
+  .bd-howto{margin-top:16px;border-top:1px solid var(--panel-brd)}
+  .bd-howto summary{font:700 15px/1.4 var(--sans);color:var(--ink);cursor:pointer;padding:14px 30px 12px 0;list-style:none;position:relative}
+  .bd-howto summary::-webkit-details-marker{display:none}
+  .bd-howto summary::after{content:'+';position:absolute;right:4px;top:12px;font:400 22px/1 var(--mono);color:var(--accent2)}
+  .bd-howto[open] summary::after{content:'−'}
+  .bd-howto ol{margin:0 0 8px;padding-left:20px;font-size:14.5px;line-height:1.65;color:#cdd6e6}
+  .bd-howto li{margin:4px 0}
+  .bd-howto b{color:var(--ink)}
+  .bd-calc{margin:14px 0 0;font-size:13.5px;color:var(--ink-dim)}
+
+  /* content sections */
+  .bd-anat-stage{display:flex;justify-content:center;padding:22px 14px;border-radius:14px;background:#151c2d;
+    border:1px solid var(--panel-brd);margin:4px 0 20px}
+  .bd-anat-stage[data-theme=light]{background:#fff;border-color:#dde3ec}
+  .bd-anat-stage img{display:block;max-width:100%;height:auto}
+  .bd-parts{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 22px;counter-reset:part}
+  .bd-parts li{display:flex;flex-direction:column;gap:7px;padding:14px 16px;border:1px solid var(--panel-brd);border-radius:12px;
+    background:rgba(0,0,0,.2);min-width:0}
+  .bd-parts .bd-tag{align-self:flex-start;max-width:100%;font:700 12.5px/1.3 var(--mono);color:#cdd6e6;background:#0b1020;
+    border:1px solid #1f2a44;border-radius:6px;padding:5px 8px;overflow-wrap:anywhere}
+  .bd-parts b{font-size:15px;color:var(--ink)}
+  .bd-parts span.t{font-size:14px;line-height:1.55;color:#cdd6e6}
+  .bd-legend{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:18px;padding:14px 16px;border-radius:12px;
+    border:1px dashed var(--panel-brd);font-size:14px;color:#cdd6e6}
+  .bd-legend > span{display:inline-flex;align-items:center;gap:9px}
+  .bd-legend b{color:var(--ink)}
+  .bd-legend i{width:12px;height:22px;border-radius:3px;flex:0 0 auto}
+  .bd-h3{font-size:19px;margin:30px 0 10px;color:var(--ink)}
+  .bd-list{list-style:none;margin:0;padding:0;display:grid;gap:10px;max-width:820px}
+  .bd-list li{position:relative;padding-left:28px;font-size:15px;line-height:1.6;color:#cdd6e6}
+  .bd-list li::before{content:"";position:absolute;left:4px;top:8px;width:9px;height:9px;border-radius:50%;
+    border:2px solid var(--accent2)}
+  .bd-list b{color:var(--ink)}
+  .bd-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+  .bd-cards.four{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .bd-card{border:1px solid var(--panel-brd);border-radius:14px;background:rgba(0,0,0,.2);padding:18px 18px 16px;min-width:0}
+  .bd-card .k{font:600 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent2)}
+  .bd-card h3{margin:9px 0 8px;font-size:17px;line-height:1.3;color:var(--ink)}
+  .bd-card p{margin:0;font-size:14px;line-height:1.6;color:#cdd6e6}
+  .bd-checks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 26px;max-width:900px}
+  .bd-checks li{display:flex;gap:11px;align-items:flex-start;font-size:15px;line-height:1.55;color:#cdd6e6}
+  .bd-checks li::before{content:"✓";flex:0 0 auto;width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;
+    justify-content:center;font:700 12px/1 var(--sans);color:#04121f;background:var(--good);margin-top:1px}
+  .bd-checks b{color:var(--ink)}
+  .bd-contact{margin:20px 0 0;font-size:15px;color:#cdd6e6}
+  .bd-contact a{font-weight:700}
+  .authorbox{margin:40px auto 0;display:flex;gap:14px;align-items:flex-start;background:var(--panel);border:1px solid var(--panel-brd);
+    border-radius:14px;padding:18px}
+  .authorbox img{width:54px;height:54px;border-radius:50%;flex:0 0 auto}
+  .authorbox p{font-size:14px;line-height:1.6;color:var(--ink-dim);margin:6px 0 0}
+  .visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+  @media(max-width:980px){
+    .bd-snips{grid-template-columns:1fr}
+    .bd-cards.four{grid-template-columns:repeat(2,minmax(0,1fr))}
+  }
+  @media(max-width:900px){
+    .bd-hero{grid-template-columns:1fr;gap:28px}
+    .bd-mockwrap{max-width:460px}
+  }
+  @media(max-width:820px){
+    .bd-previews{grid-template-columns:1fr}
+    .bd-cards{grid-template-columns:1fr}
+    .bd-parts,.bd-checks{grid-template-columns:1fr}
+  }
+  @media(max-width:720px){
+    .bd-controls{grid-template-columns:1fr;gap:18px}
+  }
+  @media(max-width:560px){
+    .bd-cards.four{grid-template-columns:1fr}
+    .bd-lookup{flex-wrap:wrap}
+    .bd-lookup .in{flex:1 1 100%}
+    .bd-lookup .lookup{flex:1 1 auto;padding:13px 16px}
+    .bd-snip-main .bd-snip-h{flex-direction:column;align-items:stretch}
+    .bd-copy.primary{width:100%}
+    .bd-mock-body{padding:16px 14px 18px}
+    .bd-mock-nav,.bd-sk.w60,.bd-sk.w45{display:none}
+    .bd-stage{min-height:0;padding:16px 8px}
+    .bd-seg{display:flex}
+    .bd-seg button{flex:1;justify-content:center}
+    .bd-theme-field .field-hint{max-width:none}
+    .bd-code{font-size:12px}
+    .bd-snip-main .bd-code{font-size:12.5px}
+  }
+</style>
+</head>
+<body>
+<nav class="topnav"><div class="navin">
+  <a class="brand" href="/" style="text-decoration:none"><img src="/favicon.svg" alt=""><b>DensityAlt</b></a>
+  <div class="navlinks">
+    <a class="nl" href="/atmosphere-explorer">Explorer</a>
+    <a class="nl" href="/">Density Altitude</a>
+    <a class="nl" href="/hot-and-high">Hot &amp; High</a>
+    <div class="nl-drop">
+      <button type="button" class="nl-trigger" aria-haspopup="true">Calculators<span class="caret" aria-hidden="true"></span></button>
+      <div class="nl-menu">
+        <a class="nl" href="/pressure-altitude-calculator">Pressure Altitude</a>
+        <a class="nl" href="/true-airspeed-calculator">True Airspeed</a>
+        <a class="nl" href="/crosswind-calculator">Crosswind</a>
+        <a class="nl" href="/takeoff-landing-distance">Takeoff &amp; Landing</a>
+        <a class="nl" href="/cloud-base-calculator">Cloud Base</a>
+        <a class="nl" href="/freezing-level-calculator">Freezing Level</a>
+        <a class="nl" href="/isa-deviation-calculator">ISA Deviation</a>
+        <a class="nl" href="/oxygen-at-altitude-calculator">Oxygen at Altitude</a>
+        <a class="nl" href="/pivotal-altitude-calculator">Pivotal Altitude</a>
+        <a class="nl" href="/horsepower-at-altitude">Horsepower</a>
+        <a class="nl" href="/power-curve">Power Curve</a>
+        <a class="nl" href="/cabin-altitude-calculator">Cabin Altitude</a>
+      </div>
+    </div>
+    <a class="nl" href="/learn/">Learn</a>
+    <a class="nl" href="/#about">About</a>
+  </div>
+  <a class="nav-gh" href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener" aria-label="DensityAlt source code on GitHub" title="Open source — view the code on GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+</div></nav>
+
+<div class="wrap">
+
+  <header class="hero rd-hero bd-hero">
+    <div class="bd-hero-text">
+      <div class="kicker">For airports, FBOs &amp; flight schools</div>
+      <h1>A free, live <span>density altitude badge</span> for your airport's website</h1>
+      <p class="rd-lede">Show pilots <b>today's density altitude at your field</b>. It updates itself from the latest METAR — no signup, no script, nothing to maintain. Paste one line into any website.</p>
+      <ul class="bd-pills" aria-label="Highlights">
+        <li>Free</li><li>No signup</li><li>No script</li><li>Updates from the METAR</li>
+      </ul>
+      <a class="bd-cta" href="#get-badge">Get your airport's badge <span aria-hidden="true">↓</span></a>
+    </div>
+    <figure class="bd-mockwrap">
+      <div class="bd-mock" aria-hidden="true">
+        <div class="bd-mock-bar"><i></i><i></i><i></i><span>your-airport-website.gov/pilot-info</span></div>
+        <div class="bd-mock-body">
+          <div class="bd-mock-nav"><span>Home</span><span>Fuel</span><span>FBO</span><span>Contact</span></div>
+          <p class="bd-mock-h">Pilot information</p>
+          <div class="bd-sk w90"></div><div class="bd-sk w75"></div>
+          <a class="bd-mock-badge" href="/?icao=KLXV" tabindex="-1"><img id="bdHeroImg" src="/badge/KLXV.svg?theme=light" width="300" height="72" alt=""></a>
+          <div class="bd-sk w90"></div><div class="bd-sk w60"></div><div class="bd-sk w45"></div>
+        </div>
+      </div>
+      <figcaption><span class="bd-live" aria-hidden="true"></span>Live right now: the light badge for Leadville, Colorado (KLXV) on a typical airport page.</figcaption>
+    </figure>
+  </header>
+
+  <section class="rd-tool bd-tool" id="get-badge" aria-labelledby="bd-toolhead">
+    <h2 id="bd-toolhead" class="rd-toolhead">Get the badge for your airport</h2>
+
+    <div class="bd-controls">
+      <div class="field bd-icao-field">
+        <label for="bdIcao">Airport ICAO code</label>
+        <div class="bd-lookup">
+          <div class="in"><input id="bdIcao" type="text" maxlength="4" placeholder="e.g. KLXV" autocomplete="off" autocapitalize="characters" spellcheck="false" enterkeyhint="go" aria-describedby="bdStatus"></div>
+          <button id="bdGo" class="lookup" type="button">Make my badge</button>
+        </div>
+        <div class="icao-status" id="bdStatus" role="status" aria-live="polite">Type your airport's 4-letter ICAO code, or try one of these:</div>
+        <div class="presets bd-chips">
+          <button class="chip" type="button" data-icao="KLXV"><b>KLXV</b>Leadville</button>
+          <button class="chip" type="button" data-icao="KTEX"><b>KTEX</b>Telluride</button>
+          <button class="chip" type="button" data-icao="KASE"><b>KASE</b>Aspen</button>
+          <button class="chip" type="button" data-icao="KPRC"><b>KPRC</b>Prescott</button>
+          <button class="chip" type="button" data-icao="KJAC"><b>KJAC</b>Jackson Hole</button>
+          <button class="chip" type="button" data-icao="KBJC"><b>KBJC</b>Rocky Mountain Metro</button>
+        </div>
+      </div>
+      <div class="field bd-theme-field">
+        <label id="bdThemeLbl">Style</label>
+        <div class="bd-seg" role="group" aria-labelledby="bdThemeLbl">
+          <button type="button" data-theme="dark" aria-pressed="true"><i></i>Dark</button>
+          <button type="button" data-theme="light" aria-pressed="false"><i></i>Light</button>
+        </div>
+        <p class="field-hint">Light suits white pages (most city and county sites); dark suits dark ones.</p>
+      </div>
+    </div>
+
+    <h3 class="bd-sub">Preview</h3>
+    <div class="bd-previews">
+      <div class="bd-prev">
+        <div class="bd-prev-h"><span class="bd-rec">Recommended</span>Image badge<span>300 × 72</span></div>
+        <div class="bd-stage" id="bdImgStage" data-theme="dark">
+          <a id="bdImgLink" href="/?icao=KASE"><img id="bdImg" src="/badge/KASE.svg" width="300" height="72" alt="Live density altitude at KASE, from DensityAlt"></a>
+        </div>
+        <p class="bd-prev-note">Just an image and a link, so it works anywhere a picture does, including locked-down city and county website systems.</p>
+      </div>
+      <div class="bd-prev">
+        <div class="bd-prev-h">Iframe card<span>320 × 190 · for sites that allow embeds</span></div>
+        <div class="bd-stage" id="bdFrameStage" data-theme="dark">
+          <iframe id="bdFrame" src="/embed/KASE" width="320" height="190" loading="lazy" title="Live density altitude at KASE"></iframe>
+        </div>
+        <p class="bd-prev-note">A little more detail (pressure altitude, ISA deviation, airport name) and it refreshes itself every 15 minutes, handy on an FBO lobby screen.</p>
+      </div>
+    </div>
+
+    <h3 class="bd-sub">Copy &amp; paste</h3>
+    <div class="bd-snip bd-snip-main">
+      <div class="bd-snip-h">
+        <div>
+          <h4>Image badge <span class="bd-rec">Recommended</span></h4>
+          <p>Paste this into your page's HTML or "source" view. Nothing else to install.</p>
+        </div>
+        <button class="bd-copy primary" type="button" data-for="snipImg">Copy code</button>
+      </div>
+      <pre class="bd-code" id="snipImg">&lt;a href="https://densityalt.com/?icao=KASE"&gt;&lt;img src="https://densityalt.com/badge/KASE.svg" width="300" height="72" alt="Live density altitude at KASE, from DensityAlt"&gt;&lt;/a&gt;</pre>
+    </div>
+    <div class="bd-snips">
+      <div class="bd-snip">
+        <div class="bd-snip-h">
+          <div><h4>Iframe card</h4><p>For website builders with an "Embed" or "HTML" block.</p></div>
+          <button class="bd-copy" type="button" data-for="snipFrame">Copy</button>
+        </div>
+        <pre class="bd-code" id="snipFrame">&lt;iframe src="https://densityalt.com/embed/KASE" width="320" height="190" style="border:0" loading="lazy" title="Live density altitude at KASE"&gt;&lt;/iframe&gt;</pre>
+      </div>
+      <div class="bd-snip">
+        <div class="bd-snip-h">
+          <div><h4>Markdown</h4><p>For forums, wikis and GitHub READMEs.</p></div>
+          <button class="bd-copy" type="button" data-for="snipMd">Copy</button>
+        </div>
+        <pre class="bd-code" id="snipMd">[![Density altitude at KASE](https://densityalt.com/badge/KASE.svg)](https://densityalt.com/?icao=KASE)</pre>
+      </div>
+      <div class="bd-snip">
+        <div class="bd-snip-h">
+          <div><h4>Plain link</h4><p>For emailed newsletters, or anywhere images aren't allowed.</p></div>
+          <button class="bd-copy" type="button" data-for="snipLink">Copy</button>
+        </div>
+        <pre class="bd-code" id="snipLink">&lt;a href="https://densityalt.com/?icao=KASE"&gt;Today's density altitude at KASE&lt;/a&gt;</pre>
+      </div>
+    </div>
+    <p class="visually-hidden" id="bdCopyLive" role="status" aria-live="polite"></p>
+
+    <details class="bd-howto">
+      <summary>How do I paste this into my website?</summary>
+      <ol>
+        <li>Open the page in your website editor and find its <b>HTML</b> or <b>Source</b> view (often a <b>&lt;&gt;</b> button), or add an <b>HTML</b>, <b>Embed</b> or <b>Code</b> block.</li>
+        <li>Paste the code where you want the badge, then save or publish. That's it: it updates itself from then on.</li>
+        <li><b>WordPress:</b> a Custom HTML block. <b>Squarespace:</b> a Code block. <b>Wix:</b> Embed HTML. <b>City and county systems</b> (CivicPlus, Granicus and similar): switch the editor to Source/HTML view; if HTML is locked, ask your web administrator to paste the image badge for you.</li>
+        <li><b>Emailed newsletters:</b> many email apps, including Gmail and Outlook, don't show SVG images, so use the plain link there.</li>
+      </ol>
+    </details>
+    <p class="bd-calc">Pilots who click the badge land on the <a id="bdCalcLink" href="/?icao=KASE">density altitude calculator for KASE</a>, pre-filled with live weather.</p>
+    <p class="rd-toolnote">Educational only — pilots should always use their POH and official weather for flight planning.</p>
+  </section>
+
+  <section class="da" id="what-it-shows">
+    <h2>What the badge shows</h2>
+    <p class="desc">Everything a pilot needs to judge the day at a glance, and enough detail to check the math. Here's the badge for <b id="bdAnatIcao">KASE</b>, shown at twice its normal size.</p>
+    <div class="bd-anat-stage" id="bdAnatStage" data-theme="dark">
+      <img id="bdAnatImg" src="/badge/KASE.svg" width="600" height="144" alt="The density altitude badge for KASE, enlarged" loading="lazy">
+    </div>
+    <ol class="bd-parts">
+      <li><code class="bd-tag" id="bdTagHead">DENSITY ALTITUDE · KASE</code><b>Your airport</b><span class="t">The ICAO code the badge is for.</span></li>
+      <li><code class="bd-tag" id="bdTagDa" style="color:#ffb84d">8,498 ft</code><b>Density altitude right now</b><span class="t">Pressure altitude corrected for temperature: the altitude the airplane will actually perform like today.</span></li>
+      <li><code class="bd-tag" id="bdTagEx" style="color:#3ecf8e">+676 ft vs field elevation</code><b>How much higher it "feels" than the field</b><span class="t">The quickest read for pilots. It also sets the colour of the bar on the left and of this figure.</span></li>
+      <li><code class="bd-tag" id="bdTagIn">7°C · 30.10 inHg · field 7,822 ft</code><b>The inputs</b><span class="t">Temperature, altimeter setting and field elevation behind the number, so pilots can sanity-check it.</span></li>
+      <li><code class="bd-tag" id="bdTagSrc">METAR 0453Z</code><b>Data source and time</b><span class="t">The observation it's based on, in Zulu (UTC). Another station's ID here means the nearest METAR was used; "model est." means a weather-model estimate.</span></li>
+      <li><code class="bd-tag">densityalt.com</code><b>One click to the full calculator</b><span class="t">The badge links to DensityAlt's calculator for your airport, pre-filled with the same live weather.</span></li>
+    </ol>
+    <div class="bd-legend" aria-label="Colour key">
+      <span><i style="background:#3ecf8e"></i><span><b>Green</b> — less than 1,000 ft above the field</span></span>
+      <span><i style="background:#ffb84d"></i><span><b>Amber</b> — 1,000 to 2,999 ft above</span></span>
+      <span><i style="background:#ff5d5d"></i><span><b>Red</b> — 3,000 ft or more above</span></span>
+    </div>
+
+    <h3 class="bd-h3" id="how-it-updates">How it updates</h3>
+    <ul class="bd-list">
+      <li>Each time someone opens your page, the badge shows the <b>latest METAR for your field</b> (from aviationweather.gov), cached for <b>up to 10 minutes</b>.</li>
+      <li>The iframe card also <b>refreshes itself every 15 minutes</b> while it's on screen.</li>
+      <li><b>No METAR at your field?</b> It uses the nearest METAR within 25&nbsp;nm, adjusts the temperature for any significant difference in elevation, and shows that station's ID and time.</li>
+      <li><b>Nothing within 25&nbsp;nm?</b> It falls back to a weather-model estimate and labels it "model est." on the badge.</li>
+      <li>Observations more than three hours old are skipped, and if no weather is available the badge says <b>"Unavailable right now"</b> rather than showing a stale number.</li>
+    </ul>
+  </section>
+
+  <section class="da" id="why">
+    <h2>Why put density altitude on your site</h2>
+    <p class="desc">Pilots already know the number matters. The badge puts it where they look before they come.</p>
+    <div class="bd-cards">
+      <div class="bd-card"><div class="k">Safety</div><h3>The number behind many hot-day mishaps</h3><p>High density altitude is a well-known factor in takeoff and climb accidents at high-elevation airports, especially on summer afternoons. FAA guidance, including the <i>Pilot's Handbook of Aeronautical Knowledge</i>, tells pilots to account for it before every high, hot departure.</p></div>
+      <div class="bd-card"><div class="k">Visitors</div><h3>Transient pilots check your site first</h3><p>Visiting pilots look up your runways, fuel and services before they fly in. A live density altitude right there tells a flatland pilot what your field will feel like today, and nudges them toward a cooler morning departure.</p></div>
+      <div class="bd-card"><div class="k">Effort</div><h3>Zero maintenance</h3><p>Paste it once. It updates itself from the METAR, with no account, plugin, API key or renewal, and nothing for your web team to touch again.</p></div>
+    </div>
+  </section>
+
+  <section class="da" id="who">
+    <h2>Who it's for</h2>
+    <div class="bd-cards four">
+      <div class="bd-card"><div class="k">Image badge</div><h3>Airport managers</h3><p>Put it on your pilot-information page next to runways and fuel. It's just an image and a link, so it works in locked-down city and county website systems.</p></div>
+      <div class="bd-card"><div class="k">Badge or iframe card</div><h3>FBOs</h3><p>Show it beside fuel prices and services, or run the iframe card on a lobby or flight-planning screen.</p></div>
+      <div class="bd-card"><div class="k">Badge or iframe card</div><h3>Flight schools &amp; clubs</h3><p>Make density altitude part of every preflight: on your homepage, scheduling page or member portal.</p></div>
+      <div class="bd-card"><div class="k">Badge, Markdown or link</div><h3>Newsletters &amp; blogs</h3><p>Use the image badge in web posts and the Markdown version in forums. For emailed newsletters, use the plain link.</p></div>
+    </div>
+  </section>
+
+  <section class="da" id="privacy">
+    <h2>Light, private and fast</h2>
+    <p class="desc">Nothing for IT or security to worry about.</p>
+    <ul class="bd-checks">
+      <li><span><b>A plain image</b>, about 1–2&nbsp;KB. No JavaScript runs on your site.</span></li>
+      <li><span><b>No cookies, no tracking scripts</b> and no ads.</span></li>
+      <li><span><b>Served from a CDN</b> and cached, so it won't slow your page down.</span></li>
+      <li><span><b>Accessible:</b> descriptive alt text, and the image carries its own text label for screen readers.</span></li>
+    </ul>
+  </section>
+
+  <section class="da faq" id="faq">
+    <h2>Frequently asked questions</h2>
+    <div class="faqlist">
+      <details class="faq-item"><summary>Is the badge really free?</summary>
+      <p class="a">Yes. There's no signup, no account and no API key, and there are no ads in the badge. Copy the code, paste it into your page, and you're done.</p></details>
+      <details class="faq-item"><summary>How current is the density altitude?</summary>
+      <p class="a">It's computed from the latest METAR for your field and cached for up to 10 minutes. Routine METARs are issued every hour, with extra reports when the weather changes, and the badge prints the observation time in Zulu so pilots can see exactly how fresh it is.</p></details>
+      <details class="faq-item"><summary>What if my airport has no METAR?</summary>
+      <p class="a">The badge uses the nearest METAR within 25 nm, adjusts its temperature for any significant difference in elevation, and shows that station's ID and time so pilots know where the numbers come from. If there's no reporting station within 25 nm, it uses a weather-model estimate and says "model est." on the badge.</p></details>
+      <details class="faq-item"><summary>Will it slow down my website?</summary>
+      <p class="a">No. The image badge is a plain SVG of about 1–2 KB, served from a CDN and cached. It runs no scripts and sets no cookies on your site. The iframe card is a tiny self-contained page that loads lazily.</p></details>
+      <details class="faq-item"><summary>Can I change the size or colours?</summary>
+      <p class="a">Pick the dark or light style above (the light one adds ?theme=light to the image address). The badge is a vector image, so you can scale it by changing the width and height attributes in proportion, for example width="450" height="108", and it stays sharp. The coloured bar follows the conditions (green, amber or red) and can't be changed.</p></details>
+      <details class="faq-item"><summary>Can pilots use the badge for flight planning?</summary>
+      <p class="a">No. It's an educational awareness tool that helps pilots notice when density altitude is high. For go/no-go decisions, pilots should use their aircraft's POH performance charts and official weather from a METAR, ATIS/AWOS or a standard briefing.</p></details>
+    </div>
+    <p class="bd-contact">Questions or a custom size? <a href="https://www.linkedin.com/in/levansula" target="_blank" rel="me noopener">Message Levan on LinkedIn</a>.</p>
+  </section>
+
+  <div class="authorbox"><img src="/headshot.jpg" alt="Levan Sulakvelidze" width="54" height="54" loading="lazy" decoding="async"><div><strong>Levan Sulakvelidze</strong><p>Instrument-rated private pilot and the builder of DensityAlt, a free set of aviation calculators. The badge uses the same live-weather density altitude as the <a href="/">calculator</a> and the <a href="/hot-and-high">Hot &amp; High</a> board. <a href="https://www.linkedin.com/in/levansula" target="_blank" rel="me noopener">LinkedIn</a> · <a href="https://github.com/levansula23" target="_blank" rel="noopener">GitHub</a></p></div></div>
+
+  <footer>
+    <h4>How the numbers are computed</h4>
+    <div class="calcrefs">
+      <div><b>Atmosphere</b> — International Standard Atmosphere (ISA): the barometric formula in the troposphere (1.98&nbsp;°C / 1000&nbsp;ft lapse) and the isothermal layer above the tropopause (~36,089&nbsp;ft).</div>
+      <div><b>Blood oxygen</b> — alveolar gas equation <code>P_AO₂ = 0.2095·(P − 47) − P_CO₂/0.8</code> feeding the Severinghaus SpO₂ curve. CO₂ falls with altitude, tuned to acute-exposure data (~87% @ 10k, ~72% @ 18k, ~50% @ 25k&nbsp;ft).</div>
+      <div><b>Density altitude</b> — <code>PA = elev + (29.92 − altimeter)·1000</code>, then <code>DA = PA + 120·(OAT − ISA&nbsp;temp)</code>.</div>
+      <div><b>Horsepower</b> — Gagg–Ferrar relation <code>HP ≈ rated·(1.132σ − 0.132)</code>, σ = density ratio at your density altitude; turbos hold rated power to a critical altitude.</div>
+      <div><b>Power curve</b> — parabolic drag polar <code>C_D = C_D0 + C_L²/(πAR·e)</code>; power required = drag × TAS. The region of reversed command is the band from stall up to the minimum-power speed. Drag values are representative estimates and V-speeds (Vs, Va, Vno, Vne) are typical published figures — check your POH; the climb readout is idealized (constant ~80% prop efficiency) and optimistic at low speed.</div>
+      <div><b>Cabin altitude</b> — <code>cabin_P = min(sea level, ambient + ΔP)</code> inverted to an altitude; ΔP is each aircraft's published max pressure differential.</div>
+      <div><b>Data sources</b> — bundled ~110 airports (offline elevation) plus <code>aviationweather.gov</code> METAR for live temp/altimeter (via a same-origin proxy once hosted), falling back to <code>open-meteo.com</code> current weather by coordinates for fields without a METAR.</div>
+      <div><b>References</b> — FAA <i>Pilot's Handbook of Aeronautical Knowledge</i> (FAA-H-8083-25) and <i>Airplane Flying Handbook</i> (FAA-H-8083-3) for density altitude, the FAR&nbsp;91.211 oxygen rules, and the power curve / region of reversed command; J.D.&nbsp;Anderson, <i>Introduction to Flight</i> (parabolic drag polar, power-required = drag&nbsp;×&nbsp;TAS); the alveolar gas equation and Severinghaus SpO₂ relation, with acute-exposure SaO₂ figures from high-altitude physiology literature (e.g. J.B.&nbsp;West). Power-curve V-speeds and the narrow trainer reversed-command band cross-checked against Van's Air Force, GoFly, and Boldmethod.</div>
+    </div>
+    <p class="disclaim">Educational models for healthy unacclimatized adults at acute exposure. Real SpO₂ varies with fitness, acclimatization, and individual physiology. Not for medical or operational flight-planning use.</p>
+    <p class="ghsrc"><strong>Open source.</strong> DensityAlt is built in the open — <a href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener">view the code on GitHub</a> to see exactly how every number is computed.</p>
+    <p class="rms">Made with <a href="https://readymadesites.com/" rel="noopener">ReadyMadeSites™</a> — custom calculators, interactive tools &amp; SEO-ready websites that rank.</p>
+  </footer>
+
+</div>
+
+<script src="/app.js"></script>
+<script src="/airport-badge.js"></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Free Live Density Altitude Badge for Airport Websites",
+  "url": "https://densityalt.com/airport-badge",
+  "description": "A free badge that shows pilots today's density altitude at your airport, updated from the latest METAR. No signup and no script: paste one line of HTML.",
+  "image": "https://densityalt.com/og-image.png",
+  "isAccessibleForFree": true,
+  "inLanguage": "en",
+  "isPartOf": {"@type": "WebSite", "name": "DensityAlt", "url": "https://densityalt.com/"},
+  "author": {"@type": "Person", "name": "Levan Sulakvelidze", "description": "Instrument-rated private pilot", "sameAs": ["https://www.linkedin.com/in/levansula", "https://github.com/levansula23"]}
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"Is the badge really free?","acceptedAnswer":{"@type":"Answer","text":"Yes. There's no signup, no account and no API key, and there are no ads in the badge. Copy the code, paste it into your page, and you're done."}},
+    {"@type":"Question","name":"How current is the density altitude?","acceptedAnswer":{"@type":"Answer","text":"It's computed from the latest METAR for your field and cached for up to 10 minutes. Routine METARs are issued every hour, with extra reports when the weather changes, and the badge prints the observation time in Zulu so pilots can see exactly how fresh it is."}},
+    {"@type":"Question","name":"What if my airport has no METAR?","acceptedAnswer":{"@type":"Answer","text":"The badge uses the nearest METAR within 25 nm, adjusts its temperature for any significant difference in elevation, and shows that station's ID and time so pilots know where the numbers come from. If there's no reporting station within 25 nm, it uses a weather-model estimate and says \"model est.\" on the badge."}},
+    {"@type":"Question","name":"Will it slow down my website?","acceptedAnswer":{"@type":"Answer","text":"No. The image badge is a plain SVG of about 1–2 KB, served from a CDN and cached. It runs no scripts and sets no cookies on your site. The iframe card is a tiny self-contained page that loads lazily."}},
+    {"@type":"Question","name":"Can I change the size or colours?","acceptedAnswer":{"@type":"Answer","text":"Pick the dark or light style above (the light one adds ?theme=light to the image address). The badge is a vector image, so you can scale it by changing the width and height attributes in proportion, for example width=\"450\" height=\"108\", and it stays sharp. The coloured bar follows the conditions (green, amber or red) and can't be changed."}},
+    {"@type":"Question","name":"Can pilots use the badge for flight planning?","acceptedAnswer":{"@type":"Answer","text":"No. It's an educational awareness tool that helps pilots notice when density altitude is high. For go/no-go decisions, pilots should use their aircraft's POH performance charts and official weather from a METAR, ATIS/AWOS or a standard briefing."}}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://densityalt.com/"},
+    {"@type":"ListItem","position":2,"name":"Density altitude badge for airports","item":"https://densityalt.com/airport-badge"}
+  ]
+}
+</script>
+</body>
+</html>
