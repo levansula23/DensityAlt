@@ -57,17 +57,18 @@
 
 <div class="wrap">
 
-  <header class="hero">
+  <header class="hero rd-hero">
     <div class="kicker">Free aviation &amp; aerospace calculators</div>
     <h1>Aircraft Horsepower at Altitude <span>Calculator</span></h1>
-    <p class="hero-sub">Thin air, less power.</p>
-    <p class="lead">Thin air carries less oxygen for combustion, so a piston engine loses power as density altitude rises. Pick your aircraft and a density altitude — get yours from the <a href="/">density altitude calculator</a> — to see the horsepower you actually have. New to it? Read <a href="/learn/density-altitude">what is density altitude?</a>.</p>
+    <p class="rd-lede">Pick your aircraft and density altitude and see the <b>horsepower you actually have</b> — instantly, with a live power-loss curve.</p>
+    <span class="rd-disc" title="DensityAlt is educational only">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Educational only — always fly your POH &amp; current weather
+    </span>
   </header>
 
-  <section class="da" id="horsepower">
-    <h2>Aircraft Horsepower at Altitude Calculator</h2>
-    <p class="desc">Thin air carries less oxygen for combustion, so a piston engine loses power as density altitude rises. Pick your aircraft and a density altitude to see the horsepower you actually have. First compute it with the <a href="/">density altitude calculator</a> (or the <a href="/pressure-altitude-calculator">pressure altitude calculator</a> on a standard day).</p>
-    <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning, dispatch, or weight-and-balance.</strong> Always fly the numbers in your POH and current official weather.</p>
+  <section class="rd-tool" id="horsepower" aria-labelledby="rd-toolhead">
+    <h2 id="rd-toolhead" class="rd-toolhead">Calculate horsepower at altitude</h2>
     <div class="da-grid">
       <div class="field">
         <label>Aircraft</label>
@@ -82,13 +83,27 @@
         <div class="in"><input id="hpCustom" type="number" value="180"><span class="unit">hp</span></div>
       </div>
     </div>
-    <div class="da-out">
-      <div class="out"><div class="lbl">Rated Power (sea level)</div><div class="v"><span id="hpRated">180</span> hp</div></div>
-      <div class="out"><div class="lbl">% of Rated Power</div><div class="v"><span id="hpPct">76%</span></div></div>
-      <div class="out hero"><div class="lbl">Power Available</div><div class="v" style="color:var(--good)"><span id="hpAvail">137</span> hp</div></div>
+    <div class="rd-result">
+      <div class="rd-da">
+        <div class="lbl">Power Available</div>
+        <div class="rd-da-v" style="color:var(--good)"><span id="hpAvail">137</span> <span class="rd-unit">hp</span></div>
+      </div>
+      <div class="rd-stats">
+        <div class="rd-stat"><span class="lbl">Rated Power (sea level)</span><b><span id="hpRated">180</span> hp</b></div>
+        <div class="rd-stat"><span class="lbl">% of Rated Power</span><b><span id="hpPct">76%</span></b></div>
+      </div>
     </div>
-    <canvas id="hpChart" class="box" width="900" height="200"></canvas>
+    <canvas id="hpChart" class="box" width="900" height="200" style="margin-top:22px"></canvas>
     <div class="da-note" id="hpNote"></div>
+    <p class="rd-toolnote">Educational estimates only — <strong>not for flight planning, dispatch, or weight-and-balance.</strong> Always fly the numbers in your POH and current official weather.</p>
+  </section>
+  <div class="rd-explore-wrap"><a class="rd-explore" href="#more-tools">Explore all 12 calculators →</a></div>
+
+  <section class="da" id="how-it-works">
+    <h2>How horsepower falls with altitude</h2>
+    <p class="desc">Thin air carries less oxygen for combustion, so a piston engine loses power as density altitude rises. Pick your aircraft and a density altitude — get yours from the <a href="/">density altitude calculator</a> — to see the horsepower you actually have. New to it? Read <a href="/learn/density-altitude">what is density altitude?</a>.</p>
+    <p class="desc">First compute density altitude with the <a href="/">density altitude calculator</a> (or the <a href="/pressure-altitude-calculator">pressure altitude calculator</a> on a standard day), then enter it above. Thin air, less power.</p>
+    <p class="desc">These are educational estimates only — not for flight planning, dispatch, or weight-and-balance. Always fly the numbers in your POH and current official weather.</p>
   </section>
 
   <section class="da faq" id="faq">

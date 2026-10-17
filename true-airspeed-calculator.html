@@ -57,17 +57,18 @@
 
 <div class="wrap">
 
-  <header class="hero">
+  <header class="hero rd-hero">
     <div class="kicker">Free aviation &amp; aerospace calculators</div>
     <h1>True Airspeed <span>Calculator</span></h1>
-    <p class="hero-sub">What you're actually doing through the air.</p>
-    <p class="lead">Your airspeed indicator measures dynamic pressure, not speed — in thin air it under-reads. True airspeed corrects indicated (calibrated) airspeed for the air density at your altitude and temperature: TAS = CAS ÷ √σ. Enter your numbers to get TAS, the <a href="/">density altitude</a> doing the work, and your Mach number.</p>
+    <p class="rd-lede">Enter indicated airspeed, pressure altitude and temperature to get <b>true airspeed instantly</b> — plus density altitude and Mach number.</p>
+    <span class="rd-disc" title="DensityAlt is educational only">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Educational only — always fly your POH &amp; current weather
+    </span>
   </header>
 
-  <section class="da" id="true-airspeed">
-    <h2>True Airspeed Calculator</h2>
-    <p class="desc">Uses pressure altitude (29.92 set — or compute it with the <a href="/pressure-altitude-calculator">pressure altitude calculator</a>) and outside air temperature. IAS is assumed equal to CAS — close for most cruise regimes.</p>
-    <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning or dispatch.</strong> Fly your POH numbers.</p>
+  <section class="rd-tool" id="true-airspeed" aria-labelledby="rd-toolhead">
+    <h2 id="rd-toolhead" class="rd-toolhead">Calculate true airspeed</h2>
     <div class="da-grid">
       <div class="field">
         <label>Indicated / Calibrated Airspeed</label>
@@ -82,16 +83,28 @@
         <div class="in"><input id="tasOat" type="number" value="5"><button type="button" id="tasUnit" class="unit unit-toggle" title="Switch between Celsius and Fahrenheit">°C</button></div>
       </div>
     </div>
-    <div class="da-out">
-      <div class="out hero"><div class="lbl">True Airspeed</div><div class="v" style="color:var(--accent2)"><span id="tasOut">136</span> kt</div></div>
-      <div class="out"><div class="lbl">Density Altitude</div><div class="v" style="color:var(--warn)"><span id="tasDa">8,700</span> ft</div></div>
-      <div class="out"><div class="lbl">Mach</div><div class="v"><span id="tasMach">0.21</span></div></div>
+    <div class="rd-result">
+      <div class="rd-da">
+        <div class="lbl">True Airspeed</div>
+        <div class="rd-da-v"><span id="tasOut">136</span> <span class="rd-unit">kt</span></div>
+      </div>
+      <div class="rd-stats">
+        <div class="rd-stat"><span class="lbl">Density Altitude</span><b><span id="tasDa">8,700</span> ft</b></div>
+        <div class="rd-stat"><span class="lbl">Mach</span><b><span id="tasMach">0.21</span></b></div>
+      </div>
     </div>
     <div class="da-note" id="tasNote"></div>
+
+    <p class="rd-toolnote">Educational estimates only — <strong>not for flight planning or dispatch.</strong> Fly your POH numbers.</p>
   </section>
+
+  <div class="rd-explore-wrap"><a class="rd-explore" href="#more-tools">Explore all 12 calculators →</a></div>
 
   <section class="da" id="how">
     <h2>How true airspeed is calculated</h2>
+    <p class="desc">Your airspeed indicator measures dynamic pressure, not speed — in thin air it under-reads. True airspeed corrects indicated (calibrated) airspeed for the air density at your altitude and temperature: TAS = CAS ÷ √σ. Enter your numbers to get TAS, the <a href="/">density altitude</a> doing the work, and your Mach number.</p>
+    <p class="desc">Uses pressure altitude (29.92 set — or compute it with the <a href="/pressure-altitude-calculator">pressure altitude calculator</a>) and outside air temperature. IAS is assumed equal to CAS — close for most cruise regimes.</p>
+    <p class="desc">Educational estimates only — <strong>not for flight planning or dispatch.</strong> Fly your POH numbers.</p>
     <p class="desc"><strong>TAS = CAS ÷ √σ</strong>, where σ is the density ratio — the air density at your <a href="/">density altitude</a> divided by sea-level density. The airspeed indicator is a pressure gauge calibrated for sea-level air; at altitude the same true speed produces less dynamic pressure, so the needle reads low. Dividing by √σ undoes that.</p>
     <p class="desc"><strong>The rule of thumb:</strong> add roughly <strong>2% per 1,000 ft</strong> of altitude. At 8,000 ft, 120 KIAS ≈ 120 × 1.16 ≈ 139 KTAS. The exact math usually lands a few knots lower than the rule — both are shown above so you can see the spread.</p>
     <p class="desc"><strong>Why it matters:</strong> flight planning runs on TAS (groundspeed = TAS ± wind), cruise tables quote TAS, and the gap between IAS and TAS is exactly why "high density altitude approaches feel fast" — your groundspeed is higher at the same indicated speed. That's also the link to <a href="/learn/density-altitude-takeoff-performance">density altitude's effect on takeoff and landing</a>.</p>

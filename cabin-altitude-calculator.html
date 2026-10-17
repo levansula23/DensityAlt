@@ -57,17 +57,18 @@
 
 <div class="wrap">
 
-  <header class="hero">
+  <header class="hero rd-hero">
     <div class="kicker">Free aviation &amp; aerospace calculators</div>
     <h1>Cabin Altitude <span>Calculator</span></h1>
-    <p class="hero-sub">What your body really feels at cruise.</p>
-    <p class="lead">Pressurized aircraft hold a maximum pressure <em>differential</em> (ΔP) between inside and outside. Pick an aircraft and cruise altitude to see the cabin altitude your body actually experiences, and the <a href="/atmosphere-explorer">blood oxygen (SpO₂)</a> that comes with it.</p>
+    <p class="rd-lede">Pick an aircraft and cruise altitude to see the <b>cabin altitude your body feels</b> and the blood oxygen that goes with it.</p>
+    <span class="rd-disc" title="DensityAlt is educational only">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Educational only — always fly your POH &amp; current weather
+    </span>
   </header>
 
-  <section class="da cabin" id="cabin">
-    <h2>Cabin Altitude Calculator</h2>
-    <p class="desc">Pressurized aircraft don't hold the cabin at sea level — they maintain a maximum pressure <em>differential</em> (ΔP) between inside and outside. Pick an aircraft and cruise altitude to see the cabin altitude your body actually experiences, and the <a href="/atmosphere-explorer">blood oxygen (SpO₂)</a> that comes with it.</p>
-    <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning, dispatch, or weight-and-balance.</strong> Always fly the numbers in your POH and current official weather.</p>
+  <section class="rd-tool cabin" id="cabin" aria-labelledby="rd-toolhead">
+    <h2 id="rd-toolhead" class="rd-toolhead">Calculate cabin altitude</h2>
     <div class="da-grid">
       <div class="field">
         <label>Aircraft</label>
@@ -82,10 +83,15 @@
         <div class="in"><input id="customDp" type="number" step="0.1" value="8.0"><span class="unit">psi</span></div>
       </div>
     </div>
-    <div class="da-out">
-      <div class="out"><div class="lbl">Max Differential</div><div class="v"><span id="cabinDp">8.65</span> psi</div></div>
-      <div class="out"><div class="lbl">Cabin Blood O₂ (SpO₂)</div><div class="v"><span id="cabinSpo2">95%</span></div></div>
-      <div class="out hero"><div class="lbl">Cabin Altitude</div><div class="v" style="color:var(--accent2)"><span id="cabinAlt">7,000</span> ft</div></div>
+    <div class="rd-result">
+      <div class="rd-da">
+        <div class="lbl">Cabin Altitude</div>
+        <div class="rd-da-v" style="color:var(--accent2);text-shadow:none"><span id="cabinAlt">7,000</span> <span class="rd-unit">ft</span></div>
+      </div>
+      <div class="rd-stats">
+        <div class="rd-stat"><span class="lbl">Cabin Blood O₂ (SpO₂)</span><b><span id="cabinSpo2">95%</span></b></div>
+        <div class="rd-stat"><span class="lbl">Max Differential</span><b><span id="cabinDp">8.65</span> psi</b></div>
+      </div>
     </div>
     <canvas id="cabinChart" class="box" width="900" height="240"></canvas>
     <div class="pc-legend">
@@ -94,6 +100,15 @@
       <span style="color:#ffd24d">▭ Shaded gap = what pressurization saves you</span>
     </div>
     <div class="da-note" id="cabinNote"></div>
+    <p class="rd-toolnote">Educational estimates only — <strong>not for flight planning, dispatch, or weight-and-balance.</strong> Always fly the numbers in your POH and current official weather.</p>
+  </section>
+
+  <div class="rd-explore-wrap"><a class="rd-explore" href="#more-tools">Explore all 12 calculators →</a></div>
+
+  <section class="da" id="how-it-works">
+    <h2>How cabin altitude works</h2>
+    <p class="desc">Pressurized aircraft don't hold the cabin at sea level — they maintain a maximum pressure <em>differential</em> (ΔP) between inside and outside. Pick an aircraft and cruise altitude to see the cabin altitude your body actually experiences, and the <a href="/atmosphere-explorer">blood oxygen (SpO₂)</a> that comes with it.</p>
+    <p class="desc">What your body really feels at cruise: pressurized aircraft hold a maximum pressure differential (ΔP) between inside and outside, so the higher you fly, the higher the cabin altitude climbs unless the system holds more pressure.</p>
   </section>
 
   <section class="da faq" id="faq">
