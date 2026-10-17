@@ -87,11 +87,12 @@
     <div class="da-out">
       <div class="out hero"><div class="lbl">Crosswind Component</div><div class="v" style="color:var(--accent2)"><span id="xCross">11 R</span></div></div>
       <div class="out"><div class="lbl">Head / Tailwind</div><div class="v" style="color:var(--good)"><span id="xHead">+10</span> kt</div></div>
-      <div class="out"><div class="lbl">Wind Angle</div><div class="v"><span id="xAngle">50</span>°</div></div>
+      <div class="out"><div class="lbl">Wind Angle</div><div class="v"><span id="xAngle">50°</span></div></div>
     </div>
     <canvas id="xChart" class="box" width="900" height="360"></canvas>
     <p class="cap" style="margin:8px 0 0">Drag around the runway to set wind direction. Blue = wind, orange = crosswind, green = headwind.</p>
     <div class="da-note" id="xNote"></div>
+    <p class="desc">Wind is only half the runway picture on a hot day. Learn <a href="/learn/density-altitude">how to calculate density altitude</a> to see what the air is doing to your takeoff roll.</p>
   </section>
 
   <section class="da faq" id="faq">
@@ -140,7 +141,7 @@
       <div><b>Horsepower</b> — Gagg–Ferrar relation <code>HP ≈ rated·(1.132σ − 0.132)</code>, σ = density ratio at your density altitude; turbos hold rated power to a critical altitude.</div>
       <div><b>Power curve</b> — parabolic drag polar <code>C_D = C_D0 + C_L²/(πAR·e)</code>; power required = drag × TAS. The region of reversed command is the band from stall up to the minimum-power speed. Drag values are representative estimates and V-speeds (Vs, Va, Vno, Vne) are typical published figures — check your POH; the climb readout is idealized (constant ~80% prop efficiency) and optimistic at low speed.</div>
       <div><b>Cabin altitude</b> — <code>cabin_P = min(sea level, ambient + ΔP)</code> inverted to an altitude; ΔP is each aircraft's published max pressure differential.</div>
-      <div><b>Data sources</b> — bundled ~110 airports (offline elevation) plus <code>aviationweather.gov</code> METAR for live temp/altimeter (via a same-origin proxy once hosted), falling back to <code>open-meteo.com</code> current weather by coordinates for fields without a METAR.</div>
+      <div><b>Data sources</b> — bundled ~260 airports (offline elevation) plus <code>aviationweather.gov</code> METAR for live temp/altimeter (via a same-origin proxy once hosted), falling back to <code>open-meteo.com</code> current weather by coordinates for fields without a METAR.</div>
       <div><b>References</b> — FAA <i>Pilot's Handbook of Aeronautical Knowledge</i> (FAA-H-8083-25) and <i>Airplane Flying Handbook</i> (FAA-H-8083-3) for density altitude, the FAR&nbsp;91.211 oxygen rules, and the power curve / region of reversed command; J.D.&nbsp;Anderson, <i>Introduction to Flight</i> (parabolic drag polar, power-required = drag&nbsp;×&nbsp;TAS); the alveolar gas equation and Severinghaus SpO₂ relation, with acute-exposure SaO₂ figures from high-altitude physiology literature (e.g. J.B.&nbsp;West). Power-curve V-speeds and the narrow trainer reversed-command band cross-checked against Van's Air Force, GoFly, and Boldmethod.</div>
     </div>
     <p class="disclaim">Educational models for healthy unacclimatized adults at acute exposure. Real SpO₂ varies with fitness, acclimatization, and individual physiology. Not for medical or operational flight-planning use.</p>
