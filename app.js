@@ -320,6 +320,10 @@ function wxSourceNote(w){
   return s;
 }
 
+// The weather service only takes ICAO codes; a bare 3-character US identifier (DEN, L35) is the K-prefixed one.
+function icaoFor(id){ return /^[A-Z0-9]{3}$/.test(id) && AIRPORTS[id]==null ? 'K'+id : id; }
+const NOT_US_HINT=' Outside the lower 48, enter the 4-letter ICAO code (e.g. PANC, PHNL).';
+
 async function wxFetchStation(raw){
   let elevFt=AIRPORTS[raw]!=null?AIRPORTS[raw]:null, tempC=null, altInHg=null, name=null, lat=null, lon=null, stnElevFt=null;
 
@@ -358,7 +362,8 @@ async function wxFetchStation(raw){
 }
 
 async function lookupICAO(){
-  const raw=$('icao').value.trim().toUpperCase();
+  const typed=$('icao').value.trim().toUpperCase(), raw=icaoFor(typed);
+  if(raw!==typed) $('icao').value=$('icao').dataset.k=raw;
   $('icao').dataset.done=raw;
   const st=$('icaoStatus');
   if(!raw){ st.className='icao-status'; st.textContent=''; return; }
@@ -373,7 +378,7 @@ async function lookupICAO(){
 
   if(!got.length){
     st.className='icao-status err';
-    st.textContent='Couldn’t reach live data for '+raw+'. '+(HOSTED?'The station may be unlisted or the weather service is momentarily down.':'Live temp/altimeter needs the hosted site (it runs through a server-side proxy).')+' Listed airports still work offline for elevation — otherwise enter values manually.';
+    st.textContent='Couldn’t reach live data for '+raw+'. '+(HOSTED?'The station may be unlisted or the weather service is momentarily down.':'Live temp/altimeter needs the hosted site (it runs through a server-side proxy).')+($('icao').dataset.k===raw?NOT_US_HINT:'')+' Listed airports still work offline for elevation — otherwise enter values manually.';
     return;
   }
   let msg='<strong>'+raw+'</strong>'+(name?' · '+name:'')+' — set '+got.join(', ')+'.'+note;
@@ -1080,7 +1085,8 @@ function calcPAC(){
   $('pacNote').innerHTML='PA = '+fmt(elev)+' ft + (29.92 − '+inHg.toFixed(2)+') × 1,000 = <strong>'+fmt(pa)+' ft</strong>.'+daTxt;
 }
 async function lookupPAC(){
-  const raw=$('pacIcao').value.trim().toUpperCase();
+  const typed=$('pacIcao').value.trim().toUpperCase(), raw=icaoFor(typed);
+  if(raw!==typed) $('pacIcao').value=$('pacIcao').dataset.k=raw;
   $('pacIcao').dataset.done=raw;
   const st=$('pacIcaoStatus');
   if(!raw){ st.className='icao-status'; st.textContent=''; return; }
@@ -1093,7 +1099,7 @@ async function lookupPAC(){
   calcPAC();
   if(!got.length){
     st.className='icao-status err';
-    st.textContent='Couldn’t reach live data for '+raw+'. '+(HOSTED?'The station may be unlisted or the weather service is momentarily down.':'Live data needs the hosted site.')+' Enter values manually.';
+    st.textContent='Couldn’t reach live data for '+raw+'. '+(HOSTED?'The station may be unlisted or the weather service is momentarily down.':'Live data needs the hosted site.')+($('pacIcao').dataset.k===raw?NOT_US_HINT:'')+' Enter values manually.';
     return;
   }
   st.className='icao-status '+(missing.length||estimated?'info':'ok');
