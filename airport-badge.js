@@ -124,7 +124,7 @@
     var seq = ++state.seq;
     setStatus('loading', 'Checking live weather for ' + code + '…', true);
     // A bare 3-letter US identifier (LXV) is almost always the K-prefixed ICAO (KLXV): try that first.
-    var tries = /^[A-Z]{3}$/.test(code) ? ['K' + code, code] : [code];
+    var tries = /^[A-Z0-9]{3}$/.test(code) ? ['K' + code, code] : [code];
     var netErr = false;
     var chain = Promise.resolve(null);
     tries.forEach(function (c) {

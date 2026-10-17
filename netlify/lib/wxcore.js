@@ -119,6 +119,8 @@ const tidyName = (s) => (s || "").replace(/,\s*[A-Z]{2},\s*US$/, "").replace(/\b
 async function stationWx(icao) {
   icao = String(icao || "").toUpperCase();
   if (!/^[A-Z0-9]{3,4}$/.test(icao)) return null;
+  // AWC only takes ICAO codes: a bare 3-character US identifier (LXV, L35) is the K-prefixed one.
+  if (icao.length === 3 && FIELD_ELEV_FT[icao] == null) icao = "K" + icao;
   const own = ((await getJSON(`${AWC}/metar?ids=${icao}&format=json`)) || [])[0];
   let name = own && own.name ? tidyName(own.name) : null;
   // Field elevation, not the METAR sensor's: bundled list first, then the AWC airport record.
