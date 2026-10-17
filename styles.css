@@ -252,6 +252,8 @@
   .reftable td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.06)}
   .reftable tr:last-child td{border-bottom:0}
   .reftable td b{font-family:var(--mono)}
+.isa-table th,.isa-table td{padding:8px 7px}.isa-table td{vertical-align:top;white-space:nowrap}
+.isa-table .isa-note{display:inline-block;white-space:normal;max-width:150px;font-size:12px;line-height:1.35;color:var(--ink-dim);margin-top:2px}
 
   /* =====================================================================
      v2 REDESIGN — sitewide sleek pass + featured Explorer nav + homepage

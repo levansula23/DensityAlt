@@ -103,17 +103,35 @@
   </section>
 
   <section class="da" id="standard">
-    <h2>The ISA standard atmosphere in one table</h2>
-    <div class="tablewrap"><table class="reftable">
-      <tr><th>Altitude</th><th>ISA temp</th><th>Pressure</th><th>Notes</th></tr>
-      <tr><td><b>Sea level</b></td><td>+15 °C / 59 °F</td><td>29.92" / 1013 hPa</td><td>The reference everything starts from</td></tr>
-      <tr><td><b>5,000 ft</b></td><td>+5.1 °C</td><td>24.90"</td><td></td></tr>
-      <tr><td><b>10,000 ft</b></td><td>−4.8 °C</td><td>20.58"</td><td></td></tr>
-      <tr><td><b>18,000 ft</b></td><td>−20.7 °C</td><td>14.95"</td><td>≈ half the atmosphere below you</td></tr>
-      <tr><td><b>30,000 ft</b></td><td>−44.4 °C</td><td>8.89"</td><td></td></tr>
-      <tr><td><b>36,089 ft</b></td><td>−56.5 °C</td><td>6.68"</td><td>Tropopause — temperature stops falling</td></tr>
+    <h2>ISA table: the standard atmosphere by altitude</h2>
+    <p class="desc">ISA temperature, pressure and air density from sea level to 45,000&nbsp;ft (U.S. Standard Atmosphere, 1976). Temperatures use the same 1.98&nbsp;°C per 1,000&nbsp;ft lapse as the calculator above; density is the percentage of sea-level air density.</p>
+    <div class="tablewrap"><table class="reftable isa-table">
+      <tr><th>Altitude</th><th>ISA temp</th><th>Pressure</th><th>Air density</th></tr>
+      <tr><td><b>Sea level</b><br>0 m<br><span class="isa-note">Sea-level reference</span></td><td>+15.0 °C<br>59 °F</td><td>29.92&quot;<br>1,013 hPa</td><td>100.0%</td></tr>
+      <tr><td><b>1,000 ft</b><br>305 m</td><td>+13.0 °C<br>55 °F</td><td>28.86&quot;<br>977 hPa</td><td>97.1%</td></tr>
+      <tr><td><b>2,000 ft</b><br>610 m</td><td>+11.0 °C<br>52 °F</td><td>27.82&quot;<br>942 hPa</td><td>94.3%</td></tr>
+      <tr><td><b>3,000 ft</b><br>914 m</td><td>+9.1 °C<br>48 °F</td><td>26.82&quot;<br>908 hPa</td><td>91.5%</td></tr>
+      <tr><td><b>4,000 ft</b><br>1,219 m</td><td>+7.1 °C<br>45 °F</td><td>25.84&quot;<br>875 hPa</td><td>88.8%</td></tr>
+      <tr><td><b>5,000 ft</b><br>1,524 m</td><td>+5.1 °C<br>41 °F</td><td>24.90&quot;<br>843 hPa</td><td>86.2%</td></tr>
+      <tr><td><b>6,000 ft</b><br>1,829 m</td><td>+3.1 °C<br>38 °F</td><td>23.98&quot;<br>812 hPa</td><td>83.6%</td></tr>
+      <tr><td><b>7,000 ft</b><br>2,134 m</td><td>+1.1 °C<br>34 °F</td><td>23.09&quot;<br>782 hPa</td><td>81.1%</td></tr>
+      <tr><td><b>8,000 ft</b><br>2,438 m</td><td>−0.8 °C<br>30 °F</td><td>22.22&quot;<br>753 hPa</td><td>78.6%</td></tr>
+      <tr><td><b>9,000 ft</b><br>2,743 m</td><td>−2.8 °C<br>27 °F</td><td>21.39&quot;<br>724 hPa</td><td>76.2%</td></tr>
+      <tr><td><b>10,000 ft</b><br>3,048 m</td><td>−4.8 °C<br>23 °F</td><td>20.58&quot;<br>697 hPa</td><td>73.8%</td></tr>
+      <tr><td><b>12,000 ft</b><br>3,658 m</td><td>−8.8 °C<br>16 °F</td><td>19.03&quot;<br>644 hPa</td><td>69.3%</td></tr>
+      <tr><td><b>14,000 ft</b><br>4,267 m</td><td>−12.7 °C<br>9 °F</td><td>17.58&quot;<br>595 hPa</td><td>65.0%</td></tr>
+      <tr><td><b>16,000 ft</b><br>4,877 m</td><td>−16.7 °C<br>2 °F</td><td>16.22&quot;<br>549 hPa</td><td>60.9%</td></tr>
+      <tr><td><b>18,000 ft</b><br>5,486 m<br><span class="isa-note">≈ half the atmosphere below you</span></td><td>−20.6 °C<br>−5 °F</td><td>14.94&quot;<br>506 hPa</td><td>57.0%</td></tr>
+      <tr><td><b>20,000 ft</b><br>6,096 m</td><td>−24.6 °C<br>−12 °F</td><td>13.75&quot;<br>466 hPa</td><td>53.3%</td></tr>
+      <tr><td><b>25,000 ft</b><br>7,620 m</td><td>−34.5 °C<br>−30 °F</td><td>11.10&quot;<br>376 hPa</td><td>44.8%</td></tr>
+      <tr><td><b>30,000 ft</b><br>9,144 m</td><td>−44.4 °C<br>−48 °F</td><td>8.89&quot;<br>301 hPa</td><td>37.4%</td></tr>
+      <tr><td><b>35,000 ft</b><br>10,668 m</td><td>−54.3 °C<br>−66 °F</td><td>7.04&quot;<br>238 hPa</td><td>31.0%</td></tr>
+      <tr><td><b>36,089 ft</b><br>11,000 m<br><span class="isa-note">Tropopause — temperature stops falling</span></td><td>−56.5 °C<br>−70 °F</td><td>6.68&quot;<br>226 hPa</td><td>29.7%</td></tr>
+      <tr><td><b>40,000 ft</b><br>12,192 m</td><td>−56.5 °C<br>−70 °F</td><td>5.54&quot;<br>188 hPa</td><td>24.6%</td></tr>
+      <tr><td><b>45,000 ft</b><br>13,716 m</td><td>−56.5 °C<br>−70 °F</td><td>4.35&quot;<br>147 hPa</td><td>19.4%</td></tr>
     </table></div>
     <p class="desc">Exam shortcut: <strong>ISA temp = 15 − (2 × altitude in thousands)</strong>. At 8,000 ft: 15 − 16 = −1&nbsp;°C. The precise lapse is 1.98&nbsp;°C/1,000 ft, which is why this calculator shows −0.8&nbsp;°C — close enough that exams accept both.</p>
+    <p class="desc"><strong>In metric:</strong> ISA cools 6.5&nbsp;°C per 1,000&nbsp;m. At 2,000&nbsp;m (6,562&nbsp;ft) ISA is +2&nbsp;°C, so an outside air temperature of 12&nbsp;°C is ISA+10 — worth roughly 1,200&nbsp;ft of extra density altitude.</p>
     <p class="desc"><strong>Why deviation matters:</strong> every degree warmer than ISA adds ~120 ft of density altitude. ISA+15 at an 8,000 ft pressure altitude means your aircraft performs like it's at ~9,800 ft. Turbine flight planning uses ISA deviation directly — cruise tables are published for ISA, ISA+10, ISA+20.</p>
   </section>
 
