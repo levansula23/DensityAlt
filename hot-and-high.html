@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#05070f">
+<title>Hot &amp; High: Live Density Altitude at US Airports | DensityAlt</title>
+<meta name="description" content="Live density altitude at about 300 high, hot US airports, refreshed every 10 minutes, plus the 50 US airports with the highest summer density altitude.">
+<link rel="canonical" href="https://densityalt.com/hot-and-high">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DensityAlt">
+<meta property="og:url" content="https://densityalt.com/hot-and-high">
+<meta property="og:title" content="Hot &amp; High: Today's Highest Density Altitudes in the US">
+<meta property="og:description" content="Which US airports have the highest density altitude right now? A live board from the latest METARs, plus the top 50 for a typical summer afternoon.">
+<meta property="og:image" content="https://densityalt.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Hot &amp; High: Today's Highest Density Altitudes in the US">
+<meta name="twitter:description" content="Which US airports have the highest density altitude right now? A live board from the latest METARs, plus the top 50 for a typical summer afternoon.">
+<meta name="twitter:image" content="https://densityalt.com/og-image.png">
+<link rel="stylesheet" href="/styles.css">
+<style>
+  /* ---- Hot & High page (page-specific; uses the sitewide tokens from styles.css) ---- */
+  .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  .hh-hero .kicker{display:inline-flex;align-items:center}
+  .hh-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--good);margin-right:10px;animation:hhPulse 2.2s ease-out infinite}
+  @keyframes hhPulse{0%{box-shadow:0 0 0 0 rgba(55,214,122,.55)}70%{box-shadow:0 0 0 9px rgba(55,214,122,0)}100%{box-shadow:0 0 0 0 rgba(55,214,122,0)}}
+  @media(prefers-reduced-motion:reduce){.hh-dot{animation:none}}
+  .hh-byline{display:flex;gap:10px;align-items:center;margin:18px 0 0;font-size:13.5px;line-height:1.4;color:var(--ink-dim)}
+  .hh-byline img{width:34px;height:34px;border-radius:50%;flex:0 0 auto}
+  .hh-byline strong{color:var(--ink)}
+  .hh-jump{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 0}
+  .hh-jump a{text-decoration:none;color:var(--ink)}
+
+  /* live board */
+  .hh-boardhead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 16px;margin:0 0 18px}
+  .hh-boardhead .rd-toolhead{margin:0}
+  .hh-status{font:600 12px/1.4 var(--mono);color:var(--ink-dim)}
+  .hh-status b{color:var(--ink);font-weight:700}
+  .hh-spin{display:inline-block;width:12px;height:12px;border:2px solid rgba(124,204,255,.25);border-top-color:var(--accent2);border-radius:50%;margin-right:9px;vertical-align:-2px;animation:spin .7s linear infinite}
+  .hh-msg{padding:34px 18px;text-align:center;border:1px dashed var(--panel-brd);border-radius:14px;color:var(--ink-dim);font:500 14.5px/1.55 var(--sans)}
+  .hh-msg strong{color:var(--ink)}
+  .hh-msg.err{border-style:solid;border-color:rgba(255,184,77,.35);background:rgba(255,184,77,.06)}
+  .hh-msg.err strong{color:var(--warn)}
+  .hh-msg button{margin-top:14px;background:rgba(78,161,255,.18);border:1px solid var(--accent);color:#dbeaff;font:600 14px/1 var(--sans);padding:11px 18px;border-radius:10px;cursor:pointer}
+  .hh-msg button:hover{background:rgba(78,161,255,.32)}
+
+  .hh-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+  .hh-stat{border:1px solid var(--panel-brd);border-radius:14px;padding:15px 16px 14px;background:rgba(0,0,0,.24);min-width:0}
+  .hh-stat.hh-lead{background:radial-gradient(220px 110px at 30% 0%,rgba(255,184,77,.16),transparent 70%),rgba(0,0,0,.24)}
+  .hh-stat .lbl{font:600 10.5px/1.25 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-dim)}
+  .hh-stat .v{font:800 30px/1 var(--mono);letter-spacing:-.02em;margin-top:11px;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .hh-stat .v small{font-size:.48em;font-weight:600;color:var(--ink-dim);letter-spacing:0}
+  .hh-stat.hh-lead .v{color:var(--warn);text-shadow:0 0 34px rgba(255,184,77,.3)}
+  .hh-stat .s{margin-top:9px;font:500 12.5px/1.45 var(--sans);color:var(--ink-dim);overflow-wrap:anywhere}
+  .hh-stat .s a{color:var(--accent);text-decoration:none;font-weight:600}
+  .hh-stat .s a:hover{text-decoration:underline}
+
+  .hh-h3{margin:28px 0 12px;font:700 12.5px/1.2 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-dim)}
+  .hh-top{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+  .hh-top li{min-width:0}
+  .hh-top a{display:flex;flex-direction:column;gap:6px;height:100%;padding:12px 13px 13px;border:1px solid var(--panel-brd);border-radius:12px;background:rgba(255,255,255,.03);text-decoration:none;color:var(--ink);transition:.15s}
+  .hh-top a:hover{border-color:var(--accent);background:rgba(78,161,255,.08)}
+  .hh-top .tk{display:flex;align-items:center;justify-content:space-between;gap:6px}
+  .hh-top .rk{font:700 11px/1 var(--mono);color:var(--accent2);letter-spacing:.06em}
+  .hh-top .id{font:800 16px/1 var(--mono);letter-spacing:.05em}
+  .hh-top .nm{font:500 12px/1.3 var(--sans);color:var(--ink-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .hh-top .dav{font:800 22px/1 var(--mono);color:var(--warn);font-variant-numeric:tabular-nums;margin-top:3px;white-space:nowrap}
+  .hh-top .dav small{font-size:.5em;color:var(--ink-dim);font-weight:600}
+
+  .hh-gap{display:inline-block;font:700 11.5px/1 var(--mono);padding:4px 7px;border-radius:999px;border:1px solid;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .hh-gap.g{color:var(--good);border-color:rgba(55,214,122,.4);background:rgba(55,214,122,.08)}
+  .hh-gap.a{color:var(--warn);border-color:rgba(255,184,77,.45);background:rgba(255,184,77,.08)}
+  .hh-gap.r{color:var(--bad);border-color:rgba(255,106,69,.45);background:rgba(255,106,69,.09)}
+
+  .hh-controls{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch;margin:0 0 10px}
+  .hh-seg{display:inline-flex;padding:3px;border:1px solid var(--panel-brd);border-radius:10px;background:rgba(0,0,0,.3)}
+  .hh-seg button{font:600 13px/1 var(--sans);color:var(--ink-dim);background:none;border:0;padding:10px 13px;border-radius:7px;cursor:pointer;white-space:nowrap;transition:.15s}
+  .hh-seg button:hover{color:var(--ink)}
+  .hh-seg button[aria-pressed="true"]{background:var(--accent);color:#04121f}
+  .hh-in{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.3);border:1px solid var(--panel-brd);border-radius:10px;padding:0 12px;min-height:42px}
+  .hh-in:focus-within{border-color:var(--accent)}
+  .hh-in select,.hh-in input{background:transparent;border:0;color:var(--ink);font:600 14px/1 var(--sans);outline:none;min-width:0;padding:11px 0}
+  .hh-in select{cursor:pointer}
+  .hh-in select option{background:#0b1020;color:var(--ink)}
+  .hh-in svg{width:15px;height:15px;color:var(--ink-dim);flex:0 0 auto}
+  .hh-search{flex:1 1 220px}
+  .hh-search input{width:100%}
+  .hh-search input::placeholder{color:var(--ink-dim);font-weight:500}
+  .hh-count{margin:0 0 10px;font:600 12px/1.4 var(--mono);color:var(--ink-dim)}
+
+  .hh-scroll{max-height:640px;overflow:auto;border:1px solid var(--panel-brd);border-radius:12px;background:rgba(0,0,0,.2)}
+  table.hh-t{width:100%;border-collapse:separate;border-spacing:0;font:500 13.5px/1.35 var(--sans)}
+  .hh-t th{position:sticky;top:0;z-index:2;background:#0c111d;font:600 10.5px/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-dim);text-align:left;padding:10px;border-bottom:1px solid var(--panel-brd);white-space:nowrap}
+  .hh-t th.n{text-align:right}
+  .hh-t td{padding:9px 10px;border-bottom:1px solid rgba(255,255,255,.06);vertical-align:middle}
+  .hh-t tbody tr:last-child td{border-bottom:0}
+  .hh-t .n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .hh-t td.rk{font:600 12px/1 var(--mono);color:var(--ink-dim);width:44px}
+  .hh-t td.dav{font-weight:800;color:var(--warn)}
+  .hh-t tbody tr{cursor:pointer;transition:background .12s}
+  .hh-t tbody tr:hover{background:rgba(78,161,255,.07)}
+  .hh-t tbody tr.hit{background:rgba(255,184,77,.12);box-shadow:inset 3px 0 0 var(--warn)}
+  .hh-thbtn{font:inherit;letter-spacing:inherit;text-transform:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
+  .hh-thbtn:hover,.hh-thbtn[aria-pressed="true"]{color:var(--ink)}
+  .hh-thbtn i{display:inline-block;width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid currentColor;opacity:0}
+  .hh-thbtn[aria-pressed="true"] i{opacity:1;color:var(--accent2)}
+  .hh-ap{color:var(--ink);text-decoration:none}
+  .hh-ap b{font-family:var(--mono);color:var(--accent);margin-right:7px;letter-spacing:.03em}
+  .hh-ap:hover span{text-decoration:underline}
+  .hh-city{display:block;font-size:12px;color:var(--ink-dim);margin-top:2px}
+  .hh-age{display:block;font:500 11px/1.3 var(--sans);color:var(--ink-dim);margin-top:2px}
+  .hh-age.stale{color:var(--warn)}
+  .hh-meta{display:none}
+  .hh-empty td{text-align:center;color:var(--ink-dim);padding:28px 10px;cursor:default}
+  .hh-legend{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin:12px 0 0;font:500 12px/1.4 var(--sans);color:var(--ink-dim)}
+  .hh-legend .hh-gap{margin-right:5px}
+
+  /* static summer ranking */
+  .hh-bands{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 0 20px;max-width:720px}
+  .hh-band{border:1px solid var(--panel-brd);border-radius:12px;padding:14px 15px;background:rgba(0,0,0,.24)}
+  .hh-band b{display:block;font:800 28px/1 var(--mono);font-variant-numeric:tabular-nums}
+  .hh-band span{display:block;margin-top:8px;font:600 11px/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-dim)}
+  .hh-band.b10 b{color:var(--bad)} .hh-band.b8 b{color:var(--warn)} .hh-band.b6 b{color:#ffd27a}
+  .hh-sum .n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .hh-sum th.n{text-align:right}
+  .hh-sum td.rk{font:600 12px/1 var(--mono);color:var(--ink-dim)}
+  .hh-sum a{color:var(--ink);text-decoration:none;font-weight:600}
+  .hh-sum a:hover{color:var(--accent);text-decoration:underline}
+  .hh-sum .hh-id{font:600 11.5px/1 var(--mono);color:var(--accent2);margin-left:6px;letter-spacing:.03em}
+  .hh-sum .hh-f{color:var(--ink-dim)}
+  .hh-sum .hh-cm{display:none}
+  .hh-sum td b{color:var(--warn)}
+  .hh-note{margin:12px 0 0;font-size:13px;line-height:1.55;color:var(--ink-dim);max-width:760px}
+
+  /* CTA */
+  .hh-cta{margin-top:46px;display:flex;gap:18px 26px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:24px 24px;border-radius:18px;
+    border:1px solid rgba(124,204,255,.42);background:linear-gradient(105deg,rgba(78,161,255,.15),rgba(124,255,204,.07) 70%),var(--panel);box-shadow:0 0 22px -8px rgba(124,204,255,.35)}
+  .hh-cta-k{font:600 11px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--accent2)}
+  .hh-cta h2{margin:8px 0 6px;font-size:23px;line-height:1.2;letter-spacing:-.01em}
+  .hh-cta p{margin:0;color:#cdd6e6;font-size:14.5px;line-height:1.55;max-width:640px}
+  .hh-cta-btn{flex:0 0 auto;background:var(--accent);color:#04121f;font:700 15px/1 var(--sans);padding:14px 20px;border-radius:11px;text-decoration:none;white-space:nowrap;transition:.15s}
+  .hh-cta-btn:hover{background:#7cf}
+
+  /* method / prose */
+  .hh-prose h3{font-size:17px;margin:24px 0 8px;color:var(--ink)}
+  .hh-prose p,.hh-prose li{font-size:15px;line-height:1.65;color:#cdd6e6;max-width:760px}
+  .hh-prose p{margin:0 0 14px}
+  .hh-prose ul{padding-left:20px;margin:0 0 14px}
+  .hh-prose li{margin:6px 0}
+  .hh-prose strong{color:var(--ink)}
+  .hh-prose .rd-formula{margin:4px 0 16px}
+  .hh-caveat{margin:18px 0 0;padding:12px 15px;border:1px solid rgba(255,184,77,.3);border-radius:10px;background:rgba(255,184,77,.06);font:500 14px/1.55 var(--sans);color:#cdd6e6;max-width:760px}
+  .hh-caveat strong{color:var(--warn)}
+
+  .hh-author{margin:40px 0 0;display:flex;gap:14px;align-items:flex-start;background:var(--panel);border:1px solid var(--panel-brd);border-radius:14px;padding:18px}
+  .hh-author img{width:54px;height:54px;border-radius:50%;flex:0 0 auto}
+  .hh-author p{font-size:14px;line-height:1.6;color:var(--ink-dim);margin:6px 0 0}
+
+  @media(max-width:980px){
+    .hh-top{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .hh-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  }
+  @media(max-width:640px){
+    .hh-top{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+    .hh-top a{padding:11px 11px 12px}
+    .hh-top .dav{font-size:20px}
+    .hh-stats{gap:8px}
+    .hh-stat{padding:13px 12px 12px}
+    .hh-stat .v{font-size:23px}
+    .hh-stat .s{font-size:12px}
+    .hh-seg{width:100%}
+    .hh-seg button{flex:1 1 50%;padding:10px 6px}
+    .hh-statesel{flex:0 0 auto}
+    .hh-search{flex:1 1 150px}
+    .hh-scroll{max-height:72vh}
+    .hh-t th,.hh-t td{padding:9px 7px}
+    .hh-t td.rk{width:30px}
+    .hh-t .c-el,.hh-t .c-tp,.hh-t .c-al,.hh-t .c-ob{display:none}
+    .hh-meta{display:block;font:500 11px/1.4 var(--mono);color:var(--ink-dim);margin-top:4px}
+    .hh-ap{overflow-wrap:anywhere}
+    .hh-bands{gap:8px}
+    .hh-band{padding:12px 11px}
+    .hh-band b{font-size:23px}
+    .hh-band span{font-size:10px;letter-spacing:.04em}
+    .hh-cta{padding:20px 17px}
+    .hh-cta h2{font-size:20px}
+    .hh-cta-btn{width:100%;text-align:center}
+    .hh-sum .hh-c,.hh-sum .hh-e{display:none}
+    .hh-sum .hh-cm{display:block;font:400 12px/1.35 var(--sans);color:var(--ink-dim);margin-top:3px}
+    .hh-sum .hh-f{display:block;margin-top:2px}
+    .hh-sum .hh-f-sep{display:none}
+    .hh-sum th,.hh-sum td{padding:8px 7px}
+    .hh-sum th,.hh-sum th.n{white-space:normal;vertical-align:bottom;letter-spacing:.04em}
+    .hh-sum th:first-child,.hh-sum td.rk{padding-left:2px}
+  }
+</style>
+</head>
+<body>
+<nav class="topnav"><div class="navin">
+  <a class="brand" href="/" style="text-decoration:none"><img src="/favicon.svg" alt=""><b>DensityAlt</b></a>
+  <div class="navlinks">
+    <a class="nl" href="/atmosphere-explorer">Explorer</a>
+    <a class="nl" href="/">Density Altitude</a>
+    <a class="nl" href="/hot-and-high">Hot &amp; High</a>
+    <div class="nl-drop">
+      <button type="button" class="nl-trigger" aria-haspopup="true">Calculators<span class="caret" aria-hidden="true"></span></button>
+      <div class="nl-menu">
+        <a class="nl" href="/pressure-altitude-calculator">Pressure Altitude</a>
+        <a class="nl" href="/true-airspeed-calculator">True Airspeed</a>
+        <a class="nl" href="/crosswind-calculator">Crosswind</a>
+        <a class="nl" href="/takeoff-landing-distance">Takeoff &amp; Landing</a>
+        <a class="nl" href="/cloud-base-calculator">Cloud Base</a>
+        <a class="nl" href="/freezing-level-calculator">Freezing Level</a>
+        <a class="nl" href="/isa-deviation-calculator">ISA Deviation</a>
+        <a class="nl" href="/oxygen-at-altitude-calculator">Oxygen at Altitude</a>
+        <a class="nl" href="/pivotal-altitude-calculator">Pivotal Altitude</a>
+        <a class="nl" href="/horsepower-at-altitude">Horsepower</a>
+        <a class="nl" href="/power-curve">Power Curve</a>
+        <a class="nl" href="/cabin-altitude-calculator">Cabin Altitude</a>
+      </div>
+    </div>
+    <a class="nl" href="/learn/">Learn</a>
+    <a class="nl" href="/#about">About</a>
+  </div>
+  <a class="nav-gh" href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener" aria-label="DensityAlt source code on GitHub" title="Open source — view the code on GitHub"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
+</div></nav>
+
+<div class="wrap">
+
+  <header class="hero rd-hero hh-hero">
+    <div class="kicker"><span class="hh-dot" aria-hidden="true"></span>Live · refreshed every 10 minutes</div>
+    <h1>Hot &amp; High: <span>today's highest density altitudes</span></h1>
+    <p class="rd-lede">Live density altitude at <b>about 300 high and hot US airports</b>, ranked from the latest METARs — plus the US fields with the <b>highest density altitude on a typical summer afternoon</b>.</p>
+    <div class="hh-byline"><img src="/headshot.jpg" alt="Levan Sulakvelidze" width="34" height="34" loading="lazy" decoding="async"><span><strong>Levan Sulakvelidze</strong> · Instrument-rated private pilot · Summer ranking updated October 2026</span></div>
+    <nav class="hh-jump" aria-label="On this page">
+      <a class="chip" href="#live">Live board</a>
+      <a class="chip" href="#summer-ranking">Summer top 50</a>
+      <a class="chip" href="#method">Method</a>
+      <a class="chip" href="#faq">FAQ</a>
+    </nav>
+  </header>
+
+  <section class="rd-tool hh-board" id="live" aria-labelledby="hh-livehead">
+    <div class="hh-boardhead">
+      <h2 id="hh-livehead" class="rd-toolhead">Density altitude right now</h2>
+      <div class="hh-status" id="hhStatus" aria-live="polite"></div>
+    </div>
+
+    <div class="hh-msg" id="hhMsg" role="status"><span class="hh-spin" aria-hidden="true"></span>Loading live METARs for about 300 airports…</div>
+    <noscript><div class="hh-msg err"><strong>The live board needs JavaScript.</strong> The summer ranking below works without it.</div></noscript>
+
+    <div id="hhContent" hidden>
+      <div class="hh-stats" id="hhStats"></div>
+
+      <h3 class="hh-h3">Top 10 right now</h3>
+      <ol class="hh-top" id="hhTop"></ol>
+
+      <h3 class="hh-h3" id="all-airports">All airports</h3>
+      <div class="hh-controls">
+        <div class="hh-seg" role="group" aria-label="Sort by">
+          <button type="button" data-sort="da" aria-pressed="true">Density altitude</button>
+          <button type="button" data-sort="gap" aria-pressed="false">Above field elevation</button>
+        </div>
+        <label class="hh-in hh-statesel"><span class="sr">Filter by state</span><select id="hhState"><option value="">All states</option></select></label>
+        <label class="hh-in hh-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg><span class="sr">Search airports</span><input id="hhSearch" type="search" placeholder="ICAO, name or city" autocomplete="off" spellcheck="false"></label>
+      </div>
+      <div class="hh-count" id="hhCount" aria-live="polite"></div>
+      <div class="hh-scroll" id="hhScroll">
+        <table class="hh-t" id="hhTable">
+          <thead><tr>
+            <th class="rk" scope="col">#</th>
+            <th scope="col">Airport</th>
+            <th class="n c-el" scope="col">Field elev</th>
+            <th class="n c-tp" scope="col">Temp</th>
+            <th class="n c-al" scope="col">Altimeter</th>
+            <th class="n" scope="col" data-col="da" aria-sort="descending"><button type="button" class="hh-thbtn" data-sort="da" aria-pressed="true">DA<i></i></button></th>
+            <th class="n" scope="col" data-col="gap"><button type="button" class="hh-thbtn" data-sort="gap" aria-pressed="false">vs field<i></i></button></th>
+            <th class="n c-ob" scope="col">Observed</th>
+          </tr></thead>
+          <tbody id="hhBody"></tbody>
+        </table>
+      </div>
+      <p class="hh-legend"><span><span class="hh-gap g">&lt; +1,000</span>near field elevation</span><span><span class="hh-gap a">+1,000–2,999</span>noticeably thin</span><span><span class="hh-gap r">+3,000 ft</span>high &amp; hot</span><span>Tap any airport to open it in the calculator.</span></p>
+    </div>
+  </section>
+
+  <section class="da" id="summer-ranking">
+    <h2>US airports with the highest summer density altitude</h2>
+    <p class="desc">Elevation sets the floor; summer heat does the rest. Of US public-use airports that sell fuel, <strong>361 have a typical summer-afternoon density altitude of 6,000&nbsp;ft or more</strong>:</p>
+    <div class="hh-bands">
+      <div class="hh-band b10"><b>39</b><span>at 10,000&nbsp;ft+</span></div>
+      <div class="hh-band b8"><b>121</b><span>at 8,000–10,000&nbsp;ft</span></div>
+      <div class="hh-band b6"><b>201</b><span>at 6,000–8,000&nbsp;ft</span></div>
+    </div>
+    <p class="desc">Lake County Airport (KLXV) in Leadville, Colorado tops the list: on a typical July afternoon your airplane feels close to <strong>13,000&nbsp;ft</strong> of density altitude before it leaves the ground. Here are the top 50, ranked by typical summer-afternoon density altitude — an ordinary July day, not a record one.</p>
+    <div class="tablewrap">
+      <table class="reftable hh-sum">
+        <thead><tr>
+          <th scope="col">#</th>
+          <th scope="col">Airport</th>
+          <th scope="col" class="hh-c">City</th>
+          <th scope="col" class="n hh-e">Elevation</th>
+          <th scope="col" class="n">Typical July high</th>
+          <th scope="col" class="n">Summer DA</th>
+        </tr></thead>
+        <tbody>
+          <tr><td class="rk">1</td><td><a href="/?icao=KLXV">Lake County</a><span class="hh-id">KLXV</span><span class="hh-cm">Leadville, CO · 9,934&nbsp;ft</span></td><td class="hh-c">Leadville, CO</td><td class="n hh-e">9,934&nbsp;ft</td><td class="n">20.7&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>69&nbsp;°F</span></td><td class="n"><b>12,978&nbsp;ft</b></td></tr>
+          <tr><td class="rk">2</td><td><a href="/?icao=KTEX">Telluride Regional</a><span class="hh-id">KTEX</span><span class="hh-cm">Telluride, CO · 9,070&nbsp;ft</span></td><td class="hh-c">Telluride, CO</td><td class="n hh-e">9,070&nbsp;ft</td><td class="n">22.8&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>73&nbsp;°F</span></td><td class="n"><b>12,161&nbsp;ft</b></td></tr>
+          <tr><td class="rk">3</td><td>Mineral County Memorial<span class="hh-id">C24</span><span class="hh-cm">Creede, CO · 8,680&nbsp;ft</span></td><td class="hh-c">Creede, CO</td><td class="n hh-e">8,680&nbsp;ft</td><td class="n">23.8&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>75&nbsp;°F</span></td><td class="n"><b>11,798&nbsp;ft</b></td></tr>
+          <tr><td class="rk">4</td><td>Silver West<span class="hh-id">C08</span><span class="hh-cm">Westcliffe, CO · 8,290&nbsp;ft</span></td><td class="hh-c">Westcliffe, CO</td><td class="n hh-e">8,290&nbsp;ft</td><td class="n">26.2&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>79&nbsp;°F</span></td><td class="n"><b>11,604&nbsp;ft</b></td></tr>
+          <tr><td class="rk">5</td><td><a href="/?icao=KAXX">Angel Fire</a><span class="hh-id">KAXX</span><span class="hh-cm">Angel Fire, NM · 8,380&nbsp;ft</span></td><td class="hh-c">Angel Fire, NM</td><td class="n hh-e">8,380&nbsp;ft</td><td class="n">24.1&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>75&nbsp;°F</span></td><td class="n"><b>11,462&nbsp;ft</b></td></tr>
+          <tr><td class="rk">6</td><td><a href="/?icao=KRCV">Astronaut Kent Rominger</a><span class="hh-id">KRCV</span><span class="hh-cm">Del Norte, CO · 7,955&nbsp;ft</span></td><td class="hh-c">Del Norte, CO</td><td class="n hh-e">7,955&nbsp;ft</td><td class="n">27.3&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>81&nbsp;°F</span></td><td class="n"><b>11,322&nbsp;ft</b></td></tr>
+          <tr><td class="rk">7</td><td><a href="/?icao=KGNB">Granby-Grand County</a><span class="hh-id">KGNB</span><span class="hh-cm">Granby, CO · 8,207&nbsp;ft</span></td><td class="hh-c">Granby, CO</td><td class="n hh-e">8,207&nbsp;ft</td><td class="n">24.4&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>76&nbsp;°F</span></td><td class="n"><b>11,285&nbsp;ft</b></td></tr>
+          <tr><td class="rk">8</td><td><a href="/?icao=KAEJ">Central Colorado Regional</a><span class="hh-id">KAEJ</span><span class="hh-cm">Buena Vista, CO · 7,950&nbsp;ft</span></td><td class="hh-c">Buena Vista, CO</td><td class="n hh-e">7,950&nbsp;ft</td><td class="n">26.4&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>80&nbsp;°F</span></td><td class="n"><b>11,207&nbsp;ft</b></td></tr>
+          <tr><td class="rk">9</td><td><a href="/?icao=KMVI">Monte Vista Municipal</a><span class="hh-id">KMVI</span><span class="hh-cm">Monte Vista, CO · 7,611&nbsp;ft</span></td><td class="hh-c">Monte Vista, CO</td><td class="n hh-e">7,611&nbsp;ft</td><td class="n">29.0&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>84&nbsp;°F</span></td><td class="n"><b>11,100&nbsp;ft</b></td></tr>
+          <tr><td class="rk">10</td><td><a href="/?icao=KASE">Aspen-Pitkin County/Sardy Field</a><span class="hh-id">KASE</span><span class="hh-cm">Aspen, CO · 7,838&nbsp;ft</span></td><td class="hh-c">Aspen, CO</td><td class="n hh-e">7,838&nbsp;ft</td><td class="n">26.6&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>80&nbsp;°F</span></td><td class="n"><b>11,092&nbsp;ft</b></td></tr>
+          <tr><td class="rk">11</td><td><a href="/?icao=KGUC">Gunnison-Crested Butte Regional</a><span class="hh-id">KGUC</span><span class="hh-cm">Gunnison, CO · 7,680&nbsp;ft</span></td><td class="hh-c">Gunnison, CO</td><td class="n hh-e">7,680&nbsp;ft</td><td class="n">27.4&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>81&nbsp;°F</span></td><td class="n"><b>10,992&nbsp;ft</b></td></tr>
+          <tr><td class="rk">12</td><td><a href="/?icao=KBCE">Bryce Canyon</a><span class="hh-id">KBCE</span><span class="hh-cm">Bryce Canyon, UT · 7,590&nbsp;ft</span></td><td class="hh-c">Bryce Canyon, UT</td><td class="n hh-e">7,590&nbsp;ft</td><td class="n">28.3&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>83&nbsp;°F</span></td><td class="n"><b>10,989&nbsp;ft</b></td></tr>
+          <tr><td class="rk">13</td><td><a href="/?icao=KALS">San Luis Valley Regional/Bergman Field</a><span class="hh-id">KALS</span><span class="hh-cm">Alamosa, CO · 7,540&nbsp;ft</span></td><td class="hh-c">Alamosa, CO</td><td class="n hh-e">7,540&nbsp;ft</td><td class="n">28.7&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>84&nbsp;°F</span></td><td class="n"><b>10,975&nbsp;ft</b></td></tr>
+          <tr><td class="rk">14</td><td>Leach<span class="hh-id">1V8</span><span class="hh-cm">Center, CO · 7,598&nbsp;ft</span></td><td class="hh-c">Center, CO</td><td class="n hh-e">7,598&nbsp;ft</td><td class="n">27.8&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>82&nbsp;°F</span></td><td class="n"><b>10,939&nbsp;ft</b></td></tr>
+          <tr><td class="rk">15</td><td><a href="/?icao=KANK">Salida/Harriett Alexander Field</a><span class="hh-id">KANK</span><span class="hh-cm">Salida, CO · 7,523&nbsp;ft</span></td><td class="hh-c">Salida, CO</td><td class="n hh-e">7,523&nbsp;ft</td><td class="n">28.2&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>83&nbsp;°F</span></td><td class="n"><b>10,894&nbsp;ft</b></td></tr>
+          <tr><td class="rk">16</td><td><a href="/?icao=KPSO">Stevens Field</a><span class="hh-id">KPSO</span><span class="hh-cm">Pagosa Springs, CO · 7,663&nbsp;ft</span></td><td class="hh-c">Pagosa Springs, CO</td><td class="n hh-e">7,663&nbsp;ft</td><td class="n">26.5&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>80&nbsp;°F</span></td><td class="n"><b>10,864&nbsp;ft</b></td></tr>
+          <tr><td class="rk">17</td><td>Mc Elroy Airfield<span class="hh-id">20V</span><span class="hh-cm">Kremmling, CO · 7,416&nbsp;ft</span></td><td class="hh-c">Kremmling, CO</td><td class="n hh-e">7,416&nbsp;ft</td><td class="n">27.5&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>82&nbsp;°F</span></td><td class="n"><b>10,678&nbsp;ft</b></td></tr>
+          <tr><td class="rk">18</td><td><a href="/?icao=KEMM">Kemmerer Municipal</a><span class="hh-id">KEMM</span><span class="hh-cm">Kemmerer, WY · 7,289&nbsp;ft</span></td><td class="hh-c">Kemmerer, WY</td><td class="n hh-e">7,289&nbsp;ft</td><td class="n">28.0&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>82&nbsp;°F</span></td><td class="n"><b>10,580&nbsp;ft</b></td></tr>
+          <tr><td class="rk">19</td><td><a href="/?icao=KEVW">Evanston-Uinta County Burns Field</a><span class="hh-id">KEVW</span><span class="hh-cm">Evanston, WY · 7,143&nbsp;ft</span></td><td class="hh-c">Evanston, WY</td><td class="n hh-e">7,143&nbsp;ft</td><td class="n">28.6&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>83&nbsp;°F</span></td><td class="n"><b>10,472&nbsp;ft</b></td></tr>
+          <tr><td class="rk">20</td><td><a href="/?icao=KJTC">Springerville Municipal</a><span class="hh-id">KJTC</span><span class="hh-cm">Springerville, AZ · 7,055&nbsp;ft</span></td><td class="hh-c">Springerville, AZ</td><td class="n hh-e">7,055&nbsp;ft</td><td class="n">29.4&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>85&nbsp;°F</span></td><td class="n"><b>10,460&nbsp;ft</b></td></tr>
+          <tr><td class="rk">21</td><td><a href="/?icao=KLAR">Laramie Regional</a><span class="hh-id">KLAR</span><span class="hh-cm">Laramie, WY · 7,284&nbsp;ft</span></td><td class="hh-c">Laramie, WY</td><td class="n hh-e">7,284&nbsp;ft</td><td class="n">27.0&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>81&nbsp;°F</span></td><td class="n"><b>10,454&nbsp;ft</b></td></tr>
+          <tr><td class="rk">22</td><td><a href="/?icao=KFBR">Fort Bridger</a><span class="hh-id">KFBR</span><span class="hh-cm">Fort Bridger, WY · 7,038&nbsp;ft</span></td><td class="hh-c">Fort Bridger, WY</td><td class="n hh-e">7,038&nbsp;ft</td><td class="n">29.4&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>85&nbsp;°F</span></td><td class="n"><b>10,438&nbsp;ft</b></td></tr>
+          <tr><td class="rk">23</td><td><a href="/?icao=KSKX">Taos Regional</a><span class="hh-id">KSKX</span><span class="hh-cm">Taos, NM · 7,095&nbsp;ft</span></td><td class="hh-c">Taos, NM</td><td class="n hh-e">7,095&nbsp;ft</td><td class="n">28.7&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>84&nbsp;°F</span></td><td class="n"><b>10,424&nbsp;ft</b></td></tr>
+          <tr><td class="rk">24</td><td><a href="/?icao=KMMH">Mammoth Yosemite</a><span class="hh-id">KMMH</span><span class="hh-cm">Mammoth Lakes, CA · 7,135&nbsp;ft</span></td><td class="hh-c">Mammoth Lakes, CA</td><td class="n hh-e">7,135&nbsp;ft</td><td class="n">28.1&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>83&nbsp;°F</span></td><td class="n"><b>10,402&nbsp;ft</b></td></tr>
+          <tr><td class="rk">25</td><td>Monticello<span class="hh-id">U64</span><span class="hh-cm">Monticello, UT · 6,970&nbsp;ft</span></td><td class="hh-c">Monticello, UT</td><td class="n hh-e">6,970&nbsp;ft</td><td class="n">29.6&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>85&nbsp;°F</span></td><td class="n"><b>10,378&nbsp;ft</b></td></tr>
+          <tr><td class="rk">26</td><td>Wayne Wonderland<span class="hh-id">38U</span><span class="hh-cm">Loa, UT · 7,027&nbsp;ft</span></td><td class="hh-c">Loa, UT</td><td class="n hh-e">7,027&nbsp;ft</td><td class="n">29.0&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>84&nbsp;°F</span></td><td class="n"><b>10,377&nbsp;ft</b></td></tr>
+          <tr><td class="rk">27</td><td><a href="/?icao=KFLG">Flagstaff Pulliam</a><span class="hh-id">KFLG</span><span class="hh-cm">Flagstaff, AZ · 7,015&nbsp;ft</span></td><td class="hh-c">Flagstaff, AZ</td><td class="n hh-e">7,015&nbsp;ft</td><td class="n">28.8&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>84&nbsp;°F</span></td><td class="n"><b>10,337&nbsp;ft</b></td></tr>
+          <tr><td class="rk">28</td><td><a href="/?icao=KLAM">Los Alamos</a><span class="hh-id">KLAM</span><span class="hh-cm">Los Alamos, NM · 7,171&nbsp;ft</span></td><td class="hh-c">Los Alamos, NM</td><td class="n hh-e">7,171&nbsp;ft</td><td class="n">26.9&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>80&nbsp;°F</span></td><td class="n"><b>10,303&nbsp;ft</b></td></tr>
+          <tr><td class="rk">29</td><td><a href="/?icao=KSAA">Shively Field</a><span class="hh-id">KSAA</span><span class="hh-cm">Saratoga, WY · 7,014&nbsp;ft</span></td><td class="hh-c">Saratoga, WY</td><td class="n hh-e">7,014&nbsp;ft</td><td class="n">28.5&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>83&nbsp;°F</span></td><td class="n"><b>10,301&nbsp;ft</b></td></tr>
+          <tr><td class="rk">30</td><td><a href="/?icao=KPNA">Ralph Wenz Field</a><span class="hh-id">KPNA</span><span class="hh-cm">Pinedale, WY · 7,096&nbsp;ft</span></td><td class="hh-c">Pinedale, WY</td><td class="n hh-e">7,096&nbsp;ft</td><td class="n">27.3&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>81&nbsp;°F</span></td><td class="n"><b>10,258&nbsp;ft</b></td></tr>
+          <tr><td class="rk">31</td><td><a href="/?icao=KDUB">Dubois Municipal</a><span class="hh-id">KDUB</span><span class="hh-cm">Dubois, WY · 7,299&nbsp;ft</span></td><td class="hh-c">Dubois, WY</td><td class="n hh-e">7,299&nbsp;ft</td><td class="n">25.2&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>77&nbsp;°F</span></td><td class="n"><b>10,257&nbsp;ft</b></td></tr>
+          <tr><td class="rk">32</td><td><a href="/?icao=KBPI">Miley Memorial Field</a><span class="hh-id">KBPI</span><span class="hh-cm">Big Piney, WY · 6,994&nbsp;ft</span></td><td class="hh-c">Big Piney, WY</td><td class="n hh-e">6,994&nbsp;ft</td><td class="n">28.2&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>83&nbsp;°F</span></td><td class="n"><b>10,239&nbsp;ft</b></td></tr>
+          <tr><td class="rk">33</td><td><a href="/?icao=KRKS">Southwest Wyoming Regional</a><span class="hh-id">KRKS</span><span class="hh-cm">Rock Springs, WY · 6,765&nbsp;ft</span></td><td class="hh-c">Rock Springs, WY</td><td class="n hh-e">6,765&nbsp;ft</td><td class="n">30.1&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>86&nbsp;°F</span></td><td class="n"><b>10,184&nbsp;ft</b></td></tr>
+          <tr><td class="rk">34</td><td><a href="/?icao=KGCN">Grand Canyon Ntl Park</a><span class="hh-id">KGCN</span><span class="hh-cm">Grand Canyon, AZ · 6,609&nbsp;ft</span></td><td class="hh-c">Grand Canyon, AZ</td><td class="n hh-e">6,609&nbsp;ft</td><td class="n">31.1&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>88&nbsp;°F</span></td><td class="n"><b>10,111&nbsp;ft</b></td></tr>
+          <tr><td class="rk">35</td><td><a href="/?icao=KRWL">Rawlins Municipal/Harvey Field</a><span class="hh-id">KRWL</span><span class="hh-cm">Rawlins, WY · 6,817&nbsp;ft</span></td><td class="hh-c">Rawlins, WY</td><td class="n hh-e">6,817&nbsp;ft</td><td class="n">28.8&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>84&nbsp;°F</span></td><td class="n"><b>10,092&nbsp;ft</b></td></tr>
+          <tr><td class="rk">36</td><td><a href="/?icao=KLVS">Las Vegas Municipal</a><span class="hh-id">KLVS</span><span class="hh-cm">Las Vegas, NM · 6,877&nbsp;ft</span></td><td class="hh-c">Las Vegas, NM</td><td class="n hh-e">6,877&nbsp;ft</td><td class="n">28.1&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>83&nbsp;°F</span></td><td class="n"><b>10,083&nbsp;ft</b></td></tr>
+          <tr><td class="rk">37</td><td><a href="/?icao=KDRO">Durango-La Plata County</a><span class="hh-id">KDRO</span><span class="hh-cm">Durango, CO · 6,689&nbsp;ft</span></td><td class="hh-c">Durango, CO</td><td class="n hh-e">6,689&nbsp;ft</td><td class="n">29.9&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>86&nbsp;°F</span></td><td class="n"><b>10,067&nbsp;ft</b></td></tr>
+          <tr><td class="rk">38</td><td><a href="/?icao=KCMR">H A Clark Memorial Field</a><span class="hh-id">KCMR</span><span class="hh-cm">Williams, AZ · 6,691&nbsp;ft</span></td><td class="hh-c">Williams, AZ</td><td class="n hh-e">6,691&nbsp;ft</td><td class="n">29.8&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>86&nbsp;°F</span></td><td class="n"><b>10,057&nbsp;ft</b></td></tr>
+          <tr><td class="rk">39</td><td><a href="/?icao=KFLY">Meadow Lake</a><span class="hh-id">KFLY</span><span class="hh-cm">Colorado Springs, CO · 6,878&nbsp;ft</span></td><td class="hh-c">Colorado Springs, CO</td><td class="n hh-e">6,878&nbsp;ft</td><td class="n">27.4&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>81&nbsp;°F</span></td><td class="n"><b>10,000&nbsp;ft</b></td></tr>
+          <tr><td class="rk">40</td><td><a href="/?icao=KSBS">Steamboat Springs/Bob Adams Field</a><span class="hh-id">KSBS</span><span class="hh-cm">Steamboat Springs, CO · 6,882&nbsp;ft</span></td><td class="hh-c">Steamboat Springs, CO</td><td class="n hh-e">6,882&nbsp;ft</td><td class="n">27.3&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>81&nbsp;°F</span></td><td class="n"><b>9,994&nbsp;ft</b></td></tr>
+          <tr><td class="rk">41</td><td><a href="/?icao=KGNT">Grants-Milan Municipal</a><span class="hh-id">KGNT</span><span class="hh-cm">Grants, NM · 6,537&nbsp;ft</span></td><td class="hh-c">Grants, NM</td><td class="n hh-e">6,537&nbsp;ft</td><td class="n">30.8&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>87&nbsp;°F</span></td><td class="n"><b>9,986&nbsp;ft</b></td></tr>
+          <tr><td class="rk">42</td><td><a href="/?icao=KEGE">Eagle County Regional</a><span class="hh-id">KEGE</span><span class="hh-cm">Eagle, CO · 6,547&nbsp;ft</span></td><td class="hh-c">Eagle, CO</td><td class="n hh-e">6,547&nbsp;ft</td><td class="n">30.6&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>87&nbsp;°F</span></td><td class="n"><b>9,975&nbsp;ft</b></td></tr>
+          <tr><td class="rk">43</td><td>Animas Air Park<span class="hh-id">00C</span><span class="hh-cm">Durango, CO · 6,684&nbsp;ft</span></td><td class="hh-c">Durango, CO</td><td class="n hh-e">6,684&nbsp;ft</td><td class="n">29.1&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>84&nbsp;°F</span></td><td class="n"><b>9,964&nbsp;ft</b></td></tr>
+          <tr><td class="rk">44</td><td><a href="/?icao=KGUP">Gallup Municipal</a><span class="hh-id">KGUP</span><span class="hh-cm">Gallup, NM · 6,473&nbsp;ft</span></td><td class="hh-c">Gallup, NM</td><td class="n hh-e">6,473&nbsp;ft</td><td class="n">31.2&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>88&nbsp;°F</span></td><td class="n"><b>9,954&nbsp;ft</b></td></tr>
+          <tr><td class="rk">45</td><td><a href="/?icao=KSRR">Sierra Blanca Regional</a><span class="hh-id">KSRR</span><span class="hh-cm">Ruidoso, NM · 6,814&nbsp;ft</span></td><td class="hh-c">Ruidoso, NM</td><td class="n hh-e">6,814&nbsp;ft</td><td class="n">27.6&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>82&nbsp;°F</span></td><td class="n"><b>9,945&nbsp;ft</b></td></tr>
+          <tr><td class="rk">46</td><td>Big Bear City<span class="hh-id">L35</span><span class="hh-cm">Big Bear City, CA · 6,752&nbsp;ft</span></td><td class="hh-c">Big Bear City, CA</td><td class="n hh-e">6,752&nbsp;ft</td><td class="n">28.1&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>83&nbsp;°F</span></td><td class="n"><b>9,929&nbsp;ft</b></td></tr>
+          <tr><td class="rk">47</td><td>Sandia Airpark Estates East<span class="hh-id">1N1</span><span class="hh-cm">Edgewood, NM · 6,565&nbsp;ft</span></td><td class="hh-c">Edgewood, NM</td><td class="n hh-e">6,565&nbsp;ft</td><td class="n">29.7&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>85&nbsp;°F</span></td><td class="n"><b>9,889&nbsp;ft</b></td></tr>
+          <tr><td class="rk">48</td><td><a href="/?icao=KHDN">Yampa Valley</a><span class="hh-id">KHDN</span><span class="hh-cm">Hayden, CO · 6,606&nbsp;ft</span></td><td class="hh-c">Hayden, CO</td><td class="n hh-e">6,606&nbsp;ft</td><td class="n">28.9&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>84&nbsp;°F</span></td><td class="n"><b>9,844&nbsp;ft</b></td></tr>
+          <tr><td class="rk">49</td><td><a href="/?icao=KSOW">Show Low Regional</a><span class="hh-id">KSOW</span><span class="hh-cm">Show Low, AZ · 6,416&nbsp;ft</span></td><td class="hh-c">Show Low, AZ</td><td class="n hh-e">6,416&nbsp;ft</td><td class="n">30.7&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>87&nbsp;°F</span></td><td class="n"><b>9,824&nbsp;ft</b></td></tr>
+          <tr><td class="rk">50</td><td><a href="/?icao=KDWX">Dixon</a><span class="hh-id">KDWX</span><span class="hh-cm">Dixon, WY · 6,549&nbsp;ft</span></td><td class="hh-c">Dixon, WY</td><td class="n hh-e">6,549&nbsp;ft</td><td class="n">29.3&nbsp;°C <span class="hh-f"><span class="hh-f-sep">/ </span>85&nbsp;°F</span></td><td class="n"><b>9,821&nbsp;ft</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="hh-note">Summer DA assumes standard pressure and the mean July daily high at field elevation (see <a href="#method">method</a>); real afternoons vary by ±1,000&nbsp;ft. Airports shown with an FAA identifier only have no ICAO code or METAR, so they can't appear on the live board.</p>
+  </section>
+
+  <aside class="hh-cta" aria-labelledby="hh-ctahead">
+    <div>
+      <div class="hh-cta-k">For airports, FBOs &amp; flight schools</div>
+      <h2 id="hh-ctahead">Run one of these airports, an FBO or a flight school?</h2>
+      <p>Put a free live density altitude badge on your website — your field's current density altitude from the latest METAR, updated automatically.</p>
+    </div>
+    <a class="hh-cta-btn" href="/airport-badge">Get the free badge →</a>
+  </aside>
+
+  <section class="da hh-prose" id="method">
+    <h2>Method &amp; caveats</h2>
+    <h3>Live board</h3>
+    <p>Each airport's latest METAR from <code>aviationweather.gov</code> supplies the temperature and altimeter setting. Combined with field elevation, density altitude comes from the same formula as the <a href="/">density altitude calculator</a>:</p>
+    <div class="rd-formula">
+      <div class="rd-frow"><span>1 · Pressure altitude</span><code>PA = elevation + (29.92 − altimeter) × 1000</code></div>
+      <div class="rd-frow"><span>2 · ISA temperature</span><code>ISA temp = 15 − 1.98 × PA / 1000  (°C)</code></div>
+      <div class="rd-frow"><span>3 · Density altitude</span><code>DA = PA + 120 × (OAT − ISA temp)</code></div>
+    </div>
+    <p><strong>vs field</strong> is density altitude minus field elevation — how much higher the airplane thinks it is than the runway it's sitting on. It's negative on a cold, high-pressure day. Colors: green below +1,000&nbsp;ft, amber +1,000 to +2,999&nbsp;ft, red +3,000&nbsp;ft or more.</p>
+    <h3>Summer ranking</h3>
+    <p>Summer DA = field elevation + 120 × (mean July daily high − ISA temperature). The July high is the 2024–25 mean daily maximum from the ERA5 reanalysis (via Open-Meteo), taken at field elevation. It assumes standard pressure (29.92&nbsp;inHg) and ignores humidity, so it's a ranking of how hot-and-high each field typically runs — real afternoons vary by ±1,000&nbsp;ft or more.</p>
+    <h3>Which airports</h3>
+    <p>Airports were screened from FAA NASR data (October 2026 cycle): public-use, operational, with fuel available. The live board tracks the roughly 300 of these that report a METAR and have a typical summer-afternoon density altitude of 4,500&nbsp;ft or more.</p>
+    <p class="hh-caveat"><strong>Educational only — not for flight planning.</strong> METARs can be up to an hour old, and conditions change fast on summer afternoons. Before you fly, use your POH performance charts and current official weather.</p>
+  </section>
+
+  <section class="da faq" id="faq">
+    <h2>Frequently asked questions</h2>
+    <div class="faqlist">
+      <details class="faq-item"><summary>Which US airport has the highest density altitude?</summary>
+      <p class="a">Lake County Airport (KLXV) in Leadville, Colorado. At 9,934&nbsp;ft it's the highest public-use airport in North America, and on a typical July afternoon its density altitude is close to 13,000&nbsp;ft. Telluride (KTEX) and Creede (C24) follow at roughly 12,200 and 11,800&nbsp;ft. Leadville usually tops the live board too, but a lower desert field on a hot afternoon can post the biggest jump above its own elevation.</p></details>
+      <details class="faq-item"><summary>Why is density altitude highest on summer afternoons?</summary>
+      <p class="a">Temperature is the big day-to-day driver. Every 1&nbsp;°C above standard adds roughly 120&nbsp;ft of density altitude, and surface temperature peaks in mid-to-late afternoon. A 7,000&nbsp;ft field at 30&nbsp;°C is about 29&nbsp;°C warmer than standard — roughly 3,500&nbsp;ft of extra density altitude — while the same field at dawn may sit only a few hundred feet above its elevation. Low pressure ahead of storms adds more. That's why mountain pilots like to depart early.</p></details>
+      <details class="faq-item"><summary>How much does density altitude hurt takeoff performance?</summary>
+      <p class="a">As a rule of thumb, a normally-aspirated light single needs roughly 10% more takeoff distance for every 1,000&nbsp;ft of density altitude and loses about 3% of its engine power per 1,000&nbsp;ft. At 8,000&nbsp;ft density altitude that's about a quarter less power and a ground roll approaching double the sea-level figure, with climb rate hurt even more. These are rules of thumb only — your POH performance charts govern. Try the <a href="/takeoff-landing-distance">takeoff and landing distance calculator</a> to see the effect.</p></details>
+      <details class="faq-item"><summary>How often is the Hot &amp; High board updated?</summary>
+      <p class="a">The board pulls the latest METAR for every airport and refreshes about every 10 minutes; leave the page open and it updates itself. Most airports issue a METAR once an hour, plus specials when the weather changes, so each row shows its observation time in Zulu and how old it is. The summer ranking is a climatology and changes only when it's re-run with new data.</p></details>
+      <details class="faq-item"><summary>Why isn't my airport on the live board?</summary>
+      <p class="a">The live board tracks about 300 METAR-reporting US airports whose typical summer-afternoon density altitude is 4,500&nbsp;ft or more. Airports without their own weather report — several on the summer list, such as Creede (C24) — can't be shown live. You can still check any airport in the <a href="/">density altitude calculator</a>, which uses the nearest METAR within 25&nbsp;nm.</p></details>
+    </div>
+  </section>
+
+  <div class="hh-author"><img src="/headshot.jpg" alt="Levan Sulakvelidze" width="54" height="54" loading="lazy" decoding="async"><div><strong>Levan Sulakvelidze</strong><p>Instrument-rated private pilot and the builder of DensityAlt. High-and-hot fields are where density altitude stops being a textbook number — it's the difference between a comfortable climb and watching the far end of the runway arrive. This board makes that number obvious before the throttle goes up. <a href="https://www.linkedin.com/in/levansula" rel="noopener">LinkedIn</a> · <a href="https://github.com/levansula23" rel="noopener">GitHub</a></p></div></div>
+
+  <footer>
+    <h4>How the numbers are computed</h4>
+    <div class="calcrefs">
+      <div><b>Atmosphere</b> — International Standard Atmosphere (ISA): the barometric formula in the troposphere (1.98&nbsp;°C / 1000&nbsp;ft lapse) and the isothermal layer above the tropopause (~36,089&nbsp;ft).</div>
+      <div><b>Blood oxygen</b> — alveolar gas equation <code>P_AO₂ = 0.2095·(P − 47) − P_CO₂/0.8</code> feeding the Severinghaus SpO₂ curve. CO₂ falls with altitude, tuned to acute-exposure data (~87% @ 10k, ~72% @ 18k, ~50% @ 25k&nbsp;ft).</div>
+      <div><b>Density altitude</b> — <code>PA = elev + (29.92 − altimeter)·1000</code>, then <code>DA = PA + 120·(OAT − ISA&nbsp;temp)</code>.</div>
+      <div><b>Horsepower</b> — Gagg–Ferrar relation <code>HP ≈ rated·(1.132σ − 0.132)</code>, σ = density ratio at your density altitude; turbos hold rated power to a critical altitude.</div>
+      <div><b>Power curve</b> — parabolic drag polar <code>C_D = C_D0 + C_L²/(πAR·e)</code>; power required = drag × TAS. The region of reversed command is the band from stall up to the minimum-power speed. Drag values are representative estimates and V-speeds (Vs, Va, Vno, Vne) are typical published figures — check your POH; the climb readout is idealized (constant ~80% prop efficiency) and optimistic at low speed.</div>
+      <div><b>Cabin altitude</b> — <code>cabin_P = min(sea level, ambient + ΔP)</code> inverted to an altitude; ΔP is each aircraft's published max pressure differential.</div>
+      <div><b>Data sources</b> — bundled ~110 airports (offline elevation) plus <code>aviationweather.gov</code> METAR for live temp/altimeter (via a same-origin proxy once hosted), falling back to <code>open-meteo.com</code> current weather by coordinates for fields without a METAR.</div>
+      <div><b>References</b> — FAA <i>Pilot's Handbook of Aeronautical Knowledge</i> (FAA-H-8083-25) and <i>Airplane Flying Handbook</i> (FAA-H-8083-3) for density altitude, the FAR&nbsp;91.211 oxygen rules, and the power curve / region of reversed command; J.D.&nbsp;Anderson, <i>Introduction to Flight</i> (parabolic drag polar, power-required = drag&nbsp;×&nbsp;TAS); the alveolar gas equation and Severinghaus SpO₂ relation, with acute-exposure SaO₂ figures from high-altitude physiology literature (e.g. J.B.&nbsp;West). Power-curve V-speeds and the narrow trainer reversed-command band cross-checked against Van's Air Force, GoFly, and Boldmethod.</div>
+    </div>
+    <p class="disclaim">Educational models for healthy unacclimatized adults at acute exposure. Real SpO₂ varies with fitness, acclimatization, and individual physiology. Not for medical or operational flight-planning use.</p>
+    <p class="ghsrc"><strong>Open source.</strong> DensityAlt is built in the open — <a href="https://github.com/levansula23/DensityAlt" target="_blank" rel="noopener">view the code on GitHub</a> to see exactly how every number is computed.</p>
+    <p class="rms">Made with <a href="https://readymadesites.com/" rel="noopener">ReadyMadeSites™</a> — custom calculators, interactive tools &amp; SEO-ready websites that rank.</p>
+  </footer>
+
+</div>
+
+<script src="/app.js"></script>
+<script src="/hot-and-high.js"></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Hot & High: Live Density Altitude at US Airports",
+  "url": "https://densityalt.com/hot-and-high",
+  "description": "Live density altitude at about 300 high, hot US airports, refreshed every 10 minutes, plus the 50 US airports with the highest summer density altitude.",
+  "inLanguage": "en-US",
+  "datePublished": "2026-10-13",
+  "dateModified": "2026-10-13",
+  "image": "https://densityalt.com/og-image.png",
+  "author": {
+    "@type": "Person",
+    "name": "Levan Sulakvelidze",
+    "description": "Instrument-rated private pilot",
+    "sameAs": [
+      "https://www.linkedin.com/in/levansula",
+      "https://www.instagram.com/levansula/",
+      "https://github.com/levansula23"
+    ]
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "DensityAlt",
+    "url": "https://densityalt.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://densityalt.com/og-image.png"
+    }
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "DensityAlt",
+    "url": "https://densityalt.com/"
+  },
+  "about": {
+    "@type": "Thing",
+    "name": "Density altitude"
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "name": "US airports with the highest typical summer density altitude",
+  "description": "Ranking of US public-use airports with fuel by typical summer-afternoon density altitude: field elevation plus 120 ft per degree C that the mean July daily high (2024-25, ERA5 reanalysis via Open-Meteo, at field elevation) exceeds the ISA standard temperature, at standard pressure. 361 airports reach 6,000 ft or more: 39 at 10,000 ft+, 121 at 8,000-10,000 ft and 201 at 6,000-8,000 ft. The top 50 are published on the page.",
+  "url": "https://densityalt.com/hot-and-high#summer-ranking",
+  "creator": {
+    "@type": "Person",
+    "name": "Levan Sulakvelidze",
+    "description": "Instrument-rated private pilot",
+    "sameAs": [
+      "https://www.linkedin.com/in/levansula",
+      "https://www.instagram.com/levansula/",
+      "https://github.com/levansula23"
+    ]
+  },
+  "isAccessibleForFree": true,
+  "dateModified": "2026-10-13",
+  "temporalCoverage": "2024-07-01/2025-07-31",
+  "spatialCoverage": {
+    "@type": "Place",
+    "name": "United States"
+  },
+  "variableMeasured": [
+    "Typical summer-afternoon density altitude (ft)",
+    "Field elevation (ft MSL)",
+    "Mean July daily high temperature (deg C)"
+  ],
+  "measurementTechnique": "Density altitude = elevation + 120 x (mean July daily high - ISA temperature), standard pressure assumed",
+  "citation": [
+    "FAA National Airspace System Resources (NASR), October 2026 cycle",
+    "ERA5 reanalysis (Copernicus/ECMWF) via the Open-Meteo historical weather API"
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Which US airport has the highest density altitude?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Lake County Airport (KLXV) in Leadville, Colorado. At 9,934 ft it's the highest public-use airport in North America, and on a typical July afternoon its density altitude is close to 13,000 ft. Telluride (KTEX) and Creede (C24) follow at roughly 12,200 and 11,800 ft. Leadville usually tops the live board too, but a lower desert field on a hot afternoon can post the biggest jump above its own elevation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why is density altitude highest on summer afternoons?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Temperature is the big day-to-day driver. Every 1 °C above standard adds roughly 120 ft of density altitude, and surface temperature peaks in mid-to-late afternoon. A 7,000 ft field at 30 °C is about 29 °C warmer than standard — roughly 3,500 ft of extra density altitude — while the same field at dawn may sit only a few hundred feet above its elevation. Low pressure ahead of storms adds more. That's why mountain pilots like to depart early."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much does density altitude hurt takeoff performance?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "As a rule of thumb, a normally-aspirated light single needs roughly 10% more takeoff distance for every 1,000 ft of density altitude and loses about 3% of its engine power per 1,000 ft. At 8,000 ft density altitude that's about a quarter less power and a ground roll approaching double the sea-level figure, with climb rate hurt even more. These are rules of thumb only — your POH performance charts govern. Try the takeoff and landing distance calculator to see the effect."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How often is the Hot & High board updated?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The board pulls the latest METAR for every airport and refreshes about every 10 minutes; leave the page open and it updates itself. Most airports issue a METAR once an hour, plus specials when the weather changes, so each row shows its observation time in Zulu and how old it is. The summer ranking is a climatology and changes only when it's re-run with new data."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why isn't my airport on the live board?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The live board tracks about 300 METAR-reporting US airports whose typical summer-afternoon density altitude is 4,500 ft or more. Airports without their own weather report — several on the summer list, such as Creede (C24) — can't be shown live. You can still check any airport in the density altitude calculator, which uses the nearest METAR within 25 nm."
+      }
+    }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://densityalt.com/"},
+    {"@type":"ListItem","position":2,"name":"Hot & High","item":"https://densityalt.com/hot-and-high"}
+  ]
+}
+</script>
+</body>
+</html>

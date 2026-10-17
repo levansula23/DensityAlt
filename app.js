@@ -362,6 +362,7 @@ async function lookupICAO(){
   const st=$('icaoStatus');
   if(!raw){ st.className='icao-status'; st.textContent=''; return; }
   st.className='icao-status loading'; st.innerHTML='<span class="spin"></span>Looking up '+raw+' — fetching live elevation, temperature &amp; altimeter…';
+  if(HOSTED && history.replaceState){ const u=new URL(location.href); u.searchParams.set('icao',raw); history.replaceState(null,'',u); }
   const {elevFt,tempC,altInHg,name,note,estimated}=await wxFetchStation(raw);
   const got=[], missing=[];
   if(elevFt!=null){ $('elev').value=fmt(elevFt); got.push('elevation '+Math.round(elevFt).toLocaleString('en-US')+' ft'); } else missing.push('elevation');
@@ -985,6 +986,8 @@ function setupDA(){
   $('icao').addEventListener('blur',()=>{ const v=$('icao').value.trim().toUpperCase(); if(v && v!==$('icao').dataset.done) lookupICAO(); });
   $('elev').addEventListener('blur',()=>{ const v=$('elev').value.trim(); if(v!=='') $('elev').value=fmt(commaInt(v)); });
   calcDA();
+  const q=(new URLSearchParams(location.search).get('icao')||'').trim().toUpperCase();
+  if(/^[A-Z0-9]{3,4}$/.test(q)){ $('icao').value=q; lookupICAO(); }
   return true;
 }
 
