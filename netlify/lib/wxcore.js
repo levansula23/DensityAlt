@@ -5,6 +5,7 @@
 const AWC = "https://aviationweather.gov/api/data";
 const UA = { "User-Agent": "densityalt.com (+https://densityalt.com)" };
 const FT_PER_M = 3.28084, HPA_TO_INHG = 0.02953, NEAR_NM = 25, LAPSE_C_PER_FT = 0.00198, STALE_S = 3 * 3600;
+const FIELD_ELEV_FT = Object.fromEntries(require("./stations.json").map((s) => [s[0], s[4]]));
 
 async function getJSON(url, ms = 6000) {
   const c = new AbortController();
@@ -120,19 +121,22 @@ async function stationWx(icao) {
   if (!/^[A-Z0-9]{3,4}$/.test(icao)) return null;
   const own = ((await getJSON(`${AWC}/metar?ids=${icao}&format=json`)) || [])[0];
   let name = own && own.name ? tidyName(own.name) : null;
-  let elevFt = own && own.elev != null ? own.elev * FT_PER_M : null;
+  // Field elevation, not the METAR sensor's: bundled list first, then the AWC airport record.
+  let elevFt = FIELD_ELEV_FT[icao] != null ? FIELD_ELEV_FT[icao] : null;
   let lat = own ? own.lat : null, lon = own ? own.lon : null;
+  if (elevFt == null || lat == null) {
+    const apt = ((await getJSON(`${AWC}/airport?ids=${icao}&format=json`)) || [])[0];
+    if (apt) {
+      if (!name && apt.name) name = tidyName(apt.name.replace(/\b\w+/g, (w) => w[0] + w.slice(1).toLowerCase()));
+      if (elevFt == null && apt.elev != null) elevFt = apt.elev * FT_PER_M;
+      if (lat == null) { lat = apt.lat; lon = apt.lon; }
+    }
+  }
+  if (elevFt == null && own && own.elev != null) elevFt = own.elev * FT_PER_M;
+  if (elevFt == null || lat == null) return null;
   if (fresh(own) && own.temp != null && own.altim != null) {
     return finish({ icao, name, elevFt, lat, lon, tempC: own.temp, altInHg: own.altim * HPA_TO_INHG, obsTime: own.obsTime, source: "metar", sourceId: icao, rawOb: own.rawOb });
   }
-  if (elevFt == null || lat == null) {
-    const apt = ((await getJSON(`${AWC}/airport?ids=${icao}&format=json`)) || [])[0];
-    if (!apt) return null;
-    if (!name && apt.name) name = tidyName(apt.name.replace(/\b\w+/g, (w) => w[0] + w.slice(1).toLowerCase()));
-    if (elevFt == null && apt.elev != null) elevFt = apt.elev * FT_PER_M;
-    if (lat == null) { lat = apt.lat; lon = apt.lon; }
-  }
-  if (elevFt == null || lat == null) return null;
   const near = await nearestMetar(lat, lon, icao);
   if (near && near.m.temp != null) {
     const sElevFt = near.m.elev != null ? near.m.elev * FT_PER_M : elevFt;

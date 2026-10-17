@@ -1,6 +1,6 @@
 // Hot & High: live density altitude across ~300 US airports with a summer DA of 4,500 ft or more.
 // GET /api/hot-and-high -> { updated, count, stations: [...] } sorted by density altitude, highest first.
-const { metarsBulk, metarsFor, fresh, finish, tidyName, FT_PER_M, HPA_TO_INHG } = require("../lib/wxcore");
+const { metarsBulk, metarsFor, fresh, finish, tidyName, HPA_TO_INHG } = require("../lib/wxcore");
 const STATIONS = require("../lib/stations.json"); // [icao, name, city, state, elevFt, summerDaFt]
 
 exports.handler = async () => {
@@ -9,7 +9,7 @@ exports.handler = async () => {
   for (const [icao, name, city, state, elev, summerDaFt] of STATIONS) {
     const m = met[icao];
     if (!fresh(m) || m.temp == null || m.altim == null) continue;
-    const w = finish({ elevFt: m.elev != null ? m.elev * FT_PER_M : elev, tempC: m.temp, altInHg: m.altim * HPA_TO_INHG });
+    const w = finish({ elevFt: elev, tempC: m.temp, altInHg: m.altim * HPA_TO_INHG });
     stations.push({ icao, name: name || tidyName(m.name), city, state, ...w, obsTime: m.obsTime, summerDaFt });
   }
   stations.sort((a, b) => b.daFt - a.daFt);
