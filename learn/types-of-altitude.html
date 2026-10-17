@@ -124,7 +124,7 @@
     </div>
 
     <h2 id="at-a-glance">The six altitudes at a glance</h2>
-    <table>
+    <div class="tablewrap"><table>
       <thead><tr><th>Altitude</th><th>Reference datum</th><th>How you get it</th><th>When it matters</th></tr></thead>
       <tbody>
         <tr><td><strong>Indicated</strong></td><td>Local sea-level pressure (Kollsman setting)</td><td>Read straight off the altimeter with the current setting</td><td>Everyday flying, ATC altitude assignments below 18,000&nbsp;ft</td></tr>
@@ -134,7 +134,7 @@
         <tr><td><strong>True</strong></td><td>Mean sea level</td><td>Calibrated altitude corrected for non-standard temperature and pressure</td><td>Terrain and obstacle clearance, cold-weather operations</td></tr>
         <tr><td><strong>Absolute</strong></td><td>The terrain directly below</td><td>Radar altimeter, or true altitude minus terrain elevation</td><td>AGL-based rules, low-level flight, decision heights</td></tr>
       </tbody>
-    </table>
+    </table></div>
 
     <h2 id="indicated">Indicated altitude: what you read</h2>
     <p>Indicated altitude is simply the number on the face of the altimeter when the current local altimeter setting is dialed into the <strong>Kollsman window</strong>. It’s the altitude you fly, the altitude ATC assigns, and the altitude that keeps you separated from other traffic below 18,000&nbsp;ft — because everyone nearby is using the same setting and therefore making the same small errors together.</p>
@@ -217,7 +217,7 @@
     </div>
   </section>
 
-  <div class="article">  <div class="authorbox"><img src="/headshot.jpg" alt="Levan Sulakvelidze" width="54" height="54" loading="lazy" decoding="async"><div><strong>Levan Sulakvelidze</strong><p>Instrument-rated private pilot and the builder of DensityAlt. I fly out of high-and-hot fields in the western U.S., where density altitude isn’t a textbook abstraction — it’s the difference between a comfortable climb and staring down the far end of the runway. I built these tools to make the numbers obvious before the throttle goes up. <a href="https://www.linkedin.com/in/levansula" rel="noopener">LinkedIn</a> · <a href="https://github.com/levansula23" rel="noopener">GitHub</a></p></div></div></div>
+  <div class="article">  <div class="authorbox"><img src="/headshot.jpg" alt="Levan Sulakvelidze" width="54" height="54" loading="lazy" decoding="async"><div><strong>Levan Sulakvelidze</strong><p>Instrument-rated private pilot and the builder of DensityAlt. Based at KMYF in San Diego, I regularly fly into high, hot Southwest fields like Grand Canyon, Flagstaff, Sedona, Page, Big Bear and Las Vegas, where density altitude isn’t a textbook abstraction — it’s the difference between a comfortable climb and staring down the far end of the runway. I built these tools to make the numbers obvious before the throttle goes up. <a href="https://www.linkedin.com/in/levansula" rel="noopener">LinkedIn</a> · <a href="https://github.com/levansula23" rel="noopener">GitHub</a></p></div></div></div>
 
   <footer>
     <h4>How the numbers are computed</h4>
@@ -228,7 +228,7 @@
       <div><b>Horsepower</b> — Gagg–Ferrar relation <code>HP ≈ rated·(1.132σ − 0.132)</code>, σ = density ratio at your density altitude; turbos hold rated power to a critical altitude.</div>
       <div><b>Power curve</b> — parabolic drag polar <code>C_D = C_D0 + C_L²/(πAR·e)</code>; power required = drag × TAS. The region of reversed command is the band from stall up to the minimum-power speed. Drag values are representative estimates and V-speeds (Vs, Va, Vno, Vne) are typical published figures — check your POH; the climb readout is idealized (constant ~80% prop efficiency) and optimistic at low speed.</div>
       <div><b>Cabin altitude</b> — <code>cabin_P = min(sea level, ambient + ΔP)</code> inverted to an altitude; ΔP is each aircraft's published max pressure differential.</div>
-      <div><b>Data sources</b> — bundled ~110 airports (offline elevation) plus <code>aviationweather.gov</code> METAR for live temp/altimeter (via a same-origin proxy once hosted), falling back to <code>open-meteo.com</code> current weather by coordinates for fields without a METAR.</div>
+      <div><b>Data sources</b> — bundled ~260 airports (offline elevation) plus <code>aviationweather.gov</code> METAR for live temp/altimeter (via a same-origin proxy once hosted), falling back to <code>open-meteo.com</code> current weather by coordinates for fields without a METAR.</div>
       <div><b>References</b> — FAA <i>Pilot's Handbook of Aeronautical Knowledge</i> (FAA-H-8083-25) and <i>Airplane Flying Handbook</i> (FAA-H-8083-3) for density altitude, the FAR&nbsp;91.211 oxygen rules, and the power curve / region of reversed command; J.D.&nbsp;Anderson, <i>Introduction to Flight</i> (parabolic drag polar, power-required = drag&nbsp;×&nbsp;TAS); the alveolar gas equation and Severinghaus SpO₂ relation, with acute-exposure SaO₂ figures from high-altitude physiology literature (e.g. J.B.&nbsp;West). Power-curve V-speeds and the narrow trainer reversed-command band cross-checked against Van's Air Force, GoFly, and Boldmethod.</div>
     </div>
     <p class="disclaim">Educational models for healthy unacclimatized adults at acute exposure. Real SpO₂ varies with fitness, acclimatization, and individual physiology. Not for medical or operational flight-planning use.</p>

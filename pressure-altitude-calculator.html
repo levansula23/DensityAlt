@@ -130,6 +130,7 @@
     <p class="desc"><strong>Worked example 1:</strong> Denver (field elevation 5,434 ft) with an altimeter setting of 29.62: PA = 5,434 + (29.92 − 29.62) × 1,000 = 5,434 + 300 = <strong>5,734 ft</strong>. Low pressure raises pressure altitude.</p>
     <p class="desc"><strong>Worked example 2:</strong> The same field on a high-pressure day, altimeter 30.22: PA = 5,434 + (29.92 − 30.22) × 1,000 = 5,434 − 300 = <strong>5,134 ft</strong>. When the setting is above 29.92, the correction is negative — pressure altitude can even be below sea level.</p>
     <p class="desc">Add temperature and you get <a href="/">density altitude</a>: DA = PA + 120 × (OAT − ISA temperature). That's why this page's calculator asks for OAT — it's the classic "PA/DA" one-two used on every performance chart.</p>
+    <p class="desc">Pressure altitude is step one; correcting it for temperature gives density altitude. Our guide shows <a href="/learn/density-altitude">how to calculate density altitude</a> by hand.</p>
   </section>
 
   <section class="da" id="altitude-types">
@@ -205,7 +206,7 @@
       <div><b>Pressure altitude</b> — <code>PA = field elevation + (29.92 − altimeter setting) × 1,000</code>; hPa settings are converted at 1 inHg = 33.8639 hPa.</div>
       <div><b>Density altitude</b> — <code>DA = PA + 120·(OAT − ISA&nbsp;temp)</code>, ISA temp = 15 − 1.98 °C per 1,000 ft of PA.</div>
       <div><b>Atmosphere</b> — International Standard Atmosphere (ISA): the barometric formula in the troposphere (1.98&nbsp;°C / 1000&nbsp;ft lapse) and the isothermal layer above the tropopause (~36,089&nbsp;ft).</div>
-      <div><b>Data sources</b> — bundled ~110 airports (offline elevation) plus <code>aviationweather.gov</code> METAR for live elevation, temperature &amp; altimeter (via a same-origin proxy), falling back to <code>open-meteo.com</code> current weather by coordinates for fields without a METAR.</div>
+      <div><b>Data sources</b> — bundled ~260 airports (offline elevation) plus <code>aviationweather.gov</code> METAR for live elevation, temperature &amp; altimeter (via a same-origin proxy), falling back to <code>open-meteo.com</code> current weather by coordinates for fields without a METAR.</div>
       <div><b>References</b> — FAA <i>Pilot's Handbook of Aeronautical Knowledge</i> (FAA-H-8083-25), FAA AIM 7-2 (altimeter setting procedures), and the ICAO Standard Atmosphere.</div>
     </div>
     <p class="disclaim">Educational tool. Not for medical or operational flight-planning use.</p>

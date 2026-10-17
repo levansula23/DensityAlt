@@ -69,6 +69,7 @@
     <h2>Crosswind Calculator</h2>
     <p class="desc">Enter your runway heading and the wind — or drag the wind arrow around the runway — to break it into crosswind and headwind/tailwind components.</p>
     <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning or dispatch.</strong> Compare results against your aircraft's demonstrated crosswind component and your own limits.</p>
+    <div class="da-note" style="margin:0 0 20px"><strong>Common gotcha: true vs. magnetic.</strong> METAR and TAF winds are in degrees <em>true</em>; ATIS, ASOS/AWOS voice broadcasts, and tower-issued winds are <em>magnetic</em>, and so are runway numbers. Put the wind and the runway in the same reference before you compute: with 12° of magnetic variation, a 20-kt wind 40° off the runway is about 13&nbsp;kt of crosswind (20 × sin&nbsp;40°), but mix the two references and you’d get about 16&nbsp;kt (sin&nbsp;52°) or 9&nbsp;kt (sin&nbsp;28°).</div>
     <div class="da-grid">
       <div class="field">
         <label>Runway Heading</label>
@@ -87,11 +88,12 @@
     <div class="da-out">
       <div class="out hero"><div class="lbl">Crosswind Component</div><div class="v" style="color:var(--accent2)"><span id="xCross">11 R</span></div></div>
       <div class="out"><div class="lbl">Head / Tailwind</div><div class="v" style="color:var(--good)"><span id="xHead">+10</span> kt</div></div>
-      <div class="out"><div class="lbl">Wind Angle</div><div class="v"><span id="xAngle">50</span>°</div></div>
+      <div class="out"><div class="lbl">Wind Angle</div><div class="v"><span id="xAngle">50°</span></div></div>
     </div>
     <canvas id="xChart" class="box" width="900" height="360"></canvas>
     <p class="cap" style="margin:8px 0 0">Drag around the runway to set wind direction. Blue = wind, orange = crosswind, green = headwind.</p>
     <div class="da-note" id="xNote"></div>
+    <p class="desc">Wind is only half the runway picture on a hot day. Learn <a href="/learn/density-altitude">how to calculate density altitude</a> to see what the air is doing to your takeoff roll.</p>
   </section>
 
   <section class="da faq" id="faq">
@@ -103,6 +105,8 @@
       <p class="a">The maximum demonstrated crosswind is the strongest crosswind a test pilot demonstrated at certification — a capability figure, not a hard limit, but beyond it you're in untested territory. Many light trainers show ~15&nbsp;kt. Know your aircraft's number and set a personal limit below it.</p></details>
       <details class="faq-item"><summary>Does a crosswind also reduce your headwind?</summary>
       <p class="a">Yes. The more the wind is off the runway heading, the more becomes crosswind and the less becomes headwind. Past 90° off the nose it's a <em>tailwind</em> — which lengthens takeoff and landing distance and may favor the reciprocal runway.</p></details>
+      <details class="faq-item"><summary>Are METAR winds true or magnetic?</summary>
+      <p class="a"><strong>True.</strong> The wind direction in a METAR or TAF is referenced to true north, while ATIS and ASOS/AWOS voice broadcasts, tower-issued winds, and runway numbers are magnetic (FAA AIM chapter 7). Before you compute a crosswind, put both in the same reference: add westerly or subtract easterly variation to turn a true direction into magnetic. With 12° of variation, a 20-kt wind 40° off the runway is about 13&nbsp;kt of crosswind, but mixing the references would give about 16 or 9&nbsp;kt.</p></details>
     </div>
   </section>
 
@@ -140,7 +144,7 @@
       <div><b>Horsepower</b> — Gagg–Ferrar relation <code>HP ≈ rated·(1.132σ − 0.132)</code>, σ = density ratio at your density altitude; turbos hold rated power to a critical altitude.</div>
       <div><b>Power curve</b> — parabolic drag polar <code>C_D = C_D0 + C_L²/(πAR·e)</code>; power required = drag × TAS. The region of reversed command is the band from stall up to the minimum-power speed. Drag values are representative estimates and V-speeds (Vs, Va, Vno, Vne) are typical published figures — check your POH; the climb readout is idealized (constant ~80% prop efficiency) and optimistic at low speed.</div>
       <div><b>Cabin altitude</b> — <code>cabin_P = min(sea level, ambient + ΔP)</code> inverted to an altitude; ΔP is each aircraft's published max pressure differential.</div>
-      <div><b>Data sources</b> — bundled ~110 airports (offline elevation) plus <code>aviationweather.gov</code> METAR for live temp/altimeter (via a same-origin proxy once hosted), falling back to <code>open-meteo.com</code> current weather by coordinates for fields without a METAR.</div>
+      <div><b>Data sources</b> — bundled ~260 airports (offline elevation) plus <code>aviationweather.gov</code> METAR for live temp/altimeter (via a same-origin proxy once hosted), falling back to <code>open-meteo.com</code> current weather by coordinates for fields without a METAR.</div>
       <div><b>References</b> — FAA <i>Pilot's Handbook of Aeronautical Knowledge</i> (FAA-H-8083-25) and <i>Airplane Flying Handbook</i> (FAA-H-8083-3) for density altitude, the FAR&nbsp;91.211 oxygen rules, and the power curve / region of reversed command; J.D.&nbsp;Anderson, <i>Introduction to Flight</i> (parabolic drag polar, power-required = drag&nbsp;×&nbsp;TAS); the alveolar gas equation and Severinghaus SpO₂ relation, with acute-exposure SaO₂ figures from high-altitude physiology literature (e.g. J.B.&nbsp;West). Power-curve V-speeds and the narrow trainer reversed-command band cross-checked against Van's Air Force, GoFly, and Boldmethod.</div>
     </div>
     <p class="disclaim">Educational models for healthy unacclimatized adults at acute exposure. Real SpO₂ varies with fitness, acclimatization, and individual physiology. Not for medical or operational flight-planning use.</p>
@@ -182,7 +186,8 @@
   "mainEntity": [
     {"@type":"Question","name":"How do you calculate a crosswind component?","acceptedAnswer":{"@type":"Answer","text":"The crosswind component equals wind speed times the sine of the angle between the wind and the runway; the headwind component equals wind speed times the cosine of that angle. For example, a 15-knot wind 50 degrees off the runway gives about 11 knots of crosswind and about 10 knots of headwind."}},
     {"@type":"Question","name":"What is a demonstrated crosswind component?","acceptedAnswer":{"@type":"Answer","text":"The maximum demonstrated crosswind component is the strongest crosswind a test pilot demonstrated during certification — it is a capability figure, not a regulatory limit, but exceeding it means you are beyond tested territory. Many light trainers show roughly 15 knots. Always know your aircraft's figure and set a personal limit below it."}},
-    {"@type":"Question","name":"Does a crosswind also reduce your headwind?","acceptedAnswer":{"@type":"Answer","text":"Yes. The more the wind is off the runway heading, the more of it becomes crosswind and the less becomes headwind. Beyond 90 degrees off the nose the headwind becomes a tailwind, which lengthens your takeoff and landing distance and may favor the reciprocal runway."}}
+    {"@type":"Question","name":"Does a crosswind also reduce your headwind?","acceptedAnswer":{"@type":"Answer","text":"Yes. The more the wind is off the runway heading, the more of it becomes crosswind and the less becomes headwind. Beyond 90 degrees off the nose the headwind becomes a tailwind, which lengthens your takeoff and landing distance and may favor the reciprocal runway."}},
+    {"@type":"Question","name":"Are METAR winds true or magnetic?","acceptedAnswer":{"@type":"Answer","text":"True. The wind direction in a METAR or TAF is referenced to true north, while ATIS and ASOS/AWOS voice broadcasts, tower-issued winds, and runway numbers are magnetic (FAA AIM chapter 7). Before you compute a crosswind, put both in the same reference: add westerly or subtract easterly variation to turn a true direction into magnetic. With 12 degrees of variation, a 20-knot wind 40 degrees off the runway is about 13 knots of crosswind, but mixing the references would give about 16 or 9 knots."}}
   ]
 }
 </script>

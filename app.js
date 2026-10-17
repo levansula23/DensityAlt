@@ -221,12 +221,12 @@ function drawCurve(pao2,sat){
 }
 
 const AIRPORTS={
- KMYF:423,KGAI:539,KSEE:388,KSEZ:4830,KSBA:13,KRNM:1395,KHMT:1512,KOKB:28,KPSP:477,KSGU:2941,KPGA:4316,
+ KMYF:427,KGAI:539,KSEE:388,KSEZ:4830,KSBA:13,KRNM:1395,KHMT:1512,KOKB:28,KPSP:477,KSGU:2884,KPGA:4317,
  KLAX:125,KSMO:177,KBUR:778,KAVX:1602,KGCN:6609,KSAN:17,L06:-210,
  KJFK:13,KLGA:21,KEWR:18,KORD:672,KMDW:620,KATL:1026,KDEN:5434,KSFO:13,KOAK:9,KSJC:62,KSEA:433,KBOS:20,
- KDFW:607,KDAL:487,KLAS:2181,KPHX:1135,KMIA:8,KFLL:65,KMCO:96,KDCA:15,KIAD:313,KBWI:146,KSLC:4227,KMSP:1044,
- KDTW:645,KPHL:36,KCLT:748,KIAH:97,KAUS:542,KPDX:31,KSMF:27,KSAF:6349,KFLG:7014,
- KASE:7838,KTEX:9078,KLXV:9934,KEGE:6548,KJAC:6451,KTRK:5901,KAPA:5885,KBJC:5673,
+ KDFW:607,KDAL:487,KLAS:2183,KPHX:1135,KMIA:8,KFLL:65,KMCO:96,KDCA:15,KIAD:313,KBWI:146,KSLC:4231,KMSP:841,
+ KDTW:645,KPHL:36,KCLT:748,KIAH:97,KAUS:542,KPDX:31,KSMF:27,KSAF:6349,KFLG:7015,
+ KASE:7838,KTEX:9070,KLXV:9934,KEGE:6547,KJAC:6451,KTRK:5904,KAPA:5885,KBJC:5673,
  EGLL:83,EGKK:202,LFPG:392,LFPO:291,EHAM:-11,EDDF:364,EDDM:1487,LIRF:15,LIMC:768,LEMD:1998,LEBL:12,
  LSZH:1416,LOWW:600,EKCH:17,ESSA:137,LPPT:374,LTFM:325,
  OMDB:62,OTHH:13,OERK:2049,LLBG:135,
@@ -236,7 +236,7 @@ const AIRPORTS={
  MMMX:7316,SBGR:2461,SAEZ:67,SCEL:1555,SKBO:8361,SPJC:113,
  FAOR:5558,HECA:382,DNMM:135,HAAB:7625,
  SLLP:13325,ZUDC:14472,VQPR:7333,SPZO:10860,VNKT:4390,VNLK:9334,
- KSDL:1510,KTUS:2643,KABQ:5355,KBOI:2871,KRNO:4415,KGEG:2376,KBZN:4473,KCOS:6187,KGJT:4858,KSUN:5318,KTVL:6264,KMMH:7135,KBIH:4124,KPRC:5045,
+ KSDL:1510,KTUS:2643,KABQ:5355,KBOI:2872,KRNO:4415,KGEG:2385,KBZN:4473,KCOS:6187,KGJT:4861,KSUN:5320,KTVL:6268,KMMH:7135,KBIH:4124,KPRC:5045,
  KSAT:809,KMSY:4,KBNA:599,KSTL:618,KMCI:1026,KCLE:791,KPIT:1203,KCVG:896,KIND:797,KCMH:815,KMKE:723,KSAV:51,KJAX:30,KTPA:26,KPBI:19,KRDU:435,KMEM:341,KOKC:1295,KTUL:677,KOMA:984,KONT:944,KSNA:56,KLGB:60,KVNY:802,KPAO:4,
  PANC:152,PAFA:434,PAJN:21,PHNL:13,PHOG:54,PHTO:38,PHKO:47,
  CYYC:3557,CYEG:2373,CYWG:783,CYOW:374,CYHZ:477,CYQB:244,
@@ -293,7 +293,7 @@ async function nearbyWx(lat,lon,elevFt,tempC,altInHg,skip){
   const [met,mod]=await Promise.all([nearestMetar(lat,lon,skip), modelWxAt(lat,lon)]);
   const from={}, modElev=mod&&mod.elevFt!=null, metElev=met&&met.elevFt!=null;
   if(elevFt==null){
-    if(metElev && (met.nm<=2 || !modElev)){ elevFt=met.elevFt; from.elevation=met.id; }
+    if(metElev && (met.nm<=2 || !modElev)){ elevFt=AIRPORTS[met.id]!=null?AIRPORTS[met.id]:met.elevFt; from.elevation=met.id; }
     else if(modElev){ elevFt=mod.elevFt; from.elevation='model'; }
   }
   let tempAdjusted=false;
@@ -320,13 +320,13 @@ function wxSourceNote(w){
 }
 
 async function wxFetchStation(raw){
-  let elevFt=null, tempC=null, altInHg=null, name=null, lat=null, lon=null;
+  let elevFt=AIRPORTS[raw]!=null?AIRPORTS[raw]:null, tempC=null, altInHg=null, name=null, lat=null, lon=null, stnElevFt=null;
 
   try{
     const r=await fetchT(wxURL('metar',raw),5000);
     if(r.ok){ const d=await r.json(); if(d && d[0]){
       if(d[0].name) name=d[0].name.trim();
-      if(d[0].elev!=null) elevFt=d[0].elev*FT_PER_M;
+      if(d[0].elev!=null) stnElevFt=d[0].elev*FT_PER_M;
       if(d[0].temp!=null) tempC=d[0].temp;
       if(d[0].altim!=null) altInHg=d[0].altim*0.0295300;
       if(d[0].lat!=null){ lat=d[0].lat; lon=d[0].lon; }
@@ -344,7 +344,7 @@ async function wxFetchStation(raw){
     }catch(e){}
   }
 
-  if(elevFt==null && AIRPORTS[raw]!=null) elevFt=AIRPORTS[raw];
+  if(elevFt==null) elevFt=stnElevFt;
   if(lat==null && COORDS[raw]){ lat=COORDS[raw][0]; lon=COORDS[raw][1]; }
 
   let note='', estimated=false;
@@ -752,9 +752,9 @@ function calcPC(){
   let note;
   if(vkt<a.vs){ note='<strong>Hypothetical.</strong> Stall speed is determined by the wing’s critical angle of attack, not by power. Theoretically, if enough thrust were available to "hang the plane on the prop" (not realistic in a trainer), you could sustain flight slower — but the wing stalls first.'; }
   else if(V<Vmp){ note='<strong>Region of reversed command (back side of the power curve).</strong> Flying at very slow speeds requires high angle of attack (AoA, or alpha), so it takes <em>more</em> power to fly <em>slower</em>, nose-high. Inside this region, altitude is controlled with <em>power</em> and airspeed with <em>pitch</em> — which is why being "behind the curve" sneaks up on you on short final.'; }
-  else { note='Front side of the power curve. <b>L/Dmax ≈ '+Math.round(Vmd*MS_KT)+' kt</b> is best lift-to-drag (best glide &amp; max range); the <b>minimum-power speed ≈ '+Math.round(Vmp*MS_KT)+' kt</b> gives best endurance and is near best-rate-of-climb (Vy).'; }
+  else { note='Front side of the power curve. <b>L/Dmax ≈ '+Math.round(Vmd*MS_KT)+' kt</b> is best lift-to-drag (best glide &amp; max range); the <b>minimum-power speed ≈ '+Math.round(Vmp*MS_KT)+' kt</b> gives best endurance; in a real light single, Vx and Vy sit above it — check your POH.'; }
   if(vkt>=a.vs){ note += excessHp>=0
-    ? ' <b>Excess power ≈ '+Math.round(excessHp)+' hp</b> (the green line minus the curve) is the surplus over level-flight power — what climbs or accelerates the airplane. It’s largest near the min-power speed, which is why Vy sits there.'
+    ? ' <b>Excess power ≈ '+Math.round(excessHp)+' hp</b> (the green line minus the curve) is the surplus over level-flight power — what climbs or accelerates the airplane. In this simplified model it peaks at the min-power speed; real propellers lose efficiency when slow, so your POH’s Vy is a bit faster (C172S: 74 KIAS).'
     : ' Here power required exceeds power available, so at this setting you’d be <b>descending</b>, not holding altitude.'; }
   $('pcNote').innerHTML=note;
   drawPC(a,rho);

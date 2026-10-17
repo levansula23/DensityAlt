@@ -107,8 +107,9 @@
       <tr><td><b>120 kt</b></td><td>1,274 ft AGL</td></tr>
       <tr><td><b>130 kt</b></td><td>1,496 ft AGL</td></tr>
     </table></div>
-    <p class="desc"><strong>Why you're always climbing or descending:</strong> the wind changes your groundspeed continuously around the pylon — fastest on the downwind side, slowest upwind. Since pivotal altitude tracks GS², you climb as you accelerate through the downwind side and descend as you slow on the upwind side. The visual cue closes the loop: if the pylon appears to move <em>ahead</em> of your wingtip reference line, you're <strong>below</strong> the pivotal altitude for your current groundspeed — climb back to it. If the pylon appears to fall <em>behind</em> the line, you're <strong>above</strong> it — descend.</p>
+    <p class="desc"><strong>Why you're always climbing or descending:</strong> the wind changes your groundspeed continuously around the pylon — fastest on the downwind side, slowest upwind. Since pivotal altitude tracks GS², you climb as you accelerate through the downwind side and descend as you slow on the upwind side. The visual cue closes the loop: if the pylon appears to move <em>ahead</em> of your wingtip reference line, you're <strong>above</strong> the pivotal altitude for your current groundspeed — descend. If the pylon appears to fall <em>behind</em> the line, you're <strong>below</strong> it — climb.</p>
     <p class="desc">Commercial-checkride staple: examiners love asking for the pivotal altitude at your entry groundspeed. Compute a table for your typical maneuvering speeds before the ride — and remember your entry altitude also has to respect minimum-safe-altitude rules over the terrain. High-elevation practice areas change your <a href="/">density altitude</a> and the true airspeed behind any groundspeed — cross-check with the <a href="/true-airspeed-calculator">TAS calculator</a> on hot days.</p>
+    <p class="desc">High, hot practice areas raise the true airspeed behind every groundspeed. Our guide explains <a href="/learn/density-altitude">how to calculate density altitude</a>.</p>
   </section>
 
   <section class="da faq" id="faq">
@@ -119,7 +120,7 @@
       <details class="faq-item"><summary>Why does pivotal altitude change during eights on pylons?</summary>
       <p class="a">Because it depends on groundspeed squared, and wind changes your groundspeed around each pylon — highest downwind, lowest upwind. You continuously descend into the upwind side and climb on the downwind side to stay on the pivotal altitude.</p></details>
       <details class="faq-item"><summary>What do I do if the pylon moves ahead of my reference line?</summary>
-      <p class="a">The pylon appearing to move ahead means you are below the pivotal altitude for your current groundspeed — climb to catch it. If the pylon drifts behind the line, you are above pivotal altitude — descend. It's the same logic as the wind correction: groundspeed builds on the downwind side, raising the pivotal altitude, so the pylon starts creeping ahead and you climb.</p></details>
+      <p class="a">The pylon appearing to move ahead means you are above the pivotal altitude for your current groundspeed — descend. If the pylon drifts behind the line, you are below pivotal altitude — climb. It ties back to the wind: groundspeed builds on the downwind side, raising the pivotal altitude, so you find yourself below it, the pylon starts slipping behind the line, and you climb.</p></details>
       <details class="faq-item"><summary>Does bank angle or airspeed affect pivotal altitude?</summary>
       <p class="a">No — only groundspeed. Bank angle determines how far from the pylon you fly (steeper bank, closer pylon), and indicated airspeed matters only through the groundspeed it produces with the wind. That's what makes the maneuver such a good test of wind awareness.</p></details>
     </div>
@@ -194,7 +195,7 @@
   "mainEntity": [
     {"@type":"Question","name":"How do you calculate pivotal altitude?","acceptedAnswer":{"@type":"Answer","text":"Square the groundspeed in knots and divide by 11.3 to get feet AGL (with mph, divide by 15). At 100 knots groundspeed: 100² ÷ 11.3 ≈ 885 feet AGL. Add terrain elevation for the MSL altitude to fly."}},
     {"@type":"Question","name":"Why does pivotal altitude change during eights on pylons?","acceptedAnswer":{"@type":"Answer","text":"Because it depends on groundspeed squared, and wind changes your groundspeed around each pylon — highest downwind, lowest upwind. You continuously descend into the upwind side and climb on the downwind side to stay on the pivotal altitude."}},
-    {"@type":"Question","name":"What do I do if the pylon moves ahead of my reference line?","acceptedAnswer":{"@type":"Answer","text":"The pylon appearing to move ahead means you are below the pivotal altitude for your current groundspeed — climb to catch it. If the pylon drifts behind the line, you are above pivotal altitude — descend."}},
+    {"@type":"Question","name":"What do I do if the pylon moves ahead of my reference line?","acceptedAnswer":{"@type":"Answer","text":"The pylon appearing to move ahead means you are above the pivotal altitude for your current groundspeed — descend. If the pylon drifts behind the line, you are below pivotal altitude — climb."}},
     {"@type":"Question","name":"Does bank angle or airspeed affect pivotal altitude?","acceptedAnswer":{"@type":"Answer","text":"No — only groundspeed. Bank angle determines how far from the pylon you fly, and indicated airspeed matters only through the groundspeed it produces with the wind. That is what makes eights on pylons such a good test of wind awareness."}}
   ]
 }

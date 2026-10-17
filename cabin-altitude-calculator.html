@@ -87,11 +87,11 @@
     <div class="rd-result">
       <div class="rd-da">
         <div class="lbl">Cabin Altitude</div>
-        <div class="rd-da-v" style="color:var(--accent2);text-shadow:none"><span id="cabinAlt">7,000</span> <span class="rd-unit">ft</span></div>
+        <div class="rd-da-v" style="color:var(--accent2);text-shadow:none"><span id="cabinAlt">4,638</span> <span class="rd-unit">ft</span></div>
       </div>
       <div class="rd-stats">
         <div class="rd-stat"><span class="lbl">Cabin Blood O₂ (SpO₂)</span><b><span id="cabinSpo2">95%</span></b></div>
-        <div class="rd-stat"><span class="lbl">Max Differential</span><b><span id="cabinDp">8.65</span> psi</b></div>
+        <div class="rd-stat"><span class="lbl">Max Differential</span><b><span id="cabinDp">9.40</span> psi</b></div>
       </div>
     </div>
     <canvas id="cabinChart" class="box" width="900" height="240"></canvas>
@@ -110,6 +110,7 @@
     <h2>How cabin altitude works</h2>
     <p class="desc">Pressurized aircraft don't hold the cabin at sea level — they maintain a maximum pressure <em>differential</em> (ΔP) between inside and outside. Pick an aircraft and cruise altitude to see the cabin altitude your body actually experiences, and the <a href="/atmosphere-explorer">blood oxygen (SpO₂)</a> that comes with it.</p>
     <p class="desc">What your body really feels at cruise: pressurized aircraft hold a maximum pressure differential (ΔP) between inside and outside, so the higher you fly, the higher the cabin altitude climbs unless the system holds more pressure.</p>
+    <p class="desc">Cabin altitude is what your body feels; density altitude is what the airplane feels. Our guide explains <a href="/learn/density-altitude">how to calculate density altitude</a> and why it drives takeoff and climb.</p>
   </section>
 
   <section class="da faq" id="faq">
@@ -156,7 +157,7 @@
       <div><b>Horsepower</b> — Gagg–Ferrar relation <code>HP ≈ rated·(1.132σ − 0.132)</code>, σ = density ratio at your density altitude; turbos hold rated power to a critical altitude.</div>
       <div><b>Power curve</b> — parabolic drag polar <code>C_D = C_D0 + C_L²/(πAR·e)</code>; power required = drag × TAS. The region of reversed command is the band from stall up to the minimum-power speed. Drag values are representative estimates and V-speeds (Vs, Va, Vno, Vne) are typical published figures — check your POH; the climb readout is idealized (constant ~80% prop efficiency) and optimistic at low speed.</div>
       <div><b>Cabin altitude</b> — <code>cabin_P = min(sea level, ambient + ΔP)</code> inverted to an altitude; ΔP is each aircraft's published max pressure differential.</div>
-      <div><b>Data sources</b> — bundled ~110 airports (offline elevation) plus <code>aviationweather.gov</code> METAR for live temp/altimeter (via a same-origin proxy once hosted), falling back to <code>open-meteo.com</code> current weather by coordinates for fields without a METAR.</div>
+      <div><b>Data sources</b> — bundled ~260 airports (offline elevation) plus <code>aviationweather.gov</code> METAR for live temp/altimeter (via a same-origin proxy once hosted), falling back to <code>open-meteo.com</code> current weather by coordinates for fields without a METAR.</div>
       <div><b>References</b> — FAA <i>Pilot's Handbook of Aeronautical Knowledge</i> (FAA-H-8083-25) and <i>Airplane Flying Handbook</i> (FAA-H-8083-3) for density altitude, the FAR&nbsp;91.211 oxygen rules, and the power curve / region of reversed command; J.D.&nbsp;Anderson, <i>Introduction to Flight</i> (parabolic drag polar, power-required = drag&nbsp;×&nbsp;TAS); the alveolar gas equation and Severinghaus SpO₂ relation, with acute-exposure SaO₂ figures from high-altitude physiology literature (e.g. J.B.&nbsp;West). Power-curve V-speeds and the narrow trainer reversed-command band cross-checked against Van's Air Force, GoFly, and Boldmethod.</div>
     </div>
     <p class="disclaim">Educational models for healthy unacclimatized adults at acute exposure. Real SpO₂ varies with fitness, acclimatization, and individual physiology. Not for medical or operational flight-planning use.</p>
