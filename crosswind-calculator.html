@@ -72,16 +72,16 @@
     <div class="da-note" style="margin:0 0 20px"><strong>Common gotcha: true vs. magnetic.</strong> METAR and TAF winds are in degrees <em>true</em>; ATIS, ASOS/AWOS voice broadcasts, and tower-issued winds are <em>magnetic</em>, and so are runway numbers. Put the wind and the runway in the same reference before you compute: with 12° of magnetic variation, a 20-kt wind 40° off the runway is about 13&nbsp;kt of crosswind (20 × sin&nbsp;40°), but mix the two references and you’d get about 16&nbsp;kt (sin&nbsp;52°) or 9&nbsp;kt (sin&nbsp;28°).</div>
     <div class="da-grid">
       <div class="field">
-        <label>Runway Heading</label>
+        <label for="xRwy">Runway Heading</label>
         <div class="in"><input id="xRwy" type="number" min="0" max="360" value="90"><span class="unit">° mag</span></div>
         <div class="field-hint">e.g. runway 09 = <b>90</b>, runway 27 = <b>270</b></div>
       </div>
       <div class="field">
-        <label>Wind Direction</label>
+        <label for="xWdir">Wind Direction</label>
         <div class="in"><input id="xWdir" type="number" min="0" max="360" value="140"><span class="unit">° from</span></div>
       </div>
       <div class="field">
-        <label>Wind Speed</label>
+        <label for="xWspd">Wind Speed</label>
         <div class="in"><input id="xWspd" type="number" min="0" value="15"><span class="unit">kt</span></div>
       </div>
     </div>
@@ -102,7 +102,7 @@
       <details class="faq-item"><summary>How do you calculate a crosswind component?</summary>
       <p class="a">Crosswind = wind speed × sin(angle between wind and runway); headwind = wind speed × cos(angle). A 15-kt wind 50° off the runway gives about <strong>11 kt crosswind</strong> and about <strong>10 kt headwind</strong>.</p></details>
       <details class="faq-item"><summary>What is a demonstrated crosswind component?</summary>
-      <p class="a">The maximum demonstrated crosswind is the strongest crosswind a test pilot demonstrated at certification — a capability figure, not a hard limit, but beyond it you're in untested territory. Many light trainers show ~15&nbsp;kt. Know your aircraft's number and set a personal limit below it.</p></details>
+      <p class="a">The maximum demonstrated crosswind is the strongest crosswind a test pilot demonstrated at certification — a capability figure, not a hard limit, but beyond it you're in untested territory. Many light trainers show ~15&nbsp;kt. Know your aircraft's number and set a personal limit below it, and compare it with the gust speed, not just the steady wind — a 15-gusting-25 kt wind 50° off the runway is about 19 kt of crosswind in the gusts, not 11.</p></details>
       <details class="faq-item"><summary>Does a crosswind also reduce your headwind?</summary>
       <p class="a">Yes. The more the wind is off the runway heading, the more becomes crosswind and the less becomes headwind. Past 90° off the nose it's a <em>tailwind</em> — which lengthens takeoff and landing distance and may favor the reciprocal runway.</p></details>
       <details class="faq-item"><summary>Are METAR winds true or magnetic?</summary>
@@ -185,7 +185,7 @@
   "@type": "FAQPage",
   "mainEntity": [
     {"@type":"Question","name":"How do you calculate a crosswind component?","acceptedAnswer":{"@type":"Answer","text":"The crosswind component equals wind speed times the sine of the angle between the wind and the runway; the headwind component equals wind speed times the cosine of that angle. For example, a 15-knot wind 50 degrees off the runway gives about 11 knots of crosswind and about 10 knots of headwind."}},
-    {"@type":"Question","name":"What is a demonstrated crosswind component?","acceptedAnswer":{"@type":"Answer","text":"The maximum demonstrated crosswind component is the strongest crosswind a test pilot demonstrated during certification — it is a capability figure, not a regulatory limit, but exceeding it means you are beyond tested territory. Many light trainers show roughly 15 knots. Always know your aircraft's figure and set a personal limit below it."}},
+    {"@type":"Question","name":"What is a demonstrated crosswind component?","acceptedAnswer":{"@type":"Answer","text":"The maximum demonstrated crosswind component is the strongest crosswind a test pilot demonstrated during certification — it is a capability figure, not a regulatory limit, but exceeding it means you are beyond tested territory. Many light trainers show roughly 15 knots. Always know your aircraft's figure and set a personal limit below it, and compare it with the gust speed, not just the steady wind: a 15-gusting-25 knot wind 50 degrees off the runway is about 19 knots of crosswind in the gusts, not 11."}},
     {"@type":"Question","name":"Does a crosswind also reduce your headwind?","acceptedAnswer":{"@type":"Answer","text":"Yes. The more the wind is off the runway heading, the more of it becomes crosswind and the less becomes headwind. Beyond 90 degrees off the nose the headwind becomes a tailwind, which lengthens your takeoff and landing distance and may favor the reciprocal runway."}},
     {"@type":"Question","name":"Are METAR winds true or magnetic?","acceptedAnswer":{"@type":"Answer","text":"True. The wind direction in a METAR or TAF is referenced to true north, while ATIS and ASOS/AWOS voice broadcasts, tower-issued winds, and runway numbers are magnetic (FAA AIM chapter 7). Before you compute a crosswind, put both in the same reference: add westerly or subtract easterly variation to turn a true direction into magnetic. With 12 degrees of variation, a 20-knot wind 40 degrees off the runway is about 13 knots of crosswind, but mixing the references would give about 16 or 9 knots."}}
   ]

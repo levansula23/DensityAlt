@@ -68,7 +68,7 @@
     <h2 id="rd-toolhead" class="rd-toolhead">Calculate density altitude</h2>
 
     <div class="field airport-row">
-      <label>Airport (ICAO) — autofills field elevation</label>
+      <label for="icao">Airport (ICAO) — autofills field elevation</label>
       <div class="lookup-wrap">
         <div class="in" style="flex:1;min-width:260px"><input id="icao" type="text" placeholder="e.g. KGAI, KMYF, KASE" maxlength="4"></div>
         <button id="icaoBtn" class="lookup">Look&nbsp;up</button>
@@ -88,11 +88,11 @@
 
     <div class="da-grid">
       <div class="field">
-        <label>Field Elevation</label>
+        <label for="elev">Field Elevation</label>
         <div class="in"><input id="elev" type="text" inputmode="numeric" value="5,000"><span class="unit">ft MSL</span></div>
       </div>
       <div class="field">
-        <label>Outside Air Temp</label>
+        <label for="oat">Outside Air Temp</label>
         <div class="in"><input id="oat" type="number" value="30"><button type="button" id="oatUnit" class="unit unit-toggle" title="Switch between Celsius and Fahrenheit">°C</button></div>
       </div>
       <div class="field">
@@ -131,14 +131,14 @@
     <h2>How density altitude works</h2>
     <p class="desc"><strong>Density altitude is pressure altitude corrected for nonstandard temperature</strong> — the altitude in the standard atmosphere where the air density matches what your aircraft is actually flying in. It's the altitude your aircraft <em>thinks</em> it's at. On a hot day at a high-elevation field, thin air robs lift, propeller thrust, and engine power — even though your altimeter still reads field elevation — which is why aircraft climb and accelerate so poorly when it's high and hot.</p>
     <div class="rd-formula">
-      <div class="rd-frow"><span>1 · Pressure altitude</span><code>PA = field elevation + (29.92 − altimeter) × 1000</code></div>
+      <div class="rd-frow"><span>1 · Pressure altitude</span><code>PA ≈ field elevation + (29.92 − altimeter) × 1000</code></div>
       <div class="rd-frow"><span>2 · Density altitude</span><code>DA = PA + 120 × (OAT − ISA temp)</code></div>
       <div class="rd-fnote">ISA temperature = 15&nbsp;°C − about 2&nbsp;°C per 1,000&nbsp;ft of pressure altitude.</div>
     </div>
     <details class="rd-worked"><summary>Worked example — 5,000&nbsp;ft field, 30&nbsp;°C, 29.92&quot;</summary>
       <p class="a">The altimeter is standard, so pressure altitude = the 5,000&nbsp;ft field elevation. ISA temperature at 5,000&nbsp;ft ≈ 15 − 2×5 = 5&nbsp;°C, so 30&nbsp;°C is 25&nbsp;°C warmer than standard (ISA+25). Density altitude = 5,000 + 120 × 25 = <b>8,000&nbsp;ft</b> — your aircraft performs as if it were most of the way to 8,000&nbsp;ft while parked at a 5,000&nbsp;ft field. The calculator above shows ≈7,988&nbsp;ft using the exact ISA lapse rate.</p>
     </details>
-    <p class="desc">Read the full guide: <a href="/learn/density-altitude">What is density altitude?</a></p>
+    <p class="desc">The calculator assumes dry air. Humid air is slightly less dense, which can add a few hundred feet of density altitude on a hot, humid day, and the FAA's Density Altitude pamphlet (FAA-P-8740-2) advises adding 10 percent to your computed takeoff distance and expecting a reduced climb rate when humidity is high. Read the full guide: <a href="/learn/density-altitude">What is density altitude?</a></p>
   </section>
 
   <section class="da" id="more-tools">
@@ -219,8 +219,8 @@
           <div class="in"><input type="email" name="email" placeholder="you@example.com"></div>
         </div>
         <div class="field">
-          <label>Topic</label>
-          <div class="in"><select name="topic"><option>Bug report</option><option>Feature idea</option><option>Wrong number</option><option>Something else</option></select></div>
+          <label for="fbTopic">Topic</label>
+          <div class="in"><select id="fbTopic" name="topic"><option>Bug report</option><option>Feature idea</option><option>Wrong number</option><option>Something else</option></select></div>
         </div>
       </div>
       <div class="field" style="margin-top:18px">

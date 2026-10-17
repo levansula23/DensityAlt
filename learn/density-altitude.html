@@ -154,7 +154,7 @@
     <p class="desc">Density altitude is the altitude your aircraft <em>thinks</em> it's at. On a hot day at a high-elevation field, thin air robs lift, propeller thrust, and engine power — even though your altimeter reads field elevation.</p>
     <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning, dispatch, or weight-and-balance.</strong> Always fly the numbers in your POH and current official weather.</p>
     <div class="field airport-row">
-      <label>Airport (ICAO) — autofills field elevation</label>
+      <label for="icao">Airport (ICAO) — autofills field elevation</label>
       <div class="lookup-wrap">
         <div class="in" style="flex:1;min-width:260px"><input id="icao" type="text" placeholder="e.g. KGAI, KMYF, KASE" maxlength="4"></div>
         <button id="icaoBtn" class="lookup">Look&nbsp;up</button>
@@ -173,16 +173,16 @@
     </div>
     <div class="da-grid">
       <div class="field">
-        <label>Field Elevation</label>
+        <label for="elev">Field Elevation</label>
         <div class="in"><input id="elev" type="text" inputmode="numeric" value="5,000"><span class="unit">ft MSL</span></div>
       </div>
       <div class="field">
-        <label>Outside Air Temp</label>
+        <label for="oat">Outside Air Temp</label>
         <div class="in"><input id="oat" type="number" value="30"><button type="button" id="oatUnit" class="unit unit-toggle" title="Switch between Celsius and Fahrenheit">°C</button></div>
         <div class="field-hint">tap the <b>°C</b> button to switch to <b>°F</b></div>
       </div>
       <div class="field">
-        <label>Altimeter Setting</label>
+        <label for="altim">Altimeter Setting</label>
         <div class="in"><input id="altim" type="number" step="0.01" value="29.92"><span class="unit">inHg</span></div>
       </div>
     </div>

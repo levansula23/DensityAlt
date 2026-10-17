@@ -73,15 +73,15 @@
     <p class="rd-cap" style="margin:0 0 16px">Temp/dew point are in every METAR, e.g. 25/13. Add field elevation for MSL.</p>
     <div class="da-grid">
       <div class="field">
-        <label>Surface Temperature</label>
+        <label for="cbT">Surface Temperature</label>
         <div class="in"><input id="cbT" type="number" value="25"><button type="button" id="cbUnit" class="unit unit-toggle" title="Switch between Celsius and Fahrenheit">°C</button></div>
       </div>
       <div class="field">
-        <label>Dew Point</label>
+        <label for="cbTd">Dew Point</label>
         <div class="in"><input id="cbTd" type="number" value="13"><button type="button" id="cbUnit2" class="unit unit-toggle" title="Switch between Celsius and Fahrenheit">°C</button></div>
       </div>
       <div class="field">
-        <label>Field Elevation <span style="font-weight:400">(optional)</span></label>
+        <label for="cbElev">Field Elevation <span style="font-weight:400">(optional)</span></label>
         <div class="in"><input id="cbElev" type="text" inputmode="numeric" value="0"><span class="unit">ft</span></div>
       </div>
     </div>
@@ -103,8 +103,8 @@
   <section class="da" id="formula">
     <h2>The cloud base formula</h2>
     <p class="desc">Rising air cools at about 2.5&nbsp;°C per 1,000 ft faster than its dew point falls — so the gap between temperature and dew point tells you where cloud forms. Enter the surface temperature and dew point (straight off any METAR) to estimate the cumulus cloud base in feet AGL and MSL. Pairs naturally with the <a href="/">density altitude calculator</a> for a same-day performance picture.</p>
-    <p class="desc">Temperature and dew point are in every METAR (e.g. <b>25/13</b> = 25&nbsp;°C over a 13&nbsp;°C dew point). Add your field elevation to get the base in MSL too. This rule estimates fair-weather cumulus bases; verify ceilings with METARs, TAFs, and area forecasts.</p>
-    <p class="desc"><strong>Cloud base (ft AGL) ≈ (temperature − dew point) ÷ 2.5&nbsp;°C × 1,000</strong> — or ÷ 4.4 when working in °F. It works because unsaturated rising air cools at the dry adiabatic lapse rate (~3&nbsp;°C per 1,000 ft) while its dew point falls only ~0.5&nbsp;°C per 1,000 ft; the two converge at ~2.5&nbsp;°C per 1,000 ft, and where they meet, water vapor condenses into cloud.</p>
+    <p class="desc">Temperature and dew point are in every METAR (e.g. <b>25/13</b> = 25&nbsp;°C over a 13&nbsp;°C dew point). Add your field elevation to get the base in MSL too. This rule estimates fair-weather cumulus bases; verify ceilings with METARs, TAFs, and the Graphical Forecasts for Aviation (GFA).</p>
+    <p class="desc"><strong>Cloud base (ft AGL) ≈ (temperature − dew point in °C) ÷ 2.5 × 1,000</strong> — or, working in °F, <strong>(temperature − dew point in °F) ÷ 4.4 × 1,000</strong>. Both are approximations of the same rule, so they differ by about 2%. It works because unsaturated rising air cools at the dry adiabatic lapse rate (~3&nbsp;°C per 1,000 ft) while its dew point falls only ~0.5&nbsp;°C per 1,000 ft; the two converge at roughly 2.4–2.5&nbsp;°C (4.4&nbsp;°F) per 1,000 ft, and where they meet, water vapor condenses into cloud.</p>
     <p class="desc"><strong>Worked example:</strong> METAR reads 25/13. Spread = 12&nbsp;°C. Base ≈ 12 ÷ 2.5 × 1,000 = <strong>4,800 ft AGL</strong>. Over a 1,200 ft field elevation, that's a base near <strong>6,000 ft MSL</strong> — matching how ATIS and METARs report ceilings AGL while your altimeter reads MSL.</p>
     <p class="desc">The rule only fits <strong>convective (cumulus) cloud in well-mixed daytime air</strong>. Stratus, frontal lifting, upslope cloud, and nighttime inversions don't obey it — that's why a summer afternoon forecast works beautifully and a marine-layer morning doesn't.</p>
     <p class="desc">The same OAT that sets your cloud base feeds your takeoff numbers on a hot day. See <a href="/learn/density-altitude">how to calculate density altitude</a>.</p>
@@ -114,7 +114,7 @@
     <h2>Frequently asked questions</h2>
     <div class="faqlist">
       <details class="faq-item"><summary>How do you calculate cloud base from temperature and dew point?</summary>
-      <p class="a">Divide the temperature/dew point spread in °C by 2.5 and multiply by 1,000 to get the estimated cumulus base in feet above ground (in °F, divide by 4.4). A 10&nbsp;°C spread puts the base near 4,000 ft AGL. Add field elevation for the MSL value.</p></details>
+      <p class="a">Divide the temperature/dew point spread in °C by 2.5 (or the spread in °F by 4.4) and multiply by 1,000 to get the estimated cumulus base in feet above ground — both are approximations of the same ~2.4&nbsp;°C (4.4&nbsp;°F) per 1,000 ft convergence. A 10&nbsp;°C spread puts the base near 4,000 ft AGL. Add field elevation for the MSL value.</p></details>
       <details class="faq-item"><summary>Is the calculated cloud base AGL or MSL?</summary>
       <p class="a">The formula gives height above the ground (AGL), because the spread is measured at the surface. Add the field elevation to convert to MSL — the number that matches your altimeter. METAR and ATIS ceilings are reported AGL.</p></details>
       <details class="faq-item"><summary>Why doesn't the estimate match the METAR ceiling?</summary>
@@ -152,7 +152,7 @@
   <footer>
     <h4>How the numbers are computed</h4>
     <div class="calcrefs">
-      <div><b>Cloud base</b> — <code>base (ft AGL) ≈ spread ÷ 2.5 °C × 1,000</code> (÷ 4.4 °F): the dry adiabatic lapse rate (~3 °C/1,000 ft) converging with the dew-point lapse (~0.5 °C/1,000 ft) in rising unsaturated air.</div>
+      <div><b>Cloud base</b> — <code>base (ft AGL) ≈ spread(°C) ÷ 2.5 × 1,000</code> or <code>spread(°F) ÷ 4.4 × 1,000</code> (both approximate the ~2.44 °C / 4.4 °F per 1,000 ft convergence in the FAA PHAK, chapter 12): the dry adiabatic lapse rate (~3 °C/1,000 ft) converging with the dew-point lapse (~0.5 °C/1,000 ft) in rising unsaturated air.</div>
       <div><b>Atmosphere</b> — International Standard Atmosphere (ISA): the barometric formula in the troposphere (1.98&nbsp;°C / 1000&nbsp;ft lapse) and the isothermal layer above the tropopause (~36,089&nbsp;ft).</div>
       <div><b>References</b> — FAA <i>Pilot's Handbook of Aeronautical Knowledge</i> (FAA-H-8083-25) and <i>Aviation Weather Handbook</i> (FAA-H-8083-28) for lapse rates and convective cloud formation.</div>
     </div>
@@ -193,7 +193,7 @@
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
-    {"@type":"Question","name":"How do you calculate cloud base from temperature and dew point?","acceptedAnswer":{"@type":"Answer","text":"Divide the temperature/dew point spread in Celsius by 2.5 and multiply by 1,000 to get the estimated cumulus base in feet above ground (in Fahrenheit, divide by 4.4). A 10-degree-Celsius spread puts the base near 4,000 feet AGL. Add field elevation for the MSL value."}},
+    {"@type":"Question","name":"How do you calculate cloud base from temperature and dew point?","acceptedAnswer":{"@type":"Answer","text":"Divide the temperature/dew point spread in Celsius by 2.5 (or the spread in Fahrenheit by 4.4) and multiply by 1,000 to get the estimated cumulus base in feet above ground. Both are approximations of the same convergence of about 2.4 degrees Celsius (4.4 degrees Fahrenheit) per 1,000 feet. A 10-degree-Celsius spread puts the base near 4,000 feet AGL. Add field elevation for the MSL value."}},
     {"@type":"Question","name":"Is the calculated cloud base AGL or MSL?","acceptedAnswer":{"@type":"Answer","text":"The formula gives height above the ground (AGL), because the spread is measured at the surface. Add the field elevation to convert to MSL — the number that matches your altimeter. METAR and ATIS ceilings are reported AGL."}},
     {"@type":"Question","name":"Why doesn't the estimate match the METAR ceiling?","acceptedAnswer":{"@type":"Answer","text":"The rule assumes convectively rising surface air, so it predicts fair-weather cumulus bases. If cloud formed by frontal lifting, stratus, or an inversion sits overhead, the real ceiling can be far from the estimate. Treat it as a planning cross-check, never a substitute for reported ceilings."}},
     {"@type":"Question","name":"What happens when the spread is zero?","acceptedAnswer":{"@type":"Answer","text":"Temperature at the dew point means saturated surface air — fog or a ceiling at or near the surface. A closing temperature/dew point spread at dusk is a classic fog setup."}}
