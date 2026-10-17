@@ -75,7 +75,7 @@
 
     <div class="panelstack">
       <div class="controls">
-        <div class="alt-readout"><span id="altFt">0</span> <small>ft</small> &nbsp;·&nbsp; <span id="altM" style="font-size:18px;color:var(--ink-dim)">0 m</span></div>
+        <div class="alt-readout"><span id="altFt">500</span> <small>ft</small> &nbsp;·&nbsp; <span id="altM" style="font-size:18px;color:var(--ink-dim)">152 m</span></div>
         <input id="slider" type="range" min="0" max="65000" step="100" value="500">
         <div class="presets">
           <button class="chip" data-alt="0">Sea level</button>
@@ -93,49 +93,49 @@
       <div class="grid">
         <div class="card">
           <div class="lbl">Air Pressure</div>
-          <div class="val"><span id="pHpa">752</span> <small>hPa</small></div>
-          <div class="bar"><i id="pBar" style="width:74%"></i></div>
-          <div class="pct"><span id="pInHg">22.22</span> inHg · <span id="pPct">74%</span> of sea level</div>
+          <div class="val"><span id="pHpa">995</span> <small>hPa</small></div>
+          <div class="bar"><i id="pBar" style="width:98.2%"></i></div>
+          <div class="pct"><span id="pInHg">29.38</span> inHg · <span id="pPct">98%</span> of sea level</div>
         </div>
         <div class="card">
           <div class="lbl">Air Density</div>
-          <div class="val"><span id="rho">0.96</span> <small>kg/m³</small></div>
-          <div class="bar"><i id="rhoBar" style="width:78%"></i></div>
-          <div class="pct"><span id="rhoPct">78%</span> of sea level</div>
+          <div class="val"><span id="rho">1.21</span> <small>kg/m³</small></div>
+          <div class="bar"><i id="rhoBar" style="width:98.5%"></i></div>
+          <div class="pct"><span id="rhoPct">99%</span> of sea level</div>
         </div>
         <div class="card">
           <div class="lbl">Outside Temp (ISA)</div>
-          <div class="val"><span id="tC">-1</span> <small>°C</small></div>
-          <div class="bar"><i id="tBar" style="width:60%;background:linear-gradient(90deg,#ff6a45,#ffb84d)"></i></div>
-          <div class="pct"><span id="tF">30</span> °F</div>
+          <div class="val"><span id="tC">14</span> <small>°C</small></div>
+          <div class="bar"><i id="tBar" style="width:98.7%;background:linear-gradient(90deg,#ff6a45,#ffb84d)"></i></div>
+          <div class="pct"><span id="tF">57</span> °F</div>
         </div>
         <div class="card">
           <div class="lbl">Ambient O₂ pressure</div>
-          <div class="val"><span id="po2">118</span> <small>mmHg</small></div>
-          <div class="bar"><i id="po2Bar" style="width:74%"></i></div>
+          <div class="val"><span id="po2">156</span> <small>mmHg</small></div>
+          <div class="bar"><i id="po2Bar" style="width:98.2%"></i></div>
           <div class="pct">sea level = 159 mmHg</div>
         </div>
         <div class="card">
           <div class="lbl">In-lung O₂ (alveolar)</div>
-          <div class="val"><span id="pao2">74</span> <small>mmHg</small></div>
-          <div class="bar"><i id="pao2Bar" style="width:74%;background:linear-gradient(90deg,#7cf,#b9a3ff)"></i></div>
+          <div class="val"><span id="pao2">97</span> <small>mmHg</small></div>
+          <div class="bar"><i id="pao2Bar" style="width:96.5%;background:linear-gradient(90deg,#7cf,#b9a3ff)"></i></div>
           <div class="pct">sea level ≈ 100 mmHg</div>
         </div>
         <div class="spo2">
           <div class="lbl">Blood O₂ · SpO₂</div>
-          <div class="big" id="spo2">96<small>%</small></div>
+          <div class="big" id="spo2">98<small>%</small></div>
           <div class="feel" id="feel">Normal — no impairment</div>
         </div>
       </div>
 
-      <div class="warn-row" id="flags"></div>
+      <div class="warn-row" id="flags"><div class="flag ok">✓ No supplemental oxygen required</div></div>
 
       <div class="strip">
         <div class="viz">
           <h3>Air molecules per cubic metre</h3>
           <p class="cap">The dots are illustrative; the real number density (from <code>n/V = P/k<sub>B</sub>T</code>) is below — and it's staggering.</p>
           <canvas id="air" class="box" width="320" height="170"></canvas>
-          <p class="molcount"><span id="molDensity">2.55 × 10<sup>25</sup></span> molecules/m³ · <span id="molPct">100%</span> of sea level</p>
+          <p class="molcount"><span id="molDensity">2.51 × 10<sup>25</sup></span> molecules/m³ · <span id="molPct">99%</span> of sea level</p>
         </div>
         <div class="viz">
           <h3>Oxygen–hemoglobin curve</h3>
@@ -143,7 +143,7 @@
           <canvas id="curve" class="box" width="320" height="170"></canvas>
         </div>
       </div>
-      <p class="scale-note">This view tops out at 65,000 ft — the <strong>Armstrong limit</strong>, where unprotected body fluids boil at body temperature. For perspective, the <strong>Kármán line</strong> (the conventional edge of space) sits near <strong>330,000 ft / 100 km</strong> — roughly 5× higher than the top of this chart.</p>
+      <p class="scale-note">This view tops out at 65,000 ft, just above the <strong>Armstrong limit</strong> (about 62,000–63,000 ft), where water boils at body temperature. Exposed body fluids — saliva, tears, the moisture in your lungs — boil there; blood inside the vessels doesn’t, because blood pressure keeps it liquid. For perspective, the <strong>Kármán line</strong> (the conventional edge of space) sits near <strong>330,000 ft / 100 km</strong> — roughly 5× higher than the top of this chart.</p>
     </div>
   </section>
 
@@ -157,7 +157,7 @@
       <details class="faq-item"><summary>Why do you need supplemental oxygen at altitude?</summary>
       <p class="a">As pressure drops, the partial pressure of oxygen drops with it, so each breath delivers less oxygen to your blood. Under FAR&nbsp;91.211, U.S. pilots need oxygen above 12,500&nbsp;ft cabin altitude (after 30&nbsp;min), continuously above 14,000&nbsp;ft, and must provide it to passengers above 15,000&nbsp;ft.</p></details>
       <details class="faq-item"><summary>What is your blood oxygen (SpO₂) at altitude?</summary>
-      <p class="a">For an unacclimatized person, SpO₂ falls from ~97% at sea level to ~87% at 10,000&nbsp;ft, ~72% at 18,000&nbsp;ft, and ~50% at 25,000&nbsp;ft. The drop accelerates because the oxygen–hemoglobin curve falls off a cliff below ~60&nbsp;mmHg PaO₂.</p></details>
+      <p class="a">For an unacclimatized person, SpO₂ falls from ~98% at sea level to ~87% at 10,000&nbsp;ft, ~72% at 18,000&nbsp;ft, and ~50% at 25,000&nbsp;ft. The drop accelerates because the oxygen–hemoglobin curve falls off a cliff below ~60&nbsp;mmHg PaO₂.</p></details>
     </div>
   </section>
 
@@ -235,10 +235,10 @@
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
-    {"@type":"Question","name":"How many layers does the atmosphere have?","acceptedAnswer":{"@type":"Answer","text":"Five, stacked by temperature: the troposphere (to about 7 miles), stratosphere (to about 31 miles), mesosphere (to about 53 miles), thermosphere (to about 370 miles), and the exosphere, which fades into space. The Kármán line — the edge of space — sits at about 62 miles."}},
-    {"@type":"Question","name":"Does the composition of the atmosphere change with altitude?","acceptedAnswer":{"@type":"Answer","text":"No — the mix stays remarkably constant. By volume, dry air is about 78% nitrogen, 21% oxygen, 0.9% argon, and 0.04% carbon dioxide up to about 62 miles. What changes with altitude is the pressure, not the recipe: at 18,000 ft the air is still about 21% oxygen, but there are roughly half as many molecules in each breath, which is why partial pressure rather than percentage drives hypoxia."}},
-    {"@type":"Question","name":"Why do you need supplemental oxygen at altitude?","acceptedAnswer":{"@type":"Answer","text":"As air pressure drops, the partial pressure of oxygen drops too, so each breath delivers less oxygen to your blood. Under FAR 91.211, U.S. pilots need oxygen above 12,500 ft cabin altitude after 30 minutes, continuously above 14,000 ft, and must provide it to passengers above 15,000 ft."}},
-    {"@type":"Question","name":"What is your blood oxygen (SpO2) at altitude?","acceptedAnswer":{"@type":"Answer","text":"For an unacclimatized person breathing cabin air, SpO2 falls from about 97% at sea level to roughly 87% at 10,000 ft, 72% at 18,000 ft, and 50% at 25,000 ft. The drop accelerates because the oxygen–hemoglobin curve falls off sharply once arterial oxygen pressure drops below about 60 mmHg."}}
+    {"@type":"Question","name":"How many layers does the atmosphere have?","acceptedAnswer":{"@type":"Answer","text":"Five, stacked by temperature: the troposphere (to about 7 miles), stratosphere (to about 31 miles), mesosphere (to about 53 miles), thermosphere (to about 370 miles), and the exosphere. The Kármán line — the edge of space — sits at about 62 miles."}},
+    {"@type":"Question","name":"Does the composition of the atmosphere change with altitude?","acceptedAnswer":{"@type":"Answer","text":"No — the mix stays remarkably constant (about 78% nitrogen, about 21% oxygen) up to about 62 miles. What changes is the pressure, not the recipe: at 18,000 ft the air is still about 21% oxygen, but there are roughly half as many molecules per breath — which is why partial pressure, not percentage, drives hypoxia."}},
+    {"@type":"Question","name":"Why do you need supplemental oxygen at altitude?","acceptedAnswer":{"@type":"Answer","text":"As pressure drops, the partial pressure of oxygen drops with it, so each breath delivers less oxygen to your blood. Under FAR 91.211, U.S. pilots need oxygen above 12,500 ft cabin altitude after 30 minutes, continuously above 14,000 ft, and must provide it to passengers above 15,000 ft."}},
+    {"@type":"Question","name":"What is your blood oxygen (SpO2) at altitude?","acceptedAnswer":{"@type":"Answer","text":"For an unacclimatized person, SpO2 falls from about 98% at sea level to about 87% at 10,000 ft, about 72% at 18,000 ft, and about 50% at 25,000 ft. The drop accelerates because the oxygen–hemoglobin curve falls off a cliff below about 60 mmHg PaO2."}}
   ]
 }
 </script>

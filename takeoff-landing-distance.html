@@ -71,30 +71,30 @@
     <p class="calc-disclaimer">Educational estimates only — <strong>not for flight planning, dispatch, or weight-and-balance.</strong> Always fly the numbers in your POH and current official weather.</p>
     <div class="da-grid">
       <div class="field">
-        <label>Pressure Altitude</label>
+        <label for="kPa">Pressure Altitude</label>
         <div class="in"><input id="kPa" type="text" inputmode="numeric" value="6,000"><span class="unit">ft</span></div>
       </div>
       <div class="field">
-        <label>Outside Air Temp</label>
+        <label for="kOat">Outside Air Temp</label>
         <div class="in"><input id="kOat" type="number" value="30"><button type="button" id="kOatUnit" class="unit unit-toggle" title="Switch between Celsius and Fahrenheit">°C</button></div>
         <div class="field-hint">tap the <b>°C</b> button to switch to <b>°F</b></div>
       </div>
       <div class="field">
-        <label>Propeller</label>
+        <label for="kProp">Propeller</label>
         <div class="in"><select id="kProp"><option value="fixed">Fixed-pitch</option><option value="cs">Constant-speed</option></select></div>
       </div>
     </div>
     <div class="da-grid" style="margin-top:18px">
       <div class="field">
-        <label>Sea-level Takeoff Distance <span style="text-transform:none;font-weight:400">over a 50-ft obstacle (your POH)</span></label>
+        <label for="kTo">Sea-level Takeoff Distance <span style="text-transform:none;font-weight:400">over a 50-ft obstacle (your POH)</span></label>
         <div class="in"><input id="kTo" type="text" inputmode="numeric" value="1,000"><span class="unit">ft</span></div>
       </div>
       <div class="field">
-        <label>Sea-level Landing Distance <span style="text-transform:none;font-weight:400">(your POH)</span></label>
+        <label for="kLd">Sea-level Landing Distance <span style="text-transform:none;font-weight:400">(your POH)</span></label>
         <div class="in"><input id="kLd" type="text" inputmode="numeric" value="1,200"><span class="unit">ft</span></div>
       </div>
       <div class="field">
-        <label>Sea-level Climb Rate <span style="text-transform:none;font-weight:400">(optional)</span></label>
+        <label for="kRoc">Sea-level Climb Rate <span style="text-transform:none;font-weight:400">(optional)</span></label>
         <div class="in"><input id="kRoc" type="text" inputmode="numeric" value="700"><span class="unit">fpm</span></div>
       </div>
     </div>

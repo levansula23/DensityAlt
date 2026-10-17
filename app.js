@@ -127,13 +127,14 @@ function renderFlags(sat){
   const t=tuc(alt);
   const add=(cls,html)=>{const d=document.createElement('div');d.className='flag '+cls;d.innerHTML=html;f.appendChild(d);};
   if(alt<5000) add('ok','✓ No supplemental oxygen required');
-  else if(alt<12500) add('warn','△ Night-vision loss begins — O₂ recommended');
-  else if(alt<14000) add('bad','⚠ FAR 91.211 — crew O₂ required above 12,500 ft for more than 30 min');
-  else if(alt<15000) add('bad','⚠ FAR 91.211 — crew O₂ required continuously above 14,000 ft');
+  else if(alt<10000) add('warn','△ Night-vision loss begins — FAA recommends O₂ above 5,000 ft at night');
+  else if(alt<=12500) add('warn','△ FAA recommends O₂ above 10,000 ft by day (5,000 ft at night)');
+  else if(alt<=14000) add('bad','⚠ FAR 91.211 — crew O₂ required above 12,500 ft for more than 30 min');
+  else if(alt<=15000) add('bad','⚠ FAR 91.211 — crew O₂ required continuously above 14,000 ft');
   else add('crit','⛔ FAR 91.211 — all occupants must be provided O₂ above 15,000 ft');
   if(t) add(alt>=25000?'crit':(alt>=18000?'bad':'warn'),'Time of useful consciousness: <span class="tuc">'+t+'</span>');
-  if(alt>=26000) add('crit','Above the death zone — body cannot acclimatize');
-  if(alt>=63000) add('crit','Above Armstrong limit — unprotected blood would boil');
+  if(alt>=26000) add('crit','In the death zone — the body cannot acclimatize');
+  if(alt>=63000) add('crit','Above the Armstrong limit — exposed body fluids boil at body temperature');
 }
 
 let stars=null;
@@ -436,10 +437,12 @@ function calcDA(){
   $('isaDev').textContent=(dev>=0?'+':'')+Math.round(dev);
   $('daOut').textContent=fmt(da);
   const diff=da-elev;
-  const toMult=1+Math.max(0,da)/1000*0.10;
+  const sig=Math.pow(1-6.8756e-6*Math.max(0,da),4.2559);
   $('daNote').innerHTML=
-    'Your aircraft will perform as if at <strong>'+fmt(da)+' ft</strong> — about <strong>'+fmt(diff)+' ft higher</strong> than the field. '
-    +'Rule of thumb: takeoff/landing distance up ≈ <strong>'+Math.round((toMult-1)*100)+'%</strong>, and a normally-aspirated engine loses ≈ <strong>'+Math.round(Math.max(0,da)/1000*3)+'%</strong> of its power. Climb rate suffers most.';
+    'Your aircraft will perform as if at <strong>'+fmt(da)+' ft</strong> — about <strong>'+fmt(Math.abs(diff))+' ft '+(diff>=0?'higher':'lower')+'</strong> than the field. '
+    +(da>0
+      ? 'Rule of thumb for a light single, versus a sea-level standard day: takeoff distance up ≈ <strong>'+Math.round(da/1000*10)+'%</strong> (about 10% per 1,000 ft), landing distance up ≈ <strong>'+Math.round((1/sig-1)*100)+'%</strong>, and a normally-aspirated engine loses ≈ <strong>'+Math.round(da/1000*3)+'%</strong> of its power. Climb rate suffers most. The FAA Koch chart in the <a href="/takeoff-landing-distance">takeoff &amp; landing tool</a> is more conservative.'
+      : 'That’s at or below sea-level standard, so no density-altitude penalty today.');
   lastDA=da;
   const u=$('useDa'); if(u) u.textContent='↑ use the density altitude from above ('+fmt(da)+' ft)';
   drawDA(pa,isaT,(isNaN(oat)?isaT:oat),elev);
@@ -507,10 +510,16 @@ function calcCabin(){
   let note;
   if(dp<=0){
     note='This aircraft is <strong>unpressurized</strong> — the cabin <em>is</em> the outside air, so your body is physiologically at the full '+fmt(cruise)+' ft. '
-      +(cruise>=15000?'Oxygen is mandatory and you have limited useful consciousness here.':cruise>=12500?'FAR 91.211 requires crew oxygen above 12,500 ft.':cruise>=10000?'Supplemental oxygen is recommended above 10,000 ft.':'Within the comfortable, no-oxygen range.');
+      +(cruise>15000?'FAR 91.211 requires crew oxygen the whole time and oxygen for every occupant above 15,000 ft, and you have limited useful consciousness here.'
+        :cruise>14000?'FAR 91.211 requires the crew to use oxygen the entire time above 14,000 ft.'
+        :cruise>12500?'FAR 91.211 requires crew oxygen after 30 minutes above 12,500 ft (and continuously above 14,000 ft).'
+        :cruise>=10000?'Supplemental oxygen is recommended above 10,000 ft by day (5,000 ft at night).'
+        :cruise>=5000?'No oxygen required, though the FAA recommends it above 5,000 ft at night.':'Within the comfortable, no-oxygen range.');
   } else {
-    note='At '+fmt(cruise)+' ft, a '+dp.toFixed(1)+' psi maximum differential holds the cabin near <strong>'+fmt(cabinAlt)+' ft</strong>. Passengers feel like they’re at '+fmt(cabinAlt)+' ft with about <strong>'+Math.round(sat)+'% blood oxygen</strong> — '
-      +(cabinAlt>8000?'on the high side, which drives the fatigue and headaches of long flights.':'comfortable, in line with modern jets (the 787 & A350 target ~6,000 ft for exactly this reason).');
+    note='At '+fmt(cruise)+' ft, holding its '+dp.toFixed(1)+' psi maximum differential keeps the cabin at about <strong>'+fmt(cabinAlt)+' ft</strong> — the lowest it can be at this altitude; real cabins are often scheduled a little higher. Passengers feel like they’re at '+fmt(cabinAlt)+' ft with about <strong>'+Math.round(sat)+'% blood oxygen</strong> — '
+      +(cabinAlt>12500?'high enough that the FAR 91.211 cabin-altitude oxygen rules apply.'
+        :cabinAlt>8000?'above the 8,000 ft cabin that transport-category jets must hold (14 CFR 25.841), which drives the fatigue and headaches of long flights.'
+        :'comfortable, in line with modern jets (the 787 & A350 target ~6,000 ft for exactly this reason).');
   }
   $('cabinNote').innerHTML=note;
   drawCabin(dp, cruise);
@@ -737,6 +746,7 @@ function niceStep(max,target){ const raw=max/target,mag=Math.pow(10,Math.floor(M
 
 function calcPC(){
   const a=pcParams(), da=parseFloat($('pcDa').value)||0, rho=isa(da/FT_PER_M).rho;
+  const tasPerIas=Math.sqrt(isa(0).rho/rho); ['vs','va','vno','vne'].forEach(k=>{ a[k]*=tasPerIas; });
   const {Vmd,Vmp}=pcSpeeds(a,rho);
   const xMinKt=Math.max(10, a.vs*0.22);
   const sl=$('pcSlider'); sl.min=Math.round(xMinKt); sl.max=Math.round(a.vno);
@@ -810,15 +820,17 @@ function calcKoch(){
   const baseTo=Math.max(0,commaInt($('kTo').value)), baseLd=Math.max(0,commaInt($('kLd').value)), baseRoc=Math.max(0,commaInt($('kRoc').value));
   const daTo=baseTo*(1+toPct/100), daLd=baseLd*(1+ldPct/100);
   $('kDa').textContent=fmt(da);
-  $('kToPct').textContent='+'+Math.round(toPct)+'%';
-  $('kLdPct').textContent='+'+Math.round(ldPct)+'%';
+  const sgn=p=>(Math.round(p)>=0?'+':'−')+Math.abs(Math.round(p))+'%';
+  const chg=p=>Math.abs(Math.round(p))+'% '+(Math.round(p)>=0?'longer':'shorter');
+  $('kToPct').textContent=sgn(toPct);
+  $('kLdPct').textContent=sgn(ldPct);
   $('kRocPct').textContent='−'+Math.round(climbLoss)+'%';
   $('kToOut').textContent=fmt(daTo);
   $('kLdOut').textContent=fmt(daLd);
   $('kRocOut').textContent=fmt(baseRoc*(1-climbLoss/100));
   const toEl=$('kToPct'); toEl.style.color = toPct>=150?'#ff4d4d':toPct>=70?'#ff6a45':toPct>=30?'#ffb84d':'#37d67a';
   let note='At <strong>'+fmt(pa)+' ft</strong> pressure altitude and <strong>'+Math.round(oat)+'°C</strong>, density altitude is about <strong>'+fmt(da)+' ft</strong>. '
-    +'Expect the <strong>takeoff roll about '+Math.round(toPct)+'% longer</strong> and the <strong>landing roll about '+Math.round(ldPct)+'% longer</strong> than a sea-level standard day, with climb rate down about <strong>'+Math.round(climbLoss)+'%</strong>. ';
+    +'Expect the <strong>takeoff distance (to clear 50 ft) about '+chg(toPct)+'</strong> and the <strong>landing distance about '+chg(ldPct)+'</strong> than a sea-level standard day, with climb rate down about <strong>'+Math.round(climbLoss)+'%</strong>. ';
   if(baseTo>0) note+='A '+fmt(baseTo)+' ft sea-level takeoff becomes roughly <strong>'+fmt(daTo)+' ft</strong>; a '+fmt(baseLd)+' ft landing becomes about <strong>'+fmt(daLd)+' ft</strong>. ';
   note+=(toPct>=100?'That is a serious high/hot penalty — verify against your POH and the runway available.':'Always confirm against your POH and runway available.');
   $('kNote').innerHTML=note;
@@ -1130,8 +1142,8 @@ function calcO2(){
   if(ft<5000) feel='Essentially no effect for healthy people at rest.';
   else if(ft<8000) feel='Mild — slight breathlessness on exertion; night vision starts to degrade above ~5,000 ft.';
   else if(ft<10000) feel='About an airliner cabin at cruise. Noticeable on exertion; mild fatigue or headache possible after hours.';
-  else if(ft<12500) feel='Judgment and night vision measurably degrade with time — the FAA recommends supplemental oxygen above 10,000 ft.';
-  else if(ft<14000) feel='FAR 91.211 territory: required crew oxygen after 30 minutes here. Headache, fatigue, and impaired thinking are common.';
+  else if(ft<=12500) feel='Judgment and night vision measurably degrade with time — the FAA recommends supplemental oxygen above 10,000 ft.';
+  else if(ft<=14000) feel='FAR 91.211 territory: required crew oxygen after 30 minutes here. Headache, fatigue, and impaired thinking are common.';
   else if(ft<18000) feel='Most unacclimatized people develop clear hypoxia symptoms — crew oxygen is required continuously above 14,000 ft.';
   else if(ft<25000) feel='Severe hypoxia. Acclimatized mountaineers function here; unacclimatized people deteriorate quickly.';
   else feel='Extreme altitude — consciousness fades rapidly without supplemental oxygen.';
@@ -1200,10 +1212,10 @@ function calcCB(){
   $('cbSpread').textContent=(cbTempU==='F'?(spread*9/5).toFixed(1)+' °F':spread.toFixed(1)+' °C');
   if(spread<=0){ $('cbAgl').textContent='0'; $('cbMsl').textContent=fmt(elev);
     $('cbNote').innerHTML='Temperature is at or below the dew point — the air is saturated at the surface. Expect <strong>fog or a very low ceiling</strong>, not a usable VFR cloud base.'; drawCB(0,elev); return; }
-  const agl=spread/2.5*1000;
+  const agl=cbTempU==='F'?spread*9/5/4.4*1000:spread/2.5*1000;
   const msl=agl+elev;
   $('cbAgl').textContent=fmt(agl); $('cbMsl').textContent=fmt(msl);
-  $('cbNote').innerHTML='Estimated cumulus base ≈ <strong>'+fmt(agl)+' ft AGL</strong>'+(elev?' (<strong>'+fmt(msl)+' ft MSL</strong> with your '+fmt(elev)+' ft field elevation)':'')+'. Formula: spread ÷ 2.5 °C × 1,000 ft (÷ 4.4 °F). It estimates <em>convective</em> (cumulus) bases in well-mixed daytime air — stratus, frontal cloud, and inversions don’t follow it. Always check METARs and area forecasts.';
+  $('cbNote').innerHTML='Estimated cumulus base ≈ <strong>'+fmt(agl)+' ft AGL</strong>'+(elev?' (<strong>'+fmt(msl)+' ft MSL</strong> with your '+fmt(elev)+' ft field elevation)':'')+'. Formula: '+(cbTempU==='F'?'spread ÷ 4.4 °F × 1,000 ft':'spread ÷ 2.5 °C × 1,000 ft')+'. It estimates <em>convective</em> (cumulus) bases in well-mixed daytime air — stratus, frontal cloud, and inversions don’t follow it. Always check METARs, TAFs and the GFA.';
   drawCB(agl,elev);
 }
 function drawCB(agl,elev){
@@ -1258,7 +1270,10 @@ function calcISADev(){
   let oat=parseFloat($('isadOat').value);
   if(isadTempU==='F'&&!isNaN(oat)) oat=(oat-32)*5/9;
   if(isNaN(oat)){ $('isadDev').textContent='—';
-    $('isadNote').innerHTML='ISA temperature at '+fmt(pa)+' ft = 15 − 1.98 × '+(pa/1000).toFixed(1)+' = <strong>'+t.toFixed(1)+' °C</strong>. Add your outside air temperature to get the deviation.'; return; }
+    $('isadNote').innerHTML=(pa>36089
+      ? 'ISA temperature at '+fmt(pa)+' ft is <strong>'+t.toFixed(1)+' °C</strong> — above the tropopause (36,089 ft) the standard atmosphere holds a constant −56.5 °C.'
+      : 'ISA temperature at '+fmt(pa)+' ft = 15 − 1.98 × '+(pa/1000).toFixed(1)+' = <strong>'+t.toFixed(1)+' °C</strong>.')
+      +' Add your outside air temperature to get the deviation.'; return; }
   const dev=oat-t;
   $('isadDev').textContent='ISA'+(dev>=0?'+':'−')+Math.abs(Math.round(dev));
   const da=pa+120*dev;
@@ -1342,7 +1357,8 @@ function calcPV(){
   $('pvOut').textContent=fmt(agl);
   $('pvMsl').textContent=fmt(agl+elev);
   $('pvMph').textContent=Math.round(gs*1.15078);
-  $('pvNote').innerHTML='Pivotal altitude = GS² ÷ 11.3 = <strong>'+fmt(agl)+' ft AGL</strong>'+(elev?' — fly ≈ <strong>'+fmt(agl+elev)+' ft MSL</strong> over your '+fmt(elev)+' ft terrain':'')+'. Groundspeed changes constantly around the pylon with the wind, so pivotal altitude changes too: <strong>descend on the downwind side, climb on the upwind side</strong>. (In mph: GS² ÷ 15.)';
+  $('pvNote').innerHTML='Pivotal altitude = GS² ÷ 11.3 = <strong>'+fmt(agl)+' ft AGL</strong>'+(elev?' — fly ≈ <strong>'+fmt(agl+elev)+' ft MSL</strong> over your '+fmt(elev)+' ft terrain':'')+'. Groundspeed changes constantly around the pylon with the wind, so pivotal altitude changes too: <strong>climb as groundspeed builds heading downwind, descend as it falls heading upwind</strong>. (In mph: GS² ÷ 15.)'
+    +(gs>0 && agl<500?' <strong>Below 500 ft AGL</strong> — lower than typical minimum safe altitudes (14 CFR 91.119) allow near people, vehicles or structures.':'');
 }
 function setupPV(){
   if(!$('pvOut')) return false;

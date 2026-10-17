@@ -72,15 +72,15 @@
     <h2 id="rd-toolhead" class="rd-toolhead">Calculate horsepower at altitude</h2>
     <div class="da-grid">
       <div class="field">
-        <label>Aircraft</label>
+        <label for="hpAcft">Aircraft</label>
         <div class="in"><select id="hpAcft"></select></div>
       </div>
       <div class="field">
-        <label>Density Altitude</label>
+        <label for="hpDa">Density Altitude</label>
         <div class="in"><input id="hpDa" type="text" inputmode="numeric" value="7,400"><span class="unit">ft</span></div>
       </div>
       <div class="field" id="hpCustomWrap" style="display:none">
-        <label>Rated Horsepower</label>
+        <label for="hpCustom">Rated Horsepower</label>
         <div class="in"><input id="hpCustom" type="number" value="180"><span class="unit">hp</span></div>
       </div>
     </div>
@@ -111,9 +111,9 @@
     <h2>Frequently asked questions</h2>
     <div class="faqlist">
       <details class="faq-item"><summary>How much horsepower does an engine lose with altitude?</summary>
-      <p class="a">A normally-aspirated piston engine loses power roughly in proportion to air density — about 3% per 1,000 ft of density altitude (Gagg–Ferrar). At 8,000 ft density altitude a 180 hp engine makes closer to 135 hp. Turbocharged engines hold rated power up to a critical altitude, then fall off the same way.</p></details>
+      <p class="a">A normally-aspirated piston engine loses power slightly faster than air density falls — about 3% of rated power per 1,000 ft of density altitude (Gagg–Ferrar, which assumes full throttle at rated RPM). At 8,000 ft density altitude a 180 hp engine makes about 136 hp. Turbocharged engines hold rated power up to a critical altitude, then fall off the same way.</p></details>
       <details class="faq-item"><summary>Do jet (turbine) engines lose power at altitude?</summary>
-      <p class="a">Yes. Jet engines produce thrust, not horsepower, and thrust falls as you climb because thinner air means less mass flow through the engine — roughly with the ambient pressure ratio, so a turbofan at FL400 may make only about a third of its sea-level static thrust. Turboprops produce shaft horsepower and are usually flat-rated to a critical altitude, then lose power as density falls.</p></details>
+      <p class="a">Yes. Jet engines produce thrust, not horsepower, and thrust falls as you climb because thinner air means less mass flow through the engine — roughly with the ambient pressure ratio, so a turbofan at FL400 may make only about a fifth of its sea-level static thrust (the pressure ratio at FL400 is about 0.19). Turboprops produce shaft horsepower and are usually flat-rated to a critical altitude, then lose power as density falls.</p></details>
     </div>
   </section>
 
@@ -149,7 +149,7 @@
       <div><b>Blood oxygen</b> — alveolar gas equation <code>P_AO₂ = 0.2095·(P − 47) − P_CO₂/0.8</code> feeding the Severinghaus SpO₂ curve. CO₂ falls with altitude, tuned to acute-exposure data (~87% @ 10k, ~72% @ 18k, ~50% @ 25k&nbsp;ft).</div>
       <div><b>Density altitude</b> — <code>PA = elev + (29.92 − altimeter)·1000</code>, then <code>DA = PA + 120·(OAT − ISA&nbsp;temp)</code>.</div>
       <div><b>Horsepower</b> — Gagg–Ferrar relation <code>HP ≈ rated·(1.132σ − 0.132)</code>, σ = density ratio at your density altitude; turbos hold rated power to a critical altitude.</div>
-      <div><b>Power curve</b> — parabolic drag polar <code>C_D = C_D0 + C_L²/(πAR·e)</code>; power required = drag × TAS. The region of reversed command is the band from stall up to the minimum-power speed. Drag values are representative estimates and V-speeds (Vs, Va, Vno, Vne) are typical published figures — check your POH; the climb readout is idealized (constant ~80% prop efficiency) and optimistic at low speed.</div>
+      <div><b>Power curve</b> — parabolic drag polar <code>C_D = C_D0 + C_L²/(πAR·e)</code>; power required = drag × TAS. The region of reversed command is the band from stall up to the minimum-power speed. Drag values are representative estimates and V-speeds (Vs, Va, Vno, Vne) are typical published figures — check your POH.</div>
       <div><b>Cabin altitude</b> — <code>cabin_P = min(sea level, ambient + ΔP)</code> inverted to an altitude; ΔP is each aircraft's published max pressure differential.</div>
       <div><b>Data sources</b> — bundled ~260 airports (offline elevation) plus <code>aviationweather.gov</code> METAR for live temp/altimeter (via a same-origin proxy once hosted), falling back to <code>open-meteo.com</code> current weather by coordinates for fields without a METAR.</div>
       <div><b>References</b> — FAA <i>Pilot's Handbook of Aeronautical Knowledge</i> (FAA-H-8083-25) and <i>Airplane Flying Handbook</i> (FAA-H-8083-3) for density altitude, the FAR&nbsp;91.211 oxygen rules, and the power curve / region of reversed command; J.D.&nbsp;Anderson, <i>Introduction to Flight</i> (parabolic drag polar, power-required = drag&nbsp;×&nbsp;TAS); the alveolar gas equation and Severinghaus SpO₂ relation, with acute-exposure SaO₂ figures from high-altitude physiology literature (e.g. J.B.&nbsp;West). Power-curve V-speeds and the narrow trainer reversed-command band cross-checked against Van's Air Force, GoFly, and Boldmethod.</div>
@@ -190,8 +190,8 @@
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
-    {"@type":"Question","name":"How much horsepower does an engine lose with altitude?","acceptedAnswer":{"@type":"Answer","text":"A normally-aspirated piston engine loses power roughly in proportion to air density — about 3% per 1,000 ft of density altitude (Gagg-Ferrar). At 8,000 ft density altitude a 180 hp engine makes closer to 135 hp. Turbocharged engines hold rated power up to a critical altitude, then fall off the same way."}},
-    {"@type":"Question","name":"Do jet (turbine) engines lose power at altitude?","acceptedAnswer":{"@type":"Answer","text":"Yes. Jet engines produce thrust, not horsepower, and thrust falls as you climb because thinner air means less mass flow through the engine — roughly with the ambient pressure ratio, so a turbofan at FL400 may make only about a third of its sea-level static thrust. Turboprops produce shaft horsepower and are usually flat-rated to a critical altitude, then lose power as density falls."}}
+    {"@type":"Question","name":"How much horsepower does an engine lose with altitude?","acceptedAnswer":{"@type":"Answer","text":"A normally-aspirated piston engine loses power slightly faster than air density falls — about 3% of rated power per 1,000 ft of density altitude (Gagg-Ferrar, which assumes full throttle at rated RPM). At 8,000 ft density altitude a 180 hp engine makes about 136 hp. Turbocharged engines hold rated power up to a critical altitude, then fall off the same way."}},
+    {"@type":"Question","name":"Do jet (turbine) engines lose power at altitude?","acceptedAnswer":{"@type":"Answer","text":"Yes. Jet engines produce thrust, not horsepower, and thrust falls as you climb because thinner air means less mass flow through the engine — roughly with the ambient pressure ratio, so a turbofan at FL400 may make only about a fifth of its sea-level static thrust (the pressure ratio at FL400 is about 0.19). Turboprops produce shaft horsepower and are usually flat-rated to a critical altitude, then lose power as density falls."}}
   ]
 }
 </script>

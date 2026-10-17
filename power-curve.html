@@ -72,28 +72,28 @@
     <h2 id="rd-toolhead" class="rd-toolhead">Explore the power curve</h2>
     <div class="da-grid pcin">
       <div class="field">
-        <label>Aircraft</label>
+        <label for="pcAcft">Aircraft</label>
         <div class="in"><select id="pcAcft"></select></div>
       </div>
       <div class="field">
-        <label>Density Altitude</label>
+        <label for="pcDa">Density Altitude</label>
         <div class="in"><input id="pcDa" type="number" value="0"><span class="unit">ft</span></div>
       </div>
       <div class="field">
-        <label>Power Setting</label>
+        <label for="pcPow">Power Setting</label>
         <div class="in"><input id="pcPow" type="number" min="0" max="100" value="75"><span class="unit">% rated</span></div>
       </div>
       <div class="field">
-        <label>Engine Power</label>
+        <label for="pcHp">Engine Power</label>
         <div class="in"><input id="pcHp" type="number" value="135"><span class="unit">hp</span></div>
         <div class="field-hint">auto from % &amp; altitude — override anytime</div>
       </div>
     </div>
     <div class="da-grid pcin" id="pcCustomWrap" style="display:none;margin-top:18px">
-      <div class="field"><label>Gross Weight</label><div class="in"><input id="pcW" type="number" value="2400"><span class="unit">lb</span></div></div>
-      <div class="field"><label>Wing Area</label><div class="in"><input id="pcS" type="number" value="170"><span class="unit">ft²</span></div></div>
-      <div class="field"><label>Wingspan</label><div class="in"><input id="pcB" type="number" value="36"><span class="unit">ft</span></div></div>
-      <div class="field"><label>Parasite drag C<sub>D0</sub></label><div class="in"><input id="pcCd0" type="number" step="0.001" value="0.033"></div></div>
+      <div class="field"><label for="pcW">Gross Weight</label><div class="in"><input id="pcW" type="number" value="2400"><span class="unit">lb</span></div></div>
+      <div class="field"><label for="pcS">Wing Area</label><div class="in"><input id="pcS" type="number" value="170"><span class="unit">ft²</span></div></div>
+      <div class="field"><label for="pcB">Wingspan</label><div class="in"><input id="pcB" type="number" value="36"><span class="unit">ft</span></div></div>
+      <div class="field"><label for="pcCd0">Parasite drag C<sub>D0</sub></label><div class="in"><input id="pcCd0" type="number" step="0.001" value="0.033"></div></div>
       <div class="field"><label>Oswald efficiency e</label><div class="in"><input id="pcE" type="number" step="0.01" value="0.75"></div></div>
     </div>
     <div class="rd-result">
